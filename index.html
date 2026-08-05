@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google" content="notranslate">
-<title>AlfaVed Dimensionador-PHE · v23</title>
+<title>AlfaVed Dimensionador-PHE · v24</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--azul-escuro:#0a1f3c;--azul:#123a6b;--azul-medio:#1d5aa8;--azul-claro:#2f7fd1;--laranja:#e8731c;--laranja-claro:#f59e4c;--cinza-fundo:#f4f6f9;--cinza-borda:#dde3ea;--texto:#1e293b;--texto-suave:#64748b;--branco:#fff;--verde:#16a34a;--vermelho:#dc2626;--sombra:0 4px 20px rgba(10,31,60,.08)}
@@ -131,10 +131,7 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
 .ds-lado td:first-child{background:var(--cinza-fundo);font-weight:600;text-align:left;width:30%}
 .curva-box{background:var(--branco);border:1px solid var(--cinza-borda);border-radius:12px;padding:16px;margin-top:16px}
 .curva-box h4{color:var(--azul-escuro);margin-bottom:6px;font-size:15px}
-.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:10px}
-@media(max-width:768px){.chart-grid{grid-template-columns:1fr}}
-.chart-titulo{font-size:13px;font-weight:600;color:var(--azul-escuro);margin-bottom:6px;text-align:center}
-.curva-box canvas{width:100%;display:block;border:1px solid var(--cinza-borda);border-radius:8px;background:#fff}
+.curva-box canvas{width:100%;display:block;border:1px solid var(--cinza-borda);border-radius:8px;background:#fff;margin-top:10px}
 .curva-tabela{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:10px}
 .curva-tabela th,.curva-tabela td{padding:6px 8px;border:1px solid var(--cinza-borda);text-align:center}
 .curva-tabela th{background:var(--cinza-fundo);font-weight:600}
@@ -180,9 +177,9 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
 <section class="hero">
   <div class="hero-overlay"></div>
   <div class="container hero-content">
-    <span class="hero-badge">⚙️ Dimensionamento de Engenharia · v23</span>
+    <span class="hero-badge">⚙️ Dimensionamento de Engenharia · v24</span>
     <h2>Dimensionador de Trocadores de Calor de Placas</h2>
-    <p>Áreas corrigidas pelas dimensões reais, seleção manual de modelos (desmarcados por padrão), validação de gases/vapor/amônia e datasheet em PDF.</p>
+    <p>Gráfico único com eficiência térmica, áreas corrigidas, seleção manual de modelos e datasheet em PDF.</p>
   </div>
 </section>
 
@@ -368,11 +365,11 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
 
 <script>
 /* ============================================================
-   AlfaVed Dimensionador-PHE · v23
-   Áreas corrigidas pelas dimensões reais + modelos desmarcados
+   AlfaVed Dimensionador-PHE · v24
+   Gráfico único com eficiência térmica + 2 linhas de fluidos
    ============================================================ */
 
-/* ---------- MODELOS ALFA LAVAL (áreas pelas dimensões reais) ---------- */
+/* ---------- MODELOS ALFA LAVAL ---------- */
 var ALFA_LAVAL = {
   gaxetadas: [
     {nome:'M3-M', A:0.032, W:0.10, b:0.0020, vazaoMax:14,  Pmax:16, Tmax:180, kW:'50-250',    tipo:'Líquidos', porta:0.050},
@@ -577,7 +574,7 @@ var MATERIAIS_REF = {
   }
 };
 
-/* ---------- U GLOBAL INICIAL VARIÁVEL (Alfa Laval) ---------- */
+/* ---------- U GLOBAL INICIAL VARIÁVEL ---------- */
 function estimarU(fP, fS, vaporCond) {
   var nomeP = fP.nome, nomeS = fS.nome;
   if (vaporCond) {
@@ -733,7 +730,6 @@ var tipoAtual='gaxetadas',secoesExtras=0,ultimoRelatorio=null;
 function trocarAba(nome){document.getElementById('tabResultadoBtn').classList.toggle('active',nome==='resultado');document.getElementById('tabDatasheetBtn').classList.toggle('active',nome==='datasheet');document.getElementById('paneResultado').classList.toggle('active',nome==='resultado');document.getElementById('paneDatasheet').classList.toggle('active',nome==='datasheet');}
 function toggleModelos(){var b=document.getElementById('corpoModelos'),h=document.getElementById('hdrModelos');b.classList.toggle('open');h.classList.toggle('open');}
 function setTipo(t){tipoAtual=t;document.getElementById('btnGaxetadas').classList.toggle('active',t==='gaxetadas');document.getElementById('btnSemisoldadas').classList.toggle('active',t==='semisoldadas');document.getElementById('btnSemisoldadas').classList.toggle('semi',t==='semisoldadas');montarModelos();}
-/* MODELOS DESMARCADOS POR PADRÃO — usuário marca apenas os desejados */
 function montarModelos(){var grid=document.getElementById('fabGrid');grid.innerHTML='';ALFA_LAVAL[tipoAtual].forEach(function(mod){var card=document.createElement('div');card.className='modelo-item';card.dataset.nome=mod.nome;card.innerHTML='<label class="checkbox-label"><input type="checkbox" class="fab-checkbox"><span class="checkmark"></span></label><div class="fab-nome">'+mod.nome+'</div><div class="fab-desc">'+mod.A.toFixed(3)+' m²/placa<br>'+mod.vazaoMax+' m³/h · '+mod.Pmax+' bar<br>Bocal '+nomeConexao(mod.porta)+'</div>';card.addEventListener('click',function(e){if(e.target.classList.contains('fab-checkbox')){card.classList.toggle('selected',e.target.checked);return;}var cb=card.querySelector('.fab-checkbox');cb.checked=!cb.checked;card.classList.toggle('selected',cb.checked);});grid.appendChild(card);});}
 function selecionarGrupo(){var grupo=document.getElementById('grupoModelos').value;var g=GRUPOS_MODELOS[grupo];if(g.tipo&&g.tipo!==tipoAtual)setTipo(g.tipo);document.querySelectorAll('.fab-checkbox').forEach(function(cb){var nome=cb.closest('.modelo-item').dataset.nome;var pertence=(g.modelos===null)?true:(g.modelos.indexOf(nome)!==-1);cb.checked=pertence;cb.closest('.modelo-item').classList.toggle('selected',pertence);});}
 function adicionarSecao(){if(secoesExtras>=2){alert('Máximo de 3 seções.');return;}secoesExtras++;var cont=document.getElementById('secoesAdicionais');var div=document.createElement('div');div.className='secao-bloco';div.id='secaoExtra'+secoesExtras;div.innerHTML='<div class="secao-titulo">🔹 Seção '+(secoesExtras+1)+' (etapa adicional)</div><div class="grid-2"><div class="sub-card produto"><div class="sub-card-head"><span class="side-icon produto-icon">📦</span><h4>Produto — Seção '+(secoesExtras+1)+'</h4></div><label>Temperatura de entrada (°C)<input type="number" id="sec'+secoesExtras+'TinP" value="45"></label><label>Temperatura de saída (°C)<input type="number" id="sec'+secoesExtras+'ToutP" value="70"></label></div><div class="sub-card servico"><div class="sub-card-head"><span class="side-icon servico-icon">⚙️</span><h4>Serviço — Seção '+(secoesExtras+1)+'</h4></div><label>Fluido de serviço<select id="sec'+secoesExtras+'FluidoS"><option value="agua">Água industrial</option><option value="vapor">Vapor saturado</option><option value="glicol20">Glicol 20%</option><option value="glicol30">Glicol 30%</option><option value="oleo">Óleo térmico</option><option value="r134a">R134a</option></select></label><label>Temperatura de entrada (°C)<input type="number" id="sec'+secoesExtras+'TinS" value="90"></label></div></div>';cont.appendChild(div);}
@@ -757,33 +753,36 @@ function gerarCurvaDesempenho(mod, sec, d, fP, fS, cfgKey, pP, pS, lmtd, toutS) 
   return pontos;
 }
 
-/* ---------- GRÁFICO SIMPLIFICADO (Canvas nativo) ---------- */
+/* ---------- GRÁFICO ÚNICO VERTICAL com EFICIÊNCIA (Canvas nativo) ---------- */
 function fmtAxe(n){
   if(isNaN(n)) return '0';
   if(n>=10000) return Math.round(n).toLocaleString('pt-BR');
   if(n>=100) return Math.round(n).toString();
   return (Math.round(n*10)/10).toString();
 }
-function desenharGrafico(canvasId, pontos, series, tituloEixoY, band) {
+function desenharGraficoUnico(canvasId, pontos, d) {
   try{
     var canvas=document.getElementById(canvasId);
     if(!canvas||!pontos||pontos.length<2) return;
     var dpr=window.devicePixelRatio||1;
     var cssW=canvas.offsetWidth||canvas.parentElement.offsetWidth||560;
-    var cssH=250;
+    var cssH=420;
     canvas.width=cssW*dpr;canvas.height=cssH*dpr;canvas.style.height=cssH+'px';
     var ctx=canvas.getContext('2d');
     ctx.scale(dpr,dpr);
-    var W=cssW,H=cssH,padL=64,padR=18,padT=30,padB=44;
+    var W=cssW,H=cssH,padL=64,padR=20,padT=46,padB=50;
     var plotW=W-padL-padR,plotH=H-padT-padB;
     ctx.fillStyle='#ffffff';ctx.fillRect(0,0,W,H);
     var vzs=pontos.map(function(p){return p.vazao;});
     var xMin=Math.min.apply(null,vzs),xMax=Math.max.apply(null,vzs);
     if(xMax-xMin<1e-9){xMax=xMin+1;}
-    var allY=[],si,p2;
-    for(si=0;si<series.length;si++){for(p2=0;p2<pontos.length;p2++){allY.push(pontos[p2][series[si].key]);}if(series[si].limit){allY.push(series[si].limit);}}
+    /* Eixo vertical: perda de pressão (kPa) */
+    var allY=[];
+    pontos.forEach(function(p){allY.push(p.dPP);allY.push(p.dPS);});
+    allY.push(d.dpP);allY.push(d.dpS);
     var yMax=Math.max.apply(null,allY)*1.15||1;if(yMax<=0){yMax=1;}
     var yMin=0,i,j,yv,xv,x,y;
+    /* Grade */
     ctx.strokeStyle='#e2e8f0';ctx.lineWidth=1;
     for(i=0;i<=4;i++){
       yv=yMin+(yMax-yMin)*i/4;y=padT+plotH-plotH*i/4;
@@ -800,17 +799,11 @@ function desenharGrafico(canvasId, pontos, series, tituloEixoY, band) {
     ctx.fillStyle='#334155';ctx.font='bold 12px Segoe UI, Arial';ctx.textAlign='center';
     ctx.fillText('Vazão do produto (m³/h)',padL+plotW/2,H-4);
     ctx.save();ctx.translate(14,padT+plotH/2);ctx.rotate(-Math.PI/2);ctx.textAlign='center';
-    ctx.fillText(tituloEixoY,0,0);ctx.restore();
-    if(band){
-      var yT=padT+plotH-(band.to-yMin)/(yMax-yMin)*plotH;
-      var yB=padT+plotH-(band.from-yMin)/(yMax-yMin)*plotH;
-      if(yB>padT&&yT<padT+plotH){
-        ctx.fillStyle='rgba(22,163,74,0.12)';
-        ctx.fillRect(padL,yT,plotW,yB-yT);
-        ctx.fillStyle='#16a34a';ctx.font='11px Segoe UI, Arial';ctx.textAlign='left';
-        ctx.fillText(band.label,padL+6,yT+14);
-      }
-    }
+    ctx.fillText('Perda de pressão (kPa)',0,0);ctx.restore();
+    /* Título */
+    ctx.fillStyle='#0a1f3c';ctx.font='bold 13px Segoe UI, Arial';ctx.textAlign='center';
+    ctx.fillText('Perda de pressão dos fluidos e eficiência térmica',W/2,20);
+    /* Ponto de projeto */
     var xDesign=null;
     for(var dd=0;dd<pontos.length;dd++){if(Math.abs(pontos[dd].fator-1)<1e-6){xDesign=padL+(pontos[dd].vazao-xMin)/(xMax-xMin)*plotW;break;}}
     if(xDesign!==null){
@@ -818,43 +811,64 @@ function desenharGrafico(canvasId, pontos, series, tituloEixoY, band) {
       ctx.beginPath();ctx.moveTo(xDesign,padT);ctx.lineTo(xDesign,padT+plotH);ctx.stroke();
       ctx.setLineDash([]);
       ctx.fillStyle='#64748b';ctx.font='11px Segoe UI, Arial';ctx.textAlign='center';
-      ctx.fillText('Ponto de projeto',xDesign,padT-8);
+      ctx.fillText('Projeto',xDesign,padT-10);
     }
-    series.forEach(function(s){
-      if(!s.limit)return;
-      var yLim=padT+plotH-(s.limit-yMin)/(yMax-yMin)*plotH;
-      if(yLim<padT||yLim>padT+plotH)return;
-      ctx.strokeStyle='#dc2626';ctx.lineWidth=1.5;ctx.setLineDash([6,4]);
-      ctx.beginPath();ctx.moveTo(padL,yLim);ctx.lineTo(padL+plotW,yLim);ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.fillStyle='#dc2626';ctx.font='11px Segoe UI, Arial';ctx.textAlign='left';
-      ctx.fillText('limite '+s.limit,padL+6,yLim-5);
-    });
-    series.forEach(function(s){
-      ctx.strokeStyle=s.color;ctx.lineWidth=2.5;
-      ctx.beginPath();
-      for(var k=0;k<pontos.length;k++){
-        var px=padL+(pontos[k].vazao-xMin)/(xMax-xMin)*plotW;
-        var py=padT+plotH-(pontos[k][s.key]-yMin)/(yMax-yMin)*plotH;
-        if(k===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);
+    /* Linhas de limite (vermelho tracejado) */
+    desenharLinhaLimite(ctx,d.dpP,yMin,yMax,padL,padT,plotW,plotH,'limite produto '+d.dpP);
+    desenharLinhaLimite(ctx,d.dpS,yMin,yMax,padL,padT,plotW,plotH,'limite serviço '+d.dpS);
+    /* Curvas de perda de pressão (azul produto, vermelha serviço) */
+    desenharCurva(ctx,pontos,'dPP','#1d5aa8',xMin,xMax,yMin,yMax,padL,padT,plotW,plotH);
+    desenharCurva(ctx,pontos,'dPS','#dc2626',xMin,xMax,yMin,yMax,padL,padT,plotW,plotH);
+    /* Eficiência térmica — anotação no ponto de projeto */
+    if(xDesign!==null){
+      var pProj=null;
+      pontos.forEach(function(p){if(Math.abs(p.fator-1)<1e-6){pProj=p;}});
+      if(pProj){
+        var efic=pProj.eficiencia.toFixed(1);
+        var corEfic=parseFloat(efic)>=85?'#16a34a':'#dc2626';
+        ctx.fillStyle=corEfic;ctx.font='bold 12px Segoe UI, Arial';ctx.textAlign='center';
+        ctx.fillText('Eficiência: '+efic+'%',xDesign,padT+plotH+18);
+        ctx.font='10px Segoe UI, Arial';
+        ctx.fillText('(ideal 85–95%)',xDesign,padT+plotH+32);
       }
-      ctx.stroke();
-      for(var k2=0;k2<pontos.length;k2++){
-        var px2=padL+(pontos[k2].vazao-xMin)/(xMax-xMin)*plotW;
-        var py2=padT+plotH-(pontos[k2][s.key]-yMin)/(yMax-yMin)*plotH;
-        ctx.fillStyle=s.color;
-        ctx.beginPath();ctx.arc(px2,py2,(Math.abs(pontos[k2].fator-1)<1e-6)?6:3.5,0,Math.PI*2);ctx.fill();
-      }
-    });
+    }
+    /* Legenda */
     var lx=padL+10;
-    series.forEach(function(s){
-      ctx.strokeStyle=s.color;ctx.lineWidth=2.5;
-      ctx.beginPath();ctx.moveTo(lx,16);ctx.lineTo(lx+18,16);ctx.stroke();
-      ctx.fillStyle='#334155';ctx.font='11px Segoe UI, Arial';ctx.textAlign='left';
-      ctx.fillText(s.label,lx+24,20);
-      lx+=24+ctx.measureText(s.label).width+20;
-    });
+    ctx.strokeStyle='#1d5aa8';ctx.lineWidth=3;
+    ctx.beginPath();ctx.moveTo(lx,34);ctx.lineTo(lx+20,34);ctx.stroke();
+    ctx.fillStyle='#334155';ctx.font='11px Segoe UI, Arial';ctx.textAlign='left';
+    ctx.fillText('Produto (azul)',lx+26,38);
+    lx+=26+ctx.measureText('Produto (azul)').width+24;
+    ctx.strokeStyle='#dc2626';
+    ctx.beginPath();ctx.moveTo(lx,34);ctx.lineTo(lx+20,34);ctx.stroke();
+    ctx.fillStyle='#334155';
+    ctx.fillText('Serviço (vermelho)',lx+26,38);
   }catch(e){}
+}
+function desenharLinhaLimite(ctx,lim,yMin,yMax,padL,padT,plotW,plotH,label){
+  var yLim=padT+plotH-(lim-yMin)/(yMax-yMin)*plotH;
+  if(yLim<padT||yLim>padT+plotH)return;
+  ctx.strokeStyle='#dc2626';ctx.lineWidth=1.5;ctx.setLineDash([6,4]);
+  ctx.beginPath();ctx.moveTo(padL,yLim);ctx.lineTo(padL+plotW,yLim);ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle='#dc2626';ctx.font='10px Segoe UI, Arial';ctx.textAlign='left';
+  ctx.fillText(label,padL+6,yLim-4);
+}
+function desenharCurva(ctx,pontos,chave,cor,xMin,xMax,yMin,yMax,padL,padT,plotW,plotH){
+  ctx.strokeStyle=cor;ctx.lineWidth=2.5;
+  ctx.beginPath();
+  for(var k=0;k<pontos.length;k++){
+    var px=padL+(pontos[k].vazao-xMin)/(xMax-xMin)*plotW;
+    var py=padT+plotH-(pontos[k][chave]-yMin)/(yMax-yMin)*plotH;
+    if(k===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);
+  }
+  ctx.stroke();
+  for(var k2=0;k2<pontos.length;k2++){
+    var px2=padL+(pontos[k2].vazao-xMin)/(xMax-xMin)*plotW;
+    var py2=padT+plotH-(pontos[k2][chave]-yMin)/(yMax-yMin)*plotH;
+    ctx.fillStyle=cor;
+    ctx.beginPath();ctx.arc(px2,py2,(Math.abs(pontos[k2].fator-1)<1e-6)?6:3.5,0,Math.PI*2);ctx.fill();
+  }
 }
 
 /* ---------- RESULTADO ---------- */
@@ -918,23 +932,18 @@ function exibirResultado(secoes, d){
       ? '✅ O equipamento opera dentro dos limites até <strong>'+Math.round(maxOk*100)+'%</strong> da vazão de projeto. Acima disso, a perda de pressão ou a velocidade no bocal passa do máximo permitido.'
       : '⚠️ Mesmo na vazão de projeto há restrições: revise o ΔP máximo, a velocidade no bocal ou escolha outro modelo.';
     html+='<div class="curva-box"><h4>📈 Comportamento com a vazão — '+m1.modelo+' ('+m1.config+' · '+m1.nomePasses+') · Bocal '+m1.conexao+'</h4>'+
-      '<div class="chart-grid">'+
-        '<div><p class="chart-titulo">Troca de calor — quanto maior, melhor</p><canvas id="graficoU"></canvas></div>'+
-        '<div><p class="chart-titulo">Perda de pressão — quanto menor, melhor</p><canvas id="graficoDP"></canvas></div>'+
-        '<div><p class="chart-titulo">Eficiência térmica — faixa ideal 85 a 95%</p><canvas id="graficoEff"></canvas></div>'+
-      '</div>'+
+      '<p class="chart-titulo" style="margin-top:6px">Linha azul = produto · Linha vermelha = serviço · Eficiência no ponto de projeto</p>'+
+      '<canvas id="graficoUnico"></canvas>'+
       '<div class="insight">'+textoInsight+'<br><span style="font-size:12px;color:#166534">💡 O bocal é padrão do modelo ('+m1.conexao+') — produto e serviço usam o mesmo diâmetro. Para gases e vapor, o limite de velocidade no bocal é maior (25 m/s).</span></div>'+
-      '<table class="curva-tabela"><thead><tr><th>Vazão</th><th>Q (kW)</th><th>Troca (U)</th><th>Perda produto</th><th>Perda serviço</th><th>Vel. bocal P/S</th><th>Eficiência</th><th>Placas</th></tr></thead><tbody>';
-    pontos.forEach(function(p){html+='<tr><td>'+(p.fator*100)+'%</td><td>'+fmt(p.Q)+'</td><td>'+fmt(p.U)+'</td><td>'+p.dPP.toFixed(1)+' kPa</td><td>'+p.dPS.toFixed(1)+' kPa</td><td>'+p.vPortaP.toFixed(1)+'/'+p.vPortaS.toFixed(1)+' m/s</td><td>'+p.eficiencia.toFixed(1)+'%</td><td>'+p.placas+'</td></tr>';});
+      '<table class="curva-tabela"><thead><tr><th>Vazão</th><th>Q (kW)</th><th>Troca (U)</th><th>Perda produto</th><th>Perda serviço</th><th>Eficiência</th><th>Placas</th></tr></thead><tbody>';
+    pontos.forEach(function(p){html+='<tr><td>'+(p.fator*100)+'%</td><td>'+fmt(p.Q)+'</td><td>'+fmt(p.U)+'</td><td>'+p.dPP.toFixed(1)+' kPa</td><td>'+p.dPS.toFixed(1)+' kPa</td><td>'+p.eficiencia.toFixed(1)+'%</td><td>'+p.placas+'</td></tr>';});
     html+='</tbody></table></div>';
   }catch(e){html+='<p style="font-size:11px;color:var(--texto-suave);margin-top:8px">Curva de desempenho indisponível para esta combinação.</p>';}
   html+='<p style="font-size:11px;color:var(--texto-suave);margin-top:10px">Base de cálculo revisada com dados oficiais Alfa Laval. Bocal padrão por modelo (produto = serviço). U global estimado por fluidos. Eficiência ε-NTU: 85-95% recomendado. Dh=2b/φ com φ por ângulo. Confira com o software oficial Alfa Laval.</p>';
   c.innerHTML=html;
   try{
     if(pontos&&pontos.length>=2){
-      desenharGrafico('graficoU',pontos,[{key:'U',color:'#1d5aa8',label:'Troca de calor'}],'Troca de calor (W/m²·K)');
-      desenharGrafico('graficoDP',pontos,[{key:'dPP',color:'#e8731c',label:'Perda produto',limit:d.dpP},{key:'dPS',color:'#16a34a',label:'Perda serviço',limit:d.dpS}],'Perda de pressão (kPa)');
-      desenharGrafico('graficoEff',pontos,[{key:'eficiencia',color:'#7c3aed',label:'Eficiência (%)'}],'Eficiência (%)',{from:85,to:95,label:'Faixa ideal 85–95%'});
+      desenharGraficoUnico('graficoUnico',pontos,d);
     }
   }catch(e){}
 }

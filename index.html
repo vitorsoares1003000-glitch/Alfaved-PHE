@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google" content="notranslate">
-<title>Dimensionador PHE — Alfaved · Alfa Laval</title>
+<title>Dimensionador PHE — Alfa Laval · v2 | Alfaved</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--azul-escuro:#0a1f3c;--azul:#123a6b;--azul-medio:#1d5aa8;--azul-claro:#2f7fd1;--laranja:#e8731c;--laranja-claro:#f59e4c;--cinza-fundo:#f4f6f9;--cinza-borda:#dde3ea;--texto:#1e293b;--texto-suave:#64748b;--branco:#fff;--verde:#16a34a;--vermelho:#dc2626;--sombra:0 4px 20px rgba(10,31,60,.08);--sombra-hover:0 8px 30px rgba(10,31,60,.15)}
@@ -123,9 +123,9 @@ input:focus,select:focus{outline:none;border-color:var(--azul-claro);box-shadow:
 <section class="hero">
   <div class="hero-overlay"></div>
   <div class="container hero-content">
-    <span class="hero-badge">⚙️ Dimensionamento de Engenharia</span>
+    <span class="hero-badge">⚙️ Dimensionamento de Engenharia · v2</span>
     <h2>Dimensionador PHE — Alfa Laval</h2>
-    <p>Método rigoroso de dimensionamento: correlações de <strong>Nusselt por ângulo chevron</strong>, coeficiente global por resistências em série, velocidade de canal e perda de carga verificada.</p>
+    <p>Modelos <strong>gaxetados para fluidos</strong> e <strong>semi-soldados para gases</strong>. Método rigoroso: Nusselt por chevron, U por resistências em série, velocidade de canal e ΔP verificado.</p>
     <div class="hero-cta" style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
       <a href="#dados" class="btn-hero" style="background:linear-gradient(135deg,var(--laranja),var(--laranja-claro));color:var(--branco);padding:13px 28px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px">🚀 Começar dimensionamento</a>
       <a href="#modelos" class="btn-hero-outline" style="background:transparent;color:var(--branco);border:2px solid rgba(255,255,255,.4);padding:11px 26px;border-radius:10px;text-decoration:none;font-weight:600;font-size:15px">Ver modelos</a>
@@ -236,9 +236,8 @@ input:focus,select:focus{outline:none;border-color:var(--azul-claro);box-shadow:
 
 <script>
 // ============================================================
-// BANCO DE DADOS ALFA LAVAL — MODELOS REAIS
-// A: área/placa (m²) | W: largura efetiva (m) | b: gap (m)
-// vazaoMax: m³/h | Pmax: bar | Tmax: °C
+// v2.0 — SOMENTE ALFA LAVAL por categoria
+// gaxetadas = fluidos líquidos/vapor | semisoldadas = gases
 // ============================================================
 const ALFA_LAVAL = {
   gaxetadas: [
@@ -330,18 +329,15 @@ function fAtrito(Re, ang){
 // DIMENSIONAMENTO POR MODELO (método de excelência)
 // ============================================================
 function dimensionarModelo(mod, d, fQ, fF, Q, lmtd, ang, RfQ, RfF, margem, vAlvo){
-  const L = mod.A/mod.W;                 // comprimento efetivo (m)
-  const Dh = 1.6*mod.b;                  // diâmetro hidráulico (m)
-  const kw = 16;                         // aço inox W/m·K
-  const tw = 0.0005;                     // espessura da placa (m)
-
-  // canais iniciais por velocidade alvo
+  const L = mod.A/mod.W;
+  const Dh = 1.6*mod.b;
+  const kw = 16;
+  const tw = 0.0005;
   let Nc = Math.max(1, Math.ceil(d.mQ/(fQ.rho*vAlvo*mod.b*mod.W)),
                         Math.ceil(d.mF/(fF.rho*vAlvo*mod.b*mod.W)));
-
   let res = null;
   for(let iter=0; iter<80; iter++){
-    const A_inst = 2*Nc*mod.A;           // área instalada (placas internas)
+    const A_inst = 2*Nc*mod.A;
     const GQ = d.mQ/(Nc*mod.b*mod.W);
     const GF = d.mF/(Nc*mod.b*mod.W);
     const hQ = calcConveccao(GQ, Dh, fQ.mu, fQ.cp, fQ.k, ang);
@@ -360,7 +356,6 @@ function dimensionarModelo(mod, d, fQ, fF, Q, lmtd, ang, RfQ, RfF, margem, vAlvo
     Nc++;
   }
   if(!res){
-    // não cobriu nem com 80 canais → retorna último estado
     const GQ = d.mQ/(Nc*mod.b*mod.W), GF = d.mF/(Nc*mod.b*mod.W);
     const hQ = calcConveccao(GQ,Dh,fQ.mu,fQ.cp,fQ.k,ang);
     const hF = calcConveccao(GF,Dh,fF.mu,fF.cp,fF.k,ang);
@@ -401,20 +396,14 @@ function dimensionar(d){
   const dT1 = d.tinQ - toutF, dT2 = d.toutQ - d.tinF;
   const lmtd = (dT1-dT2)/Math.log(dT1/dT2);
   d.vazaoReq = Math.max(d.vazaoQ, d.vazaoF);
-
-  // ângulo chevron (automático: gases 30°, líquidos 45°)
   const gasQ = GASES[d.fluidoQ], gasF = GASES[d.fluidoF];
   const ang = d.chevron==='auto' ? (gasQ||gasF ? 30 : 45) : parseInt(d.chevron);
-
-  // velocidade alvo: gases ~8 m/s, líquidos ~0.5 m/s
   const vAlvo = (gasQ||gasF) ? 8 : 0.5;
-
   const RfQ = d.incQ, RfF = d.incF, margem = d.margem/100;
   const resultados = [];
   for(const mod of d.modelos){
     resultados.push(dimensionarModelo(mod, d, fQ, fF, Q, lmtd, ang, RfQ, RfF, margem, vAlvo));
   }
-  // ordenar: atende primeiro, depois menor área instalada
   resultados.sort((a,b)=> (b.atende-a.atende) || (a.A_inst-b.A_inst));
   return {Q, lmtd, toutF, mQ:d.mQ, mF:d.mF, fQ, fF, ang, resultados};
 }
@@ -506,7 +495,7 @@ function exibirResultado(r){
     '<p><strong>Temperatura saída lado frio:</strong> '+r.toutF.toFixed(1)+' °C</p>'+
     '<p><strong>Lado quente:</strong> '+r.fQ.nome+' | <strong>Lado frio:</strong> '+r.fF.nome+'</p></div>';
   html+='<div class="melhor-modelo"><h4>🏆 Melhor modelo para o processo</h4>'+
-    '<p><strong>'+melhor.modelo+'</strong> (Alfa Laval '+(r.resultados[0].gap?'':'')+(tipoAtual==='semisoldadas'?'semi-soldada':'gaxetada')+')</p>'+
+    '<p><strong>'+melhor.modelo+'</strong> (Alfa Laval '+(tipoAtual==='semisoldadas'?'semi-soldada':'gaxetada')+')</p>'+
     '<p><strong>Placas:</strong> '+melhor.Nplacas+' &nbsp;|&nbsp; <strong>Área instalada:</strong> '+melhor.A_inst.toFixed(1)+' m² &nbsp;|&nbsp; <strong>Área necessária:</strong> '+melhor.A_nec.toFixed(1)+' m²</p>'+
     '<p><strong>U global:</strong> '+fmt(melhor.U)+' W/m²·K &nbsp;|&nbsp; <strong>ΔP quente:</strong> '+melhor.dPQ.toFixed(1)+' kPa &nbsp;|&nbsp; <strong>ΔP frio:</strong> '+melhor.dPF.toFixed(1)+' kPa</p></div>';
   html+='<h4 style="margin:18px 0 10px;font-size:15px;color:#0a1f3c">Comparativo técnico entre modelos</h4>'+

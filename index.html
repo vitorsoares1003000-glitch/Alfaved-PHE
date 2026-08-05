@@ -44,7 +44,7 @@
         <div class="container hero-content">
             <span class="hero-badge">⚙️ Ferramenta de Engenharia</span>
             <h2>Dimensionador de Trocadores de Calor de Placas</h2>
-            <p>Transformando desafios em inovação — dimensionamento preliminar e comparação entre os principais fabricantes, com destaque para a linha própria <strong>Alfaved</strong>.</p>
+            <p>Transformando desafios em inovação — selecione os fabricantes e compare modelos reais de placas para o seu processo.</p>
             <div class="hero-cta">
                 <a href="#dados" class="btn-hero">🚀 Começar dimensionamento</a>
                 <a href="#fabricantes" class="btn-hero-outline">Ver fabricantes</a>
@@ -138,8 +138,8 @@
                 <label>Margem de área (%)
                     <input type="number" id="margem" value="10">
                 </label>
-                <label>Preço base (R$/m²)
-                    <input type="number" id="preco" value="1500">
+                <label>Fator de eficiência térmica
+                    <input type="number" id="fatorU" value="1.0" step="0.05">
                 </label>
             </div>
         </section>
@@ -149,8 +149,8 @@
             <div class="card-header">
                 <span class="step-badge">3</span>
                 <div>
-                    <h3>Fabricantes para comparar</h3>
-                    <p class="card-sub">Selecione os fabricantes — a Alfaved é destacada como linha própria</p>
+                    <h3>Selecione os fabricantes</h3>
+                    <p class="card-sub">Marque os fabricantes que deseja comparar — a Alfaved é destacada como linha própria</p>
                 </div>
             </div>
             <div class="fab-grid" id="fabGrid"></div>
@@ -169,7 +169,7 @@
                 <span class="step-badge">4</span>
                 <div>
                     <h3>Resultado do dimensionamento</h3>
-                    <p class="card-sub">Comparativo entre os fabricantes selecionados</p>
+                    <p class="card-sub">Modelo recomendado por fabricante para o seu processo</p>
                 </div>
             </div>
             <div id="resultadoConteudo"></div>

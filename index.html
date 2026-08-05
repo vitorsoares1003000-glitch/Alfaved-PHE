@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google" content="notranslate">
-<title>AlfaVed Dimensionador-PHE · v10</title>
+<title>AlfaVed Dimensionador-PHE · v11</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--azul-escuro:#0a1f3c;--azul:#123a6b;--azul-medio:#1d5aa8;--azul-claro:#2f7fd1;--laranja:#e8731c;--laranja-claro:#f59e4c;--cinza-fundo:#f4f6f9;--cinza-borda:#dde3ea;--texto:#1e293b;--texto-suave:#64748b;--branco:#fff;--verde:#16a34a;--vermelho:#dc2626;--sombra:0 4px 20px rgba(10,31,60,.08)}
@@ -160,7 +160,7 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
 <section class="hero">
   <div class="hero-overlay"></div>
   <div class="container hero-content">
-    <span class="hero-badge">⚙️ Dimensionamento de Engenharia · v10</span>
+    <span class="hero-badge">⚙️ Dimensionamento de Engenharia · v11</span>
     <h2>Dimensionador de Trocadores de Calor de Placas</h2>
     <p>Dimensionamento com <strong>multi-passe</strong> (1×1 a 3×3), <strong>multi-seção</strong> (até 3 etapas), fator de correção F, turbulência por placa H/L e datasheet em PDF.</p>
   </div>
@@ -183,7 +183,7 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
       <div class="sub-card produto">
         <div class="sub-card-head"><span class="side-icon produto-icon">📦</span><h4>Produto</h4></div>
         <label class="obrigatorio">Fluido do processo
-          <select id="fluidoP" onchange="sugerirIncrustacao()">
+          <select id="fluidoP" onchange="preencherAutomatico()">
             <option value="agua">Água (produto)</option>
             <option value="leite">Leite</option>
             <option value="cerveja">Cerveja</option>
@@ -200,14 +200,14 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
             <option value="amonia_v">Amônia (vapor)</option>
           </select>
         </label>
-        <label class="obrigatorio">Vazão do produto (m³/h)<input type="number" id="vazaoP" value="50" step="0.1"></label>
+        <label class="obrigatorio">Vazão do produto (m³/h)<input type="number" id="vazaoP" value="50" step="0.1" onchange="preencherAutomatico()"></label>
         <label class="obrigatorio">Temperatura de entrada (°C)<input type="number" id="tinP" value="30"></label>
         <label class="obrigatorio">Temperatura de saída (°C)<input type="number" id="toutP" value="96"></label>
       </div>
       <div class="sub-card servico">
         <div class="sub-card-head"><span class="side-icon servico-icon">⚙️</span><h4>Serviço — Seção 1</h4></div>
         <label class="obrigatorio">Fluido de serviço
-          <select id="fluidoS" onchange="sugerirIncrustacao()">
+          <select id="fluidoS" onchange="preencherAutomatico()">
             <option value="agua">Água industrial</option>
             <option value="vapor">Vapor saturado (condensação)</option>
             <option value="amonia_l">Amônia (líquido)</option>
@@ -250,7 +250,7 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
   </section>
 
   <section id="restricoes" class="card fade-in">
-    <div class="card-header"><span class="step-badge">3</span><div><h3>Restrições de projeto</h3><p class="card-sub">Perda de carga, incrustação, passes e configuração de placas</p></div></div>
+    <div class="card-header"><span class="step-badge">3</span><div><h3>Restrições de projeto</h3><p class="card-sub">Preenchidas automaticamente conforme os fluidos selecionados</p></div></div>
     <div class="grid-4">
       <label>ΔP máx. produto (kPa)<input type="number" id="dpP" value="80"></label>
       <label>ΔP máx. serviço (kPa)<input type="number" id="dpS" value="80"></label>
@@ -333,8 +333,8 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
 
 <script>
 /* ============================================================
-   AlfaVed Dimensionador-PHE · v10
-   Script reescrito de forma limpa (sem minificação)
+   AlfaVed Dimensionador-PHE · v11
+   Tópico 3 automático + cálculo revisado + datasheet completo
    ============================================================ */
 
 /* ---------- BANCO DE MODELOS ALFA LAVAL ---------- */
@@ -491,14 +491,35 @@ function props(f, T) {
   }
 }
 
-function sugerirIncrustacao() {
+/* ---------- TÓPICO 3 AUTOMÁTICO ---------- */
+function preencherAutomatico() {
   var fP = document.getElementById('fluidoP').value;
   var fS = document.getElementById('fluidoS').value;
+
   if (INC_SUG[fP]) document.getElementById('incP').value = INC_SUG[fP];
   if (INC_SUG[fS]) document.getElementById('incS').value = INC_SUG[fS];
+
+  var dpProduto = 80, dpServico = 80;
+  if (['oleo','oleoveg','xarope','salmoura','suco','leite','cerveja'].indexOf(fP) !== -1) dpProduto = 60;
+  if (['oleo','xarope','glicol40','glicol30'].indexOf(fS) !== -1) dpServico = 60;
+  if (['ar','co2','amonia_v'].indexOf(fP) !== -1) dpProduto = 100;
+  if (['ar','amonia_v'].indexOf(fS) !== -1) dpServico = 100;
+  document.getElementById('dpP').value = dpProduto;
+  document.getElementById('dpS').value = dpServico;
+
+  var cfg = document.getElementById('config');
+  if (['oleo','oleoveg','xarope','salmoura'].indexOf(fP) !== -1) cfg.value = 'L';
+  else if (['ar','co2','amonia_v'].indexOf(fP) !== -1) cfg.value = 'H';
+  else cfg.value = 'auto';
+
+  var vazao = parseFloat(document.getElementById('vazaoP').value) || 50;
+  var passes = document.getElementById('passes');
+  if (vazao > 200) passes.value = '1x1';
+  else if (vazao < 30) passes.value = '2x2';
+  else passes.value = 'auto';
 }
 
-/* ---------- CORRELAÇÕES DE PLACAS CHEVRON ---------- */
+/* ---------- CORRELAÇÕES ---------- */
 var CORR = {
   30:{C:0.348, m:0.663, K:1.20},
   45:{C:0.270, m:0.700, K:2.20},
@@ -555,7 +576,6 @@ function fatorMultiPass(P, R, pP, pS) {
   return fatorCorrecao(P, R);
 }
 
-/* ---------- CONFIGURAÇÕES ---------- */
 var CONFIGS = {
   'H':   {nome:'Só H',  ap:60, as:60},
   'L':   {nome:'Só L',  ap:30, as:30},
@@ -581,8 +601,11 @@ function dimensionarModelo(mod, sec, d, fP, fS, Q, lmtd, cfgKey, pP, pS) {
 
   for (var iter = 0; iter < 120; iter++) {
     var A_inst = 2 * Nc * mod.A;
-    var GP = d.mP / (Nc * mod.b * mod.W) * pP;
-    var GS = vaporCond ? 0 : d.mS / (Nc * mod.b * mod.W) * pS;
+    /* CORREÇÃO: canais por passe, não multiplicação artificial */
+    var canaisP = Math.max(1, Math.floor(Nc / pP));
+    var canaisS = Math.max(1, Math.floor(Nc / pS));
+    var GP = d.mP / (canaisP * mod.b * mod.W);
+    var GS = vaporCond ? 0 : d.mS / (canaisS * mod.b * mod.W);
 
     var ladoP = calcLado(GP, Dh, fP, ap, TmP, TmS, null);
     var hS;
@@ -605,6 +628,7 @@ function dimensionarModelo(mod, sec, d, fP, fS, Q, lmtd, cfgKey, pP, pS) {
       res = {
         Nc:Nc, Nplacas:2*Nc+1, A_inst:A_inst, A_nec:A_nec, U:U,
         hP:ladoP.h, hS:hS, ReP:ladoP.Re, ReS:ReS,
+        PrP:ladoP.Pr, PrS:vaporCond?0:(GS*Dh/fS.mu>0?fS.mu*fS.cp/fS.k:0),
         turbP:ladoP.turb, turbS:vaporCond?'Condensação':classTurb(ReS),
         vP:GP/fP.rho, vS:vaporCond?0:GS/fS.rho, dPP:dPP, dPS:dPS
       };
@@ -615,8 +639,10 @@ function dimensionarModelo(mod, sec, d, fP, fS, Q, lmtd, cfgKey, pP, pS) {
 
   if (!res) {
     var A_inst2 = 2 * Nc * mod.A;
-    var GP2 = d.mP / (Nc * mod.b * mod.W) * pP;
-    var GS2 = vaporCond ? 0 : d.mS / (Nc * mod.b * mod.W) * pS;
+    var canaisP2 = Math.max(1, Math.floor(Nc / pP));
+    var canaisS2 = Math.max(1, Math.floor(Nc / pS));
+    var GP2 = d.mP / (canaisP2 * mod.b * mod.W);
+    var GS2 = vaporCond ? 0 : d.mS / (canaisS2 * mod.b * mod.W);
     var ladoP2 = calcLado(GP2, Dh, fP, ap, TmP, TmS, null);
     var hS2;
     if (vaporCond) {
@@ -634,6 +660,7 @@ function dimensionarModelo(mod, sec, d, fP, fS, Q, lmtd, cfgKey, pP, pS) {
     res = {
       Nc:Nc, Nplacas:2*Nc+1, A_inst:A_inst2, A_nec:A_nec2, U:U2,
       hP:ladoP2.h, hS:hS2, ReP:ladoP2.Re, ReS:ReS2,
+      PrP:ladoP2.Pr, PrS:vaporCond?0:(GS2*Dh/fS.mu>0?fS.mu*fS.cp/fS.k:0),
       turbP:ladoP2.turb, turbS:vaporCond?'Condensação':classTurb(ReS2),
       vP:GP2/fP.rho, vS:vaporCond?0:GS2/fS.rho, dPP:dPP2, dPS:dPS2
     };
@@ -664,7 +691,6 @@ function dimensionarSeccao(sec, d, modelos) {
   var fP = props(d.fluidoP, (sec.tinP + sec.toutP) / 2);
   var fS = props(sec.fluidoS, sec.tinS);
 
-  /* CORREÇÃO IMPORTANTE: atribuir as vazões mássicas em d */
   d.mP = (d.vazaoP / 3600) * fP.rho;
 
   var Q = d.mP * fP.cp * (sec.toutP - sec.tinP);
@@ -685,7 +711,7 @@ function dimensionarSeccao(sec, d, modelos) {
   var dT1 = sec.tinS - sec.toutP;
   var dT2 = toutS - sec.tinP;
   if (dT1 <= 0 || dT2 <= 0) {
-    throw new Error('LMTD inválido: verifique as temperaturas (a do serviço deve ser maior que a do produto).');
+    throw new Error('LMTD inválido: a temperatura do serviço deve ser maior que a do produto.');
   }
   var lmtd = (dT1 - dT2) / Math.log(dT1 / dT2);
 
@@ -817,7 +843,6 @@ function removerSecao() {
 }
 
 function calcular() {
-  /* limpar caixa de erro */
   var erroBox = document.getElementById('erroTela');
   erroBox.style.display = 'none';
 
@@ -913,7 +938,7 @@ function exibirResultado(secoes) {
   });
 
   html += '</tbody></table>' +
-    '<p style="font-size:11px;color:var(--texto-suave);margin-top:10px">Multi-passe: velocidade por canal = vazão×(passes)/canais; ΔP multiplica pelos passes. F=1 para paridade igual (contracorrente); mistos usam fator 1-2. Confira com o software oficial Alfa Laval.</p>';
+    '<p style="font-size:11px;color:var(--texto-suave);margin-top:10px">Multi-passe: velocidade por canal = vazão/(canais por passe); ΔP multiplica pelos passes. F=1 para paridade igual (contracorrente); mistos usam fator 1-2. Confira com o software oficial Alfa Laval.</p>';
 
   c.innerHTML = html;
 }
@@ -950,6 +975,12 @@ function gerarDatasheet(secoes) {
       '<tr><td>Placas</td><td>' + m.Nplacas + '</td></tr>' +
       '<tr><td>Área instalada</td><td>' + m.A_inst.toFixed(1) + ' m²</td></tr>' +
       '<tr><td>Coeficiente U</td><td>' + fmt(m.U) + ' W/m²·K</td></tr>' +
+      '<tr><td>Reynolds produto</td><td>' + fmt(m.ReP) + '</td></tr>' +
+      '<tr><td>Reynolds serviço</td><td>' + (m.ReS ? fmt(m.ReS) : '—') + '</td></tr>' +
+      '<tr><td>Prandtl produto</td><td>' + m.PrP.toFixed(1) + '</td></tr>' +
+      '<tr><td>Prandtl serviço</td><td>' + (m.PrS ? m.PrS.toFixed(1) : '—') + '</td></tr>' +
+      '<tr><td>h convectivo produto</td><td>' + fmt(m.hP) + ' W/m²·K</td></tr>' +
+      '<tr><td>h convectivo serviço</td><td>' + fmt(m.hS) + ' W/m²·K</td></tr>' +
       '<tr><td>Turbulência produto/serviço</td><td>' + m.turbP + ' / ' + m.turbS + '</td></tr>' +
       '<tr><td>ΔP produto / serviço</td><td>' + m.dPP.toFixed(1) + ' / ' + m.dPS.toFixed(1) + ' kPa</td></tr>' +
     '</table></div>';
@@ -990,7 +1021,6 @@ function fmt(n) {
   return n.toLocaleString('pt-BR', {maximumFractionDigits: 0});
 }
 
-/* ---------- EXIBIR ERROS NA TELA (facilita diagnóstico) ---------- */
 window.onerror = function(msg, src, line) {
   var box = document.getElementById('erroTela');
   if (box) {
@@ -1000,9 +1030,9 @@ window.onerror = function(msg, src, line) {
   return false;
 };
 
-/* ---------- INICIALIZAÇÃO ---------- */
 document.addEventListener('DOMContentLoaded', function() {
   montarModelos();
+  preencherAutomatico();
   document.getElementById('btnCalcular').addEventListener('click', calcular);
   document.getElementById('btnImprimir').addEventListener('click', function() { window.print(); });
   document.getElementById('btnPdf').addEventListener('click', baixarPDF);

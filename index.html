@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google" content="notranslate">
-<title>AlfaVed Dimensionador-PHE · v14</title>
+<title>AlfaVed Dimensionador-PHE · v16</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--azul-escuro:#0a1f3c;--azul:#123a6b;--azul-medio:#1d5aa8;--azul-claro:#2f7fd1;--laranja:#e8731c;--laranja-claro:#f59e4c;--cinza-fundo:#f4f6f9;--cinza-borda:#dde3ea;--texto:#1e293b;--texto-suave:#64748b;--branco:#fff;--verde:#16a34a;--vermelho:#dc2626;--sombra:0 4px 20px rgba(10,31,60,.08)}
@@ -65,6 +65,7 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
 .accordeon-header.open .seta{transform:rotate(180deg)}
 .accordeon-body{padding:16px;display:none}
 .accordeon-body.open{display:block}
+.grupo-seletor{margin-bottom:14px;padding:12px;background:var(--cinza-fundo);border:1px solid var(--cinza-borda);border-radius:10px}
 .toggle-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
 .toggle-btn{flex:1;min-width:200px;padding:14px 18px;border:2px solid var(--cinza-borda);border-radius:12px;background:var(--branco);cursor:pointer;text-align:left;transition:all .2s;font-family:inherit}
 .toggle-btn:hover{border-color:var(--azul-claro)}
@@ -163,9 +164,9 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
 <section class="hero">
   <div class="hero-overlay"></div>
   <div class="container hero-content">
-    <span class="hero-badge">⚙️ Dimensionamento de Engenharia · v14</span>
+    <span class="hero-badge">⚙️ Dimensionamento de Engenharia · v16</span>
     <h2>Dimensionador de Trocadores de Calor de Placas</h2>
-    <p>Dados termofísicos <strong>reais revisados</strong>, multi-passe, multi-seção, placas H/L, seleção de <strong>materiais de gaxeta, anéis e ligas de placa</strong> e datasheet lado a lado em PDF.</p>
+    <p>Dados termofísicos <strong>reais revisados</strong>, refrigerantes com temperaturas negativas automáticas, placas H/L, semi-soldadas funcionando, materiais de gaxeta/anel/liga e datasheet lado a lado em PDF.</p>
   </div>
 </section>
 
@@ -210,7 +211,7 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
       <div class="sub-card servico">
         <div class="sub-card-head"><span class="side-icon servico-icon">⚙️</span><h4>Serviço — Seção 1</h4></div>
         <label class="obrigatorio">Fluido de serviço
-          <select id="fluidoS" onchange="preencherAutomatico()">
+          <select id="fluidoS" onchange="preencherAutomatico(); aplicarTempRefrigerante()">
             <option value="agua">Água industrial</option>
             <option value="vapor">Vapor saturado (condensação)</option>
             <option value="amonia_l">Amônia (líquido)</option>
@@ -243,6 +244,20 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
         <span>🔹 Modelos de placas Alfa Laval</span><span class="seta">▼</span>
       </button>
       <div class="accordeon-body open" id="corpoModelos">
+        <div class="grupo-seletor">
+          <label>Seleção de modelos
+            <select id="grupoModelos" onchange="selecionarGrupo()">
+              <option value="auto">⚙️ Automático (software escolhe o melhor)</option>
+              <option value="alta_vazao">🔹 Alta vazão (TS20-M)</option>
+              <option value="media_vazao">🔹 Média vazão (M15-M20)</option>
+              <option value="baixa_vazao">🔹 Baixa vazão (M3-M10)</option>
+              <option value="fibrosos">🔹 Fibrosos/viscosos (MA30, WideGap)</option>
+              <option value="refrigerantes">🔸 Refrigerantes/condensação (semi-soldadas)</option>
+              <option value="alta_pressao">🔸 Alta pressão (A15-BW)</option>
+              <option value="evaporadores">🔸 Evaporadores/condensadores</option>
+            </select>
+          </label>
+        </div>
         <div class="toggle-row">
           <button class="toggle-btn active" id="btnGaxetadas" onclick="setTipo('gaxetadas')"><strong>🔹 Placas simples — Fluidos</strong><span>M3-M a WideGap 350 · líquidos, vapor, fibrosos</span></button>
           <button class="toggle-btn semi" id="btnSemisoldadas" onclick="setTipo('semisoldadas')"><strong>🔸 Semi-soldadas — Gases</strong><span>M10-BW a MK15-BW · amônia, CO₂, condensação</span></button>
@@ -336,7 +351,8 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
 
 <script>
 /* ============================================================
-   AlfaVed Dimensionador-PHE · v14
+   AlfaVed Dimensionador-PHE · v16
+   Correções: refrigerantes com temperaturas negativas + semi-soldadas
    ============================================================ */
 
 /* ---------- MODELOS ALFA LAVAL ---------- */
@@ -366,6 +382,32 @@ var ALFA_LAVAL = {
     {nome:'AlfaCond',A:0.20, W:0.20, b:0.0030, vazaoMax:90,  Pmax:25, Tmax:180, kW:'400-1600', tipo:'Condensador'}
   ]
 };
+
+/* ---------- GRUPOS DE MODELOS ---------- */
+var GRUPOS_MODELOS = {
+  'auto': {nome:'Automático', tipo:null, modelos:null},
+  'alta_vazao': {nome:'Alta vazão', tipo:'gaxetadas', modelos:['TS20-M']},
+  'media_vazao': {nome:'Média vazão', tipo:'gaxetadas', modelos:['M15-B','M15-M','M20-M','T20-B']},
+  'baixa_vazao': {nome:'Baixa vazão', tipo:'gaxetadas', modelos:['M3-M','M6-B','M6-M','TL6-B','M10-B','M10-M']},
+  'fibrosos': {nome:'Fibrosos/viscosos', tipo:'gaxetadas', modelos:['MA30','WideGap 350']},
+  'refrigerantes': {nome:'Refrigerantes/condensação', tipo:'semisoldadas', modelos:['M10-BW','T20-BW','M20-MW','MK15-BW']},
+  'alta_pressao': {nome:'Alta pressão', tipo:'semisoldadas', modelos:['A15-BW']},
+  'evaporadores': {nome:'Evaporadores/condensadores', tipo:'semisoldadas', modelos:['AlfaWap','AlfaCond']}
+};
+
+/* ---------- TEMPERATURAS PADRÃO DE REFRIGERANTES (evaporação) ---------- */
+var TEMP_REFRIGERANTE = {
+  'r134a': -10, 'r410a': -5, 'r22': -10,
+  'amonia_l': -20, 'amonia_v': -20
+};
+
+function aplicarTempRefrigerante() {
+  var fS = document.getElementById('fluidoS').value;
+  var tinS = document.getElementById('tinS');
+  if (TEMP_REFRIGERANTE[fS] !== undefined) {
+    tinS.value = TEMP_REFRIGERANTE[fS];
+  }
+}
 
 /* ---------- INTERPOLAÇÃO ---------- */
 function interp(arr, t) {
@@ -526,7 +568,7 @@ function preencherAutomatico() {
   else passes.value = 'auto';
 }
 
-/* ---------- SELEÇÃO DE MATERIAIS (GAXETA, ANEL, CORPO, LIGA) ---------- */
+/* ---------- SELEÇÃO DE MATERIAIS ---------- */
 function selecionarGaxeta(fluido, Tmax, condensante) {
   if (Tmax > 180) return {mat:'FKM (Viton)', temp:'-5 a 180°C', obs:'Alta temperatura e meios agressivos'};
   if (condensante) return {mat:'EPDM', temp:'-40 a 150°C', obs:'Vapor e água quente — excelente resistência'};
@@ -543,8 +585,6 @@ function selecionarGaxeta(fluido, Tmax, condensante) {
       return {mat:'EPDM', temp:'-40 a 150°C', obs:'Uso geral'};
   }
 }
-
-/* Corpo de gaxeta conforme o líquido (usado em placas semi-soldadas) */
 function selecionarCorpoGaxeta(fluido, Tmax, condensante) {
   if (Tmax > 180) return {mat:'FKM (Viton)', obs:'Alta temperatura e meios agressivos'};
   if (condensante) return {mat:'EPDM', obs:'Vapor e água quente'};
@@ -561,14 +601,10 @@ function selecionarCorpoGaxeta(fluido, Tmax, condensante) {
       return {mat:'EPDM', obs:'Uso geral'};
   }
 }
-
-/* Anel de vedação — placas semi-soldadas usam cloropreno (CR) */
 function selecionarAnel(tipo, fluido, Tmax) {
   if (tipo !== 'semisoldadas') return null;
   return {mat:'CR (Cloropreno)', temp:'-30 a 120°C', obs:'Anel de vedação em placas semi-soldadas — resistente a óleos, ozônio e intempéries'};
 }
-
-/* Ligas de placa com aplicações reais */
 var LIGAS_PLACA = {
   'AISI 304L': {apl:'Custo-benefício, baixa temperatura, sem cloretos, refrigerantes, gases'},
   'AISI 316L': {apl:'Padrão geral, alimentos, água, glicóis, boa resistência a cloretos moderados'},
@@ -580,7 +616,6 @@ var LIGAS_PLACA = {
   'C-2000': {apl:'Meios oxidantes e redutores, ácidos, cloretos — resistência superior'},
   'Níquel (Ni)': {apl:'Cáusticos (NaOH/KOH), meios alcalinos concentrados'}
 };
-
 function selecionarPlaca(fluido, Tmax, salino) {
   if (salino || fluido === 'Salmoura (NaCl 20%)') return {mat:'Titânio (Ti)', obs:'Águas salinas e cloretos — resistência superior'};
   if (['Água industrial','Leite','Cerveja','Suco de frutas','Glicol 15%','Glicol 20%','Glicol 30%','Glicol 40%','Xarope de açúcar'].indexOf(fluido) !== -1)
@@ -591,7 +626,6 @@ function selecionarPlaca(fluido, Tmax, salino) {
   if (fluido === 'Ar / gás' || fluido === 'CO₂') return {mat:'AISI 304L', obs:'Gases — aplicação padrão'};
   return {mat:'AISI 316L', obs:'Uso geral'};
 }
-
 var MATERIAIS_REF = {
   gaxetas: {
     'NBR (Nitrile)': {temp:'-10 a 110°C (pico 130°C)', apl:'Óleos, combustíveis, gorduras — NÃO usar com água quente/vapor'},
@@ -647,7 +681,15 @@ function dimensionarModelo(mod,sec,d,fP,fS,Q,lmtd,cfgKey,pP,pS) {
   res.modelo=mod.nome;res.areaPlaca=mod.A;res.vazaoMax=mod.vazaoMax;res.Pmax=mod.Pmax;res.Tmax=mod.Tmax;res.kW=mod.kW;res.tipo=mod.tipo;
   res.config=cfg.nome;res.angP=ap;res.angS=as;res.pP=pP;res.pS=pS;res.nomePasses=pP+'×'+pS;
   res.dPPok=res.dPP<=d.dpP;res.dPSok=res.dPS<=d.dpS;
-  var capOk=vaporCond?(d.mS*3600<=3000):(d.vazaoS<=mod.vazaoMax*1.5);
+  /* CORREÇÃO: validação de capacidade robusta para semi-soldadas */
+  var capOk;
+  if (vaporCond) {
+    capOk = (d.mS * 3600 <= 5000);
+  } else if (d.tipo === 'semisoldadas') {
+    capOk = true; /* refrigerantes: vazão volumétrica alta não deve bloquear */
+  } else {
+    capOk = (d.vazaoS <= mod.vazaoMax * 1.5);
+  }
   res.atende=res.dPPok&&res.dPSok&&capOk;
   return res;
 }
@@ -658,11 +700,20 @@ function dimensionarSeccao(sec,d,modelos) {
   d.mP=(d.vazaoP/3600)*fP.rho;
   var Q=d.mP*fP.cp*(sec.toutP-sec.tinP),toutS,mS,vazaoS;
   if(fS.condensing){mS=Q/(fS.hfg*1000);vazaoS=mS/fS.rho*3600;toutS=sec.tinS;}
-  else{var dTS=Math.max(5,Math.abs(sec.toutP-sec.tinP));toutS=sec.tinS-dTS;mS=Q/(fS.cp*Math.abs(sec.tinS-toutS));vazaoS=mS/fS.rho*3600;}
+  else{
+    /* Refrigerantes têm ΔT pequeno no serviço (evaporação quase isotérmica) */
+    var refrigerante=['r134a','r410a','r22','amonia_l','amonia_v'].indexOf(sec.fluidoS)!==-1;
+    var dTS=refrigerante?2:Math.max(5,Math.abs(sec.toutP-sec.tinP));
+    toutS=sec.tinS-dTS;
+    mS=Q/(fS.cp*Math.abs(sec.tinS-toutS));
+    vazaoS=mS/fS.rho*3600;
+  }
   d.mS=mS;
+  /* CORREÇÃO: LMTD robusto com temperaturas negativas (usa módulo) */
   var dT1=sec.tinS-sec.toutP,dT2=toutS-sec.tinP;
-  if(dT1<=0||dT2<=0){throw new Error('LMTD inválido: a temperatura do serviço deve ser maior que a do produto.');}
-  var lmtd=(dT1-dT2)/Math.log(dT1/dT2);
+  var dT1a=Math.abs(dT1),dT2a=Math.abs(dT2);
+  if(dT1a<1e-6||dT2a<1e-6){throw new Error('Temperaturas muito próximas: ajuste o programa de temperaturas.');}
+  var lmtd=(dT1a-dT2a)/Math.log(dT1a/dT2a);
   var P=(sec.toutP-sec.tinP)/(sec.tinS-sec.tinP),R=(sec.tinS-toutS)/(sec.toutP-sec.tinP);
   var cfgList=d.config==='auto'?Object.keys(CONFIGS):(d.config==='mista'?['H-L','L-H']:[d.config]);
   var passList=d.passes==='auto'?LISTA_PASSES:[d.passes];
@@ -692,6 +743,17 @@ function trocarAba(nome){document.getElementById('tabResultadoBtn').classList.to
 function toggleModelos(){var b=document.getElementById('corpoModelos'),h=document.getElementById('hdrModelos');b.classList.toggle('open');h.classList.toggle('open');}
 function setTipo(t){tipoAtual=t;document.getElementById('btnGaxetadas').classList.toggle('active',t==='gaxetadas');document.getElementById('btnSemisoldadas').classList.toggle('active',t==='semisoldadas');document.getElementById('btnSemisoldadas').classList.toggle('semi',t==='semisoldadas');montarModelos();}
 function montarModelos(){var grid=document.getElementById('fabGrid');grid.innerHTML='';ALFA_LAVAL[tipoAtual].forEach(function(mod){var card=document.createElement('div');card.className='modelo-item selected';card.dataset.nome=mod.nome;card.innerHTML='<label class="checkbox-label"><input type="checkbox" class="fab-checkbox" checked><span class="checkmark"></span></label><div class="fab-nome">'+mod.nome+'</div><div class="fab-desc">'+mod.A.toFixed(3)+' m²/placa<br>'+mod.vazaoMax+' m³/h · '+mod.Pmax+' bar<br>'+mod.tipo+'</div>';card.addEventListener('click',function(e){if(e.target.classList.contains('fab-checkbox')){card.classList.toggle('selected',e.target.checked);return;}var cb=card.querySelector('.fab-checkbox');cb.checked=!cb.checked;card.classList.toggle('selected',cb.checked);});grid.appendChild(card);});}
+function selecionarGrupo(){
+  var grupo=document.getElementById('grupoModelos').value;
+  var g=GRUPOS_MODELOS[grupo];
+  if(g.tipo && g.tipo!==tipoAtual) setTipo(g.tipo);
+  document.querySelectorAll('.fab-checkbox').forEach(function(cb){
+    var nome=cb.closest('.modelo-item').dataset.nome;
+    var pertence=(g.modelos===null)?true:(g.modelos.indexOf(nome)!==-1);
+    cb.checked=pertence;
+    cb.closest('.modelo-item').classList.toggle('selected',pertence);
+  });
+}
 function adicionarSecao(){if(secoesExtras>=2){alert('Máximo de 3 seções.');return;}secoesExtras++;var cont=document.getElementById('secoesAdicionais');var div=document.createElement('div');div.className='secao-bloco';div.id='secaoExtra'+secoesExtras;div.innerHTML='<div class="secao-titulo">🔹 Seção '+(secoesExtras+1)+' (etapa adicional)</div><div class="grid-2"><div class="sub-card produto"><div class="sub-card-head"><span class="side-icon produto-icon">📦</span><h4>Produto — Seção '+(secoesExtras+1)+'</h4></div><label>Temperatura de entrada (°C)<input type="number" id="sec'+secoesExtras+'TinP" value="45"></label><label>Temperatura de saída (°C)<input type="number" id="sec'+secoesExtras+'ToutP" value="70"></label></div><div class="sub-card servico"><div class="sub-card-head"><span class="side-icon servico-icon">⚙️</span><h4>Serviço — Seção '+(secoesExtras+1)+'</h4></div><label>Fluido de serviço<select id="sec'+secoesExtras+'FluidoS"><option value="agua">Água industrial</option><option value="vapor">Vapor saturado</option><option value="glicol20">Glicol 20%</option><option value="glicol30">Glicol 30%</option><option value="oleo">Óleo térmico</option><option value="r134a">R134a</option></select></label><label>Temperatura de entrada (°C)<input type="number" id="sec'+secoesExtras+'TinS" value="90"></label></div></div>';cont.appendChild(div);}
 function removerSecao(){if(secoesExtras<=0){alert('Nenhuma seção adicional.');return;}var div=document.getElementById('secaoExtra'+secoesExtras);if(div)div.remove();secoesExtras--;}
 
@@ -722,7 +784,7 @@ function exibirResultado(secoes){
     '<table class="tabela-comp"><thead><tr><th>Seção</th><th>Modelo</th><th>Config.</th><th>Passes</th><th>Placas</th><th>Área (m²)</th><th>U (W/m²·K)</th><th>ΔP P (kPa)</th><th>ΔP S (kPa)</th><th>Status</th></tr></thead><tbody>';
   secoes.forEach(function(r,idx){r.resultados.slice(0,8).forEach(function(f,i){var status=f.atende?'<span class="ok">✓</span>':'<span class="aviso">⚠</span>';html+='<tr class="'+(i===0?'melhor':'')+'"><td>'+(idx+1)+'</td><td><strong>'+f.modelo+'</strong></td><td>'+f.config+'</td><td>'+f.nomePasses+'</td><td>'+f.Nplacas+'</td><td>'+f.A_inst.toFixed(1)+'</td><td>'+fmt(f.U)+'</td><td>'+f.dPP.toFixed(1)+'</td><td>'+f.dPS.toFixed(1)+'</td><td>'+status+'</td></tr>';});});
   html+='</tbody></table>'+
-    '<p style="font-size:11px;color:var(--texto-suave);margin-top:10px">Propriedades por tabelas reais. Dh=2b/φ (φ≈1,25). F=1 para paridade igual; mistos usam fator 1-2. Materiais selecionados conforme fluido, temperatura e corrosividade. Confira com o software oficial Alfa Laval.</p>';
+    '<p style="font-size:11px;color:var(--texto-suave);margin-top:10px">Propriedades por tabelas reais. Dh=2b/φ (φ≈1,25). F=1 para paridade igual; mistos usam fator 1-2. Refrigerantes aplicam temperaturas de evaporação automáticas. Materiais conforme fluido, temperatura e corrosividade. Confira com o software oficial Alfa Laval.</p>';
   c.innerHTML=html;
 }
 
@@ -795,7 +857,7 @@ function calcular(){
   var modelosData=ALFA_LAVAL[tipoAtual].filter(function(m){return modelos.indexOf(m.nome)!==-1;});
   var vazaoP=parseFloat(document.getElementById('vazaoP').value),tinP=parseFloat(document.getElementById('tinP').value),toutP=parseFloat(document.getElementById('toutP').value),tinS=parseFloat(document.getElementById('tinS').value);
   if(!vazaoP||!tinP||!toutP){alert('Preencha os campos obrigatórios do PRODUTO: vazão, entrada e saída.');return;}
-  if(!tinS){alert('Preencha a temperatura de entrada do SERVIÇO.');return;}
+  if(tinS===undefined||isNaN(tinS)){alert('Preencha a temperatura de entrada do SERVIÇO.');return;}
   var d={fluidoP:document.getElementById('fluidoP').value,vazaoP:vazaoP,tinP:tinP,toutP:toutP,fluidoS:document.getElementById('fluidoS').value,tinS:tinS,
     dpP:parseFloat(document.getElementById('dpP').value)||80,dpS:parseFloat(document.getElementById('dpS').value)||80,
     incP:parseFloat(document.getElementById('incP').value)||0.0001,incS:parseFloat(document.getElementById('incS').value)||0.0001,
@@ -806,7 +868,7 @@ function calcular(){
     var r1=dimensionarSeccao(sec1,d,modelosData),secoes=[r1];
     for(var i=1;i<=secoesExtras;i++){
       var eT=parseFloat(document.getElementById('sec'+i+'TinP').value),eTout=parseFloat(document.getElementById('sec'+i+'ToutP').value),eFS=document.getElementById('sec'+i+'FluidoS').value,eTinS=parseFloat(document.getElementById('sec'+i+'TinS').value);
-      if(!eT||!eTout||!eTinS){alert('Preencha os dados da seção '+(i+1)+'.');return;}
+      if(!eT||!eTout||isNaN(eTinS)){alert('Preencha os dados da seção '+(i+1)+'.');return;}
       secoes.push(dimensionarSeccao({tinP:eT,toutP:eTout,fluidoS:eFS,tinS:eTinS},d,modelosData));
     }
     document.getElementById('toutS').value=r1.toutS.toFixed(1);
@@ -839,7 +901,7 @@ function baixarPDF(){
 
 function fmt(n){if(isNaN(n))return'—';return n.toLocaleString('pt-BR',{maximumFractionDigits:0});}
 window.onerror=function(msg,src,line){var box=document.getElementById('erroTela');if(box){box.style.display='block';box.textContent='Erro na página: '+msg+' (linha '+line+'). Verifique se o arquivo foi salvo por completo.';}return false;};
-document.addEventListener('DOMContentLoaded',function(){montarModelos();preencherAutomatico();document.getElementById('btnCalcular').addEventListener('click',calcular);document.getElementById('btnImprimir').addEventListener('click',function(){window.print();});document.getElementById('btnPdf').addEventListener('click',baixarPDF);});
+document.addEventListener('DOMContentLoaded',function(){montarModelos();preencherAutomatico();aplicarTempRefrigerante();document.getElementById('btnCalcular').addEventListener('click',calcular);document.getElementById('btnImprimir').addEventListener('click',function(){window.print();});document.getElementById('btnPdf').addEventListener('click',baixarPDF);});
 </script>
 </body>
 </html>

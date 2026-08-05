@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google" content="notranslate">
-<title>AlfaVed Dimensionador-PHE · v9</title>
+<title>AlfaVed Dimensionador-PHE</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--azul-escuro:#0a1f3c;--azul:#123a6b;--azul-medio:#1d5aa8;--azul-claro:#2f7fd1;--laranja:#e8731c;--laranja-claro:#f59e4c;--cinza-fundo:#f4f6f9;--cinza-borda:#dde3ea;--texto:#1e293b;--texto-suave:#64748b;--branco:#fff;--verde:#16a34a;--vermelho:#dc2626;--sombra:0 4px 20px rgba(10,31,60,.08);--sombra-hover:0 8px 30px rgba(10,31,60,.15)}
@@ -33,19 +33,18 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:var(--ci
 .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 @media(max-width:768px){.grid-2,.grid-3{grid-template-columns:1fr}}
 .sub-card{background:var(--cinza-fundo);border:1px solid var(--cinza-borda);border-radius:12px;padding:18px}
-.sub-card.servico{border-top:4px solid var(--laranja)}
 .sub-card.produto{border-top:4px solid var(--azul-claro)}
+.sub-card.servico{border-top:4px solid var(--laranja)}
 .sub-card-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
 .sub-card-head h4{font-size:15px;color:var(--azul-escuro)}
 .side-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
-.servico-icon{background:rgba(232,115,28,.15)}
 .produto-icon{background:rgba(47,127,209,.15)}
+.servico-icon{background:rgba(232,115,28,.15)}
 label{display:block;margin-bottom:12px;font-size:13px;font-weight:600;color:#475569}
 .obrigatorio::after{content:' *';color:var(--vermelho);font-weight:700}
 input,select{width:100%;padding:10px 13px;margin-top:5px;border:1.5px solid var(--cinza-borda);border-radius:10px;font-size:14px;font-family:inherit;background:var(--branco);color:var(--texto);transition:all .2s}
 input:focus,select:focus{outline:none;border-color:var(--azul-claro);box-shadow:0 0 0 3px rgba(47,127,209,.15)}
 input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--azul-escuro);font-weight:600}
-input.calculado:read-only{background:#eef4fb}
 .ident-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 @media(max-width:768px){.ident-grid{grid-template-columns:1fr}}
 .ident-card{background:linear-gradient(135deg,var(--azul-escuro),var(--azul));border-radius:12px;padding:18px;color:var(--branco)}
@@ -94,8 +93,8 @@ input.calculado:read-only{background:#eef4fb}
 .melhor-modelo{background:linear-gradient(135deg,#fdf0e4,#fff7f0);border:2px solid var(--laranja);border-radius:12px;padding:18px;margin-bottom:18px;box-shadow:0 4px 16px rgba(232,115,28,.15)}
 .melhor-modelo h4{color:var(--laranja);margin-bottom:8px;font-size:16px}
 .melhor-modelo p{font-size:13px;margin-bottom:5px}
-.tabela-comp{width:100%;border-collapse:collapse;margin-top:14px;font-size:12.5px}
-.tabela-comp th,.tabela-comp td{padding:9px 10px;border:1px solid var(--cinza-borda);text-align:center}
+.tabela-comp{width:100%;border-collapse:collapse;margin-top:14px;font-size:12px}
+.tabela-comp th,.tabela-comp td{padding:8px 9px;border:1px solid var(--cinza-borda);text-align:center}
 .tabela-comp th{background:linear-gradient(135deg,var(--azul),var(--azul-medio));color:var(--branco);font-weight:600}
 .tabela-comp tr:nth-child(even){background:var(--cinza-fundo)}
 .tabela-comp tr.melhor{background:#fdf0e4;font-weight:700}
@@ -144,9 +143,9 @@ input.calculado:read-only{background:#eef4fb}
 <section class="hero">
   <div class="hero-overlay"></div>
   <div class="container hero-content">
-    <span class="hero-badge">⚙️ Dimensionamento de Engenharia · v9</span>
+    <span class="hero-badge">⚙️ Dimensionamento de Engenharia</span>
     <h2>Dimensionador de Trocadores de Calor de Placas</h2>
-    <p>Informe os dados do <strong>produto</strong> (obrigatórios) e a temperatura de entrada do <strong>serviço</strong>. O cálculo determina a <strong>vazão necessária do serviço</strong> e a <strong>temperatura de saída</strong> para atingir a eficiência desejada.</p>
+    <p>Informe os dados do <strong>produto</strong> (obrigatórios) e a temperatura de entrada do <strong>serviço</strong>. O cálculo determina a vazão necessária do serviço, a temperatura de saída e a melhor configuração de placas H/L.</p>
   </div>
 </section>
 
@@ -194,9 +193,9 @@ input.calculado:read-only{background:#eef4fb}
             <option value="amonia_v">Amônia (vapor)</option>
           </select>
         </label>
-        <label class="obrigatorio">Vazão do produto (m³/h)<input type="number" id="vazaoP" value="40" step="0.1"></label>
-        <label class="obrigatorio">Temperatura de entrada (°C)<input type="number" id="tinP" value="25"></label>
-        <label class="obrigatorio">Temperatura de saída (°C)<input type="number" id="toutP" value="45"></label>
+        <label class="obrigatorio">Vazão do produto (m³/h)<input type="number" id="vazaoP" value="50" step="0.1"></label>
+        <label class="obrigatorio">Temperatura de entrada (°C)<input type="number" id="tinP" value="30"></label>
+        <label class="obrigatorio">Temperatura de saída (°C)<input type="number" id="toutP" value="96"></label>
       </div>
       <div class="sub-card servico">
         <div class="sub-card-head"><span class="side-icon servico-icon">⚙️</span><h4>Serviço</h4></div>
@@ -217,7 +216,7 @@ input.calculado:read-only{background:#eef4fb}
             <option value="ar">Ar / gás de processo</option>
           </select>
         </label>
-        <label class="obrigatorio">Temperatura de entrada (°C)<input type="number" id="tinS" value="80"></label>
+        <label class="obrigatorio">Temperatura de entrada (°C)<input type="number" id="tinS" value="125"></label>
         <label>Temperatura de saída (°C)<input type="text" id="toutS" class="calculado" placeholder="calculada" readonly></label>
         <label>Vazão necessária do serviço (m³/h)<input type="text" id="vazaoS" class="calculado" placeholder="calculada" readonly></label>
       </div>
@@ -245,19 +244,19 @@ input.calculado:read-only{background:#eef4fb}
   </section>
 
   <section id="restricoes" class="card fade-in">
-    <div class="card-header"><span class="step-badge">3</span><div><h3>Restrições de projeto</h3><p class="card-sub">Limites de perda de carga, incrustação e critérios</p></div></div>
+    <div class="card-header"><span class="step-badge">3</span><div><h3>Restrições de projeto</h3><p class="card-sub">Limites de perda de carga, incrustação e configuração de placas</p></div></div>
     <div class="grid-3">
       <label>ΔP máx. produto (kPa)<input type="number" id="dpP" value="80"></label>
       <label>ΔP máx. serviço (kPa)<input type="number" id="dpS" value="80"></label>
       <label>Incrustação produto (m²·K/W)<input type="number" id="incP" value="0.0001" step="0.00001"></label>
       <label>Incrustação serviço (m²·K/W)<input type="number" id="incS" value="0.00005" step="0.00001"></label>
       <label>Margem de área (%)<input type="number" id="margem" value="10"></label>
-      <label>Ângulo chevron
-        <select id="chevron">
-          <option value="auto">Automático</option>
-          <option value="30">30° (baixa ΔP)</option>
-          <option value="45">45° (equilibrado)</option>
-          <option value="60">60° (alta turbulência)</option>
+      <label>Configuração de placas
+        <select id="config">
+          <option value="auto">Automática (sugere a melhor)</option>
+          <option value="H">Só placas H — 60° (alta turbulência)</option>
+          <option value="L">Só placas L — 30° (baixa turbulência)</option>
+          <option value="mista">Mista H/L (produto + serviço)</option>
         </select>
       </label>
     </div>
@@ -268,7 +267,7 @@ input.calculado:read-only{background:#eef4fb}
   </div>
 
   <section id="resultado" class="card resultado-card fade-in" style="display:none;">
-    <div class="card-header"><span class="step-badge">4</span><div><h3>Resultado do dimensionamento</h3><p class="card-sub">Melhor equipamento recomendado para o seu processo</p></div></div>
+    <div class="card-header"><span class="step-badge">4</span><div><h3>Resultado do dimensionamento</h3><p class="card-sub">Melhor equipamento e configuração recomendados</p></div></div>
     <div id="resultadoConteudo"></div>
     <div class="calc-area"><button id="btnImprimir" class="btn-secondary">🖨️ Imprimir / Salvar PDF</button></div>
   </section>
@@ -348,26 +347,26 @@ const INC_SUG={ agua:0.00005,vapor:0.00010,amonia_l:0.00005,amonia_v:0.00005,gli
 function props(f, T){
   const t=T||40;
   switch(f){
-    case 'agua': return {rho:1001-0.21*t-0.0031*t*t, cp:4217-1.3*t+0.014*t*t, k:0.565+0.0021*t-7e-6*t*t, mu:0.00180*Math.exp(-0.0247*t), nome:'Água industrial'};
-    case 'vapor':{const rho=interp(TAB_VAPOR.map(r=>[r[0],r[1]]),t);const mu=interp(TAB_VAPOR.map(r=>[r[0],r[2]]),t)*1e-5;const k=interp(TAB_VAPOR.map(r=>[r[0],r[3]]),t);const hfg=interp(TAB_VAPOR.map(r=>[r[0],r[4]]),t);return {rho:rho,cp:2040,k:k,mu:mu,hfg:hfg,condensing:true,nome:'Vapor saturado'};}
-    case 'amonia_l': return {rho:682-0.9*(t-20),cp:4660,k:0.52,mu:2.2e-4*Math.exp(-0.015*(t-20)),nome:'Amônia (líquido)'};
-    case 'amonia_v': return {rho:3.2*(303)/(t+273),cp:2150,k:0.024,mu:1.0e-5,nome:'Amônia (vapor)'};
-    case 'glicol15':{const g=TAB_GLICOL['15'];return {rho:g[0],cp:g[1],k:g[2],mu:g[3]*Math.exp(-0.022*(t-20)),nome:'Glicol 15%'};}
-    case 'glicol20':{const g=TAB_GLICOL['20'];return {rho:g[0],cp:g[1],k:g[2],mu:g[3]*Math.exp(-0.022*(t-20)),nome:'Glicol 20%'};}
-    case 'glicol30':{const g=TAB_GLICOL['30'];return {rho:g[0],cp:g[1],k:g[2],mu:g[3]*Math.exp(-0.022*(t-20)),nome:'Glicol 30%'};}
-    case 'glicol40':{const g=TAB_GLICOL['40'];return {rho:g[0],cp:g[1],k:g[2],mu:g[3]*Math.exp(-0.022*(t-20)),nome:'Glicol 40%'};}
-    case 'r134a': return {rho:1290,cp:1340,k:0.095,mu:3.3e-4,nome:'R134a (líquido)'};
-    case 'r410a': return {rho:1100,cp:1600,k:0.090,mu:1.4e-4,nome:'R410A (líquido)'};
-    case 'r22': return {rho:1200,cp:1180,k:0.085,mu:2.2e-4,nome:'R22 (líquido)'};
-    case 'oleo': return {rho:850,cp:2100,k:0.14,mu:0.06*Math.exp(-0.025*(t-20)),nome:'Óleo térmico'};
-    case 'ar': return {rho:1.16*(303)/(t+273),cp:1007,k:0.026,mu:1.85e-5,nome:'Ar / gás'};
-    case 'co2': return {rho:1.87*(303)/(t+273),cp:850,k:0.0166,mu:1.5e-5,nome:'CO₂'};
-    case 'leite': return {rho:1030,cp:3930,k:0.53,mu:0.0021*Math.exp(-0.018*(t-20)),nome:'Leite'};
-    case 'cerveja': return {rho:1010,cp:4100,k:0.56,mu:0.0019*Math.exp(-0.018*(t-20)),nome:'Cerveja'};
-    case 'suco': return {rho:1040,cp:3900,k:0.54,mu:0.0025*Math.exp(-0.018*(t-20)),nome:'Suco de frutas'};
-    case 'oleoveg': return {rho:920,cp:2000,k:0.17,mu:0.05*Math.exp(-0.02*(t-20)),nome:'Óleo vegetal'};
-    case 'salmoura': return {rho:1170,cp:3200,k:0.50,mu:0.0025*Math.exp(-0.015*(t-20)),nome:'Salmoura (NaCl 20%)'};
-    case 'xarope': return {rho:1300,cp:2900,k:0.40,mu:0.10*Math.exp(-0.02*(t-20)),nome:'Xarope de açúcar'};
+    case 'agua': return {rho:1001-0.21*t-0.0031*t*t, cp:4217-1.3*t+0.014*t*t, k:0.565+0.0021*t-7e-6*t*t, mu:0.00180*Math.exp(-0.0247*t), muFn:tt=>0.00180*Math.exp(-0.0247*tt), nome:'Água industrial'};
+    case 'vapor':{const rho=interp(TAB_VAPOR.map(r=>[r[0],r[1]]),t);const mu=interp(TAB_VAPOR.map(r=>[r[0],r[2]]),t)*1e-5;const k=interp(TAB_VAPOR.map(r=>[r[0],r[3]]),t);const hfg=interp(TAB_VAPOR.map(r=>[r[0],r[4]]),t);return {rho:rho,cp:2040,k:k,mu:mu,muFn:tt=>interp(TAB_VAPOR.map(r=>[r[0],r[2]]),tt)*1e-5,hfg:hfg,condensing:true,nome:'Vapor saturado'};}
+    case 'amonia_l': return {rho:682-0.9*(t-20),cp:4660,k:0.52,mu:2.2e-4*Math.exp(-0.015*(t-20)),muFn:tt=>2.2e-4*Math.exp(-0.015*(tt-20)),nome:'Amônia (líquido)'};
+    case 'amonia_v': return {rho:3.2*(303)/(t+273),cp:2150,k:0.024,mu:1.0e-5,muFn:()=>1.0e-5,nome:'Amônia (vapor)'};
+    case 'glicol15':{const g=TAB_GLICOL['15'];return {rho:g[0],cp:g[1],k:g[2],mu:g[3]*Math.exp(-0.022*(t-20)),muFn:tt=>g[3]*Math.exp(-0.022*(tt-20)),nome:'Glicol 15%'};}
+    case 'glicol20':{const g=TAB_GLICOL['20'];return {rho:g[0],cp:g[1],k:g[2],mu:g[3]*Math.exp(-0.022*(t-20)),muFn:tt=>g[3]*Math.exp(-0.022*(tt-20)),nome:'Glicol 20%'};}
+    case 'glicol30':{const g=TAB_GLICOL['30'];return {rho:g[0],cp:g[1],k:g[2],mu:g[3]*Math.exp(-0.022*(t-20)),muFn:tt=>g[3]*Math.exp(-0.022*(tt-20)),nome:'Glicol 30%'};}
+    case 'glicol40':{const g=TAB_GLICOL['40'];return {rho:g[0],cp:g[1],k:g[2],mu:g[3]*Math.exp(-0.022*(t-20)),muFn:tt=>g[3]*Math.exp(-0.022*(tt-20)),nome:'Glicol 40%'};}
+    case 'r134a': return {rho:1290,cp:1340,k:0.095,mu:3.3e-4,muFn:()=>3.3e-4,nome:'R134a (líquido)'};
+    case 'r410a': return {rho:1100,cp:1600,k:0.090,mu:1.4e-4,muFn:()=>1.4e-4,nome:'R410A (líquido)'};
+    case 'r22': return {rho:1200,cp:1180,k:0.085,mu:2.2e-4,muFn:()=>2.2e-4,nome:'R22 (líquido)'};
+    case 'oleo': return {rho:850,cp:2100,k:0.14,mu:0.06*Math.exp(-0.025*(t-20)),muFn:tt=>0.06*Math.exp(-0.025*(tt-20)),nome:'Óleo térmico'};
+    case 'ar': return {rho:1.16*(303)/(t+273),cp:1007,k:0.026,mu:1.85e-5,muFn:()=>1.85e-5,nome:'Ar / gás'};
+    case 'co2': return {rho:1.87*(303)/(t+273),cp:850,k:0.0166,mu:1.5e-5,muFn:()=>1.5e-5,nome:'CO₂'};
+    case 'leite': return {rho:1030,cp:3930,k:0.53,mu:0.0021*Math.exp(-0.018*(t-20)),muFn:tt=>0.0021*Math.exp(-0.018*(tt-20)),nome:'Leite'};
+    case 'cerveja': return {rho:1010,cp:4100,k:0.56,mu:0.0019*Math.exp(-0.018*(t-20)),muFn:tt=>0.0019*Math.exp(-0.018*(tt-20)),nome:'Cerveja'};
+    case 'suco': return {rho:1040,cp:3900,k:0.54,mu:0.0025*Math.exp(-0.018*(t-20)),muFn:tt=>0.0025*Math.exp(-0.018*(tt-20)),nome:'Suco de frutas'};
+    case 'oleoveg': return {rho:920,cp:2000,k:0.17,mu:0.05*Math.exp(-0.02*(t-20)),muFn:tt=>0.05*Math.exp(-0.02*(tt-20)),nome:'Óleo vegetal'};
+    case 'salmoura': return {rho:1170,cp:3200,k:0.50,mu:0.0025*Math.exp(-0.015*(t-20)),muFn:tt=>0.0025*Math.exp(-0.015*(tt-20)),nome:'Salmoura (NaCl 20%)'};
+    case 'xarope': return {rho:1300,cp:2900,k:0.40,mu:0.10*Math.exp(-0.02*(t-20)),muFn:tt=>0.10*Math.exp(-0.02*(tt-20)),nome:'Xarope de açúcar'};
   }
 }
 function sugerirIncrustacao(){
@@ -376,81 +375,136 @@ function sugerirIncrustacao(){
   if(INC_SUG[fP]) document.getElementById('incP').value=INC_SUG[fP];
   if(INC_SUG[fS]) document.getElementById('incS').value=INC_SUG[fS];
 }
+// ============================================================
+// CORRELAÇÕES — placa H (60°) e L (30°)
+// Nu = C·Re^m·Pr^(1/3)·(μ/μw)^0.17   |   f = K·Re^-0.20
+// ============================================================
 const CORR={30:{C:0.348,m:0.663,K:1.20},45:{C:0.270,m:0.700,K:2.20},60:{C:0.122,m:0.750,K:4.50}};
-function calcConveccao(G,Dh,mu,cp,k,ang){const Re=G*Dh/mu,Pr=mu*cp/k,c=CORR[ang];const Nu=c.C*Math.pow(Re,c.m)*Math.pow(Pr,1/3);return {Re:Re,Pr:Pr,Nu:Nu,h:Nu*k/Dh};}
+function classTurb(Re){
+  if(Re<400) return 'Laminar';
+  if(Re<2000) return 'Transição';
+  return 'Turbulento';
+}
+function calcConveccao(G,Dh,mu,cp,k,ang){
+  const Re=G*Dh/mu, Pr=mu*cp/k, c=CORR[ang];
+  const Nu=c.C*Math.pow(Re,c.m)*Math.pow(Pr,1/3);
+  const h=Nu*k/Dh;
+  return {Re,Pr,Nu,h,turb:classTurb(Re)};
+}
 function fAtrito(Re,ang){return CORR[ang].K*Math.pow(Re,-0.20);}
-function fatorLMTD(P,R){if(P<=0||R<=0)return 1;const num=Math.sqrt(R*R+1)*Math.log((1-P)/(1-P*R));const den=(R-1)*Math.log((2-P*(R+1-Math.sqrt(R*R+1)))/(2-P*(R+1+Math.sqrt(R*R+1))));if(Math.abs(den)<1e-6)return 1;return Math.max(0.5,Math.min(1,num/den));}
-function dimensionarModelo(mod,d,fP,fS,Q,lmtd,ang,RfP,RfS,margem,vAlvo,passes){
-  const L=mod.A/mod.W,Dh=1.6*mod.b,kw=16,tw=0.0005,nP=passes||1;
-  let Nc=Math.max(1,Math.ceil(d.mP/(fP.rho*vAlvo*mod.b*mod.W*nP)),Math.ceil(d.mS/(fS.rho*vAlvo*mod.b*mod.W*nP)));
+function calcLado(G,Dh,f,ang,Tm,TmOutro,hOutro){
+  const base=calcConveccao(G,Dh,f.mu,f.cp,f.k,ang);
+  const R1=1/base.h;
+  const R2=hOutro?1/hOutro:1e6;
+  const Tw=(Tm*R2+TmOutro*R1)/(R1+R2);
+  const muW=f.muFn?f.muFn(Tw):f.mu;
+  const h=base.h*Math.pow(f.mu/muW,0.17);
+  return {Re:base.Re,Pr:base.Pr,Nu:base.Nu,h,turb:base.turb};
+}
+function hCondensacao(tSat,tMedia){
+  const dT=Math.max(2,tSat-tMedia);
+  return Math.min(12000,Math.max(5000,9500/Math.pow(dT,0.12)));
+}
+function fatorLMTD(P,R){
+  if(P<=0||R<=0) return 1;
+  const num=Math.sqrt(R*R+1)*Math.log((1-P)/(1-P*R));
+  const den=(R-1)*Math.log((2-P*(R+1-Math.sqrt(R*R+1)))/(2-P*(R+1+Math.sqrt(R*R+1))));
+  if(Math.abs(den)<1e-6) return 1;
+  return Math.max(0.5,Math.min(1,num/den));
+}
+const CONFIGS={
+  H:   {nome:'Só H',  desc:'60° / 60° · alta turbulência', ap:60, as:60},
+  L:   {nome:'Só L',  desc:'30° / 30° · baixa turbulência', ap:30, as:30},
+  'H-L':{nome:'Mista H/L', desc:'Produto 60° + Serviço 30°', ap:60, as:30},
+  'L-H':{nome:'Mista L/H', desc:'Produto 30° + Serviço 60°', ap:30, as:60}
+};
+function dimensionarModelo(mod,d,fP,fS,Q,lmtd,RfP,RfS,margem,cfgKey){
+  const cfg=CONFIGS[cfgKey], ap=cfg.ap, as=cfg.as;
+  const kw=16,tw=0.0005;
+  const L=mod.A/mod.W, Dh=1.6*mod.b;
+  const vaporCond=!!fS.condensing;
+  const TmP=(d.tinP+d.toutP)/2, TmS=d.tinS;
+  const Uest=vaporCond?4500:2500;
+  let Nc=Math.max(3,Math.ceil((Q/(Uest*lmtd))*(1+margem/100)/(2*mod.A)));
   let res=null;
-  for(let iter=0;iter<100;iter++){
+  for(let iter=0;iter<80;iter++){
     const A_inst=2*Nc*mod.A;
-    const GP=d.mP/(Nc*mod.b*mod.W),GS=d.mS/(Nc*mod.b*mod.W);
-    const hP=calcConveccao(GP,Dh,fP.mu,fP.cp,fP.k,ang);
-    const hS=calcConveccao(GS,Dh,fS.mu,fS.cp,fS.k,ang);
-    const U=1/(1/hP.h+RfP+tw/kw+RfS+1/hS.h);
+    const GP=d.mP/(Nc*mod.b*mod.W);
+    const GS=d.mS/(Nc*mod.b*mod.W);
+    let ladoP=calcLado(GP,Dh,fP,ap,TmP,TmS,null);
+    let hS;
+    if(vaporCond){ hS=hCondensacao(d.tinS,TmP); }
+    else{
+      const lS=calcLado(GS,Dh,fS,as,TmS,TmP,ladoP.h);
+      ladoP=calcLado(GP,Dh,fP,ap,TmP,TmS,lS.h);
+      hS=lS.h;
+    }
+    const U=1/(1/ladoP.h+RfP+tw/kw+RfS+1/hS);
     const A_nec=Q/(U*lmtd);
     const A_min=A_nec*(1+margem/100);
     if(A_inst>=A_min){
-      const dPP=1.15*fAtrito(hP.Re,ang)*(L/Dh)*(GP*GP/(2*fP.rho))*nP;
-      const dPS=1.15*fAtrito(hS.Re,ang)*(L/Dh)*(GS*GS/(2*fS.rho))*nP;
-      res={Nc:Nc,Nplacas:2*Nc+1,A_inst:A_inst,A_nec:A_nec,U:U,hP:hP.h,hS:hS.h,ReP:hP.Re,ReS:hS.Re,vP:GP/fP.rho,vS:GS/fS.rho,dPP:dPP,dPS:dPS};
+      const ReS=vaporCond?0:GS*Dh/fS.mu;
+      const dPP=1.15*fAtrito(ladoP.Re,ap)*(L/Dh)*(GP*GP/(2*fP.rho));
+      const dPS=vaporCond?3.0:1.15*fAtrito(ReS,as)*(L/Dh)*(GS*GS/(2*fS.rho));
+      res={Nc:Nc,Nplacas:2*Nc+1,A_inst:A_inst,A_nec:A_nec,U:U,hP:ladoP.h,hS:hS,
+           ReP:ladoP.Re,ReS:ReS,turbP:ladoP.turb,turbS:vaporCond?'Condensação':classTurb(ReS),
+           vP:GP/fP.rho,vS:vaporCond?0:GS/fS.rho,dPP:dPP,dPS:dPS};
       break;
     }
     Nc++;
   }
   if(!res){
-    const GP=d.mP/(Nc*mod.b*mod.W),GS=d.mS/(Nc*mod.b*mod.W);
-    const hP=calcConveccao(GP,Dh,fP.mu,fP.cp,fP.k,ang);
-    const hS=calcConveccao(GS,Dh,fS.mu,fS.cp,fS.k,ang);
-    const U=1/(1/hP.h+RfP+tw/kw+RfS+1/hS.h);
-    const A_nec=Q/(U*lmtd),A_inst=2*Nc*mod.A;
-    const dPP=1.15*fAtrito(hP.Re,ang)*(L/Dh)*(GP*GP/(2*fP.rho))*nP;
-    const dPS=1.15*fAtrito(hS.Re,ang)*(L/Dh)*(GS*GS/(2*fS.rho))*nP;
-    res={Nc:Nc,Nplacas:2*Nc+1,A_inst:A_inst,A_nec:A_nec,U:U,hP:hP.h,hS:hS.h,ReP:hP.Re,ReS:hS.Re,vP:GP/fP.rho,vS:GS/fS.rho,dPP:dPP,dPS:dPS};
+    const A_inst=2*Nc*mod.A;
+    const GP=d.mP/(Nc*mod.b*mod.W), GS=d.mS/(Nc*mod.b*mod.W);
+    let ladoP=calcLado(GP,Dh,fP,ap,TmP,TmS,null);
+    let hS;
+    if(vaporCond){ hS=hCondensacao(d.tinS,TmP); }
+    else{
+      const lS=calcLado(GS,Dh,fS,as,TmS,TmP,ladoP.h);
+      ladoP=calcLado(GP,Dh,fP,ap,TmP,TmS,lS.h);
+      hS=lS.h;
+    }
+    const U=1/(1/ladoP.h+RfP+tw/kw+RfS+1/hS);
+    const A_nec=Q/(U*lmtd);
+    const ReS=vaporCond?0:GS*Dh/fS.mu;
+    const dPP=1.15*fAtrito(ladoP.Re,ap)*(L/Dh)*(GP*GP/(2*fP.rho));
+    const dPS=vaporCond?3.0:1.15*fAtrito(ReS,as)*(L/Dh)*(GS*GS/(2*fS.rho));
+    res={Nc:Nc,Nplacas:2*Nc+1,A_inst:A_inst,A_nec:A_nec,U:U,hP:ladoP.h,hS:hS,
+         ReP:ladoP.Re,ReS:ReS,turbP:ladoP.turb,turbS:vaporCond?'Condensação':classTurb(ReS),
+         vP:GP/fP.rho,vS:vaporCond?0:GS/fS.rho,dPP:dPP,dPS:dPS};
   }
-  res.modelo=mod.nome;res.areaPlaca=mod.A;res.gap=mod.b*1000;res.vazaoMax=mod.vazaoMax;res.Pmax=mod.Pmax;res.Tmax=mod.Tmax;res.kW=mod.kW;res.tipo=mod.tipo;res.passes=nP;
+  res.modelo=mod.nome;res.areaPlaca=mod.A;res.vazaoMax=mod.vazaoMax;res.Pmax=mod.Pmax;res.Tmax=mod.Tmax;res.kW=mod.kW;res.tipo=mod.tipo;
+  res.config=cfg.nome;res.angP=ap;res.angS=as;
   res.dPPok=res.dPP<=d.dpP;res.dPSok=res.dPS<=d.dpS;
-  res.atende=res.dPPok&&res.dPSok&&(d.vazaoReq<=mod.vazaoMax);
+  const capOk=vaporCond?(d.mS*3600<=3000):(d.vazaoS<=mod.vazaoMax*1.5);
+  res.atende=res.dPPok&&res.dPSok&&capOk;
   return res;
 }
 function dimensionar(d){
   const fP=props(d.fluidoP,(d.tinP+d.toutP)/2);
   const fS=props(d.fluidoS,d.tinS);
   d.mP=(d.vazaoP/3600)*fP.rho;
-  // Calor a partir do PRODUTO (obrigatório)
   const Q=d.mP*fP.cp*(d.toutP-d.tinP);
-  let toutS, mS, vazaoS;
-  if(fS.condensing){
-    // Serviço é vapor: vazão de vapor necessária
-    mS=Q/(fS.hfg*1000);
-    vazaoS=mS/fS.rho*3600;
-    toutS=d.tinS; // condensação a temperatura constante
-  } else {
-    // Serviço líquido: assume ΔT de serviço típico (ex: 10°C) para achar vazão
-    // Usa a temperatura de entrada do serviço e uma queda razoável
-    const dTS=Math.max(5, Math.abs(d.toutP-d.tinP)); // aproximação
-    toutS=d.tinS - dTS;
-    mS=Q/(fS.cp*Math.abs(d.tinS-toutS));
-    vazaoS=mS/fS.rho*3600;
-  }
-  d.mS=mS; d.vazaoS=vazaoS; d.toutS=toutS;
+  let toutS,mS,vazaoS;
+  if(fS.condensing){ mS=Q/(fS.hfg*1000); vazaoS=mS/fS.rho*3600; toutS=d.tinS; }
+  else{ const dTS=Math.max(5,Math.abs(d.toutP-d.tinP)); toutS=d.tinS-dTS; mS=Q/(fS.cp*Math.abs(d.tinS-toutS)); vazaoS=mS/fS.rho*3600; }
+  d.mS=mS;d.vazaoS=vazaoS;d.toutS=toutS;
   const dT1=d.tinS-toutP, dT2=toutS-d.tinP;
   const lmtd=(dT1-dT2)/Math.log(dT1/dT2);
-  const P=(d.toutP-d.tinP)/(d.tinS-d.tinP),R=(d.tinS-toutS)/(d.toutP-d.tinP);
+  const P=(d.toutP-d.tinP)/(d.tinS-d.tinP), R=(d.tinS-toutS)/(d.toutP-d.tinP);
   const F=fatorLMTD(Math.abs(P),Math.abs(R));
   const lmtdF=lmtd*F;
-  d.vazaoReq=Math.max(d.vazaoP,d.vazaoS);
-  const gas=['ar','co2','amonia_v'];
-  const gasP=gas.includes(d.fluidoP),gasS=gas.includes(d.fluidoS);
-  const ang=d.chevron==='auto'?(gasP||gasS?30:45):parseInt(d.chevron);
-  const vAlvo=(gasP||gasS)?8:0.5;
-  const RfP=d.incP,RfS=d.incS,margem=d.margem/100,passes=d.passes||1;
+  d.vazaoReq=Math.max(d.vazaoP,fS.condensing?0:d.vazaoS);
+  const RfP=d.incP,RfS=d.incS,margem=d.margem/100;
+  const cfgList=d.config==='auto'?['H','L','H-L','L-H']:(d.config==='mista'?['H-L','L-H']:[d.config]);
   const resultados=[];
-  for(const mod of d.modelos){resultados.push(dimensionarModelo(mod,d,fP,fS,Q,lmtdF,ang,RfP,RfS,margem,vAlvo,passes));}
-  resultados.sort((a,b)=>(b.atende-a.atende)||(a.A_inst-b.A_inst));
-  return {Q,lmtd,lmtdF,toutS,vazaoS,mP:d.mP,mS:d.mS,fP,fS,ang,F,resultados};
+  for(const mod of d.modelos){
+    for(const cfgKey of cfgList){
+      resultados.push(dimensionarModelo(mod,d,fP,fS,Q,lmtdF,RfP,RfS,margem,cfgKey));
+    }
+  }
+  resultados.sort((a,b)=>(b.atende-a.atende)||(a.A_inst-b.A_inst)||(a.Nplacas-b.Nplacas));
+  return {Q:Q,lmtd:lmtd,lmtdF:lmtdF,toutS:toutS,vazaoS:vazaoS,mP:d.mP,mS:d.mS,fP:fP,fS:fS,F:F,resultados:resultados};
 }
 let tipoAtual='gaxetadas';
 document.addEventListener('DOMContentLoaded',()=>{montarModelos();document.getElementById('btnCalcular').addEventListener('click',calcular);document.getElementById('btnImprimir').addEventListener('click',()=>window.print());});
@@ -494,12 +548,11 @@ function calcular(){
     incP:parseFloat(document.getElementById('incP').value)||0.0001,
     incS:parseFloat(document.getElementById('incS').value)||0.00005,
     margem:parseFloat(document.getElementById('margem').value)||10,
-    chevron:document.getElementById('chevron').value,
+    config:document.getElementById('config').value,
     passes:1,modelos:modelosData,tipo:tipoAtual
   };
   try{
     const r=dimensionar(d);
-    // Preencher campos calculados do serviço
     document.getElementById('toutS').value=r.toutS.toFixed(1);
     document.getElementById('vazaoS').value=r.vazaoS.toFixed(1);
     exibirResultado(r);
@@ -513,23 +566,24 @@ function exibirResultado(r){
   const proj='PRJ-AV'+(document.getElementById('numProjeto').value||'');
   let html='<div class="resultado-resumo"><h4>📋 Projeto: '+proj+' · Cliente: '+cliente+'</h4>'+
     '<p><strong>Calor trocado:</strong> '+fmt(r.Q/1000)+' kW</p>'+
-    '<p><strong>LMTD corrigido:</strong> '+r.lmtdF.toFixed(1)+' °C &nbsp;|&nbsp; <strong>Fator F:</strong> '+r.F.toFixed(2)+' &nbsp;|&nbsp; <strong>Chevron:</strong> '+r.ang+'°</p>'+
+    '<p><strong>LMTD corrigido:</strong> '+r.lmtdF.toFixed(1)+' °C &nbsp;|&nbsp; <strong>Fator F:</strong> '+r.F.toFixed(2)+'</p>'+
     '<p><strong>Produto:</strong> '+r.fP.nome+' | <strong>Serviço:</strong> '+r.fS.nome+'</p>'+
     '<p><strong>Vazão necessária do serviço:</strong> '+r.vazaoS.toFixed(1)+' m³/h</p>'+
     '<p><strong>Temperatura de saída do serviço:</strong> '+r.toutS.toFixed(1)+' °C</p></div>';
-  html+='<div class="melhor-modelo"><h4>🏆 Melhor equipamento recomendado</h4>'+
-    '<p><strong>'+melhor.modelo+'</strong> (Alfa Laval '+(tipoAtual==='semisoldadas'?'semi-soldada':'gaxetada')+' · '+melhor.tipo+')</p>'+
-    '<p><strong>Placas:</strong> '+melhor.Nplacas+' &nbsp;|&nbsp; <strong>Área instalada:</strong> '+melhor.A_inst.toFixed(1)+' m² &nbsp;|&nbsp; <strong>Área necessária:</strong> '+melhor.A_nec.toFixed(1)+' m²</p>'+
-    '<p><strong>U global:</strong> '+fmt(melhor.U)+' W/m²·K &nbsp;|&nbsp; <strong>ΔP produto:</strong> '+melhor.dPP.toFixed(1)+' kPa &nbsp;|&nbsp; <strong>ΔP serviço:</strong> '+melhor.dPS.toFixed(1)+' kPa</p>'+
+  html+='<div class="melhor-modelo"><h4>🏆 Melhor equipamento e configuração recomendados</h4>'+
+    '<p><strong>'+melhor.modelo+'</strong> · Configuração <strong>'+melhor.config+'</strong> ('+melhor.angP+'° / '+melhor.angS+'°)</p>'+
+    '<p><strong>Placas:</strong> '+melhor.Nplacas+' &nbsp;|&nbsp; <strong>Área instalada:</strong> '+melhor.A_inst.toFixed(1)+' m² &nbsp;|&nbsp; <strong>U global:</strong> '+fmt(melhor.U)+' W/m²·K</p>'+
+    '<p><strong>Turbulência produto:</strong> '+melhor.turbP+' (Re '+fmt(melhor.ReP)+') &nbsp;|&nbsp; <strong>Turbulência serviço:</strong> '+melhor.turbS+(melhor.ReS?' (Re '+fmt(melhor.ReS)+')':'')+'</p>'+
+    '<p><strong>ΔP produto:</strong> '+melhor.dPP.toFixed(1)+' kPa &nbsp;|&nbsp; <strong>ΔP serviço:</strong> '+melhor.dPS.toFixed(1)+' kPa</p>'+
     '<p><strong>Capacidade típica do modelo:</strong> '+melhor.kW+' kW</p></div>';
-  html+='<h4 style="margin:18px 0 10px;font-size:15px;color:#0a1f3c">Comparativo técnico entre modelos</h4>'+
-    '<table class="tabela-comp"><thead><tr><th>Modelo</th><th>Placas</th><th>Área inst. (m²)</th><th>U (W/m²·K)</th><th>Re produto</th><th>v produto (m/s)</th><th>ΔP produto (kPa)</th><th>Re serviço</th><th>v serviço (m/s)</th><th>ΔP serviço (kPa)</th><th>Status</th></tr></thead><tbody>';
+  html+='<h4 style="margin:18px 0 10px;font-size:15px;color:#0a1f3c">Comparativo modelo × configuração</h4>'+
+    '<table class="tabela-comp"><thead><tr><th>Modelo</th><th>Config.</th><th>Ângulos</th><th>Placas</th><th>Área (m²)</th><th>U (W/m²·K)</th><th>Turb. produto</th><th>Turb. serviço</th><th>ΔP prod. (kPa)</th><th>ΔP serv. (kPa)</th><th>Status</th></tr></thead><tbody>';
   r.resultados.forEach((f,i)=>{
     const status=f.atende?'<span class="ok">✓ Atende</span>':'<span class="aviso">⚠ Verificar</span>';
-    html+='<tr class="'+(i===0?'melhor':'')+'"><td><strong>'+f.modelo+'</strong></td><td>'+f.Nplacas+'</td><td>'+f.A_inst.toFixed(1)+'</td><td>'+fmt(f.U)+'</td><td>'+fmt(f.ReP)+'</td><td>'+f.vP.toFixed(2)+'</td><td>'+f.dPP.toFixed(1)+'</td><td>'+fmt(f.ReS)+'</td><td>'+f.vS.toFixed(2)+'</td><td>'+f.dPS.toFixed(1)+'</td><td>'+status+'</td></tr>';
+    html+='<tr class="'+(i===0?'melhor':'')+'"><td><strong>'+f.modelo+'</strong></td><td>'+f.config+'</td><td>'+f.angP+'°/'+f.angS+'°</td><td>'+f.Nplacas+'</td><td>'+f.A_inst.toFixed(1)+'</td><td>'+fmt(f.U)+'</td><td>'+f.turbP+'</td><td>'+f.turbS+'</td><td>'+f.dPP.toFixed(1)+'</td><td>'+f.dPS.toFixed(1)+'</td><td>'+status+'</td></tr>';
   });
   html+='</tbody></table>';
-  html+='<p style="font-size:11px;color:var(--texto-suave);margin-top:10px">Propriedades reais por temperatura média (tabelas de vapor, ASHRAE, Engineering Toolbox). ΔP inclui perdas de portas (+15%). LMTD corrigido por fator F (1-2 passagens). Confira com o software oficial Alfa Laval antes da compra.</p>';
+  html+='<p style="font-size:11px;color:var(--texto-suave);margin-top:10px">Placa H = 60° (alta turbulência, maior h e ΔP) · Placa L = 30° (baixa turbulência, menor h e ΔP). h corrigido por viscosidade na parede (Sieder-Tate). Vapor condensante: h de condensação 5000–12000 W/m²·K. Confira com o software oficial Alfa Laval antes da compra.</p>';
   c.innerHTML=html;
   sec.style.display='block';
   sec.scrollIntoView({behavior:'smooth'});

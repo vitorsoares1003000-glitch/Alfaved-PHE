@@ -13,25 +13,33 @@ function configurarMenuMobile() {
     toggle.addEventListener('click', () => nav.classList.toggle('open'));
 }
 
-// ===== MONTAR FABRICANTES =====
+// ===== MONTAR FABRICANTES (com checkbox) =====
 function montarFabricantes() {
     const grid = document.getElementById('fabGrid');
     grid.innerHTML = '';
     Object.entries(FABRICANTES).forEach(([key, fab]) => {
         const card = document.createElement('div');
-        card.className = 'fab-card' + (fab.proprio ? ' alfaved' : '') + ' selected';
+        card.className = 'fab-card selected';
         card.dataset.key = key;
         card.innerHTML = `
+            <label class="checkbox-label">
+                <input type="checkbox" class="fab-checkbox" checked>
+                <span class="checkmark"></span>
+            </label>
             <div class="fab-logo" style="color:${fab.cor}">${fab.logo}</div>
             <div class="fab-nome">${fab.nome}</div>
             <div class="fab-desc">${fab.descricao}</div>
-            ${fab.proprio ? '<span class="fab-badge">⭐ Linha própria</span>' : ''}
-            <div class="fab-check">✓ Selecionado</div>
+            <div class="fab-modelos">${fab.modelos.length} modelos</div>
         `;
-        card.addEventListener('click', () => {
-            card.classList.toggle('selected');
-            const check = card.querySelector('.fab-check');
-            check.style.display = card.classList.contains('selected') ? 'block' : 'none';
+        card.addEventListener('click', (e) => {
+            // Não alternar se clicou no checkbox diretamente
+            if (e.target.classList.contains('fab-checkbox')) {
+                card.classList.toggle('selected', e.target.checked);
+                return;
+            }
+            const checkbox = card.querySelector('.fab-checkbox');
+            checkbox.checked = !checkbox.checked;
+            card.classList.toggle('selected', checkbox.checked);
         });
         grid.appendChild(card);
     });
@@ -54,6 +62,19 @@ function configurarNavegacao() {
 // ===== CALCULAR =====
 function configurarCalcular() {
     document.getElementById('btnCalcular').addEventListener('click', () => {
+        // Coletar fabricantes selecionados
+        const fabricantes = [];
+        document.querySelectorAll('.fab-checkbox').forEach(cb => {
+            if (cb.checked) {
+                fabricantes.push(cb.closest('.fab-card').dataset.key);
+            }
+        });
+
+        if (fabricantes.length === 0) {
+            alert('Selecione pelo menos um fabricante.');
+            return;
+        }
+
         const dados = {
             fluidoQ: document.getElementById('fluidoQ').value,
             vazaoQ: parseFloat(document.getElementById('vazaoQ').value),
@@ -68,12 +89,15 @@ function configurarCalcular() {
             incQ: parseFloat(document.getElementById('incQ').value),
             incF: parseFloat(document.getElementById('incF').value),
             margem: parseFloat(document.getElementById('margem').value),
-            preco: parseFloat(document.getElementById('preco').value)
+            fatorU: parseFloat(document.getElementById('fatorU').value) || 1.0,
+            fabricantes: fabricantes
         };
+
         if (!dados.vazaoQ || !dados.tinQ || !dados.toutQ) {
             alert('Preencha os dados do lado quente.');
             return;
         }
+
         const resultado = dimensionar(dados);
         exibirResultado(resultado);
     });
@@ -83,8 +107,6 @@ function configurarCalcular() {
 function exibirResultado(r) {
     const sec = document.getElementById('resultado');
     const conteudo = document.getElementById('resultadoConteudo');
-    const alfaved = r.resultados.find(x => x.proprio);
-    const melhor = r.resultados[0];
 
     let html = `
         <div class="resultado-resumo">
@@ -92,30 +114,30 @@ function exibirResultado(r) {
             <p><strong>Calor trocado:</strong> ${formatarNum(r.Q / 1000)} kW</p>
             <p><strong>LMTD:</strong> ${r.lmtd.toFixed(1)} °C</p>
             <p><strong>Temperatura saída lado frio:</strong> ${r.toutF.toFixed(1)} °C</p>
-            <p><strong>Vazão mássica quente:</strong> ${r.mQ.toFixed(1)} kg/s | <strong>Frio:</strong> ${r.mF.toFixed(1)} kg/s</p>
         </div>
     `;
 
-    if (alfaved && melhor) {
-        const economia = ((melhor.area - alfaved.area) / melhor.area * 100).toFixed(1);
-        html += `
-            <div class="destaque-alfaved">
-                <h4>⭐ ALFAVED — Solução recomendada</h4>
-                <p><strong>Área:</strong> ${alfaved.area.toFixed(1)} m² | <strong>Placas:</strong> ${alfaved.numPlacas} | <strong>Custo:</strong> ${formatarMoeda(alfaved.custo)}</p>
-                <p><strong>Economia vs. concorrente mais próximo:</strong> ${economia}% de área</p>
-            </div>
-        `;
-    }
-
-    html += `<h4 style="margin:20px 0 10px;">Comparativo entre fabricantes</h4>`;
+    html += `<h4 style="margin:20px 0 10px;">Modelo recomendado por fabricante</h4>`;
     html += `<table class="tabela-comp">
-        <thead><tr><th>Fabricante</th><th>Área (m²)</th><th>Placas</th><th>Custo (R$)</th><th>ΔP (kPa)</th><th>U (W/m²·K)</th></tr></thead>
+        <thead><tr>
+            <th>Fabricante</th>
+            <th>Modelo</th>
+            <th>Área (m²)</th>
+            <th>Placas</th>
+            <th>Área/placa (m²)</th>
+            <th>Chevron (°)</th>
+            <th>Vazão máx. (m³/h)</th>
+        </tr></thead>
         <tbody>`;
     r.resultados.forEach(f => {
-        html += `<tr class="${f.proprio ? 'alfaved-row' : ''}">
-            <td>${f.proprio ? '⭐ ' : ''}${f.nome}</td>
-            <td>${f.area.toFixed(1)}</td><td>${f.numPlacas}</td>
-            <td>${formatarMoeda(f.custo)}</td><td>${f.dp.toFixed(0)}</td><td>${f.U.toFixed(0)}</td>
+        html += `<tr>
+            <td>${f.nome}</td>
+            <td><strong>${f.modelo}</strong></td>
+            <td>${f.area.toFixed(1)}</td>
+            <td>${f.numPlacas}</td>
+            <td>${f.areaPorPlaca.toFixed(3)}</td>
+            <td>${f.chevron}</td>
+            <td>${f.vazaoMax}</td>
         </tr>`;
     });
     html += `</tbody></table>`;
@@ -132,7 +154,7 @@ function gerarGrafico(r) {
     const ctx = document.getElementById('graficoArea');
     if (!ctx) return;
     if (window.graficoAtual) window.graficoAtual.destroy();
-    const labels = r.resultados.map(f => f.proprio ? f.nome + ' ⭐' : f.nome);
+    const labels = r.resultados.map(f => f.nome + ' (' + f.modelo + ')');
     const areas = r.resultados.map(f => parseFloat(f.area.toFixed(1)));
     const cores = r.resultados.map(f => f.cor);
     window.graficoAtual = new Chart(ctx, {
@@ -168,4 +190,3 @@ function configurarImprimir() {
 
 // ===== UTILITÁRIOS =====
 function formatarNum(n) { return n.toLocaleString('pt-BR', { maximumFractionDigits: 1 }); }
-function formatarMoeda(n) { return n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); }

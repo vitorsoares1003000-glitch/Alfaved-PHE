@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google" content="notranslate">
-<title>AlfaVed Dimensionador-PHE · v8</title>
+<title>AlfaVed Dimensionador-PHE · v9</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--azul-escuro:#0a1f3c;--azul:#123a6b;--azul-medio:#1d5aa8;--azul-claro:#2f7fd1;--laranja:#e8731c;--laranja-claro:#f59e4c;--cinza-fundo:#f4f6f9;--cinza-borda:#dde3ea;--texto:#1e293b;--texto-suave:#64748b;--branco:#fff;--verde:#16a34a;--vermelho:#dc2626;--sombra:0 4px 20px rgba(10,31,60,.08);--sombra-hover:0 8px 30px rgba(10,31,60,.15)}
@@ -41,8 +41,11 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:var(--ci
 .servico-icon{background:rgba(232,115,28,.15)}
 .produto-icon{background:rgba(47,127,209,.15)}
 label{display:block;margin-bottom:12px;font-size:13px;font-weight:600;color:#475569}
+.obrigatorio::after{content:' *';color:var(--vermelho);font-weight:700}
 input,select{width:100%;padding:10px 13px;margin-top:5px;border:1.5px solid var(--cinza-borda);border-radius:10px;font-size:14px;font-family:inherit;background:var(--branco);color:var(--texto);transition:all .2s}
 input:focus,select:focus{outline:none;border-color:var(--azul-claro);box-shadow:0 0 0 3px rgba(47,127,209,.15)}
+input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--azul-escuro);font-weight:600}
+input.calculado:read-only{background:#eef4fb}
 .ident-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 @media(max-width:768px){.ident-grid{grid-template-columns:1fr}}
 .ident-card{background:linear-gradient(135deg,var(--azul-escuro),var(--azul));border-radius:12px;padding:18px;color:var(--branco)}
@@ -141,9 +144,9 @@ input:focus,select:focus{outline:none;border-color:var(--azul-claro);box-shadow:
 <section class="hero">
   <div class="hero-overlay"></div>
   <div class="container hero-content">
-    <span class="hero-badge">⚙️ Dimensionamento de Engenharia · v8</span>
+    <span class="hero-badge">⚙️ Dimensionamento de Engenharia · v9</span>
     <h2>Dimensionador de Trocadores de Calor de Placas</h2>
-    <p>Dados <strong>reais de propriedades termofísicas</strong>: água industrial, vapor saturado (condensação), amônia, glicol 15/20/30/40%, refrigerantes e produtos alimentícios. Dimensionamento rigoroso com Nusselt por chevron, U por resistências, fator de LMTD e ΔP verificado.</p>
+    <p>Informe os dados do <strong>produto</strong> (obrigatórios) e a temperatura de entrada do <strong>serviço</strong>. O cálculo determina a <strong>vazão necessária do serviço</strong> e a <strong>temperatura de saída</strong> para atingir a eficiência desejada.</p>
   </div>
 </section>
 
@@ -169,35 +172,12 @@ input:focus,select:focus{outline:none;border-color:var(--azul-claro);box-shadow:
   </section>
 
   <section id="dados" class="card fade-in">
-    <div class="card-header"><span class="step-badge">2</span><div><h3>Dados do projeto</h3><p class="card-sub">Serviço (fluido de utilidade) × Produto (fluido do processo)</p></div></div>
+    <div class="card-header"><span class="step-badge">2</span><div><h3>Dados do projeto</h3><p class="card-sub">Produto (obrigatório) × Serviço (vazão e saída calculadas)</p></div></div>
     <div class="grid-2">
-      <div class="sub-card servico">
-        <div class="sub-card-head"><span class="side-icon servico-icon">⚙️</span><h4>Serviço</h4></div>
-        <label>Fluido de serviço
-          <select id="fluidoQ" onchange="sugerirIncrustacao()">
-            <option value="agua">Água industrial</option>
-            <option value="vapor">Vapor saturado (condensação)</option>
-            <option value="amonia_l">Amônia (líquido)</option>
-            <option value="amonia_v">Amônia (vapor)</option>
-            <option value="glicol15">Glicol 15%</option>
-            <option value="glicol20">Glicol 20%</option>
-            <option value="glicol30">Glicol 30%</option>
-            <option value="glicol40">Glicol 40%</option>
-            <option value="r134a">R134a (líquido)</option>
-            <option value="r410a">R410A (líquido)</option>
-            <option value="r22">R22 (líquido)</option>
-            <option value="oleo">Óleo térmico</option>
-            <option value="ar">Ar / gás de processo</option>
-          </select>
-        </label>
-        <label>Vazão (m³/h)<input type="number" id="vazaoQ" value="50" step="0.1"></label>
-        <label>Temperatura de entrada (°C)<input type="number" id="tinQ" value="80"></label>
-        <label>Temperatura de saída (°C)<input type="number" id="toutQ" value="60"></label>
-      </div>
       <div class="sub-card produto">
         <div class="sub-card-head"><span class="side-icon produto-icon">📦</span><h4>Produto</h4></div>
-        <label>Fluido do processo
-          <select id="fluidoF" onchange="sugerirIncrustacao()">
+        <label class="obrigatorio">Fluido do processo
+          <select id="fluidoP" onchange="sugerirIncrustacao()">
             <option value="agua">Água (produto)</option>
             <option value="leite">Leite</option>
             <option value="cerveja">Cerveja</option>
@@ -214,9 +194,32 @@ input:focus,select:focus{outline:none;border-color:var(--azul-claro);box-shadow:
             <option value="amonia_v">Amônia (vapor)</option>
           </select>
         </label>
-        <label>Vazão (m³/h)<input type="number" id="vazaoF" value="40" step="0.1"></label>
-        <label>Temperatura de entrada (°C)<input type="number" id="tinF" value="25"></label>
-        <label>Temperatura de saída (°C)<input type="number" id="toutF" placeholder="automática"></label>
+        <label class="obrigatorio">Vazão do produto (m³/h)<input type="number" id="vazaoP" value="40" step="0.1"></label>
+        <label class="obrigatorio">Temperatura de entrada (°C)<input type="number" id="tinP" value="25"></label>
+        <label class="obrigatorio">Temperatura de saída (°C)<input type="number" id="toutP" value="45"></label>
+      </div>
+      <div class="sub-card servico">
+        <div class="sub-card-head"><span class="side-icon servico-icon">⚙️</span><h4>Serviço</h4></div>
+        <label class="obrigatorio">Fluido de serviço
+          <select id="fluidoS" onchange="sugerirIncrustacao()">
+            <option value="agua">Água industrial</option>
+            <option value="vapor">Vapor saturado (condensação)</option>
+            <option value="amonia_l">Amônia (líquido)</option>
+            <option value="amonia_v">Amônia (vapor)</option>
+            <option value="glicol15">Glicol 15%</option>
+            <option value="glicol20">Glicol 20%</option>
+            <option value="glicol30">Glicol 30%</option>
+            <option value="glicol40">Glicol 40%</option>
+            <option value="r134a">R134a (líquido)</option>
+            <option value="r410a">R410A (líquido)</option>
+            <option value="r22">R22 (líquido)</option>
+            <option value="oleo">Óleo térmico</option>
+            <option value="ar">Ar / gás de processo</option>
+          </select>
+        </label>
+        <label class="obrigatorio">Temperatura de entrada (°C)<input type="number" id="tinS" value="80"></label>
+        <label>Temperatura de saída (°C)<input type="text" id="toutS" class="calculado" placeholder="calculada" readonly></label>
+        <label>Vazão necessária do serviço (m³/h)<input type="text" id="vazaoS" class="calculado" placeholder="calculada" readonly></label>
       </div>
     </div>
 
@@ -244,10 +247,10 @@ input:focus,select:focus{outline:none;border-color:var(--azul-claro);box-shadow:
   <section id="restricoes" class="card fade-in">
     <div class="card-header"><span class="step-badge">3</span><div><h3>Restrições de projeto</h3><p class="card-sub">Limites de perda de carga, incrustação e critérios</p></div></div>
     <div class="grid-3">
-      <label>ΔP máx. serviço (kPa)<input type="number" id="dpQ" value="80"></label>
-      <label>ΔP máx. produto (kPa)<input type="number" id="dpF" value="80"></label>
-      <label>Incrustação serviço (m²·K/W)<input type="number" id="incQ" value="0.00005" step="0.00001"></label>
-      <label>Incrustação produto (m²·K/W)<input type="number" id="incF" value="0.0001" step="0.00001"></label>
+      <label>ΔP máx. produto (kPa)<input type="number" id="dpP" value="80"></label>
+      <label>ΔP máx. serviço (kPa)<input type="number" id="dpS" value="80"></label>
+      <label>Incrustação produto (m²·K/W)<input type="number" id="incP" value="0.0001" step="0.00001"></label>
+      <label>Incrustação serviço (m²·K/W)<input type="number" id="incS" value="0.00005" step="0.00001"></label>
       <label>Margem de área (%)<input type="number" id="margem" value="10"></label>
       <label>Ângulo chevron
         <select id="chevron">
@@ -368,71 +371,86 @@ function props(f, T){
   }
 }
 function sugerirIncrustacao(){
-  const fQ=document.getElementById('fluidoQ').value;
-  const fF=document.getElementById('fluidoF').value;
-  if(INC_SUG[fQ]) document.getElementById('incQ').value=INC_SUG[fQ];
-  if(INC_SUG[fF]) document.getElementById('incF').value=INC_SUG[fF];
+  const fP=document.getElementById('fluidoP').value;
+  const fS=document.getElementById('fluidoS').value;
+  if(INC_SUG[fP]) document.getElementById('incP').value=INC_SUG[fP];
+  if(INC_SUG[fS]) document.getElementById('incS').value=INC_SUG[fS];
 }
 const CORR={30:{C:0.348,m:0.663,K:1.20},45:{C:0.270,m:0.700,K:2.20},60:{C:0.122,m:0.750,K:4.50}};
 function calcConveccao(G,Dh,mu,cp,k,ang){const Re=G*Dh/mu,Pr=mu*cp/k,c=CORR[ang];const Nu=c.C*Math.pow(Re,c.m)*Math.pow(Pr,1/3);return {Re:Re,Pr:Pr,Nu:Nu,h:Nu*k/Dh};}
 function fAtrito(Re,ang){return CORR[ang].K*Math.pow(Re,-0.20);}
 function fatorLMTD(P,R){if(P<=0||R<=0)return 1;const num=Math.sqrt(R*R+1)*Math.log((1-P)/(1-P*R));const den=(R-1)*Math.log((2-P*(R+1-Math.sqrt(R*R+1)))/(2-P*(R+1+Math.sqrt(R*R+1))));if(Math.abs(den)<1e-6)return 1;return Math.max(0.5,Math.min(1,num/den));}
-function dimensionarModelo(mod,d,fQ,fF,Q,lmtd,ang,RfQ,RfF,margem,vAlvo,passes){
+function dimensionarModelo(mod,d,fP,fS,Q,lmtd,ang,RfP,RfS,margem,vAlvo,passes){
   const L=mod.A/mod.W,Dh=1.6*mod.b,kw=16,tw=0.0005,nP=passes||1;
-  let Nc=Math.max(1,Math.ceil(d.mQ/(fQ.rho*vAlvo*mod.b*mod.W*nP)),Math.ceil(d.mF/(fF.rho*vAlvo*mod.b*mod.W*nP)));
+  let Nc=Math.max(1,Math.ceil(d.mP/(fP.rho*vAlvo*mod.b*mod.W*nP)),Math.ceil(d.mS/(fS.rho*vAlvo*mod.b*mod.W*nP)));
   let res=null;
   for(let iter=0;iter<100;iter++){
     const A_inst=2*Nc*mod.A;
-    const GQ=d.mQ/(Nc*mod.b*mod.W),GF=d.mF/(Nc*mod.b*mod.W);
-    const hQ=calcConveccao(GQ,Dh,fQ.mu,fQ.cp,fQ.k,ang);
-    const hF=calcConveccao(GF,Dh,fF.mu,fF.cp,fF.k,ang);
-    const U=1/(1/hQ.h+RfQ+tw/kw+RfF+1/hF.h);
+    const GP=d.mP/(Nc*mod.b*mod.W),GS=d.mS/(Nc*mod.b*mod.W);
+    const hP=calcConveccao(GP,Dh,fP.mu,fP.cp,fP.k,ang);
+    const hS=calcConveccao(GS,Dh,fS.mu,fS.cp,fS.k,ang);
+    const U=1/(1/hP.h+RfP+tw/kw+RfS+1/hS.h);
     const A_nec=Q/(U*lmtd);
     const A_min=A_nec*(1+margem/100);
     if(A_inst>=A_min){
-      const dPQ=1.15*fAtrito(hQ.Re,ang)*(L/Dh)*(GQ*GQ/(2*fQ.rho))*nP;
-      const dPF=1.15*fAtrito(hF.Re,ang)*(L/Dh)*(GF*GF/(2*fF.rho))*nP;
-      res={Nc:Nc,Nplacas:2*Nc+1,A_inst:A_inst,A_nec:A_nec,U:U,hQ:hQ.h,hF:hF.h,ReQ:hQ.Re,ReF:hF.Re,vQ:GQ/fQ.rho,vF:GF/fF.rho,dPQ:dPQ,dPF:dPF};
+      const dPP=1.15*fAtrito(hP.Re,ang)*(L/Dh)*(GP*GP/(2*fP.rho))*nP;
+      const dPS=1.15*fAtrito(hS.Re,ang)*(L/Dh)*(GS*GS/(2*fS.rho))*nP;
+      res={Nc:Nc,Nplacas:2*Nc+1,A_inst:A_inst,A_nec:A_nec,U:U,hP:hP.h,hS:hS.h,ReP:hP.Re,ReS:hS.Re,vP:GP/fP.rho,vS:GS/fS.rho,dPP:dPP,dPS:dPS};
       break;
     }
     Nc++;
   }
   if(!res){
-    const GQ=d.mQ/(Nc*mod.b*mod.W),GF=d.mF/(Nc*mod.b*mod.W);
-    const hQ=calcConveccao(GQ,Dh,fQ.mu,fQ.cp,fQ.k,ang);
-    const hF=calcConveccao(GF,Dh,fF.mu,fF.cp,fF.k,ang);
-    const U=1/(1/hQ.h+RfQ+tw/kw+RfF+1/hF.h);
+    const GP=d.mP/(Nc*mod.b*mod.W),GS=d.mS/(Nc*mod.b*mod.W);
+    const hP=calcConveccao(GP,Dh,fP.mu,fP.cp,fP.k,ang);
+    const hS=calcConveccao(GS,Dh,fS.mu,fS.cp,fS.k,ang);
+    const U=1/(1/hP.h+RfP+tw/kw+RfS+1/hS.h);
     const A_nec=Q/(U*lmtd),A_inst=2*Nc*mod.A;
-    const dPQ=1.15*fAtrito(hQ.Re,ang)*(L/Dh)*(GQ*GQ/(2*fQ.rho))*nP;
-    const dPF=1.15*fAtrito(hF.Re,ang)*(L/Dh)*(GF*GF/(2*fF.rho))*nP;
-    res={Nc:Nc,Nplacas:2*Nc+1,A_inst:A_inst,A_nec:A_nec,U:U,hQ:hQ.h,hF:hF.h,ReQ:hQ.Re,ReF:hF.Re,vQ:GQ/fQ.rho,vF:GF/fF.rho,dPQ:dPQ,dPF:dPF};
+    const dPP=1.15*fAtrito(hP.Re,ang)*(L/Dh)*(GP*GP/(2*fP.rho))*nP;
+    const dPS=1.15*fAtrito(hS.Re,ang)*(L/Dh)*(GS*GS/(2*fS.rho))*nP;
+    res={Nc:Nc,Nplacas:2*Nc+1,A_inst:A_inst,A_nec:A_nec,U:U,hP:hP.h,hS:hS.h,ReP:hP.Re,ReS:hS.Re,vP:GP/fP.rho,vS:GS/fS.rho,dPP:dPP,dPS:dPS};
   }
   res.modelo=mod.nome;res.areaPlaca=mod.A;res.gap=mod.b*1000;res.vazaoMax=mod.vazaoMax;res.Pmax=mod.Pmax;res.Tmax=mod.Tmax;res.kW=mod.kW;res.tipo=mod.tipo;res.passes=nP;
-  res.dPQok=res.dPQ<=d.dpQ;res.dPFok=res.dPF<=d.dpF;
-  res.atende=res.dPQok&&res.dPFok&&(d.vazaoReq<=mod.vazaoMax);
+  res.dPPok=res.dPP<=d.dpP;res.dPSok=res.dPS<=d.dpS;
+  res.atende=res.dPPok&&res.dPSok&&(d.vazaoReq<=mod.vazaoMax);
   return res;
 }
 function dimensionar(d){
-  const fQ=props(d.fluidoQ,(d.tinQ+d.toutQ)/2);
-  const fF=props(d.fluidoF,d.toutF?(d.tinF+d.toutF)/2:(d.tinF+d.tinQ));
-  d.mQ=(d.vazaoQ/3600)*fQ.rho;d.mF=(d.vazaoF/3600)*fF.rho;
-  let Q,dT1,dT2,toutF=d.toutF;
-  if(fQ.condensing){Q=d.mQ*fQ.hfg*1000;if(!toutF||isNaN(toutF))toutF=d.tinF+Q/(d.mF*fF.cp);dT1=d.tinQ-toutF;dT2=d.tinQ-d.tinF;}
-  else{Q=d.mQ*fQ.cp*(d.tinQ-d.toutQ);if(!toutF||isNaN(toutF))toutF=d.tinF+Q/(d.mF*fF.cp);dT1=d.tinQ-toutF;dT2=d.toutQ-d.tinF;}
-  let lmtd=(dT1-dT2)/Math.log(dT1/dT2);
-  const P=(d.toutQ-d.tinQ)/(d.tinF-d.tinQ),R=(d.tinQ-d.toutQ)/(d.toutF-d.tinF);
+  const fP=props(d.fluidoP,(d.tinP+d.toutP)/2);
+  const fS=props(d.fluidoS,d.tinS);
+  d.mP=(d.vazaoP/3600)*fP.rho;
+  // Calor a partir do PRODUTO (obrigatório)
+  const Q=d.mP*fP.cp*(d.toutP-d.tinP);
+  let toutS, mS, vazaoS;
+  if(fS.condensing){
+    // Serviço é vapor: vazão de vapor necessária
+    mS=Q/(fS.hfg*1000);
+    vazaoS=mS/fS.rho*3600;
+    toutS=d.tinS; // condensação a temperatura constante
+  } else {
+    // Serviço líquido: assume ΔT de serviço típico (ex: 10°C) para achar vazão
+    // Usa a temperatura de entrada do serviço e uma queda razoável
+    const dTS=Math.max(5, Math.abs(d.toutP-d.tinP)); // aproximação
+    toutS=d.tinS - dTS;
+    mS=Q/(fS.cp*Math.abs(d.tinS-toutS));
+    vazaoS=mS/fS.rho*3600;
+  }
+  d.mS=mS; d.vazaoS=vazaoS; d.toutS=toutS;
+  const dT1=d.tinS-toutP, dT2=toutS-d.tinP;
+  const lmtd=(dT1-dT2)/Math.log(dT1/dT2);
+  const P=(d.toutP-d.tinP)/(d.tinS-d.tinP),R=(d.tinS-toutS)/(d.toutP-d.tinP);
   const F=fatorLMTD(Math.abs(P),Math.abs(R));
-  lmtd=lmtd*F;
-  d.vazaoReq=Math.max(d.vazaoQ,d.vazaoF);
+  const lmtdF=lmtd*F;
+  d.vazaoReq=Math.max(d.vazaoP,d.vazaoS);
   const gas=['ar','co2','amonia_v'];
-  const gasQ=gas.includes(d.fluidoQ),gasF=gas.includes(d.fluidoF);
-  const ang=d.chevron==='auto'?(gasQ||gasF?30:45):parseInt(d.chevron);
-  const vAlvo=(gasQ||gasF)?8:0.5;
-  const RfQ=d.incQ,RfF=d.incF,margem=d.margem/100,passes=d.passes||1;
+  const gasP=gas.includes(d.fluidoP),gasS=gas.includes(d.fluidoS);
+  const ang=d.chevron==='auto'?(gasP||gasS?30:45):parseInt(d.chevron);
+  const vAlvo=(gasP||gasS)?8:0.5;
+  const RfP=d.incP,RfS=d.incS,margem=d.margem/100,passes=d.passes||1;
   const resultados=[];
-  for(const mod of d.modelos){resultados.push(dimensionarModelo(mod,d,fQ,fF,Q,lmtd,ang,RfQ,RfF,margem,vAlvo,passes));}
+  for(const mod of d.modelos){resultados.push(dimensionarModelo(mod,d,fP,fS,Q,lmtdF,ang,RfP,RfS,margem,vAlvo,passes));}
   resultados.sort((a,b)=>(b.atende-a.atende)||(a.A_inst-b.A_inst));
-  return {Q,lmtd,toutF,mQ:d.mQ,mF:d.mF,fQ,fF,ang,F,resultados};
+  return {Q,lmtd,lmtdF,toutS,vazaoS,mP:d.mP,mS:d.mS,fP,fS,ang,F,resultados};
 }
 let tipoAtual='gaxetadas';
 document.addEventListener('DOMContentLoaded',()=>{montarModelos();document.getElementById('btnCalcular').addEventListener('click',calcular);document.getElementById('btnImprimir').addEventListener('click',()=>window.print());});
@@ -460,25 +478,32 @@ function calcular(){
   document.querySelectorAll('.fab-checkbox').forEach(cb=>{if(cb.checked)modelos.push(cb.closest('.modelo-item').dataset.nome);});
   if(!modelos.length){alert('Selecione pelo menos um modelo.');return;}
   const modelosData=ALFA_LAVAL[tipoAtual].filter(m=>modelos.includes(m.nome));
+  const vazaoP=parseFloat(document.getElementById('vazaoP').value);
+  const tinP=parseFloat(document.getElementById('tinP').value);
+  const toutP=parseFloat(document.getElementById('toutP').value);
+  const tinS=parseFloat(document.getElementById('tinS').value);
+  if(!vazaoP||!tinP||!toutP){alert('Preencha os campos obrigatórios do PRODUTO: vazão, temperatura de entrada e temperatura de saída.');return;}
+  if(!tinS){alert('Preencha a temperatura de entrada do SERVIÇO (obrigatória).');return;}
   const d={
-    fluidoQ:document.getElementById('fluidoQ').value,
-    vazaoQ:parseFloat(document.getElementById('vazaoQ').value),
-    tinQ:parseFloat(document.getElementById('tinQ').value),
-    toutQ:parseFloat(document.getElementById('toutQ').value),
-    fluidoF:document.getElementById('fluidoF').value,
-    vazaoF:parseFloat(document.getElementById('vazaoF').value),
-    tinF:parseFloat(document.getElementById('tinF').value),
-    toutF:parseFloat(document.getElementById('toutF').value)||null,
-    dpQ:parseFloat(document.getElementById('dpQ').value)||80,
-    dpF:parseFloat(document.getElementById('dpF').value)||80,
-    incQ:parseFloat(document.getElementById('incQ').value)||0.00005,
-    incF:parseFloat(document.getElementById('incF').value)||0.0001,
+    fluidoP:document.getElementById('fluidoP').value,
+    vazaoP:vazaoP, tinP:tinP, toutP:toutP,
+    fluidoS:document.getElementById('fluidoS').value,
+    tinS:tinS,
+    dpP:parseFloat(document.getElementById('dpP').value)||80,
+    dpS:parseFloat(document.getElementById('dpS').value)||80,
+    incP:parseFloat(document.getElementById('incP').value)||0.0001,
+    incS:parseFloat(document.getElementById('incS').value)||0.00005,
     margem:parseFloat(document.getElementById('margem').value)||10,
     chevron:document.getElementById('chevron').value,
     passes:1,modelos:modelosData,tipo:tipoAtual
   };
-  if(!d.vazaoQ||!d.tinQ||!d.toutQ){alert('Preencha os dados do serviço.');return;}
-  try{exibirResultado(dimensionar(d));}catch(err){alert('Não foi possível dimensionar com esses dados. Verifique temperaturas e vazões.');}
+  try{
+    const r=dimensionar(d);
+    // Preencher campos calculados do serviço
+    document.getElementById('toutS').value=r.toutS.toFixed(1);
+    document.getElementById('vazaoS').value=r.vazaoS.toFixed(1);
+    exibirResultado(r);
+  }catch(err){alert('Não foi possível dimensionar com esses dados. Verifique temperaturas e vazões.');}
 }
 function exibirResultado(r){
   const sec=document.getElementById('resultado');
@@ -487,20 +512,21 @@ function exibirResultado(r){
   const cliente=document.getElementById('cliente').value||'—';
   const proj='PRJ-AV'+(document.getElementById('numProjeto').value||'');
   let html='<div class="resultado-resumo"><h4>📋 Projeto: '+proj+' · Cliente: '+cliente+'</h4>'+
-    '<p><strong>Calor trocado:</strong> '+fmt(r.Q/1000)+' kW'+(r.fQ.condensing?' (condensação)':'')+'</p>'+
-    '<p><strong>LMTD corrigido:</strong> '+r.lmtd.toFixed(1)+' °C &nbsp;|&nbsp; <strong>Fator F:</strong> '+r.F.toFixed(2)+' &nbsp;|&nbsp; <strong>Chevron:</strong> '+r.ang+'°</p>'+
-    '<p><strong>Temperatura saída produto:</strong> '+r.toutF.toFixed(1)+' °C</p>'+
-    '<p><strong>Serviço:</strong> '+r.fQ.nome+' | <strong>Produto:</strong> '+r.fF.nome+'</p></div>';
+    '<p><strong>Calor trocado:</strong> '+fmt(r.Q/1000)+' kW</p>'+
+    '<p><strong>LMTD corrigido:</strong> '+r.lmtdF.toFixed(1)+' °C &nbsp;|&nbsp; <strong>Fator F:</strong> '+r.F.toFixed(2)+' &nbsp;|&nbsp; <strong>Chevron:</strong> '+r.ang+'°</p>'+
+    '<p><strong>Produto:</strong> '+r.fP.nome+' | <strong>Serviço:</strong> '+r.fS.nome+'</p>'+
+    '<p><strong>Vazão necessária do serviço:</strong> '+r.vazaoS.toFixed(1)+' m³/h</p>'+
+    '<p><strong>Temperatura de saída do serviço:</strong> '+r.toutS.toFixed(1)+' °C</p></div>';
   html+='<div class="melhor-modelo"><h4>🏆 Melhor equipamento recomendado</h4>'+
     '<p><strong>'+melhor.modelo+'</strong> (Alfa Laval '+(tipoAtual==='semisoldadas'?'semi-soldada':'gaxetada')+' · '+melhor.tipo+')</p>'+
     '<p><strong>Placas:</strong> '+melhor.Nplacas+' &nbsp;|&nbsp; <strong>Área instalada:</strong> '+melhor.A_inst.toFixed(1)+' m² &nbsp;|&nbsp; <strong>Área necessária:</strong> '+melhor.A_nec.toFixed(1)+' m²</p>'+
-    '<p><strong>U global:</strong> '+fmt(melhor.U)+' W/m²·K &nbsp;|&nbsp; <strong>ΔP serviço:</strong> '+melhor.dPQ.toFixed(1)+' kPa &nbsp;|&nbsp; <strong>ΔP produto:</strong> '+melhor.dPF.toFixed(1)+' kPa</p>'+
+    '<p><strong>U global:</strong> '+fmt(melhor.U)+' W/m²·K &nbsp;|&nbsp; <strong>ΔP produto:</strong> '+melhor.dPP.toFixed(1)+' kPa &nbsp;|&nbsp; <strong>ΔP serviço:</strong> '+melhor.dPS.toFixed(1)+' kPa</p>'+
     '<p><strong>Capacidade típica do modelo:</strong> '+melhor.kW+' kW</p></div>';
   html+='<h4 style="margin:18px 0 10px;font-size:15px;color:#0a1f3c">Comparativo técnico entre modelos</h4>'+
-    '<table class="tabela-comp"><thead><tr><th>Modelo</th><th>Placas</th><th>Área inst. (m²)</th><th>U (W/m²·K)</th><th>Re serviço</th><th>v serviço (m/s)</th><th>ΔP serviço (kPa)</th><th>Re produto</th><th>v produto (m/s)</th><th>ΔP produto (kPa)</th><th>Status</th></tr></thead><tbody>';
+    '<table class="tabela-comp"><thead><tr><th>Modelo</th><th>Placas</th><th>Área inst. (m²)</th><th>U (W/m²·K)</th><th>Re produto</th><th>v produto (m/s)</th><th>ΔP produto (kPa)</th><th>Re serviço</th><th>v serviço (m/s)</th><th>ΔP serviço (kPa)</th><th>Status</th></tr></thead><tbody>';
   r.resultados.forEach((f,i)=>{
     const status=f.atende?'<span class="ok">✓ Atende</span>':'<span class="aviso">⚠ Verificar</span>';
-    html+='<tr class="'+(i===0?'melhor':'')+'"><td><strong>'+f.modelo+'</strong></td><td>'+f.Nplacas+'</td><td>'+f.A_inst.toFixed(1)+'</td><td>'+fmt(f.U)+'</td><td>'+fmt(f.ReQ)+'</td><td>'+f.vQ.toFixed(2)+'</td><td>'+f.dPQ.toFixed(1)+'</td><td>'+fmt(f.ReF)+'</td><td>'+f.vF.toFixed(2)+'</td><td>'+f.dPF.toFixed(1)+'</td><td>'+status+'</td></tr>';
+    html+='<tr class="'+(i===0?'melhor':'')+'"><td><strong>'+f.modelo+'</strong></td><td>'+f.Nplacas+'</td><td>'+f.A_inst.toFixed(1)+'</td><td>'+fmt(f.U)+'</td><td>'+fmt(f.ReP)+'</td><td>'+f.vP.toFixed(2)+'</td><td>'+f.dPP.toFixed(1)+'</td><td>'+fmt(f.ReS)+'</td><td>'+f.vS.toFixed(2)+'</td><td>'+f.dPS.toFixed(1)+'</td><td>'+status+'</td></tr>';
   });
   html+='</tbody></table>';
   html+='<p style="font-size:11px;color:var(--texto-suave);margin-top:10px">Propriedades reais por temperatura média (tabelas de vapor, ASHRAE, Engineering Toolbox). ΔP inclui perdas de portas (+15%). LMTD corrigido por fator F (1-2 passagens). Confira com o software oficial Alfa Laval antes da compra.</p>';

@@ -4,26 +4,26 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google" content="notranslate">
-<title>AlfaVed Dimensionador-PHE · v7</title>
+<title>AlfaVed Dimensionador-PHE · v8</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--azul-escuro:#0a1f3c;--azul:#123a6b;--azul-medio:#1d5aa8;--azul-claro:#2f7fd1;--laranja:#e8731c;--laranja-claro:#f59e4c;--cinza-fundo:#f4f6f9;--cinza-borda:#dde3ea;--texto:#1e293b;--texto-suave:#64748b;--branco:#fff;--verde:#16a34a;--vermelho:#dc2626;--sombra:0 4px 20px rgba(10,31,60,.08);--sombra-hover:0 8px 30px rgba(10,31,60,.15)}
 body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:var(--cinza-fundo);color:var(--texto);line-height:1.6}
 .container{max-width:1150px;margin:0 auto;padding:0 24px}
-/* HEADER — sem barra de navegação */
+/* HEADER */
 .header{background:linear-gradient(135deg,var(--azul-escuro),var(--azul));color:var(--branco);padding:16px 0;box-shadow:0 2px 12px rgba(0,0,0,.25)}
 .header-inner{display:flex;justify-content:center;align-items:center;gap:14px}
 .brand{display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--branco)}
-.brand-logo{width:52px;height:52px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:var(--branco);box-shadow:0 2px 10px rgba(0,0,0,.2)}
-.brand-logo svg{width:44px;height:44px}
+.brand-logo{width:54px;height:54px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:var(--branco);box-shadow:0 2px 10px rgba(0,0,0,.2)}
+.brand-logo svg{width:46px;height:46px}
 .brand-text h1{font-size:24px;letter-spacing:1px;font-weight:800;line-height:1.1}
 .brand-text span{font-size:13px;opacity:.9;letter-spacing:2px;text-transform:uppercase}
-.hero{position:relative;background:linear-gradient(135deg,var(--azul-escuro) 0%,var(--azul) 50%,var(--azul-medio) 100%);color:var(--branco);padding:48px 0;overflow:hidden}
+.hero{position:relative;background:linear-gradient(135deg,var(--azul-escuro) 0%,var(--azul) 50%,var(--azul-medio) 100%);color:var(--branco);padding:44px 0;overflow:hidden}
 .hero-overlay{position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,rgba(232,115,28,.25),transparent 40%),radial-gradient(circle at 20% 80%,rgba(47,127,209,.3),transparent 40%)}
 .hero-content{position:relative;text-align:center;max-width:840px;margin:0 auto}
-.hero-badge{display:inline-block;background:rgba(232,115,28,.2);border:1px solid var(--laranja);color:var(--laranja-claro);padding:6px 16px;border-radius:30px;font-size:13px;font-weight:600;margin-bottom:16px}
-.hero h2{font-size:32px;font-weight:800;margin-bottom:12px;line-height:1.2}
-.hero p{font-size:15px;opacity:.92;max-width:700px;margin:0 auto 22px}
+.hero-badge{display:inline-block;background:rgba(232,115,28,.2);border:1px solid var(--laranja);color:var(--laranja-claro);padding:6px 16px;border-radius:30px;font-size:13px;font-weight:600;margin-bottom:14px}
+.hero h2{font-size:30px;font-weight:800;margin-bottom:10px;line-height:1.2}
+.hero p{font-size:14px;opacity:.92;max-width:700px;margin:0 auto 18px}
 .hero p strong{color:var(--laranja-claro)}
 .card{background:var(--branco);border-radius:16px;padding:24px;margin:24px 0;box-shadow:var(--sombra);border:1px solid var(--cinza-borda)}
 .card-header{display:flex;align-items:flex-start;gap:14px;margin-bottom:20px}
@@ -54,7 +54,22 @@ input:focus,select:focus{outline:none;border-color:var(--azul-claro);box-shadow:
 .prj-prefixo{display:flex;align-items:center;gap:8px}
 .prj-prefixo .fixo{background:var(--laranja);color:var(--branco);padding:10px 14px;border-radius:10px;font-weight:800;font-size:14px;letter-spacing:1px;white-space:nowrap;margin-top:5px}
 .prj-prefixo input{flex:1}
-.modelos-lista{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
+/* ACORDEÃO DE MODELOS */
+.modelos-accordeon{border:2px solid var(--cinza-borda);border-radius:12px;margin-top:22px;overflow:hidden}
+.accordeon-header{width:100%;display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:linear-gradient(135deg,var(--cinza-fundo),#eef4fb);border:none;cursor:pointer;font-family:inherit;font-size:15px;font-weight:700;color:var(--azul-escuro);transition:background .2s}
+.accordeon-header:hover{background:#e6edf6}
+.accordeon-header .seta{font-size:13px;transition:transform .3s}
+.accordeon-header.open .seta{transform:rotate(180deg)}
+.accordeon-body{padding:16px;display:none}
+.accordeon-body.open{display:block}
+.toggle-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.toggle-btn{flex:1;min-width:200px;padding:14px 18px;border:2px solid var(--cinza-borda);border-radius:12px;background:var(--branco);cursor:pointer;text-align:left;transition:all .2s;font-family:inherit}
+.toggle-btn:hover{border-color:var(--azul-claro)}
+.toggle-btn.active{border-color:var(--azul);background:#eef4fb}
+.toggle-btn.active.semi{border-color:var(--laranja);background:#fdf0e4}
+.toggle-btn strong{display:block;font-size:15px;color:var(--azul-escuro)}
+.toggle-btn span{font-size:12px;color:var(--texto-suave)}
+.modelos-lista{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
 .modelo-item{border:2px solid var(--cinza-borda);border-radius:12px;padding:12px;text-align:center;cursor:pointer;transition:all .2s;background:var(--branco);position:relative}
 .modelo-item:hover{border-color:var(--azul-claro);transform:translateY(-3px);box-shadow:var(--sombra-hover)}
 .modelo-item.selected{border-color:var(--azul);background:#eef4fb}
@@ -65,13 +80,6 @@ input:focus,select:focus{outline:none;border-color:var(--azul-claro);box-shadow:
 .checkmark{position:absolute;top:0;left:0;width:18px;height:18px;background:var(--branco);border:2px solid var(--cinza-borda);border-radius:4px;transition:all .2s}
 .fab-checkbox:checked+.checkmark{background:var(--azul);border-color:var(--azul)}
 .fab-checkbox:checked+.checkmark::after{content:'✓';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:var(--branco);font-size:12px;font-weight:700}
-.toggle-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
-.toggle-btn{flex:1;min-width:200px;padding:14px 18px;border:2px solid var(--cinza-borda);border-radius:12px;background:var(--branco);cursor:pointer;text-align:left;transition:all .2s;font-family:inherit}
-.toggle-btn:hover{border-color:var(--azul-claro)}
-.toggle-btn.active{border-color:var(--azul);background:#eef4fb}
-.toggle-btn.active.semi{border-color:var(--laranja);background:#fdf0e4}
-.toggle-btn strong{display:block;font-size:15px;color:var(--azul-escuro)}
-.toggle-btn span{font-size:12px;color:var(--texto-suave)}
 .calc-area{text-align:center;margin:28px 0}
 .btn-primary{background:linear-gradient(135deg,var(--laranja),var(--laranja-claro));color:var(--branco);border:none;padding:16px 44px;font-size:17px;font-weight:700;font-family:inherit;border-radius:12px;cursor:pointer;transition:all .2s;box-shadow:0 6px 20px rgba(232,115,28,.35);display:inline-flex;align-items:center;gap:10px}
 .btn-primary:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(232,115,28,.45)}
@@ -108,7 +116,7 @@ input:focus,select:focus{outline:none;border-color:var(--azul-claro);box-shadow:
 .footer-copy{opacity:.6;font-size:11px}
 .fade-in{opacity:0;transform:translateY(20px);animation:fadeIn .6s ease forwards}
 @keyframes fadeIn{to{opacity:1;transform:translateY(0)}}
-@media(max-width:768px){.hero h2{font-size:26px}.hero{padding:40px 0}.card{padding:18px}}
+@media(max-width:768px){.hero h2{font-size:24px}.hero{padding:36px 0}.card{padding:18px}}
 </style>
 </head>
 <body>
@@ -118,9 +126,10 @@ input:focus,select:focus{outline:none;border-color:var(--azul-claro);box-shadow:
     <a href="#" class="brand">
       <div class="brand-logo">
         <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="50" cy="50" r="46" fill="none" stroke="#123b6d" stroke-width="6"/>
-          <path d="M50 16 L66 82 L55 82 L50 62 L45 82 L34 82 Z" fill="#123b6d"/>
-          <path d="M37 72 L50 86 L63 72 L63 78 L50 92 L37 78 Z" fill="#c8102e"/>
+          <circle cx="50" cy="50" r="44" fill="none" stroke="#123b6d" stroke-width="7" stroke-dasharray="250 26" stroke-dashoffset="115" stroke-linecap="round"/>
+          <path d="M50 16 L35 86 L44 86 L50 64 Z" fill="#2f7fd1"/>
+          <path d="M50 16 L65 86 L56 86 L50 64 Z" fill="#123b6d"/>
+          <path d="M50 64 L41 86 L59 86 Z" fill="#c8102e"/>
         </svg>
       </div>
       <div class="brand-text">
@@ -134,7 +143,7 @@ input:focus,select:focus{outline:none;border-color:var(--azul-claro);box-shadow:
 <section class="hero">
   <div class="hero-overlay"></div>
   <div class="container hero-content">
-    <span class="hero-badge">⚙️ Dimensionamento de Engenharia · v7</span>
+    <span class="hero-badge">⚙️ Dimensionamento de Engenharia · v8</span>
     <h2>Dimensionador de Trocadores de Calor de Placas</h2>
     <p>Dados <strong>reais de propriedades termofísicas</strong>: água industrial, vapor saturado (condensação), amônia, glicol 15/20/30/40%, refrigerantes e produtos alimentícios. Dimensionamento rigoroso com Nusselt por chevron, U por resistências, fator de LMTD e ΔP verificado.</p>
   </div>
@@ -162,25 +171,9 @@ input:focus,select:focus{outline:none;border-color:var(--azul-claro);box-shadow:
     </div>
   </section>
 
-  <!-- ===== 2. MODELOS ===== -->
-  <section id="modelos" class="card fade-in">
-    <div class="card-header"><span class="step-badge">2</span><div><h3>Modelos Alfa Laval</h3><p class="card-sub">Selecione os modelos a comparar</p></div></div>
-    <div class="toggle-row">
-      <button class="toggle-btn active" id="btnGaxetadas" onclick="setTipo('gaxetadas')">
-        <strong>🔹 Placas simples — Fluidos</strong>
-        <span>M3-M a MA30 · líquidos, vapor e fluidos fibrosos</span>
-      </button>
-      <button class="toggle-btn semi" id="btnSemisoldadas" onclick="setTipo('semisoldadas')">
-        <strong>🔸 Semi-soldadas — Gases</strong>
-        <span>M10-BW a MK15-BW · amônia, CO₂, condensação</span>
-      </button>
-    </div>
-    <div class="modelos-lista" id="fabGrid"></div>
-  </section>
-
-  <!-- ===== 3. DADOS DO PROJETO ===== -->
+  <!-- ===== 2. DADOS DO PROJETO + MODELOS (unificados) ===== -->
   <section id="dados" class="card fade-in">
-    <div class="card-header"><span class="step-badge">3</span><div><h3>Dados do projeto</h3><p class="card-sub">Serviço (fluido de utilidade) × Produto (fluido do processo)</p></div></div>
+    <div class="card-header"><span class="step-badge">2</span><div><h3>Dados do projeto</h3><p class="card-sub">Serviço (fluido de utilidade) × Produto (fluido do processo)</p></div></div>
     <div class="grid-2">
       <div class="sub-card servico">
         <div class="sub-card-head"><span class="side-icon servico-icon">⚙️</span><h4>Serviço</h4></div>
@@ -230,11 +223,32 @@ input:focus,select:focus{outline:none;border-color:var(--azul-claro);box-shadow:
         <label>Temperatura de saída (°C)<input type="number" id="toutF" placeholder="automática"></label>
       </div>
     </div>
+
+    <!-- Acordeão: Modelos de placas (abre ao clicar) -->
+    <div class="modelos-accordeon">
+      <button class="accordeon-header open" id="hdrModelos" onclick="toggleModelos()">
+        <span>🔹 Modelos de placas Alfa Laval</span>
+        <span class="seta">▼</span>
+      </button>
+      <div class="accordeon-body open" id="corpoModelos">
+        <div class="toggle-row">
+          <button class="toggle-btn active" id="btnGaxetadas" onclick="setTipo('gaxetadas')">
+            <strong>🔹 Placas simples — Fluidos</strong>
+            <span>M3-M a MA30 · líquidos, vapor e fluidos fibrosos</span>
+          </button>
+          <button class="toggle-btn semi" id="btnSemisoldadas" onclick="setTipo('semisoldadas')">
+            <strong>🔸 Semi-soldadas — Gases</strong>
+            <span>M10-BW a MK15-BW · amônia, CO₂, condensação</span>
+          </button>
+        </div>
+        <div class="modelos-lista" id="fabGrid"></div>
+      </div>
+    </div>
   </section>
 
-  <!-- ===== 4. RESTRIÇÕES ===== -->
+  <!-- ===== 3. RESTRIÇÕES ===== -->
   <section id="restricoes" class="card fade-in">
-    <div class="card-header"><span class="step-badge">4</span><div><h3>Restrições de projeto</h3><p class="card-sub">Limites de perda de carga, incrustação e critérios</p></div></div>
+    <div class="card-header"><span class="step-badge">3</span><div><h3>Restrições de projeto</h3><p class="card-sub">Limites de perda de carga, incrustação e critérios</p></div></div>
     <div class="grid-3">
       <label>ΔP máx. serviço (kPa)<input type="number" id="dpQ" value="80"></label>
       <label>ΔP máx. produto (kPa)<input type="number" id="dpF" value="80"></label>
@@ -256,9 +270,9 @@ input:focus,select:focus{outline:none;border-color:var(--azul-claro);box-shadow:
     <button id="btnCalcular" class="btn-primary"><span>⚙️</span> Calcular Dimensionamento</button>
   </div>
 
-  <!-- ===== 5. RESULTADO ===== -->
+  <!-- ===== 4. RESULTADO ===== -->
   <section id="resultado" class="card resultado-card fade-in" style="display:none;">
-    <div class="card-header"><span class="step-badge">5</span><div><h3>Resultado do dimensionamento</h3><p class="card-sub">Melhor equipamento recomendado para o seu processo</p></div></div>
+    <div class="card-header"><span class="step-badge">4</span><div><h3>Resultado do dimensionamento</h3><p class="card-sub">Melhor equipamento recomendado para o seu processo</p></div></div>
     <div id="resultadoConteudo"></div>
     <div class="calc-area"><button id="btnImprimir" class="btn-secondary">🖨️ Imprimir / Salvar PDF</button></div>
   </section>
@@ -283,9 +297,10 @@ input:focus,select:focus{outline:none;border-color:var(--azul-claro);box-shadow:
     <div class="footer-brand">
       <div class="brand-logo" style="width:34px;height:34px;border-radius:8px">
         <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:28px;height:28px">
-          <circle cx="50" cy="50" r="46" fill="none" stroke="#123b6d" stroke-width="6"/>
-          <path d="M50 16 L66 82 L55 82 L50 62 L45 82 L34 82 Z" fill="#123b6d"/>
-          <path d="M37 72 L50 86 L63 72 L63 78 L50 92 L37 78 Z" fill="#c8102e"/>
+          <circle cx="50" cy="50" r="44" fill="none" stroke="#123b6d" stroke-width="7" stroke-dasharray="250 26" stroke-dashoffset="115" stroke-linecap="round"/>
+          <path d="M50 16 L35 86 L44 86 L50 64 Z" fill="#2f7fd1"/>
+          <path d="M50 16 L65 86 L56 86 L50 64 Z" fill="#123b6d"/>
+          <path d="M50 64 L41 86 L59 86 Z" fill="#c8102e"/>
         </svg>
       </div>
       <span>AlfaVed Dimensionador-PHE</span>
@@ -297,7 +312,7 @@ input:focus,select:focus{outline:none;border-color:var(--azul-claro);box-shadow:
 
 <script>
 // ============================================================
-// v7.0 — MODELOS REAIS ALFA LAVAL
+// v8.0 — MODELOS REAIS ALFA LAVAL
 // ============================================================
 const ALFA_LAVAL = {
   gaxetadas: [
@@ -325,7 +340,7 @@ const ALFA_LAVAL = {
 };
 
 // ============================================================
-// v7.0 — PROPRIEDADES REAIS DOS FLUIDOS
+// v8.0 — PROPRIEDADES REAIS DOS FLUIDOS
 // ============================================================
 function interp(arr, t){
   if(t<=arr[0][0]) return arr[0][1];
@@ -451,6 +466,12 @@ function dimensionar(d){
 // ============================================================
 let tipoAtual='gaxetadas';
 document.addEventListener('DOMContentLoaded',()=>{montarModelos();document.getElementById('btnCalcular').addEventListener('click',calcular);document.getElementById('btnImprimir').addEventListener('click',()=>window.print());});
+function toggleModelos(){
+  const body=document.getElementById('corpoModelos');
+  const hdr=document.getElementById('hdrModelos');
+  body.classList.toggle('open');
+  hdr.classList.toggle('open');
+}
 function setTipo(t){tipoAtual=t;document.getElementById('btnGaxetadas').classList.toggle('active',t==='gaxetadas');document.getElementById('btnSemisoldadas').classList.toggle('active',t==='semisoldadas');document.getElementById('btnSemisoldadas').classList.toggle('semi',t==='semisoldadas');montarModelos();}
 function montarModelos(){
   const grid=document.getElementById('fabGrid');grid.innerHTML='';

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google" content="notranslate">
-<title>AlfaVed Dimensionador-PHE · v22</title>
+<title>AlfaVed Dimensionador-PHE · v23</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--azul-escuro:#0a1f3c;--azul:#123a6b;--azul-medio:#1d5aa8;--azul-claro:#2f7fd1;--laranja:#e8731c;--laranja-claro:#f59e4c;--cinza-fundo:#f4f6f9;--cinza-borda:#dde3ea;--texto:#1e293b;--texto-suave:#64748b;--branco:#fff;--verde:#16a34a;--vermelho:#dc2626;--sombra:0 4px 20px rgba(10,31,60,.08)}
@@ -180,9 +180,9 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
 <section class="hero">
   <div class="hero-overlay"></div>
   <div class="container hero-content">
-    <span class="hero-badge">⚙️ Dimensionamento de Engenharia · v22</span>
+    <span class="hero-badge">⚙️ Dimensionamento de Engenharia · v23</span>
     <h2>Dimensionador de Trocadores de Calor de Placas</h2>
-    <p>Base de cálculo <strong>revisada</strong> — bocal padrão por modelo, validação de gases/vapor/amônia, curva de desempenho e datasheet em PDF.</p>
+    <p>Áreas corrigidas pelas dimensões reais, seleção manual de modelos (desmarcados por padrão), validação de gases/vapor/amônia e datasheet em PDF.</p>
   </div>
 </section>
 
@@ -278,6 +278,7 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
           <button class="toggle-btn active" id="btnGaxetadas" onclick="setTipo('gaxetadas')"><strong>🔹 Placas simples — Fluidos</strong><span>M3-M a WideGap 350 · líquidos, vapor, fibrosos</span></button>
           <button class="toggle-btn semi" id="btnSemisoldadas" onclick="setTipo('semisoldadas')"><strong>🔸 Semi-soldadas — Gases</strong><span>M10-BW a MK15-BW · amônia, CO₂, condensação</span></button>
         </div>
+        <p style="font-size:12px;color:var(--texto-suave);margin:0 0 10px">Marque os modelos desejados antes de calcular. Todos iniciam desmarcados.</p>
         <div class="modelos-lista" id="fabGrid"></div>
       </div>
     </div>
@@ -367,11 +368,11 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
 
 <script>
 /* ============================================================
-   AlfaVed Dimensionador-PHE · v22
-   CORREÇÃO CRÍTICA: bocal padrão por modelo (produto = serviço)
+   AlfaVed Dimensionador-PHE · v23
+   Áreas corrigidas pelas dimensões reais + modelos desmarcados
    ============================================================ */
 
-/* ---------- MODELOS ALFA LAVAL (com bocal padrão "porta" em metros) ---------- */
+/* ---------- MODELOS ALFA LAVAL (áreas pelas dimensões reais) ---------- */
 var ALFA_LAVAL = {
   gaxetadas: [
     {nome:'M3-M', A:0.032, W:0.10, b:0.0020, vazaoMax:14,  Pmax:16, Tmax:180, kW:'50-250',    tipo:'Líquidos', porta:0.050},
@@ -384,7 +385,7 @@ var ALFA_LAVAL = {
     {nome:'M15-M',A:0.16,  W:0.18, b:0.0032, vazaoMax:85,  Pmax:25, Tmax:180, kW:'1000-4000', tipo:'Líquidos', porta:0.100},
     {nome:'M20-M',A:0.21,  W:0.20, b:0.0032, vazaoMax:100, Pmax:25, Tmax:180, kW:'1500-5000', tipo:'Líquidos', porta:0.150},
     {nome:'T20-B',A:0.20,  W:0.20, b:0.0030, vazaoMax:95,  Pmax:25, Tmax:180, kW:'1500-5000', tipo:'Líquidos', porta:0.150},
-    {nome:'TS20-M',A:0.20, W:0.20, b:0.0040, vazaoMax:677, Pmax:30, Tmax:210, kW:'2500-15000',tipo:'Alta vazão', porta:0.200},
+    {nome:'TS20-M',A:0.70, W:0.20, b:0.0040, vazaoMax:677, Pmax:30, Tmax:210, kW:'2500-15000',tipo:'Alta vazão', porta:0.200},
     {nome:'MA30', A:0.30,  W:0.24, b:0.0110, vazaoMax:120, Pmax:25, Tmax:200, kW:'2000-6000', tipo:'Fibrosos/viscosos', porta:0.200},
     {nome:'WideGap 350',A:0.35,W:0.26,b:0.0110,vazaoMax:400,Pmax:22.9,Tmax:180,kW:'3000-9000',tipo:'Fibrosos/partículas', porta:0.350}
   ],
@@ -602,18 +603,12 @@ function calcEficiencia(Q, mP, cpP, mS, cpS, tinS, tinP) {
   return Q / Qmax;
 }
 
-/* ---------- BOCAL PADRÃO POR MODELO (CORREÇÃO CRÍTICA) ----------
-   O bocal (porta) é um furo na placa — mesmo diâmetro para produto e serviço.
-   A conexão é ÚNICA por modelo, definida pelo fabricante. */
+/* ---------- BOCAL PADRÃO POR MODELO ---------- */
 function nomeConexao(portaM) {
   var dn = Math.round(portaM * 1000);
   var pol = (portaM * 39.3701).toFixed(1);
   return 'DN ' + dn + ' (' + pol + '")';
 }
-
-/* ---------- VERIFICAÇÃO DE VELOCIDADE NAS PORTAS ----------
-   Líquidos: 8 m/s · Gases/vapor (densidade baixa): 25 m/s
-   Usa o bocal do modelo (mesmo para produto e serviço) */
 function verificarVelocidadePorta(m, rho, portaM, gas) {
   var Aporta = Math.PI * Math.pow(portaM, 2) / 4;
   var vporta = m / (rho * Aporta);
@@ -649,8 +644,8 @@ function dimensionarModelo(mod,sec,d,fP,fS,Q,lmtd,cfgKey,pP,pS) {
     var U=1/(1/ladoP.h+d.incP+tw/kw+d.incS+1/hS),A_nec=Q/(U*lmtd),A_min=A_nec*(1+d.margem/100);
     if(A_inst>=A_min){
       var ReS=vaporCond?0:GS*DhS/fS.mu;
-      var dPP=1.15*fAtrito(ladoP.Re,ap)*(L/DhP)*(GP*GP/(2*fP.rho))*pP;
-      var dPS=vaporCond?3.0:1.15*fAtrito(ReS,as)*(L/DhS)*(GS*GS/(2*fS.rho))*pS;
+      var dPP=fAtrito(ladoP.Re,ap)*(L/DhP)*(GP*GP/(2*fP.rho))*pP;
+      var dPS=vaporCond?3.0:fAtrito(ReS,as)*(L/DhS)*(GS*GS/(2*fS.rho))*pS;
       res={Nc:Nc,Nplacas:2*Nc+1,A_inst:A_inst,A_nec:A_nec,U:U,hP:ladoP.h,hS:hS,ReP:ladoP.Re,ReS:ReS,PrP:ladoP.Pr,PrS:vaporCond?0:(fS.mu*fS.cp/fS.k),turbP:ladoP.turb,turbS:vaporCond?'Condensação':classTurb(ReS),vP:GP/fP.rho,vS:vaporCond?0:GS/fS.rho,dPP:dPP,dPS:dPS};
       break;
     }
@@ -662,8 +657,8 @@ function dimensionarModelo(mod,sec,d,fP,fS,Q,lmtd,cfgKey,pP,pS) {
     var ladoP2=calcLado(GP2,DhP,fP,ap,TmP,TmS,null),hS2;
     if(vaporCond){hS2=hCondensacao(sec.tinS,TmP);}else{var lS2=calcLado(GS2,DhS,fS,as,TmS,TmP,ladoP2.h);ladoP2=calcLado(GP2,DhP,fP,ap,TmP,TmS,lS2.h);hS2=lS2.h;}
     var U2=1/(1/ladoP2.h+d.incP+tw/kw+d.incS+1/hS2),A_nec2=Q/(U2*lmtd),ReS2=vaporCond?0:GS2*DhS/fS.mu;
-    var dPP2=1.15*fAtrito(ladoP2.Re,ap)*(L/DhP)*(GP2*GP2/(2*fP.rho))*pP;
-    var dPS2=vaporCond?3.0:1.15*fAtrito(ReS2,as)*(L/DhS)*(GS2*GS2/(2*fS.rho))*pS;
+    var dPP2=fAtrito(ladoP2.Re,ap)*(L/DhP)*(GP2*GP2/(2*fP.rho))*pP;
+    var dPS2=vaporCond?3.0:fAtrito(ReS2,as)*(L/DhS)*(GS2*GS2/(2*fS.rho))*pS;
     res={Nc:Nc,Nplacas:2*Nc+1,A_inst:A_inst2,A_nec:A_nec2,U:U2,hP:ladoP2.h,hS:hS2,ReP:ladoP2.Re,ReS:ReS2,PrP:ladoP2.Pr,PrS:vaporCond?0:(fS.mu*fS.cp/fS.k),turbP:ladoP2.turb,turbS:vaporCond?'Condensação':classTurb(ReS2),vP:GP2/fP.rho,vS:vaporCond?0:GS2/fS.rho,dPP:dPP2,dPS:dPS2};
   }
   res.modelo=mod.nome;res.areaPlaca=mod.A;res.vazaoMax=mod.vazaoMax;res.Pmax=mod.Pmax;res.Tmax=mod.Tmax;res.kW=mod.kW;res.tipo=mod.tipo;
@@ -671,7 +666,6 @@ function dimensionarModelo(mod,sec,d,fP,fS,Q,lmtd,cfgKey,pP,pS) {
   res.config=cfg.nome;res.angP=ap;res.angS=as;res.pP=pP;res.pS=pS;res.nomePasses=pP+'×'+pS;
   res.cfgKey=cfgKey;res.modRef=mod;res.sec=sec;
   res.dPPok=res.dPP<=d.dpP;res.dPSok=res.dPS<=d.dpS;
-  /* Validação da velocidade no bocal do modelo (mesmo diâmetro p/ ambos) */
   var gasP=ehGas(fP.rho),gasS=ehGas(fS.rho);
   var vp=verificarVelocidadePorta(d.mP,fP.rho,mod.porta,gasP);
   var vs=verificarVelocidadePorta(d.mS,fS.rho,mod.porta,gasS);
@@ -739,7 +733,8 @@ var tipoAtual='gaxetadas',secoesExtras=0,ultimoRelatorio=null;
 function trocarAba(nome){document.getElementById('tabResultadoBtn').classList.toggle('active',nome==='resultado');document.getElementById('tabDatasheetBtn').classList.toggle('active',nome==='datasheet');document.getElementById('paneResultado').classList.toggle('active',nome==='resultado');document.getElementById('paneDatasheet').classList.toggle('active',nome==='datasheet');}
 function toggleModelos(){var b=document.getElementById('corpoModelos'),h=document.getElementById('hdrModelos');b.classList.toggle('open');h.classList.toggle('open');}
 function setTipo(t){tipoAtual=t;document.getElementById('btnGaxetadas').classList.toggle('active',t==='gaxetadas');document.getElementById('btnSemisoldadas').classList.toggle('active',t==='semisoldadas');document.getElementById('btnSemisoldadas').classList.toggle('semi',t==='semisoldadas');montarModelos();}
-function montarModelos(){var grid=document.getElementById('fabGrid');grid.innerHTML='';ALFA_LAVAL[tipoAtual].forEach(function(mod){var card=document.createElement('div');card.className='modelo-item selected';card.dataset.nome=mod.nome;card.innerHTML='<label class="checkbox-label"><input type="checkbox" class="fab-checkbox" checked><span class="checkmark"></span></label><div class="fab-nome">'+mod.nome+'</div><div class="fab-desc">'+mod.A.toFixed(3)+' m²/placa<br>'+mod.vazaoMax+' m³/h · '+mod.Pmax+' bar<br>Bocal '+nomeConexao(mod.porta)+'</div>';card.addEventListener('click',function(e){if(e.target.classList.contains('fab-checkbox')){card.classList.toggle('selected',e.target.checked);return;}var cb=card.querySelector('.fab-checkbox');cb.checked=!cb.checked;card.classList.toggle('selected',cb.checked);});grid.appendChild(card);});}
+/* MODELOS DESMARCADOS POR PADRÃO — usuário marca apenas os desejados */
+function montarModelos(){var grid=document.getElementById('fabGrid');grid.innerHTML='';ALFA_LAVAL[tipoAtual].forEach(function(mod){var card=document.createElement('div');card.className='modelo-item';card.dataset.nome=mod.nome;card.innerHTML='<label class="checkbox-label"><input type="checkbox" class="fab-checkbox"><span class="checkmark"></span></label><div class="fab-nome">'+mod.nome+'</div><div class="fab-desc">'+mod.A.toFixed(3)+' m²/placa<br>'+mod.vazaoMax+' m³/h · '+mod.Pmax+' bar<br>Bocal '+nomeConexao(mod.porta)+'</div>';card.addEventListener('click',function(e){if(e.target.classList.contains('fab-checkbox')){card.classList.toggle('selected',e.target.checked);return;}var cb=card.querySelector('.fab-checkbox');cb.checked=!cb.checked;card.classList.toggle('selected',cb.checked);});grid.appendChild(card);});}
 function selecionarGrupo(){var grupo=document.getElementById('grupoModelos').value;var g=GRUPOS_MODELOS[grupo];if(g.tipo&&g.tipo!==tipoAtual)setTipo(g.tipo);document.querySelectorAll('.fab-checkbox').forEach(function(cb){var nome=cb.closest('.modelo-item').dataset.nome;var pertence=(g.modelos===null)?true:(g.modelos.indexOf(nome)!==-1);cb.checked=pertence;cb.closest('.modelo-item').classList.toggle('selected',pertence);});}
 function adicionarSecao(){if(secoesExtras>=2){alert('Máximo de 3 seções.');return;}secoesExtras++;var cont=document.getElementById('secoesAdicionais');var div=document.createElement('div');div.className='secao-bloco';div.id='secaoExtra'+secoesExtras;div.innerHTML='<div class="secao-titulo">🔹 Seção '+(secoesExtras+1)+' (etapa adicional)</div><div class="grid-2"><div class="sub-card produto"><div class="sub-card-head"><span class="side-icon produto-icon">📦</span><h4>Produto — Seção '+(secoesExtras+1)+'</h4></div><label>Temperatura de entrada (°C)<input type="number" id="sec'+secoesExtras+'TinP" value="45"></label><label>Temperatura de saída (°C)<input type="number" id="sec'+secoesExtras+'ToutP" value="70"></label></div><div class="sub-card servico"><div class="sub-card-head"><span class="side-icon servico-icon">⚙️</span><h4>Serviço — Seção '+(secoesExtras+1)+'</h4></div><label>Fluido de serviço<select id="sec'+secoesExtras+'FluidoS"><option value="agua">Água industrial</option><option value="vapor">Vapor saturado</option><option value="glicol20">Glicol 20%</option><option value="glicol30">Glicol 30%</option><option value="oleo">Óleo térmico</option><option value="r134a">R134a</option></select></label><label>Temperatura de entrada (°C)<input type="number" id="sec'+secoesExtras+'TinS" value="90"></label></div></div>';cont.appendChild(div);}
 function removerSecao(){if(secoesExtras<=0){alert('Nenhuma seção adicional.');return;}var div=document.getElementById('secaoExtra'+secoesExtras);if(div)div.remove();secoesExtras--;}
@@ -1012,7 +1007,7 @@ function gerarDatasheet(secoes){
 function calcular(){
   var erroBox=document.getElementById('erroTela');erroBox.style.display='none';
   var modelos=[];document.querySelectorAll('.fab-checkbox').forEach(function(cb){if(cb.checked)modelos.push(cb.closest('.modelo-item').dataset.nome);});
-  if(modelos.length===0){alert('Selecione pelo menos um modelo.');return;}
+  if(modelos.length===0){alert('Marque pelo menos um modelo de placa para calcular.');return;}
   var modelosData=ALFA_LAVAL[tipoAtual].filter(function(m){return modelos.indexOf(m.nome)!==-1;});
   var vazaoP=parseFloat(document.getElementById('vazaoP').value),tinP=parseFloat(document.getElementById('tinP').value),toutP=parseFloat(document.getElementById('toutP').value),tinS=parseFloat(document.getElementById('tinS').value);
   if(!vazaoP||!tinP||!toutP){alert('Preencha os campos obrigatórios do PRODUTO: vazão, entrada e saída.');return;}

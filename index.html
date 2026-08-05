@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google" content="notranslate">
-<title>AlfaVed Dimensionador-PHE · v17</title>
+<title>AlfaVed Dimensionador-PHE · v18</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--azul-escuro:#0a1f3c;--azul:#123a6b;--azul-medio:#1d5aa8;--azul-claro:#2f7fd1;--laranja:#e8731c;--laranja-claro:#f59e4c;--cinza-fundo:#f4f6f9;--cinza-borda:#dde3ea;--texto:#1e293b;--texto-suave:#64748b;--branco:#fff;--verde:#16a34a;--vermelho:#dc2626;--sombra:0 4px 20px rgba(10,31,60,.08)}
@@ -31,8 +31,9 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:var(--ci
 .card-sub{font-size:13px;color:var(--texto-suave);margin-top:2px}
 .step-badge{background:linear-gradient(135deg,var(--azul),var(--azul-claro));color:var(--branco);width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;flex-shrink:0}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-@media(max-width:768px){.grid-2,.grid-4{grid-template-columns:1fr}}
+@media(max-width:768px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}}
 .sub-card{background:var(--cinza-fundo);border:1px solid var(--cinza-borda);border-radius:12px;padding:18px}
 .sub-card.produto{border-top:4px solid var(--azul-claro)}
 .sub-card.servico{border-top:4px solid var(--laranja)}
@@ -92,6 +93,11 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
 .btn-pdf{background:linear-gradient(135deg,var(--vermelho),#b91c1c);color:var(--branco);border:none;padding:12px 32px;font-size:14px;font-weight:600;font-family:inherit;border-radius:10px;cursor:pointer;transition:all .2s}
 .btn-pdf:hover{transform:translateY(-2px)}
 .resultado-card{border-left:5px solid var(--laranja)}
+.resumo-equip{background:linear-gradient(135deg,var(--azul-escuro),var(--azul));color:var(--branco);border-radius:12px;padding:18px;margin-bottom:18px}
+.resumo-equip h4{color:var(--branco);margin-bottom:12px;font-size:16px}
+.resumo-equip .grid-4{color:var(--branco)}
+.resumo-equip .grid-4 strong{color:var(--laranja-claro)}
+.resumo-equip .grid-4 div{font-size:13px}
 .resultado-resumo{background:linear-gradient(135deg,var(--cinza-fundo),#eef4fb);border-radius:12px;padding:18px;margin-bottom:18px;border:1px solid var(--cinza-borda)}
 .resultado-resumo h4{color:var(--azul-escuro);margin-bottom:10px;font-size:15px}
 .resultado-resumo p{margin-bottom:5px;font-size:13px}
@@ -164,9 +170,9 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
 <section class="hero">
   <div class="hero-overlay"></div>
   <div class="container hero-content">
-    <span class="hero-badge">⚙️ Dimensionamento de Engenharia · v17</span>
+    <span class="hero-badge">⚙️ Dimensionamento de Engenharia · v18</span>
     <h2>Dimensionador de Trocadores de Calor de Placas</h2>
-    <p>Base de cálculo <strong>revisada com dados oficiais Alfa Laval</strong>, U global variável por fluidos, eficiência térmica ε-NTU, materiais de gaxeta/anel/liga e datasheet lado a lado em PDF.</p>
+    <p>Base de cálculo <strong>revisada com dados oficiais Alfa Laval</strong>, layout estilo CAS, resumo do equipamento, conexões, eficiência térmica ε-NTU e datasheet lado a lado em PDF.</p>
   </div>
 </section>
 
@@ -351,8 +357,8 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
 
 <script>
 /* ============================================================
-   AlfaVed Dimensionador-PHE · v17
-   Revisão técnica: U variável, ε-NTU, φ por ângulo, materiais
+   AlfaVed Dimensionador-PHE · v18
+   Layout estilo CAS + revisão técnica completa
    ============================================================ */
 
 /* ---------- MODELOS ALFA LAVAL ---------- */
@@ -560,7 +566,7 @@ var MATERIAIS_REF = {
   }
 };
 
-/* ---------- REVISÃO: U GLOBAL INICIAL VARIÁVEL POR FLUIDOS (Alfa Laval) ---------- */
+/* ---------- REVISÃO: U GLOBAL INICIAL VARIÁVEL (Alfa Laval) ---------- */
 function estimarU(fP, fS, vaporCond) {
   var nomeP = fP.nome, nomeS = fS.nome;
   if (vaporCond) {
@@ -577,21 +583,30 @@ function estimarU(fP, fS, vaporCond) {
   if (nomeP.indexOf('Glicol') !== -1) return 2500;
   return 2500;
 }
-
-/* ---------- REVISÃO: FATOR DE AMPLIAÇÃO POR ÂNGULO ---------- */
-function fatorAmpliacao(ang) {
-  if (ang === 60) return 1.25;
-  if (ang === 30) return 1.15;
-  return 1.20;
-}
-
-/* ---------- REVISÃO: EFICIÊNCIA TÉRMICA (ε-NTU) ---------- */
+function fatorAmpliacao(ang) { if (ang === 60) return 1.25; if (ang === 30) return 1.15; return 1.20; }
 function calcEficiencia(Q, mP, cpP, mS, cpS, tinS, tinP) {
   var Cmin = Math.min(mP*cpP, mS*cpS);
   if (Cmin <= 0) return 0;
   var Qmax = Cmin * Math.abs(tinS - tinP);
   if (Qmax <= 0) return 0;
   return Q / Qmax;
+}
+
+/* ---------- NOVIDADE: DIÂMETRO DE CONEXÃO (estilo CAS) ---------- */
+function diametroConexao(vazaoM3h) {
+  if (vazaoM3h < 10) return 'DN 50 (2")';
+  if (vazaoM3h < 25) return 'DN 65 (2.5")';
+  if (vazaoM3h < 50) return 'DN 80 (3")';
+  if (vazaoM3h < 100) return 'DN 100 (4")';
+  if (vazaoM3h < 200) return 'DN 150 (6")';
+  return 'DN 200 (8")';
+}
+
+/* ---------- NOVIDADE: PERDA DE CARGA NAS PORTAS (estilo CAS) ---------- */
+function dPPorta(m, rho, DportaM) {
+  var Aporta = Math.PI * Math.pow(DportaM, 2) / 4;
+  var vporta = m / (rho * Aporta);
+  return 1.5 * rho * vporta * vporta / 2; // kPa
 }
 
 /* ---------- CORRELAÇÕES ---------- */
@@ -699,36 +714,58 @@ function selecionarGrupo(){var grupo=document.getElementById('grupoModelos').val
 function adicionarSecao(){if(secoesExtras>=2){alert('Máximo de 3 seções.');return;}secoesExtras++;var cont=document.getElementById('secoesAdicionais');var div=document.createElement('div');div.className='secao-bloco';div.id='secaoExtra'+secoesExtras;div.innerHTML='<div class="secao-titulo">🔹 Seção '+(secoesExtras+1)+' (etapa adicional)</div><div class="grid-2"><div class="sub-card produto"><div class="sub-card-head"><span class="side-icon produto-icon">📦</span><h4>Produto — Seção '+(secoesExtras+1)+'</h4></div><label>Temperatura de entrada (°C)<input type="number" id="sec'+secoesExtras+'TinP" value="45"></label><label>Temperatura de saída (°C)<input type="number" id="sec'+secoesExtras+'ToutP" value="70"></label></div><div class="sub-card servico"><div class="sub-card-head"><span class="side-icon servico-icon">⚙️</span><h4>Serviço — Seção '+(secoesExtras+1)+'</h4></div><label>Fluido de serviço<select id="sec'+secoesExtras+'FluidoS"><option value="agua">Água industrial</option><option value="vapor">Vapor saturado</option><option value="glicol20">Glicol 20%</option><option value="glicol30">Glicol 30%</option><option value="oleo">Óleo térmico</option><option value="r134a">R134a</option></select></label><label>Temperatura de entrada (°C)<input type="number" id="sec'+secoesExtras+'TinS" value="90"></label></div></div>';cont.appendChild(div);}
 function removerSecao(){if(secoesExtras<=0){alert('Nenhuma seção adicional.');return;}var div=document.getElementById('secaoExtra'+secoesExtras);if(div)div.remove();secoesExtras--;}
 
-/* ---------- RESULTADO ---------- */
+/* ---------- RESULTADO (estilo CAS) ---------- */
 function exibirResultado(secoes){
   var c=document.getElementById('resultadoConteudo'),cliente=document.getElementById('cliente').value||'—',proj='PRJ-AV'+(document.getElementById('numProjeto').value||'');
   var totalA=0,totalQ=0,totalPlacas=0;
   secoes.forEach(function(x){totalA+=x.melhor.A_inst;totalQ+=x.Q;totalPlacas+=x.melhor.Nplacas;});
-  var html='<div class="resultado-resumo"><h4>📋 Projeto: '+proj+' · Cliente: '+cliente+'</h4>'+
+  var m0=secoes[0].melhor;
+  var vazaoPv=document.getElementById('vazaoP').value;
+  var conexaoP=diametroConexao(parseFloat(vazaoPv)||0);
+  var conexaoS=diametroConexao(secoes[0].vazaoS);
+  var Tmax=Math.max(parseFloat(document.getElementById('tinS').value)||0,parseFloat(secoes[0].toutS)||0,parseFloat(document.getElementById('toutP').value)||0);
+  var gaxP=selecionarGaxeta(secoes[0].fP.nome,Tmax,false);
+  var ehSemi=(tipoAtual==='semisoldadas');
+  var corpoP=ehSemi?selecionarCorpoGaxeta(secoes[0].fP.nome,Tmax,false):null;
+  var placaP=selecionarPlaca(secoes[0].fP.nome,Tmax,false);
+  var anelP=ehSemi?selecionarAnel(tipoAtual,secoes[0].fP.nome,Tmax):null;
+  /* Painel de resumo do equipamento (estilo CAS) */
+  var resumoEquip='<div class="resumo-equip"><h4>🔧 Equipamento selecionado</h4><div class="grid-4">'+
+    '<div><strong>Modelo</strong><br>'+m0.modelo+'</div>'+
+    '<div><strong>Placas</strong><br>'+m0.Nplacas+'</div>'+
+    '<div><strong>Área</strong><br>'+m0.A_inst.toFixed(1)+' m²</div>'+
+    '<div><strong>Configuração</strong><br>'+m0.config+' · '+m0.nomePasses+'</div>'+
+    '<div><strong>Liga da placa</strong><br>'+placaP.mat+'</div>'+
+    '<div><strong>Gaxeta</strong><br>'+(ehSemi?(corpoP?corpoP.mat:'—'):gaxP.mat)+(ehSemi&&anelP?' + '+anelP.mat:'')+'</div>'+
+    '<div><strong>Conexão produto</strong><br>'+conexaoP+'</div>'+
+    '<div><strong>Conexão serviço</strong><br>'+conexaoS+'</div>'+
+  '</div></div>';
+  var html=resumoEquip;
+  html+='<div class="resultado-resumo"><h4>📋 Projeto: '+proj+' · Cliente: '+cliente+'</h4>'+
     '<p><strong>Calor total trocado:</strong> '+fmt(totalQ/1000)+' kW ('+secoes.length+' seção/seções)</p>'+
     '<p><strong>Área total instalada:</strong> '+totalA.toFixed(1)+' m² · <strong>Placas totais:</strong> '+totalPlacas+'</p></div>';
   secoes.forEach(function(r,idx){
     var m=r.melhor,servT=document.getElementById(idx===0?'tinS':'sec'+idx+'TinS').value;
-    var Tmax=Math.max(parseFloat(servT)||0,parseFloat(r.toutS)||0,parseFloat(document.getElementById(idx===0?'toutP':'sec'+idx+'ToutP').value)||0);
-    var gaxP=selecionarGaxeta(r.fP.nome,Tmax,false),gaxS=selecionarGaxeta(r.fS.nome,Tmax,!!r.fS.condensing);
-    var placaP=selecionarPlaca(r.fP.nome,Tmax,false),placaS=selecionarPlaca(r.fS.nome,Tmax,false);
-    var ehSemi=(tipoAtual==='semisoldadas');
-    var anelP=ehSemi?selecionarAnel(tipoAtual,r.fP.nome,Tmax):null;
-    var corpoP=ehSemi?selecionarCorpoGaxeta(r.fP.nome,Tmax,false):null;
+    var Tmax2=Math.max(parseFloat(servT)||0,parseFloat(r.toutS)||0,parseFloat(document.getElementById(idx===0?'toutP':'sec'+idx+'ToutP').value)||0);
+    var gaxP2=selecionarGaxeta(r.fP.nome,Tmax2,false),gaxS2=selecionarGaxeta(r.fS.nome,Tmax2,!!r.fS.condensing);
+    var placaP2=selecionarPlaca(r.fP.nome,Tmax2,false),placaS2=selecionarPlaca(r.fS.nome,Tmax2,false);
+    var ehSemi2=(tipoAtual==='semisoldadas');
+    var anelP2=ehSemi2?selecionarAnel(tipoAtual,r.fP.nome,Tmax2):null;
+    var corpoP2=ehSemi2?selecionarCorpoGaxeta(r.fP.nome,Tmax2,false):null;
     var efic=(m.eficiencia*100).toFixed(1);
     var statusEfic=parseFloat(efic)>=85?'<span class="ok">✓</span>':'<span class="aviso">⚠</span>';
     html+='<div class="melhor-modelo"><h4>🏆 Seção '+(idx+1)+' — Melhor: '+m.modelo+' · '+m.config+' ('+m.angP+'°/'+m.angS+'°) · '+m.nomePasses+' passes</h4>'+
       '<p><strong>Q seção:</strong> '+fmt(r.Q/1000)+' kW | <strong>LMTD:</strong> '+m.lmtdF.toFixed(1)+' °C | <strong>F:</strong> '+m.F.toFixed(2)+' | <strong>Eficiência ε:</strong> '+efic+'% '+statusEfic+'</p>'+
       '<p><strong>Placas:</strong> '+m.Nplacas+' | <strong>Área:</strong> '+m.A_inst.toFixed(1)+' m² | <strong>U:</strong> '+fmt(m.U)+' W/m²·K</p>'+
       '<p><strong>Turbulência:</strong> '+m.turbP+' (Re '+fmt(m.ReP)+') / '+m.turbS+(m.ReS?' (Re '+fmt(m.ReS)+')':'')+' | <strong>ΔP:</strong> '+m.dPP.toFixed(1)+' / '+m.dPS.toFixed(1)+' kPa</p>'+
-      '<p><strong>Liga da placa:</strong> '+placaP.mat+' | <strong>Gaxeta:</strong> '+(ehSemi?(corpoP?corpoP.mat:'—'):gaxP.mat)+(ehSemi&&anelP?' | <strong>Anel:</strong> '+anelP.mat:'')+'</p>'+
+      '<p><strong>Liga da placa:</strong> '+placaP2.mat+' | <strong>Gaxeta:</strong> '+(ehSemi2?(corpoP2?corpoP2.mat:'—'):gaxP2.mat)+(ehSemi2&&anelP2?' | <strong>Anel:</strong> '+anelP2.mat:'')+'</p>'+
       '<p><strong>Serviço:</strong> '+r.fS.nome+' · entrada '+servT+'°C · saída '+r.toutS.toFixed(1)+'°C · vazão '+r.vazaoS.toFixed(1)+' m³/h</p></div>';
   });
-  html+='<h4 style="margin:16px 0 10px;font-size:15px;color:#0a1f3c">Comparativo por seção (top 8)</h4>'+
+  html+='<h4 style="margin:16px 0 10px;font-size:15px;color:#0a1f3c">📊 Parâmetros de projeto (por seção)</h4>'+
     '<table class="tabela-comp"><thead><tr><th>Seção</th><th>Modelo</th><th>Config.</th><th>Passes</th><th>Placas</th><th>Área (m²)</th><th>U (W/m²·K)</th><th>ε (%)</th><th>ΔP P (kPa)</th><th>ΔP S (kPa)</th><th>Status</th></tr></thead><tbody>';
-  secoes.forEach(function(r,idx){r.resultados.slice(0,8).forEach(function(f,i){var status=f.atende?'<span class="ok">✓</span>':'<span class="aviso">⚠</span>';html+='<tr class="'+(i===0?'melhor':'')+'"><td>'+(idx+1)+'</td><td><strong>'+f.modelo+'</strong></td><td>'+f.config+'</td><td>'+f.nomePasses+'</td><td>'+f.Nplacas+'</td><td>'+f.A_inst.toFixed(1)+'</td><td>'+fmt(f.U)+'</td><td>'+(f.eficiencia*100).toFixed(1)+'</td><td>'+f.dPP.toFixed(1)+'</td><td>'+f.dPS.toFixed(1)+'</td><td>'+status+'</td></tr>';});});
+  secoes.forEach(function(r,idx){r.resultados.slice(0,8).forEach(function(f,i){var status=f.atende?'<span class="ok">✓</span>':'<span class="aviso">✗</span>';html+='<tr class="'+(i===0?'melhor':'')+'"><td>'+(idx+1)+'</td><td><strong>'+f.modelo+'</strong></td><td>'+f.config+'</td><td>'+f.nomePasses+'</td><td>'+f.Nplacas+'</td><td>'+f.A_inst.toFixed(1)+'</td><td>'+fmt(f.U)+'</td><td>'+(f.eficiencia*100).toFixed(1)+'</td><td>'+f.dPP.toFixed(1)+'</td><td>'+f.dPS.toFixed(1)+'</td><td>'+status+'</td></tr>';});});
   html+='</tbody></table>'+
-    '<p style="font-size:11px;color:var(--texto-suave);margin-top:10px">Base de cálculo revisada com dados oficiais Alfa Laval. U global estimado por fluidos (água/água ≈6500, vapor/água ≈5000 W/m²·K). Eficiência ε-NTU: Alfa Laval recomenda 85-95%. Dh=2b/φ com φ por ângulo. Confira com o software oficial Alfa Laval.</p>';
+    '<p style="font-size:11px;color:var(--texto-suave);margin-top:10px">Base de cálculo revisada com dados oficiais Alfa Laval. U global estimado por fluidos. Eficiência ε-NTU: 85-95% recomendado. Dh=2b/φ com φ por ângulo. Conexões e perda de carga nas portas conforme CAS. Confira com o software oficial Alfa Laval.</p>';
   c.innerHTML=html;
 }
 
@@ -737,8 +774,10 @@ function gerarDatasheet(secoes){
   var c=document.getElementById('datasheetConteudo'),cliente=document.getElementById('cliente').value||'—',proj='PRJ-AV'+(document.getElementById('numProjeto').value||''),hoje=new Date().toLocaleDateString('pt-BR');
   var totalA=0,totalQ=0;
   secoes.forEach(function(x){totalA+=x.melhor.A_inst;totalQ+=x.Q;});
+  var vazaoPv=document.getElementById('vazaoP').value;
+  var conexaoP=diametroConexao(parseFloat(vazaoPv)||0),conexaoS=diametroConexao(secoes[0].vazaoS);
   var html='<div class="datasheet" id="dsImprimivel"><h2>AlfaVed Dimensionador-PHE</h2><div class="sub">Datasheet de Dimensionamento · Gerado em '+hoje+'</div>'+
-    '<div class="ds-secao"><h4>1. Identificação</h4><table class="ds-tabela"><tr><td>Projeto</td><td>'+proj+'</td></tr><tr><td>Cliente</td><td>'+cliente+'</td></tr><tr><td>Data</td><td>'+hoje+'</td></tr><tr><td>Número de seções</td><td>'+secoes.length+'</td></tr><tr><td>Tipo de trocador</td><td>'+(tipoAtual==='semisoldadas'?'Placas semi-soldadas':'Placas gaxetadas')+'</td></tr></table></div>';
+    '<div class="ds-secao"><h4>1. Identificação</h4><table class="ds-tabela"><tr><td>Projeto</td><td>'+proj+'</td></tr><tr><td>Cliente</td><td>'+cliente+'</td></tr><tr><td>Data</td><td>'+hoje+'</td></tr><tr><td>Número de seções</td><td>'+secoes.length+'</td></tr><tr><td>Tipo de trocador</td><td>'+(tipoAtual==='semisoldadas'?'Placas semi-soldadas':'Placas gaxetadas')+'</td></tr><tr><td>Conexão produto</td><td>'+conexaoP+'</td></tr><tr><td>Conexão serviço</td><td>'+conexaoS+'</td></tr></table></div>';
   secoes.forEach(function(r,idx){
     var m=r.melhor,servT=document.getElementById(idx===0?'tinS':'sec'+idx+'TinS').value;
     var Tmax=Math.max(parseFloat(servT)||0,parseFloat(r.toutS)||0,parseFloat(document.getElementById(idx===0?'toutP':'sec'+idx+'ToutP').value)||0);
@@ -749,7 +788,6 @@ function gerarDatasheet(secoes){
     var corpoP=ehSemi?selecionarCorpoGaxeta(r.fP.nome,Tmax,false):null,corpoS=ehSemi?selecionarCorpoGaxeta(r.fS.nome,Tmax,!!r.fS.condensing):null;
     var tinPv=document.getElementById(idx===0?'tinP':'sec'+idx+'TinP').value;
     var toutPv=document.getElementById(idx===0?'toutP':'sec'+idx+'ToutP').value;
-    var vazaoPv=document.getElementById('vazaoP').value;
     html+='<div class="ds-secao"><h4>'+(idx+1)+'. Seção '+(idx+1)+' — Condições operacionais de projeto</h4>'+
       '<table class="ds-lado"><tr><th></th><th>Produto</th><th>Serviço</th></tr>'+
       '<tr><td>Fluido</td><td>'+r.fP.nome+'</td><td>'+r.fS.nome+'</td></tr>'+

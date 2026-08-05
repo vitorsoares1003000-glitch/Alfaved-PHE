@@ -4,48 +4,70 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dimensionador PHE — Alfaved Soluções Industriais</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Cabeçalho -->
+    <!-- ===== HEADER ===== -->
     <header class="header">
         <div class="container header-inner">
-            <div class="brand">
-                <div class="brand-logo">A</div>
+            <a href="#" class="brand">
+                <div class="brand-logo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                        <path d="M2 17l10 5 10-5"/>
+                        <path d="M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
                 <div class="brand-text">
                     <h1>ALFAVED</h1>
                     <span>Soluções Industriais</span>
                 </div>
-            </div>
-            <nav class="nav">
-                <a href="#dados" class="nav-link active">1. Dados</a>
-                <a href="#restricoes" class="nav-link">2. Restrições</a>
-                <a href="#fabricantes" class="nav-link">3. Fabricantes</a>
-                <a href="#resultado" class="nav-link">4. Resultado</a>
+            </a>
+            <nav class="nav" id="navMenu">
+                <a href="#dados" class="nav-link active">Dados</a>
+                <a href="#restricoes" class="nav-link">Restrições</a>
+                <a href="#fabricantes" class="nav-link">Fabricantes</a>
+                <a href="#resultado" class="nav-link">Resultado</a>
+                <a href="#contato" class="nav-link">Contato</a>
             </nav>
+            <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
         </div>
     </header>
 
-    <!-- Hero -->
+    <!-- ===== HERO ===== -->
     <section class="hero">
-        <div class="container">
-            <h2>Dimensionador de Trocadores de Calor de Placas (PHE)</h2>
-            <p>Dimensionamento preliminar e comparação entre fabricantes — com destaque para a linha própria Alfaved.</p>
+        <div class="hero-overlay"></div>
+        <div class="container hero-content">
+            <span class="hero-badge">⚙️ Ferramenta de Engenharia</span>
+            <h2>Dimensionador de Trocadores de Calor de Placas</h2>
+            <p>Transformando desafios em inovação — dimensionamento preliminar e comparação entre os principais fabricantes, com destaque para a linha própria <strong>Alfaved</strong>.</p>
+            <div class="hero-cta">
+                <a href="#dados" class="btn-hero">🚀 Começar dimensionamento</a>
+                <a href="#fabricantes" class="btn-hero-outline">Ver fabricantes</a>
+            </div>
         </div>
     </section>
 
     <main class="container">
 
-        <!-- 1. Dados do processo -->
-        <section id="dados" class="card">
+        <!-- ===== 1. DADOS DO PROCESSO ===== -->
+        <section id="dados" class="card fade-in">
             <div class="card-header">
                 <span class="step-badge">1</span>
-                <h3>Dados do processo</h3>
+                <div>
+                    <h3>Dados do processo</h3>
+                    <p class="card-sub">Informe as condições de operação dos dois lados do trocador</p>
+                </div>
             </div>
             <div class="grid-2">
-                <div class="sub-card">
-                    <h4>🔥 Lado quente</h4>
+                <div class="sub-card hot">
+                    <div class="sub-card-head">
+                        <span class="side-icon hot-icon">🔥</span>
+                        <h4>Lado quente</h4>
+                    </div>
                     <label>Fluido
                         <select id="fluidoQ">
                             <option value="agua">Água</option>
@@ -64,8 +86,11 @@
                         <input type="number" id="toutQ" value="60">
                     </label>
                 </div>
-                <div class="sub-card">
-                    <h4>❄️ Lado frio</h4>
+                <div class="sub-card cold">
+                    <div class="sub-card-head">
+                        <span class="side-icon cold-icon">❄️</span>
+                        <h4>Lado frio</h4>
+                    </div>
                     <label>Fluido
                         <select id="fluidoF">
                             <option value="agua">Água</option>
@@ -87,11 +112,14 @@
             </div>
         </section>
 
-        <!-- 2. Restrições de projeto -->
-        <section id="restricoes" class="card">
+        <!-- ===== 2. RESTRIÇÕES ===== -->
+        <section id="restricoes" class="card fade-in">
             <div class="card-header">
                 <span class="step-badge">2</span>
-                <h3>Restrições de projeto</h3>
+                <div>
+                    <h3>Restrições de projeto</h3>
+                    <p class="card-sub">Defina os limites e parâmetros de dimensionamento</p>
+                </div>
             </div>
             <div class="grid-3">
                 <label>ΔP máx. quente (kPa)
@@ -115,27 +143,33 @@
             </div>
         </section>
 
-        <!-- 3. Fabricantes -->
-        <section id="fabricantes" class="card">
+        <!-- ===== 3. FABRICANTES ===== -->
+        <section id="fabricantes" class="card fade-in">
             <div class="card-header">
                 <span class="step-badge">3</span>
-                <h3>Fabricantes para comparar</h3>
+                <div>
+                    <h3>Fabricantes para comparar</h3>
+                    <p class="card-sub">Selecione os fabricantes — a Alfaved é destacada como linha própria</p>
+                </div>
             </div>
-            <div class="fab-grid" id="fabGrid">
-                <!-- Fabricantes gerados via JS -->
-            </div>
+            <div class="fab-grid" id="fabGrid"></div>
         </section>
 
         <!-- Botão calcular -->
-        <div class="calc-area">
-            <button id="btnCalcular" class="btn-primary">⚙️ Calcular Dimensionamento</button>
+        <div class="calc-area fade-in">
+            <button id="btnCalcular" class="btn-primary">
+                <span class="btn-icon">⚙️</span> Calcular Dimensionamento
+            </button>
         </div>
 
-        <!-- 4. Resultado -->
-        <section id="resultado" class="card resultado-card" style="display:none;">
+        <!-- ===== 4. RESULTADO ===== -->
+        <section id="resultado" class="card resultado-card fade-in" style="display:none;">
             <div class="card-header">
                 <span class="step-badge">4</span>
-                <h3>Resultado do dimensionamento</h3>
+                <div>
+                    <h3>Resultado do dimensionamento</h3>
+                    <p class="card-sub">Comparativo entre os fabricantes selecionados</p>
+                </div>
             </div>
             <div id="resultadoConteudo"></div>
             <div class="calc-area">
@@ -145,9 +179,59 @@
 
     </main>
 
+    <!-- ===== CONTATO ===== -->
+    <section id="contato" class="contato">
+        <div class="container">
+            <h3>Vamos construir soluções juntos?</h3>
+            <p>Fale com nossa equipe de engenharia de aplicações para dimensionamento e seleção de trocadores de calor.</p>
+            <div class="contato-grid">
+                <div class="contato-item">
+                    <span class="contato-icon">📍</span>
+                    <div>
+                        <strong>Endereço</strong>
+                        <span>Penápolis, SP, Brasil</span>
+                    </div>
+                </div>
+                <div class="contato-item">
+                    <span class="contato-icon">📞</span>
+                    <div>
+                        <strong>Telefone</strong>
+                        <span>(18) 3653-1000</span>
+                    </div>
+                </div>
+                <div class="contato-item">
+                    <span class="contato-icon">✉️</span>
+                    <div>
+                        <strong>E-mail</strong>
+                        <span>contato@alfaved.com.br</span>
+                    </div>
+                </div>
+                <div class="contato-item">
+                    <span class="contato-icon">💬</span>
+                    <div>
+                        <strong>WhatsApp</strong>
+                        <a href="https://wa.me/551836531000" target="_blank">Falar no WhatsApp</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
     <footer class="footer">
         <div class="container">
-            <p><strong>Alfaved Soluções Industriais</strong> — dimensionamento preliminar para seleção; valores finais devem ser confirmados com catálogos oficiais dos fabricantes.</p>
+            <div class="footer-brand">
+                <div class="brand-logo small">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                        <path d="M2 17l10 5 10-5"/>
+                        <path d="M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <span>ALFAVED — Soluções Industriais</span>
+            </div>
+            <p class="footer-note">Dimensionamento preliminar para seleção; valores finais devem ser confirmados com catálogos oficiais dos fabricantes.</p>
+            <p class="footer-copy">© 2026 Alfaved Soluções Industriais — CNPJ 50.093.389/0001-35</p>
         </div>
     </footer>
 

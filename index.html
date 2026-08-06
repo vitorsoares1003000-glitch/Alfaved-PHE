@@ -23,7 +23,6 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:var(--ci
 .hero-badge{display:inline-block;background:rgba(232,115,28,.2);border:1px solid var(--laranja);color:var(--laranja-claro);padding:6px 16px;border-radius:30px;font-size:13px;font-weight:600;margin-bottom:14px}
 .hero h2{font-size:30px;font-weight:800;margin-bottom:10px;line-height:1.2}
 .hero p{font-size:14px;opacity:.92;max-width:720px;margin:0 auto 16px}
-.hero p strong{color:var(--laranja-claro)}
 #erroTela{display:none;background:#fef2f2;border:2px solid var(--vermelho);color:var(--vermelho);padding:14px 18px;border-radius:12px;margin:16px 0;font-size:13px;font-weight:600}
 .card{background:var(--branco);border-radius:16px;padding:24px;margin:22px 0;box-shadow:var(--sombra);border:1px solid var(--cinza-borda)}
 .card-header{display:flex;align-items:flex-start;gap:14px;margin-bottom:18px}
@@ -51,8 +50,6 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
 .ident-card{background:linear-gradient(135deg,var(--azul-escuro),var(--azul));border-radius:12px;padding:18px;color:var(--branco)}
 .ident-card label{color:rgba(255,255,255,.85)}
 .ident-card input{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.25);color:var(--branco)}
-.ident-card input::placeholder{color:rgba(255,255,255,.5)}
-.ident-card input:focus{border-color:var(--laranja-claro);box-shadow:0 0 0 3px rgba(232,115,28,.25)}
 .prj-prefixo{display:flex;align-items:center;gap:8px}
 .prj-prefixo .fixo{background:var(--laranja);color:var(--branco);padding:10px 14px;border-radius:10px;font-weight:800;font-size:14px;letter-spacing:1px;white-space:nowrap;margin-top:5px}
 .prj-prefixo input{flex:1}
@@ -60,22 +57,18 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
 .secao-bloco .secao-titulo{font-size:14px;font-weight:700;color:var(--azul-escuro);margin-bottom:12px}
 .modelos-accordeon{border:2px solid var(--cinza-borda);border-radius:12px;margin-top:22px;overflow:hidden}
 .accordeon-header{width:100%;display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:linear-gradient(135deg,var(--cinza-fundo),#eef4fb);border:none;cursor:pointer;font-family:inherit;font-size:15px;font-weight:700;color:var(--azul-escuro);transition:background .2s}
-.accordeon-header:hover{background:#e6edf6}
-.accordeon-header .seta{font-size:13px;transition:transform .3s}
 .accordeon-header.open .seta{transform:rotate(180deg)}
 .accordeon-body{padding:16px;display:none}
 .accordeon-body.open{display:block}
 .grupo-seletor{margin-bottom:14px;padding:12px;background:var(--cinza-fundo);border:1px solid var(--cinza-borda);border-radius:10px}
 .toggle-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
 .toggle-btn{flex:1;min-width:200px;padding:14px 18px;border:2px solid var(--cinza-borda);border-radius:12px;background:var(--branco);cursor:pointer;text-align:left;transition:all .2s;font-family:inherit}
-.toggle-btn:hover{border-color:var(--azul-claro)}
 .toggle-btn.active{border-color:var(--azul);background:#eef4fb}
 .toggle-btn.active.semi{border-color:var(--laranja);background:#fdf0e4}
 .toggle-btn strong{display:block;font-size:15px;color:var(--azul-escuro)}
 .toggle-btn span{font-size:12px;color:var(--texto-suave)}
 .modelos-lista{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
 .modelo-item{border:2px solid var(--cinza-borda);border-radius:12px;padding:12px;text-align:center;cursor:pointer;transition:all .2s;background:var(--branco);position:relative}
-.modelo-item:hover{border-color:var(--azul-claro);transform:translateY(-3px)}
 .modelo-item.selected{border-color:var(--azul);background:#eef4fb}
 .modelo-item .fab-nome{font-weight:700;font-size:13px}
 .modelo-item .fab-desc{font-size:10px;color:var(--texto-suave);margin-top:2px;line-height:1.3}
@@ -88,26 +81,21 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
 .btn-primary{background:linear-gradient(135deg,var(--laranja),var(--laranja-claro));color:var(--branco);border:none;padding:16px 44px;font-size:17px;font-weight:700;font-family:inherit;border-radius:12px;cursor:pointer;transition:all .2s;box-shadow:0 6px 20px rgba(232,115,28,.35);display:inline-flex;align-items:center;gap:10px}
 .btn-primary:hover{transform:translateY(-3px)}
 .btn-secondary{background:linear-gradient(135deg,var(--azul),var(--azul-claro));color:var(--branco);border:none;padding:12px 32px;font-size:14px;font-weight:600;font-family:inherit;border-radius:10px;cursor:pointer;transition:all .2s}
-.btn-secondary:hover{transform:translateY(-2px)}
 .btn-pdf{background:linear-gradient(135deg,var(--vermelho),#b91c1c);color:var(--branco);border:none;padding:12px 32px;font-size:14px;font-weight:600;font-family:inherit;border-radius:10px;cursor:pointer;transition:all .2s}
-.btn-pdf:hover{transform:translateY(-2px)}
 .resultado-card{border-left:5px solid var(--laranja)}
 .resumo-equip{background:linear-gradient(135deg,var(--azul-escuro),var(--azul));color:var(--branco);border-radius:12px;padding:18px;margin-bottom:18px}
 .resumo-equip h4{color:var(--branco);margin-bottom:12px;font-size:16px}
-.resumo-equip .grid-4{color:var(--branco)}
-.resumo-equip .grid-4 strong{color:var(--laranja-claro)}
 .resumo-equip .grid-4 div{font-size:13px}
+.resumo-equip .grid-4 strong{color:var(--laranja-claro)}
 .resultado-resumo{background:linear-gradient(135deg,var(--cinza-fundo),#eef4fb);border-radius:12px;padding:18px;margin-bottom:18px;border:1px solid var(--cinza-borda)}
 .resultado-resumo h4{color:var(--azul-escuro);margin-bottom:10px;font-size:15px}
 .resultado-resumo p{margin-bottom:5px;font-size:13px}
-.resultado-resumo strong{color:var(--azul-escuro)}
 .melhor-modelo{background:linear-gradient(135deg,#fdf0e4,#fff7f0);border:2px solid var(--laranja);border-radius:12px;padding:18px;margin-bottom:18px;box-shadow:0 4px 16px rgba(232,115,28,.15)}
 .melhor-modelo h4{color:var(--laranja);margin-bottom:8px;font-size:16px}
 .melhor-modelo p{font-size:13px;margin-bottom:5px}
 .tabela-comp{width:100%;border-collapse:collapse;margin-top:12px;font-size:11.5px}
 .tabela-comp th,.tabela-comp td{padding:7px 8px;border:1px solid var(--cinza-borda);text-align:center}
 .tabela-comp th{background:linear-gradient(135deg,var(--azul),var(--azul-medio));color:var(--branco);font-weight:600}
-.tabela-comp tr:nth-child(even){background:var(--cinza-fundo)}
 .tabela-comp tr.melhor{background:#fdf0e4;font-weight:700}
 .ok{color:var(--verde);font-weight:700}
 .aviso{color:var(--vermelho);font-weight:700}
@@ -124,7 +112,6 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
 .ds-tabela{width:100%;border-collapse:collapse;font-size:12px}
 .ds-tabela td{padding:6px 10px;border:1px solid var(--cinza-borda)}
 .ds-tabela td:first-child{background:var(--cinza-fundo);font-weight:600;width:45%}
-.ds-tabela td:last-child{text-align:right}
 .ds-lado{width:100%;border-collapse:collapse;font-size:12px}
 .ds-lado th,.ds-lado td{padding:6px 10px;border:1px solid var(--cinza-borda);text-align:center}
 .ds-lado th{background:var(--azul);color:var(--branco)}
@@ -134,28 +121,17 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
 .curva-tabela{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:10px}
 .curva-tabela th,.curva-tabela td{padding:8px 10px;border:1px solid var(--cinza-borda);text-align:center}
 .curva-tabela th{background:var(--cinza-fundo);font-weight:600}
-.curva-tabela tr:nth-child(even){background:var(--cinza-fundo)}
 .barra{display:inline-block;width:60px;height:8px;background:#e2e8f0;border-radius:4px;overflow:hidden;vertical-align:middle;margin-left:4px}
 .barra-fill{height:100%;border-radius:4px}
 .barra-fill.azul{background:#1d5aa8}
 .barra-fill.vermelho{background:#dc2626}
 .barra-fill.verde{background:#16a34a}
 .insight{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:10px 14px;margin-top:12px;font-size:13px;color:#14532d}
-.insight strong{color:#15803d}
 .contato{background:linear-gradient(135deg,var(--azul-escuro),var(--azul));color:var(--branco);padding:46px 0;margin-top:34px}
 .contato h3{font-size:26px;text-align:center;margin-bottom:10px}
-.contato>.container>p{text-align:center;opacity:.9;max-width:650px;margin:0 auto 30px;font-size:14px}
 .contato-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px}
-.contato-item{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:18px;display:flex;align-items:center;gap:12px;transition:background .2s}
-.contato-item:hover{background:rgba(255,255,255,.15)}
-.contato-icon{font-size:22px}
-.contato-item strong{display:block;font-size:13px;margin-bottom:2px}
-.contato-item span,.contato-item a{font-size:12px;opacity:.9;color:var(--branco);text-decoration:none}
-.contato-item a:hover{color:var(--laranja-claro)}
+.contato-item{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:18px;display:flex;align-items:center;gap:12px}
 .footer{background:var(--azul-escuro);color:var(--branco);text-align:center;padding:26px 0;font-size:12px;border-top:3px solid var(--laranja)}
-.footer-brand{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px}
-.footer-note{opacity:.8;max-width:700px;margin:0 auto 8px;font-size:12px}
-.footer-copy{opacity:.6;font-size:11px}
 .fade-in{opacity:0;transform:translateY(20px);animation:fadeIn .6s ease forwards}
 @keyframes fadeIn{to{opacity:1;transform:translateY(0)}}
 @media(max-width:768px){.hero h2{font-size:24px}.hero{padding:34px 0}.card{padding:18px}}
@@ -340,31 +316,17 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
 <section id="contato" class="contato">
   <div class="container">
     <h3>Vamos construir soluções juntos?</h3>
-    <p>Fale com a equipe de engenharia de aplicações da AlfaVed para seleção e manutenção de trocadores de calor.</p>
     <div class="contato-grid">
-      <div class="contato-item"><span class="contato-icon">📍</span><div><strong>Endereço</strong><span>Penápolis, SP, Brasil</span></div></div>
-      <div class="contato-item"><span class="contato-icon">📞</span><div><strong>Telefone</strong><span>(18) 3653-1000</span></div></div>
-      <div class="contato-item"><span class="contato-icon">✉️</span><div><strong>E-mail</strong><span>contato@alfaved.com.br</span></div></div>
-      <div class="contato-item"><span class="contato-icon">💬</span><div><strong>WhatsApp</strong><a href="https://wa.me/551836531000" target="_blank">Falar no WhatsApp</a></div></div>
+      <div class="contato-item">📍<div><strong>Endereço</strong><span>Penápolis, SP, Brasil</span></div></div>
+      <div class="contato-item">📞<div><strong>Telefone</strong><span>(18) 3653-1000</span></div></div>
+      <div class="contato-item">✉️<div><strong>E-mail</strong><span>contato@alfaved.com.br</span></div></div>
     </div>
   </div>
 </section>
 
 <footer class="footer">
   <div class="container">
-    <div class="footer-brand">
-      <div class="brand-logo" style="width:34px;height:34px;border-radius:8px">
-        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:28px;height:28px">
-          <circle cx="50" cy="50" r="42" fill="none" stroke="#123b6d" stroke-width="8" stroke-dasharray="240 24" stroke-dashoffset="0" stroke-linecap="round"/>
-          <path d="M50 22 L33 82 L42 82 L50 58 Z" fill="#2f7fd1"/>
-          <path d="M50 22 L67 82 L58 82 L50 58 Z" fill="#123b6d"/>
-          <path d="M50 58 L40 82 L60 82 Z" fill="#c8102e"/>
-        </svg>
-      </div>
-      <span>AlfaVed Dimensionador-PHE</span>
-    </div>
-    <p class="footer-note">Dimensionamento preliminar para seleção; valores finais devem ser confirmados com o software oficial e catálogos da Alfa Laval.</p>
-    <p class="footer-copy">© 2026 AlfaVed — CNPJ 50.093.389/0001-35</p>
+    <p>© 2026 AlfaVed — CNPJ 50.093.389/0001-35</p>
   </div>
 </footer>
 
@@ -428,30 +390,14 @@ function aplicarTempRefrigerante() {
    Os dois fluidos passam pela MESMA placa (frente/trás).
    Material ÚNICO escolhido pelo fluido MAIS EXIGENTE.
    ============================================================ */
-
-/* Nível de agressividade para a PLACA */
 function nivelPlaca(nomeFluido) {
   var n = nomeFluido;
-  if (n.indexOf('Salmoura') !== -1) return 5;          // Titânio
-  if (n.indexOf('Óleo térmico') !== -1) return 4;      // 316L (alta temp)
-  if (n.indexOf('Xarope') !== -1) return 4;            // 316L
-  if (n.indexOf('Óleo vegetal') !== -1) return 3;      // 316L
-  if (n.indexOf('Suco') !== -1) return 3;              // 316L
-  if (n.indexOf('Leite') !== -1) return 3;             // 316L
-  if (n.indexOf('Cerveja') !== -1) return 3;           // 316L
-  if (n.indexOf('Água') !== -1) return 2;              // 316L
-  if (n.indexOf('Glicol') !== -1) return 2;            // 316L
-  if (n.indexOf('Amônia') !== -1) return 1;            // 304L
-  if (n.indexOf('R134a') !== -1) return 1;             // 304L
-  if (n.indexOf('R410A') !== -1) return 1;             // 304L
-  if (n.indexOf('R22') !== -1) return 1;               // 304L
-  if (n.indexOf('Ar') !== -1) return 1;                // 304L
-  if (n.indexOf('CO₂') !== -1) return 1;               // 304L
-  if (n.indexOf('Vapor') !== -1) return 2;             // 316L (condensação)
-  return 2;
+  if (n.indexOf('Salmoura') !== -1) return 5;
+  if (n.indexOf('Óleo térmico') !== -1 || n.indexOf('Xarope') !== -1) return 4;
+  if (n.indexOf('Óleo vegetal') !== -1 || n.indexOf('Suco') !== -1 || n.indexOf('Leite') !== -1 || n.indexOf('Cerveja') !== -1) return 3;
+  if (n.indexOf('Água') !== -1 || n.indexOf('Glicol') !== -1 || n.indexOf('Vapor') !== -1) return 2;
+  return 1;
 }
-
-/* Seleciona a PLACA ÚNICA considerando AMBOS os fluidos */
 function selecionarPlacaConjunta(fP, fS, Tmax) {
   var nivel = Math.max(nivelPlaca(fP.nome), nivelPlaca(fS.nome));
   var salino = (fP.nome.indexOf('Salmoura') !== -1) || (fS.nome.indexOf('Salmoura') !== -1);
@@ -460,44 +406,22 @@ function selecionarPlacaConjunta(fP, fS, Tmax) {
   if (nivel >= 1) return {mat:'AISI 304L', obs:'Refrigerantes e gases — custo-benefício'};
   return {mat:'AISI 316L', obs:'Uso geral'};
 }
-
-/* Nível de compatibilidade da GAXETA */
 function nivelGaxeta(nomeFluido, condensante) {
   var n = nomeFluido;
-  if (condensante || n.indexOf('Vapor') !== -1) return 3;   // EPDM (vapor)
-  if (n.indexOf('Amônia') !== -1) return 3;                 // HNBR
-  if (n.indexOf('R134a') !== -1) return 3;                  // HNBR
-  if (n.indexOf('R410A') !== -1) return 3;                  // HNBR
-  if (n.indexOf('R22') !== -1) return 3;                    // HNBR
-  if (n.indexOf('Óleo') !== -1) return 2;                   // NBR
-  if (n.indexOf('Xarope') !== -1) return 2;                 // NBR
-  if (n.indexOf('Salmoura') !== -1) return 2;               // NBR
-  if (n.indexOf('Água') !== -1) return 1;                   // EPDM
-  if (n.indexOf('Glicol') !== -1) return 1;                 // EPDM
-  if (n.indexOf('Leite') !== -1) return 1;                  // EPDM
-  if (n.indexOf('Cerveja') !== -1) return 1;                // EPDM
-  if (n.indexOf('Suco') !== -1) return 1;                   // EPDM
-  if (n.indexOf('Ar') !== -1) return 1;                     // EPDM
-  if (n.indexOf('CO₂') !== -1) return 1;                    // EPDM
+  if (condensante || n.indexOf('Vapor') !== -1) return 3;
+  if (n.indexOf('Amônia') !== -1 || n.indexOf('R134a') !== -1 || n.indexOf('R410A') !== -1 || n.indexOf('R22') !== -1) return 3;
+  if (n.indexOf('Óleo') !== -1 || n.indexOf('Xarope') !== -1 || n.indexOf('Salmoura') !== -1) return 2;
   return 1;
 }
-
-/* Seleciona a GAXETA ÚNICA considerando AMBOS os fluidos */
 function selecionarGaxetaConjunta(fP, fS, Tmax) {
-  if (Tmax > 180) return {mat:'FKM (Viton)', temp:'-5 a 180°C', obs:'Alta temperatura e meios agressivos'};
-  var nivelP = nivelGaxeta(fP.nome, false);
-  var nivelS = nivelGaxeta(fS.nome, !!fS.condensing);
-  var nivel = Math.max(nivelP, nivelS);
-  // Se algum é refrigerante/amônia → HNBR (mais restritivo)
+  if (Tmax > 180) return {mat:'FKM (Viton)', temp:'-5 a 180°C', obs:'Alta temperatura'};
+  var nivel = Math.max(nivelGaxeta(fP.nome, false), nivelGaxeta(fS.nome, !!fS.condensing));
   var temRefrig = [fP.nome, fS.nome].some(function(n){
     return n.indexOf('Amônia') !== -1 || n.indexOf('R134a') !== -1 || n.indexOf('R410A') !== -1 || n.indexOf('R22') !== -1;
   });
-  if (temRefrig) return {mat:'HNBR', temp:'-30 a 150°C', obs:'Refrigerantes e amônia — resistência química'};
-  // Se algum é vapor/condensante → EPDM (resiste vapor e água)
-  if (fS.condensing || fP.nome.indexOf('Vapor') !== -1) return {mat:'EPDM', temp:'-40 a 150°C', obs:'Vapor e água quente — excelente resistência'};
-  // Se algum é óleo/gordo/salino → NBR
-  if (nivel >= 2) return {mat:'NBR (Nitrile)', temp:'-10 a 110°C', obs:'Resistente a óleos, gorduras e salmoura'};
-  // Padrão
+  if (temRefrig) return {mat:'HNBR', temp:'-30 a 150°C', obs:'Refrigerantes e amônia'};
+  if (fS.condensing || fP.nome.indexOf('Vapor') !== -1) return {mat:'EPDM', temp:'-40 a 150°C', obs:'Vapor e água quente'};
+  if (nivel >= 2) return {mat:'NBR (Nitrile)', temp:'-10 a 110°C', obs:'Resistente a óleos e salmoura'};
   return {mat:'EPDM', temp:'-40 a 150°C', obs:'Uso geral'};
 }
 
@@ -817,7 +741,6 @@ function exibirResultado(secoes, d){
   secoes.forEach(function(x){totalA+=x.melhor.A_inst;totalQ+=x.Q;totalPlacas+=x.melhor.Nplacas;});
   var m0=secoes[0].melhor;
   var Tmax=Math.max(parseFloat(document.getElementById('tinS').value)||0,parseFloat(secoes[0].toutS)||0,parseFloat(document.getElementById('toutP').value)||0);
-  /* MATERIAL ÚNICO (placa e gaxeta) considerando AMBOS os fluidos */
   var placa = selecionarPlacaConjunta(secoes[0].fP, secoes[0].fS, Tmax);
   var gaxeta = selecionarGaxetaConjunta(secoes[0].fP, secoes[0].fS, Tmax);
   var ehSemi=(tipoAtual==='semisoldadas');
@@ -895,13 +818,11 @@ function gerarDatasheet(secoes){
   secoes.forEach(function(x){totalA+=x.melhor.A_inst;totalQ+=x.Q;});
   var m0=secoes[0].melhor;
   var Tmax=Math.max(parseFloat(document.getElementById('tinS').value)||0,parseFloat(secoes[0].toutS)||0,parseFloat(document.getElementById('toutP').value)||0);
-  /* MATERIAL ÚNICO */
   var placa = selecionarPlacaConjunta(secoes[0].fP, secoes[0].fS, Tmax);
   var gaxeta = selecionarGaxetaConjunta(secoes[0].fP, secoes[0].fS, Tmax);
   var ehSemi=(tipoAtual==='semisoldadas');
   var html='<div class="datasheet" id="dsImprimivel"><h2>AlfaVed Dimensionador-PHE</h2><div class="sub">Datasheet de Dimensionamento · Gerado em '+hoje+'</div>'+
     '<div class="ds-secao"><h4>1. Identificação</h4><table class="ds-tabela"><tr><td>Projeto</td><td>'+proj+'</td></tr><tr><td>Cliente</td><td>'+cliente+'</td></tr><tr><td>Data</td><td>'+hoje+'</td></tr><tr><td>Número de seções</td><td>'+secoes.length+'</td></tr><tr><td>Tipo de trocador</td><td>'+(ehSemi?'Placas semi-soldadas':'Placas gaxetadas')+'</td></tr><tr><td>Bocal do modelo (produto e serviço)</td><td>'+m0.conexao+'</td></tr><tr><td>Velocidade no bocal — produto</td><td>'+m0.vPortaP.toFixed(1)+' m/s '+(m0.vPortaOkP?'✓':'✗')+'</td></tr><tr><td>Velocidade no bocal — serviço</td><td>'+m0.vPortaS.toFixed(1)+' m/s '+(m0.vPortaOkS?'✓':'✗')+'</td></tr></table></div>'+
-    /* SEÇÃO 2: DESENHO DIMENSIONAL COM DIAGRAMA SVG */
     '<div class="ds-secao"><h4>2. Desenho dimensional</h4>'+
     '<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:420px;display:block;margin:0 auto 14px">'+
     '<text x="200" y="18" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#0a1f3c">Desenho Dimensional</text>'+
@@ -954,7 +875,6 @@ function gerarDatasheet(secoes){
     '<tr><td>Distância entre portas (h)</td><td>'+(m0.modRef.h?m0.modRef.h+' mm':'Consultar catálogo')+'</td></tr>'+
     '<tr><td>Bocal (conexão)</td><td>'+m0.conexao+'</td></tr>'+
     '</table></div>'+
-    /* SEÇÃO 3: CONEXÕES TIPO FLANGE */
     '<div class="ds-secao"><h4>3. Conexões tipo flange</h4><table class="ds-tabela">'+
     '<tr><td>Padrão</td><td>EN 1092-1 / ASME B16.5 / JIS B2220</td></tr>'+
     '<tr><td>Tamanho do bocal</td><td>'+m0.conexao+'</td></tr>'+
@@ -1001,10 +921,9 @@ function gerarDatasheet(secoes){
       '<tr><td>Passes</td><td>'+secoes[0].melhor.nomePasses+'</td></tr>'+
     '</table></div>'+
     '<div class="ds-secao"><h4>'+(secoes.length+4)+'. Observações</h4><table class="ds-tabela"><tr><td>Contatos</td><td>'+
-  '<strong>Vitor Soares</strong> — P&D de projetos<br>E-mail: engenharia@alfaved.com.br · Tel: (18) 9.9669-7330<br><br>'+
-  '<strong>Jhonatan Dias Dejato</strong> — Diretor de Engenharia<br>E-mail: jhonatan@alfaved.com.br · Tel: (18) 9.9628-8714'+
-'</td></tr></table></div>'+<table class="ds-tabela"><tr><td>Nota</td><td>Dimensionamento preliminar baseado em dados oficiais Alfa Laval. O bocal é padrão do modelo — produto e serviço usam o mesmo diâmetro de conexão. Material da placa e gaxeta ÚNICOS, selecionados pelo fluido mais exigente (ambos passam pela mesma placa). Valores finais devem ser confirmados com o software oficial e catálogos.</td></tr></table></div>'+
-    '<div class="sub" style="margin-top:14px">© 2026 AlfaVed — CNPJ 50.093.389/0001-35</div></div>';
+      '<strong>Vitor Soares</strong> — P&D de projetos<br>E-mail: engenharia@alfaved.com.br · Tel: (18) 9.9669-7330<br><br>'+
+      '<strong>Jhonatan Dias Dejato</strong> — Diretor de Engenharia<br>E-mail: jhonatan@alfaved.com.br · Tel: (18) 9.9628-8714'+
+    '</td></tr></table></div></div>';
   c.innerHTML=html;
 }
 

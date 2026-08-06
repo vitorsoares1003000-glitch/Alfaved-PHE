@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google" content="notranslate">
 <title>AlfaVed Dimensionador-PHE · v31</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--azul-escuro:#0a1f3c;--azul:#123a6b;--azul-medio:#1d5aa8;--azul-claro:#2f7fd1;--laranja:#e8731c;--laranja-claro:#f59e4c;--cinza-fundo:#f4f6f9;--cinza-borda:#dde3ea;--texto:#1e293b;--texto-suave:#64748b;--branco:#fff;--verde:#16a34a;--vermelho:#dc2626;--sombra:0 4px 20px rgba(10,31,60,.08)}
@@ -161,7 +160,7 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
   <div class="container hero-content">
     <span class="hero-badge">⚙️ Dimensionamento de Engenharia · v31</span>
     <h2>Dimensionador de Trocadores de Calor de Placas</h2>
-    <p>Fluidos revisados, passes identificados por lado, trava de capacidade e PDF real.</p>
+    <p>Fluidos revisados, passes identificados por lado, trava de capacidade e PDF via impressão.</p>
   </div>
 </section>
 
@@ -343,10 +342,10 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
    - Fluidos revisados (viscosidade por °Brix p/ açúcar)
    - Passes identificados por lado (produto × serviço)
    - Trava de capacidade física de placas por modelo
-   - PDF real via html2pdf
+   - PDF via impressão (sem dependência externa)
    ============================================================ */
 
-/* ---------- MODELOS ALFA LAVAL (com dimensões H, Wmm, h e placasMax) ---------- */
+/* ---------- MODELOS ALFA LAVAL (com dimensões e placasMax) ---------- */
 var ALFA_LAVAL = {
   gaxetadas: [
     {nome:'M3-M', A:0.032, W:0.10, b:0.0020, vazaoMax:14,  Pmax:16, Tmax:180, kW:'50-250',    tipo:'Líquidos', porta:0.050, H:480, Wmm:180, h:null, placasMax:300},
@@ -472,7 +471,6 @@ var TAB_GLICOL = {
   '15':[1017,4050,0.545,0.0019],'20':[1026,3960,0.525,0.0027],
   '30':[1040,3780,0.485,0.0045],'40':[1055,3600,0.445,0.0080]
 };
-/* Viscosidade de soluções de açúcar por °Brix (Pa·s a 20°C) — revisada */
 var TAB_BRIX = [
   [0,0.0010],[5,0.0013],[10,0.0018],[15,0.0024],[20,0.0033],
   [30,0.0065],[40,0.0130],[50,0.0280],[60,0.0750],[65,0.1500],[70,0.3000]
@@ -748,7 +746,6 @@ function dimensionarModelo(mod,sec,d,fP,fS,Q,lmtd,cfgKey,pP,pS) {
   res.nomePassesExt=nomePassesExt(pP,pS);
   res.cfgKey=cfgKey;res.modRef=mod;res.sec=sec;
   res.dPPok=res.dPP<=d.dpP;res.dPSok=res.dPS<=d.dpS;
-  /* TRAVA DE CAPACIDADE FÍSICA: placas não podem exceder a capacidade do modelo */
   res.capacidadeOk = res.Nplacas <= (mod.placasMax || 250);
   var gasP=ehGas(fP.rho),gasS=ehGas(fS.rho);
   var vp=verificarVelocidadePorta(d.mP,fP.rho,mod.porta,gasP);
@@ -1078,19 +1075,22 @@ function calcular(){
   }catch(err){erroBox.style.display='block';erroBox.textContent='Não foi possível dimensionar: '+err.message;}
 }
 
-/* ---------- PDF (html2pdf - baixa arquivo real) ---------- */
+/* ---------- PDF (via impressão - sem dependência externa) ---------- */
 function baixarPDF(){
   if(!ultimoRelatorio){alert('Calcule primeiro para gerar o datasheet.');return;}
-  if(typeof html2pdf === 'undefined'){alert('Biblioteca de PDF não carregada. Verifique a conexão com a internet e recarregue a página.');return;}
-  var elemento = document.getElementById('dsImprimivel');
-  var opt = {
-    margin: 10,
-    filename: 'Datasheet_AlfaVed_' + (document.getElementById('numProjeto').value || 'projeto') + '.pdf',
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2 },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-  };
-  html2pdf().set(opt).from(elemento).save();
+  var conteudo=document.getElementById('dsImprimivel').outerHTML;
+  var j=window.open('','_blank');
+  j.document.write('<html><head><title>Datasheet AlfaVed</title><style>'+
+    'body{font-family:Arial,sans-serif;padding:30px;color:#1e293b}'+
+    'table{width:100%;border-collapse:collapse;margin-bottom:14px}'+
+    'td,th{padding:8px 12px;border:1px solid #dde3ea;font-size:13px}'+
+    'td:first-child{background:#f4f6f9;font-weight:600;width:30%}'+
+    'th{background:#123a6b;color:#fff}'+
+    'h2{color:#0a1f3c;text-align:center}'+
+    'h4{background:#123a6b;color:#fff;padding:8px 12px;border-radius:6px;font-size:13px}'+
+    '.sub{text-align:center;color:#64748b;margin-bottom:16px;font-size:12px}'+
+    '</style></head><body>'+conteudo+'</body></html>');
+  j.document.close();j.focus();j.print();
 }
 
 function fmt(n){if(isNaN(n))return'—';return n.toLocaleString('pt-BR',{maximumFractionDigits:0});}

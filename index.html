@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google" content="notranslate">
-<title>AlfaVed Dimensionador-PHE · v25</title>
+<title>AlfaVed Dimensionador-PHE · v26</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--azul-escuro:#0a1f3c;--azul:#123a6b;--azul-medio:#1d5aa8;--azul-claro:#2f7fd1;--laranja:#e8731c;--laranja-claro:#f59e4c;--cinza-fundo:#f4f6f9;--cinza-borda:#dde3ea;--texto:#1e293b;--texto-suave:#64748b;--branco:#fff;--verde:#16a34a;--vermelho:#dc2626;--sombra:0 4px 20px rgba(10,31,60,.08)}
@@ -130,11 +130,16 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
 .ds-lado th{background:var(--azul);color:var(--branco)}
 .ds-lado td:first-child{background:var(--cinza-fundo);font-weight:600;text-align:left;width:30%}
 .curva-box{background:var(--branco);border:1px solid var(--cinza-borda);border-radius:12px;padding:16px;margin-top:16px}
-.curva-box h4{color:var(--azul-escuro);margin-bottom:6px;font-size:15px}
-.curva-box canvas{width:100%;display:block;border:1px solid var(--cinza-borda);border-radius:8px;background:#fff;margin-top:10px}
+.curva-box h4{color:var(--azul-escuro);margin-bottom:10px;font-size:15px}
 .curva-tabela{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:10px}
-.curva-tabela th,.curva-tabela td{padding:6px 8px;border:1px solid var(--cinza-borda);text-align:center}
+.curva-tabela th,.curva-tabela td{padding:8px 10px;border:1px solid var(--cinza-borda);text-align:center}
 .curva-tabela th{background:var(--cinza-fundo);font-weight:600}
+.curva-tabela tr:nth-child(even){background:var(--cinza-fundo)}
+.barra{display:inline-block;width:60px;height:8px;background:#e2e8f0;border-radius:4px;overflow:hidden;vertical-align:middle;margin-left:4px}
+.barra-fill{height:100%;border-radius:4px}
+.barra-fill.azul{background:#1d5aa8}
+.barra-fill.vermelho{background:#dc2626}
+.barra-fill.verde{background:#16a34a}
 .insight{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:10px 14px;margin-top:12px;font-size:13px;color:#14532d}
 .insight strong{color:#15803d}
 .contato{background:linear-gradient(135deg,var(--azul-escuro),var(--azul));color:var(--branco);padding:46px 0;margin-top:34px}
@@ -177,9 +182,9 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
 <section class="hero">
   <div class="hero-overlay"></div>
   <div class="container hero-content">
-    <span class="hero-badge">⚙️ Dimensionamento de Engenharia · v25</span>
+    <span class="hero-badge">⚙️ Dimensionamento de Engenharia · v26</span>
     <h2>Dimensionador de Trocadores de Calor de Placas</h2>
-    <p>Gráfico vertical com 3 linhas (produto, serviço, eficiência), base de cálculo corrigida e datasheet em PDF.</p>
+    <p>Tabela visual de desempenho, base de cálculo corrigida, seleção manual de modelos e datasheet em PDF.</p>
   </div>
 </section>
 
@@ -315,7 +320,7 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
   </div>
 
   <section id="resultado" class="card resultado-card fade-in" style="display:none;">
-    <div class="card-header"><span class="step-badge">4</span><div><h3>Resultado do dimensionamento</h3><p class="card-sub">Equipamento, parâmetros, curva de desempenho, materiais e datasheet</p></div></div>
+    <div class="card-header"><span class="step-badge">4</span><div><h3>Resultado do dimensionamento</h3><p class="card-sub">Equipamento, parâmetros, desempenho, materiais e datasheet</p></div></div>
     <div class="tabs">
       <button class="tab-btn active" id="tabResultadoBtn" onclick="trocarAba('resultado')">📊 Resultado</button>
       <button class="tab-btn" id="tabDatasheetBtn" onclick="trocarAba('datasheet')">📋 Datasheet</button>
@@ -365,8 +370,8 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
 
 <script>
 /* ============================================================
-   AlfaVed Dimensionador-PHE · v25
-   Gráfico vertical com 3 linhas + base de cálculo corrigida
+   AlfaVed Dimensionador-PHE · v26
+   Sem gráfico — tabela visual de desempenho com barras
    ============================================================ */
 
 /* ---------- MODELOS ALFA LAVAL ---------- */
@@ -592,7 +597,6 @@ function estimarU(fP, fS, vaporCond) {
   return 2500;
 }
 function fatorAmpliacao(ang) { if (ang === 60) return 1.25; if (ang === 30) return 1.15; return 1.20; }
-/* CORREÇÃO: eficiência limitada a 100% e tratada para condensação */
 function calcEficiencia(Q, mP, cpP, mS, cpS, tinS, tinP, vaporCond) {
   if (vaporCond) {
     var Qmax = mP * cpP * Math.abs(tinS - tinP);
@@ -647,7 +651,6 @@ function dimensionarModelo(mod,sec,d,fP,fS,Q,lmtd,cfgKey,pP,pS) {
     var U=1/(1/ladoP.h+d.incP+tw/kw+d.incS+1/hS),A_nec=Q/(U*lmtd),A_min=A_nec*(1+d.margem/100);
     if(A_inst>=A_min){
       var ReS=vaporCond?0:GS*DhS/fS.mu;
-      /* CORREÇÃO: ΔP limitado a valores realistas (máx 300 kPa) */
       var dPP=Math.min(300, fAtrito(ladoP.Re,ap)*(L/DhP)*(GP*GP/(2*fP.rho))*pP);
       var dPS=vaporCond?3.0:Math.min(300, fAtrito(ReS,as)*(L/DhS)*(GS*GS/(2*fS.rho))*pS);
       res={Nc:Nc,Nplacas:2*Nc+1,A_inst:A_inst,A_nec:A_nec,U:U,hP:ladoP.h,hS:hS,ReP:ladoP.Re,ReS:ReS,PrP:ladoP.Pr,PrS:vaporCond?0:(fS.mu*fS.cp/fS.k),turbP:ladoP.turb,turbS:vaporCond?'Condensação':classTurb(ReS),vP:GP/fP.rho,vS:vaporCond?0:GS/fS.rho,dPP:dPP,dPS:dPS};
@@ -742,7 +745,7 @@ function selecionarGrupo(){var grupo=document.getElementById('grupoModelos').val
 function adicionarSecao(){if(secoesExtras>=2){alert('Máximo de 3 seções.');return;}secoesExtras++;var cont=document.getElementById('secoesAdicionais');var div=document.createElement('div');div.className='secao-bloco';div.id='secaoExtra'+secoesExtras;div.innerHTML='<div class="secao-titulo">🔹 Seção '+(secoesExtras+1)+' (etapa adicional)</div><div class="grid-2"><div class="sub-card produto"><div class="sub-card-head"><span class="side-icon produto-icon">📦</span><h4>Produto — Seção '+(secoesExtras+1)+'</h4></div><label>Temperatura de entrada (°C)<input type="number" id="sec'+secoesExtras+'TinP" value="45"></label><label>Temperatura de saída (°C)<input type="number" id="sec'+secoesExtras+'ToutP" value="70"></label></div><div class="sub-card servico"><div class="sub-card-head"><span class="side-icon servico-icon">⚙️</span><h4>Serviço — Seção '+(secoesExtras+1)+'</h4></div><label>Fluido de serviço<select id="sec'+secoesExtras+'FluidoS"><option value="agua">Água industrial</option><option value="vapor">Vapor saturado</option><option value="glicol20">Glicol 20%</option><option value="glicol30">Glicol 30%</option><option value="oleo">Óleo térmico</option><option value="r134a">R134a</option></select></label><label>Temperatura de entrada (°C)<input type="number" id="sec'+secoesExtras+'TinS" value="90"></label></div></div>';cont.appendChild(div);}
 function removerSecao(){if(secoesExtras<=0){alert('Nenhuma seção adicional.');return;}var div=document.getElementById('secaoExtra'+secoesExtras);if(div)div.remove();secoesExtras--;}
 
-/* ---------- CURVA DE DESEMPENHO ---------- */
+/* ---------- CURVA DE DESEMPENHO (para a tabela) ---------- */
 function gerarCurvaDesempenho(mod, sec, d, fP, fS, cfgKey, pP, pS, lmtd, toutS) {
   var pontos=[],fatores=[0.6,0.8,1.0,1.2,1.4],i,fator,vazaoP,mP2,Qp,mS2,vazaoS2,d2,r;
   for(i=0;i<fatores.length;i++){
@@ -758,136 +761,6 @@ function gerarCurvaDesempenho(mod, sec, d, fP, fS, cfgKey, pP, pS, lmtd, toutS) 
     pontos.push({fator:fator,vazao:vazaoP,Q:Qp/1000,U:r.U,dPP:r.dPP,dPS:r.dPS,placas:r.Nplacas,eficiencia:efic,vPortaP:r.vPortaP,vPortaS:r.vPortaS});
   }
   return pontos;
-}
-
-/* ---------- GRÁFICO VERTICAL ÚNICO com 3 LINHAS (Canvas nativo) ---------- */
-function fmtAxe(n){
-  if(isNaN(n)) return '0';
-  if(n>=10000) return Math.round(n).toLocaleString('pt-BR');
-  if(n>=100) return Math.round(n).toString();
-  return (Math.round(n*10)/10).toString();
-}
-function desenharGraficoUnico(canvasId, pontos, d) {
-  try{
-    var canvas=document.getElementById(canvasId);
-    if(!canvas||!pontos||pontos.length<2) return;
-    var dpr=window.devicePixelRatio||1;
-    var cssW=canvas.offsetWidth||canvas.parentElement.offsetWidth||560;
-    var cssH=460;
-    canvas.width=cssW*dpr;canvas.height=cssH*dpr;canvas.style.height=cssH+'px';
-    var ctx=canvas.getContext('2d');
-    ctx.scale(dpr,dpr);
-    var W=cssW,H=cssH,padL=64,padR=20,padT=50,padB=52;
-    var plotW=W-padL-padR,plotH=H-padT-padB;
-    ctx.fillStyle='#ffffff';ctx.fillRect(0,0,W,H);
-    var vzs=pontos.map(function(p){return p.vazao;});
-    var xMin=Math.min.apply(null,vzs),xMax=Math.max.apply(null,vzs);
-    if(xMax-xMin<1e-9){xMax=xMin+1;}
-    /* Eixo Y: perda de pressão (kPa) — cresce de baixo para cima */
-    var allY=[];
-    pontos.forEach(function(p){allY.push(p.dPP);allY.push(p.dPS);});
-    allY.push(d.dpP);allY.push(d.dpS);
-    var yMax=Math.max.apply(null,allY)*1.15||1;if(yMax<=0){yMax=1;}
-    var yMin=0,i,j,yv,xv,x,y;
-    ctx.strokeStyle='#e2e8f0';ctx.lineWidth=1;
-    for(i=0;i<=4;i++){
-      yv=yMin+(yMax-yMin)*i/4;y=padT+plotH-plotH*i/4;
-      ctx.beginPath();ctx.moveTo(padL,y);ctx.lineTo(padL+plotW,y);ctx.stroke();
-      ctx.fillStyle='#64748b';ctx.font='12px Segoe UI, Arial';ctx.textAlign='right';
-      ctx.fillText(fmtAxe(yv),padL-8,y+4);
-    }
-    for(j=0;j<=4;j++){
-      xv=xMin+(xMax-xMin)*j/4;x=padL+plotW*j/4;
-      ctx.beginPath();ctx.moveTo(x,padT);ctx.lineTo(x,padT+plotH);ctx.stroke();
-      ctx.fillStyle='#64748b';ctx.font='12px Segoe UI, Arial';ctx.textAlign='center';
-      ctx.fillText(fmtAxe(xv),x,H-18);
-    }
-    ctx.fillStyle='#334155';ctx.font='bold 12px Segoe UI, Arial';ctx.textAlign='center';
-    ctx.fillText('Vazão do produto (m³/h)',padL+plotW/2,H-4);
-    ctx.save();ctx.translate(14,padT+plotH/2);ctx.rotate(-Math.PI/2);ctx.textAlign='center';
-    ctx.fillText('Perda de pressão (kPa)',0,0);ctx.restore();
-    ctx.fillStyle='#0a1f3c';ctx.font='bold 13px Segoe UI, Arial';ctx.textAlign='center';
-    ctx.fillText('Perda de pressão e eficiência térmica',W/2,22);
-    /* Ponto de projeto */
-    var xDesign=null;
-    for(var dd=0;dd<pontos.length;dd++){if(Math.abs(pontos[dd].fator-1)<1e-6){xDesign=padL+(pontos[dd].vazao-xMin)/(xMax-xMin)*plotW;break;}}
-    if(xDesign!==null){
-      ctx.strokeStyle='#94a3b8';ctx.lineWidth=1.5;ctx.setLineDash([5,4]);
-      ctx.beginPath();ctx.moveTo(xDesign,padT);ctx.lineTo(xDesign,padT+plotH);ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.fillStyle='#64748b';ctx.font='11px Segoe UI, Arial';ctx.textAlign='center';
-      ctx.fillText('Projeto',xDesign,padT-12);
-    }
-    /* Linhas de limite (vermelho tracejado) */
-    desenharLinhaLimite(ctx,d.dpP,yMin,yMax,padL,padT,plotW,plotH,'limite produto '+d.dpP);
-    desenharLinhaLimite(ctx,d.dpS,yMin,yMax,padL,padT,plotW,plotH,'limite serviço '+d.dpS);
-    /* Curvas de perda de pressão (azul produto, vermelha serviço) */
-    desenharCurva(ctx,pontos,'dPP','#1d5aa8',xMin,xMax,yMin,yMax,padL,padT,plotW,plotH);
-    desenharCurva(ctx,pontos,'dPS','#dc2626',xMin,xMax,yMin,yMax,padL,padT,plotW,plotH);
-    /* LINHA VERDE: eficiência térmica (escala própria 0-100%) */
-    var eficMax=100,eficMin=0;
-    var yEficTop=padT+plotH-(95-eficMin)/(eficMax-eficMin)*plotH;
-    var yEficBot=padT+plotH-(85-eficMin)/(eficMax-eficMin)*plotH;
-    ctx.fillStyle='rgba(22,163,74,0.10)';
-    ctx.fillRect(padL,yEficTop,plotW,yEficBot-yEficTop);
-    ctx.fillStyle='#16a34a';ctx.font='10px Segoe UI, Arial';ctx.textAlign='left';
-    ctx.fillText('Faixa ideal 85-95%',padL+6,yEficTop-4);
-    ctx.strokeStyle='#16a34a';ctx.lineWidth=2.2;ctx.setLineDash([]);
-    ctx.beginPath();
-    for(var k=0;k<pontos.length;k++){
-      var px=padL+(pontos[k].vazao-xMin)/(xMax-xMin)*plotW;
-      var py=padT+plotH-(Math.min(100,pontos[k].eficiencia)-eficMin)/(eficMax-eficMin)*plotH;
-      if(k===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);
-    }
-    ctx.stroke();
-    for(var k2=0;k2<pontos.length;k2++){
-      var px2=padL+(pontos[k2].vazao-xMin)/(xMax-xMin)*plotW;
-      var py2=padT+plotH-(Math.min(100,pontos[k2].eficiencia)-eficMin)/(eficMax-eficMin)*plotH;
-      ctx.fillStyle='#16a34a';
-      ctx.beginPath();ctx.arc(px2,py2,(Math.abs(pontos[k2].fator-1)<1e-6)?6:3.5,0,Math.PI*2);ctx.fill();
-    }
-    /* Legenda 3 linhas */
-    var lx=padL+10;
-    ctx.strokeStyle='#1d5aa8';ctx.lineWidth=3;
-    ctx.beginPath();ctx.moveTo(lx,38);ctx.lineTo(lx+20,38);ctx.stroke();
-    ctx.fillStyle='#334155';ctx.font='11px Segoe UI, Arial';ctx.textAlign='left';
-    ctx.fillText('Produto (azul)',lx+26,42);
-    lx+=26+ctx.measureText('Produto (azul)').width+24;
-    ctx.strokeStyle='#dc2626';
-    ctx.beginPath();ctx.moveTo(lx,38);ctx.lineTo(lx+20,38);ctx.stroke();
-    ctx.fillStyle='#334155';
-    ctx.fillText('Serviço (vermelho)',lx+26,42);
-    lx+=26+ctx.measureText('Serviço (vermelho)').width+24;
-    ctx.strokeStyle='#16a34a';
-    ctx.beginPath();ctx.moveTo(lx,38);ctx.lineTo(lx+20,38);ctx.stroke();
-    ctx.fillStyle='#334155';
-    ctx.fillText('Eficiência (verde)',lx+26,42);
-  }catch(e){}
-}
-function desenharLinhaLimite(ctx,lim,yMin,yMax,padL,padT,plotW,plotH,label){
-  var yLim=padT+plotH-(lim-yMin)/(yMax-yMin)*plotH;
-  if(yLim<padT||yLim>padT+plotH)return;
-  ctx.strokeStyle='#dc2626';ctx.lineWidth=1.5;ctx.setLineDash([6,4]);
-  ctx.beginPath();ctx.moveTo(padL,yLim);ctx.lineTo(padL+plotW,yLim);ctx.stroke();
-  ctx.setLineDash([]);
-  ctx.fillStyle='#dc2626';ctx.font='10px Segoe UI, Arial';ctx.textAlign='left';
-  ctx.fillText(label,padL+6,yLim-4);
-}
-function desenharCurva(ctx,pontos,chave,cor,xMin,xMax,yMin,yMax,padL,padT,plotW,plotH){
-  ctx.strokeStyle=cor;ctx.lineWidth=2.5;
-  ctx.beginPath();
-  for(var k=0;k<pontos.length;k++){
-    var px=padL+(pontos[k].vazao-xMin)/(xMax-xMin)*plotW;
-    var py=padT+plotH-(pontos[k][chave]-yMin)/(yMax-yMin)*plotH;
-    if(k===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);
-  }
-  ctx.stroke();
-  for(var k2=0;k2<pontos.length;k2++){
-    var px2=padL+(pontos[k2].vazao-xMin)/(xMax-xMin)*plotW;
-    var py2=padT+plotH-(pontos[k2][chave]-yMin)/(yMax-yMin)*plotH;
-    ctx.fillStyle=cor;
-    ctx.beginPath();ctx.arc(px2,py2,(Math.abs(pontos[k2].fator-1)<1e-6)?6:3.5,0,Math.PI*2);ctx.fill();
-  }
 }
 
 /* ---------- RESULTADO ---------- */
@@ -950,21 +823,26 @@ function exibirResultado(secoes, d){
     var textoInsight=maxOk!==null
       ? '✅ O equipamento opera dentro dos limites até <strong>'+Math.round(maxOk*100)+'%</strong> da vazão de projeto. Acima disso, a perda de pressão ou a velocidade no bocal passa do máximo permitido.'
       : '⚠️ Mesmo na vazão de projeto há restrições: revise o ΔP máximo, a velocidade no bocal ou escolha outro modelo.';
-    html+='<div class="curva-box"><h4>📈 Comportamento com a vazão — '+m1.modelo+' ('+m1.config+' · '+m1.nomePasses+') · Bocal '+m1.conexao+'</h4>'+
-      '<p class="chart-titulo" style="margin-top:6px">Linha azul = produto · Linha vermelha = serviço · Linha verde = eficiência térmica</p>'+
-      '<canvas id="graficoUnico"></canvas>'+
-      '<div class="insight">'+textoInsight+'<br><span style="font-size:12px;color:#166534">💡 O bocal é padrão do modelo ('+m1.conexao+') — produto e serviço usam o mesmo diâmetro. Para gases e vapor, o limite de velocidade no bocal é maior (25 m/s).</span></div>'+
-      '<table class="curva-tabela"><thead><tr><th>Vazão</th><th>Q (kW)</th><th>Troca (U)</th><th>Perda produto</th><th>Perda serviço</th><th>Eficiência</th><th>Placas</th></tr></thead><tbody>';
-    pontos.forEach(function(p){html+='<tr><td>'+(p.fator*100)+'%</td><td>'+fmt(p.Q)+'</td><td>'+fmt(p.U)+'</td><td>'+p.dPP.toFixed(1)+' kPa</td><td>'+p.dPS.toFixed(1)+' kPa</td><td>'+p.eficiencia.toFixed(1)+'%</td><td>'+p.placas+'</td></tr>';});
+    /* TABELA VISUAL DE DESEMPENHO (sem gráfico) */
+    html+='<div class="curva-box"><h4>📊 Desempenho do equipamento — '+m1.modelo+' ('+m1.config+' · '+m1.nomePasses+') · Bocal '+m1.conexao+'</h4>'+
+      '<div class="insight">'+textoInsight+'<br><span style="font-size:12px;color:#166534">💡 Barras: azul = ΔP produto · vermelho = ΔP serviço · verde = eficiência. O bocal é padrão do modelo ('+m1.conexao+').</span></div>'+
+      '<table class="curva-tabela"><thead><tr><th>Vazão</th><th>Q (kW)</th><th>U (W/m²·K)</th><th>ΔP Produto</th><th>ΔP Serviço</th><th>Eficiência</th><th>Placas</th></tr></thead><tbody>';
+    pontos.forEach(function(p){
+      var dpPPct=Math.min(100,(p.dPP/d.dpP)*100);
+      var dpSPct=Math.min(100,(p.dPS/d.dpS)*100);
+      var dpPBar='<div class="barra"><div class="barra-fill azul" style="width:'+dpPPct+'%"></div></div>';
+      var dpSBar='<div class="barra"><div class="barra-fill vermelho" style="width:'+dpSPct+'%"></div></div>';
+      var eficBar='<div class="barra"><div class="barra-fill verde" style="width:'+Math.min(100,p.eficiencia)+'%"></div></div>';
+      html+='<tr><td>'+(p.fator*100)+'%</td><td>'+fmt(p.Q)+'</td><td>'+fmt(p.U)+'</td>'+
+        '<td>'+p.dPP.toFixed(1)+' kPa '+dpPBar+'</td>'+
+        '<td>'+p.dPS.toFixed(1)+' kPa '+dpSBar+'</td>'+
+        '<td>'+p.eficiencia.toFixed(1)+'% '+eficBar+'</td>'+
+        '<td>'+p.placas+'</td></tr>';
+    });
     html+='</tbody></table></div>';
-  }catch(e){html+='<p style="font-size:11px;color:var(--texto-suave);margin-top:8px">Curva de desempenho indisponível para esta combinação.</p>';}
+  }catch(e){html+='<p style="font-size:11px;color:var(--texto-suave);margin-top:8px">Desempenho indisponível para esta combinação.</p>';}
   html+='<p style="font-size:11px;color:var(--texto-suave);margin-top:10px">Base de cálculo revisada com dados oficiais Alfa Laval. Bocal padrão por modelo (produto = serviço). U global estimado por fluidos. Eficiência ε-NTU: 85-95% recomendado. Dh=2b/φ com φ por ângulo. Confira com o software oficial Alfa Laval.</p>';
   c.innerHTML=html;
-  try{
-    if(pontos&&pontos.length>=2){
-      desenharGraficoUnico('graficoUnico',pontos,d);
-    }
-  }catch(e){}
 }
 
 /* ---------- DATASHEET ---------- */

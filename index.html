@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google" content="notranslate">
-<title>AlfaVed Dimensionador-PHE · v28</title>
+<title>AlfaVed Dimensionador-PHE · v29</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--azul-escuro:#0a1f3c;--azul:#123a6b;--azul-medio:#1d5aa8;--azul-claro:#2f7fd1;--laranja:#e8731c;--laranja-claro:#f59e4c;--cinza-fundo:#f4f6f9;--cinza-borda:#dde3ea;--texto:#1e293b;--texto-suave:#64748b;--branco:#fff;--verde:#16a34a;--vermelho:#dc2626;--sombra:0 4px 20px rgba(10,31,60,.08)}
@@ -182,9 +182,9 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
 <section class="hero">
   <div class="hero-overlay"></div>
   <div class="container hero-content">
-    <span class="hero-badge">⚙️ Dimensionamento de Engenharia · v28</span>
+    <span class="hero-badge">⚙️ Dimensionamento de Engenharia · v29</span>
     <h2>Dimensionador de Trocadores de Calor de Placas</h2>
-    <p>Base de cálculo revisada, diagrama dimensional, bocal padrão e datasheet em PDF.</p>
+    <p>Materiais únicos por equipamento, diagrama dimensional, bocal padrão e datasheet em PDF.</p>
   </div>
 </section>
 
@@ -370,8 +370,9 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
 
 <script>
 /* ============================================================
-   AlfaVed Dimensionador-PHE · v28
-   Diagrama dimensional SVG + dimensões por modelo
+   AlfaVed Dimensionador-PHE · v29
+   Materiais ÚNICOS por equipamento (placa e gaxeta)
+   Os dois fluidos passam pela MESMA placa (frente/trás)
    ============================================================ */
 
 /* ---------- MODELOS ALFA LAVAL (com dimensões H, Wmm, h) ---------- */
@@ -420,6 +421,84 @@ function aplicarTempRefrigerante() {
   var fS = document.getElementById('fluidoS').value;
   var tinS = document.getElementById('tinS');
   if (TEMP_REFRIGERANTE[fS] !== undefined) tinS.value = TEMP_REFRIGERANTE[fS];
+}
+
+/* ============================================================
+   SELEÇÃO CONJUNTA DE MATERIAIS (v29)
+   Os dois fluidos passam pela MESMA placa (frente/trás).
+   Material ÚNICO escolhido pelo fluido MAIS EXIGENTE.
+   ============================================================ */
+
+/* Nível de agressividade para a PLACA */
+function nivelPlaca(nomeFluido) {
+  var n = nomeFluido;
+  if (n.indexOf('Salmoura') !== -1) return 5;          // Titânio
+  if (n.indexOf('Óleo térmico') !== -1) return 4;      // 316L (alta temp)
+  if (n.indexOf('Xarope') !== -1) return 4;            // 316L
+  if (n.indexOf('Óleo vegetal') !== -1) return 3;      // 316L
+  if (n.indexOf('Suco') !== -1) return 3;              // 316L
+  if (n.indexOf('Leite') !== -1) return 3;             // 316L
+  if (n.indexOf('Cerveja') !== -1) return 3;           // 316L
+  if (n.indexOf('Água') !== -1) return 2;              // 316L
+  if (n.indexOf('Glicol') !== -1) return 2;            // 316L
+  if (n.indexOf('Amônia') !== -1) return 1;            // 304L
+  if (n.indexOf('R134a') !== -1) return 1;             // 304L
+  if (n.indexOf('R410A') !== -1) return 1;             // 304L
+  if (n.indexOf('R22') !== -1) return 1;               // 304L
+  if (n.indexOf('Ar') !== -1) return 1;                // 304L
+  if (n.indexOf('CO₂') !== -1) return 1;               // 304L
+  if (n.indexOf('Vapor') !== -1) return 2;             // 316L (condensação)
+  return 2;
+}
+
+/* Seleciona a PLACA ÚNICA considerando AMBOS os fluidos */
+function selecionarPlacaConjunta(fP, fS, Tmax) {
+  var nivel = Math.max(nivelPlaca(fP.nome), nivelPlaca(fS.nome));
+  var salino = (fP.nome.indexOf('Salmoura') !== -1) || (fS.nome.indexOf('Salmoura') !== -1);
+  if (salino || nivel >= 5) return {mat:'Titânio (Ti)', obs:'Salmoura/cloretos — resistência superior a corrosão'};
+  if (nivel >= 3) return {mat:'AISI 316L', obs:'Padrão para água, alimentos, glicóis e óleos'};
+  if (nivel >= 1) return {mat:'AISI 304L', obs:'Refrigerantes e gases — custo-benefício'};
+  return {mat:'AISI 316L', obs:'Uso geral'};
+}
+
+/* Nível de compatibilidade da GAXETA */
+function nivelGaxeta(nomeFluido, condensante) {
+  var n = nomeFluido;
+  if (condensante || n.indexOf('Vapor') !== -1) return 3;   // EPDM (vapor)
+  if (n.indexOf('Amônia') !== -1) return 3;                 // HNBR
+  if (n.indexOf('R134a') !== -1) return 3;                  // HNBR
+  if (n.indexOf('R410A') !== -1) return 3;                  // HNBR
+  if (n.indexOf('R22') !== -1) return 3;                    // HNBR
+  if (n.indexOf('Óleo') !== -1) return 2;                   // NBR
+  if (n.indexOf('Xarope') !== -1) return 2;                 // NBR
+  if (n.indexOf('Salmoura') !== -1) return 2;               // NBR
+  if (n.indexOf('Água') !== -1) return 1;                   // EPDM
+  if (n.indexOf('Glicol') !== -1) return 1;                 // EPDM
+  if (n.indexOf('Leite') !== -1) return 1;                  // EPDM
+  if (n.indexOf('Cerveja') !== -1) return 1;                // EPDM
+  if (n.indexOf('Suco') !== -1) return 1;                   // EPDM
+  if (n.indexOf('Ar') !== -1) return 1;                     // EPDM
+  if (n.indexOf('CO₂') !== -1) return 1;                    // EPDM
+  return 1;
+}
+
+/* Seleciona a GAXETA ÚNICA considerando AMBOS os fluidos */
+function selecionarGaxetaConjunta(fP, fS, Tmax) {
+  if (Tmax > 180) return {mat:'FKM (Viton)', temp:'-5 a 180°C', obs:'Alta temperatura e meios agressivos'};
+  var nivelP = nivelGaxeta(fP.nome, false);
+  var nivelS = nivelGaxeta(fS.nome, !!fS.condensing);
+  var nivel = Math.max(nivelP, nivelS);
+  // Se algum é refrigerante/amônia → HNBR (mais restritivo)
+  var temRefrig = [fP.nome, fS.nome].some(function(n){
+    return n.indexOf('Amônia') !== -1 || n.indexOf('R134a') !== -1 || n.indexOf('R410A') !== -1 || n.indexOf('R22') !== -1;
+  });
+  if (temRefrig) return {mat:'HNBR', temp:'-30 a 150°C', obs:'Refrigerantes e amônia — resistência química'};
+  // Se algum é vapor/condensante → EPDM (resiste vapor e água)
+  if (fS.condensing || fP.nome.indexOf('Vapor') !== -1) return {mat:'EPDM', temp:'-40 a 150°C', obs:'Vapor e água quente — excelente resistência'};
+  // Se algum é óleo/gordo/salino → NBR
+  if (nivel >= 2) return {mat:'NBR (Nitrile)', temp:'-10 a 110°C', obs:'Resistente a óleos, gorduras e salmoura'};
+  // Padrão
+  return {mat:'EPDM', temp:'-40 a 150°C', obs:'Uso geral'};
 }
 
 /* ---------- INTERPOLAÇÃO ---------- */
@@ -523,31 +602,7 @@ function preencherAutomatico() {
   else passes.value = 'auto';
 }
 
-/* ---------- SELEÇÃO DE MATERIAIS ---------- */
-function selecionarGaxeta(fluido, Tmax, condensante) {
-  if (Tmax > 180) return {mat:'FKM (Viton)', temp:'-5 a 180°C', obs:'Alta temperatura e meios agressivos'};
-  if (condensante) return {mat:'EPDM', temp:'-40 a 150°C', obs:'Vapor e água quente — excelente resistência'};
-  switch (fluido) {
-    case 'Óleo térmico': case 'Óleo vegetal': case 'Xarope de açúcar': case 'Salmoura (NaCl 20%)': return {mat:'NBR (Nitrile)', temp:'-10 a 110°C', obs:'Resistente a óleos e gorduras'};
-    case 'Água industrial': case 'Leite': case 'Cerveja': case 'Suco de frutas': case 'Glicol 15%': case 'Glicol 20%': case 'Glicol 30%': case 'Glicol 40%': return {mat:'EPDM', temp:'-40 a 150°C', obs:'Água, alimentos e CIP — padrão da indústria'};
-    case 'R134a (líquido)': case 'R410A (líquido)': case 'R22 (líquido)': case 'Amônia (líquido)': case 'Amônia (vapor)': return {mat:'HNBR', temp:'-30 a 150°C', obs:'Refrigerantes e amônia — resistência química'};
-    default: return {mat:'EPDM', temp:'-40 a 150°C', obs:'Uso geral'};
-  }
-}
-function selecionarCorpoGaxeta(fluido, Tmax, condensante) {
-  if (Tmax > 180) return {mat:'FKM (Viton)', obs:'Alta temperatura e meios agressivos'};
-  if (condensante) return {mat:'EPDM', obs:'Vapor e água quente'};
-  switch (fluido) {
-    case 'Óleo térmico': case 'Óleo vegetal': case 'Xarope de açúcar': case 'Salmoura (NaCl 20%)': return {mat:'NBR (Nitrile)', obs:'Resistente a óleos e gorduras'};
-    case 'Água industrial': case 'Leite': case 'Cerveja': case 'Suco de frutas': case 'Glicol 15%': case 'Glicol 20%': case 'Glicol 30%': case 'Glicol 40%': return {mat:'EPDM', obs:'Água, alimentos e CIP'};
-    case 'R134a (líquido)': case 'R410A (líquido)': case 'R22 (líquido)': case 'Amônia (líquido)': case 'Amônia (vapor)': return {mat:'HNBR', obs:'Refrigerantes e amônia'};
-    default: return {mat:'EPDM', obs:'Uso geral'};
-  }
-}
-function selecionarAnel(tipo, fluido, Tmax) {
-  if (tipo !== 'semisoldadas') return null;
-  return {mat:'CR (Cloropreno)', temp:'-30 a 120°C', obs:'Anel de vedação em placas semi-soldadas — resistente a óleos, ozônio e intempéries'};
-}
+/* ---------- LIGAS E MATERIAIS (referência) ---------- */
 var LIGAS_PLACA = {
   'AISI 304L': {apl:'Custo-benefício, baixa temperatura, sem cloretos, refrigerantes, gases'},
   'AISI 316L': {apl:'Padrão geral, alimentos, água, glicóis, boa resistência a cloretos moderados'},
@@ -562,14 +617,6 @@ var LIGAS_PLACA = {
   '825': {apl:'Ácidos, cloretos, água do mar — liga níquel-ferro'},
   'Níquel (Ni)': {apl:'Cáusticos (NaOH/KOH), meios alcalinos concentrados'}
 };
-function selecionarPlaca(fluido, Tmax, salino) {
-  if (salino || fluido === 'Salmoura (NaCl 20%)') return {mat:'Titânio (Ti)', obs:'Águas salinas e cloretos — resistência superior'};
-  if (['Água industrial','Leite','Cerveja','Suco de frutas','Glicol 15%','Glicol 20%','Glicol 30%','Glicol 40%','Xarope de açúcar'].indexOf(fluido) !== -1) return {mat:'AISI 316L', obs:'Padrão para alimentos, água e glicóis — boa resistência a cloretos'};
-  if (fluido === 'Óleo térmico' || fluido === 'Óleo vegetal') return {mat:'AISI 316L', obs:'Óleos — resistência padrão'};
-  if (['Amônia (líquido)','Amônia (vapor)','R134a (líquido)','R410A (líquido)','R22 (líquido)'].indexOf(fluido) !== -1) return {mat:'AISI 304L', obs:'Refrigerantes — custo-benefício'};
-  if (fluido === 'Ar / gás' || fluido === 'CO₂') return {mat:'AISI 304L', obs:'Gases — aplicação padrão'};
-  return {mat:'AISI 316L', obs:'Uso geral'};
-}
 var MATERIAIS_REF = {
   gaxetas: {
     'NBR (Nitrile)': {temp:'-10 a 110°C (pico 130°C)', apl:'Óleos, combustíveis, gorduras — NÃO usar com água quente/vapor'},
@@ -770,11 +817,10 @@ function exibirResultado(secoes, d){
   secoes.forEach(function(x){totalA+=x.melhor.A_inst;totalQ+=x.Q;totalPlacas+=x.melhor.Nplacas;});
   var m0=secoes[0].melhor;
   var Tmax=Math.max(parseFloat(document.getElementById('tinS').value)||0,parseFloat(secoes[0].toutS)||0,parseFloat(document.getElementById('toutP').value)||0);
-  var gaxP=selecionarGaxeta(secoes[0].fP.nome,Tmax,false);
+  /* MATERIAL ÚNICO (placa e gaxeta) considerando AMBOS os fluidos */
+  var placa = selecionarPlacaConjunta(secoes[0].fP, secoes[0].fS, Tmax);
+  var gaxeta = selecionarGaxetaConjunta(secoes[0].fP, secoes[0].fS, Tmax);
   var ehSemi=(tipoAtual==='semisoldadas');
-  var corpoP=ehSemi?selecionarCorpoGaxeta(secoes[0].fP.nome,Tmax,false):null;
-  var placaP=selecionarPlaca(secoes[0].fP.nome,Tmax,false);
-  var anelP=ehSemi?selecionarAnel(tipoAtual,secoes[0].fP.nome,Tmax):null;
   var statusPortaP=m0.vPortaOkP?'<span class="ok">✓</span>':'<span class="aviso">✗</span>';
   var statusPortaS=m0.vPortaOkS?'<span class="ok">✓</span>':'<span class="aviso">✗</span>';
   var resumoEquip='<div class="resumo-equip"><h4>🔧 Equipamento selecionado</h4><div class="grid-4">'+
@@ -782,8 +828,8 @@ function exibirResultado(secoes, d){
     '<div><strong>Placas</strong><br>'+m0.Nplacas+'</div>'+
     '<div><strong>Área</strong><br>'+m0.A_inst.toFixed(1)+' m²</div>'+
     '<div><strong>Configuração</strong><br>'+m0.config+' · '+m0.nomePasses+'</div>'+
-    '<div><strong>Liga da placa</strong><br>'+placaP.mat+'</div>'+
-    '<div><strong>Gaxeta</strong><br>'+(ehSemi?(corpoP?corpoP.mat:'—'):gaxP.mat)+(ehSemi&&anelP?' + '+anelP.mat:'')+'</div>'+
+    '<div><strong>Liga da placa</strong><br>'+placa.mat+'</div>'+
+    '<div><strong>Gaxeta</strong><br>'+gaxeta.mat+'</div>'+
     '<div><strong>Bocal (conexão)</strong><br>'+m0.conexao+'</div>'+
     '<div><strong>Velocidade no bocal</strong><br>Prod '+m0.vPortaP.toFixed(1)+' m/s '+statusPortaP+' · Serv '+m0.vPortaS.toFixed(1)+' m/s '+statusPortaS+'</div>'+
   '</div></div>';
@@ -791,15 +837,13 @@ function exibirResultado(secoes, d){
   html+='<div class="resultado-resumo"><h4>📋 Projeto: '+proj+' · Cliente: '+cliente+'</h4>'+
     '<p><strong>Calor total trocado:</strong> '+fmt(totalQ/1000)+' kW ('+secoes.length+' seção/seções)</p>'+
     '<p><strong>Área total instalada:</strong> '+totalA.toFixed(1)+' m² · <strong>Placas totais:</strong> '+totalPlacas+'</p>'+
-    '<p><strong>Bocal do modelo:</strong> '+m0.conexao+' — mesmo diâmetro para produto e serviço (padrão do fabricante)</p></div>';
+    '<p><strong>Bocal do modelo:</strong> '+m0.conexao+' — mesmo diâmetro para produto e serviço (padrão do fabricante)</p>'+
+    '<p><strong>Material da placa (único):</strong> '+placa.mat+' · <strong>Gaxeta (única):</strong> '+gaxeta.mat+' — selecionados pelo fluido mais exigente, pois ambos passam pela mesma placa</p></div>';
   secoes.forEach(function(r,idx){
     var m=r.melhor,servT=document.getElementById(idx===0?'tinS':'sec'+idx+'TinS').value;
     var Tmax2=Math.max(parseFloat(servT)||0,parseFloat(r.toutS)||0,parseFloat(document.getElementById(idx===0?'toutP':'sec'+idx+'ToutP').value)||0);
-    var gaxP2=selecionarGaxeta(r.fP.nome,Tmax2,false),gaxS2=selecionarGaxeta(r.fS.nome,Tmax2,!!r.fS.condensing);
-    var placaP2=selecionarPlaca(r.fP.nome,Tmax2,false),placaS2=selecionarPlaca(r.fS.nome,Tmax2,false);
-    var ehSemi2=(tipoAtual==='semisoldadas');
-    var anelP2=ehSemi2?selecionarAnel(tipoAtual,r.fP.nome,Tmax2):null;
-    var corpoP2=ehSemi2?selecionarCorpoGaxeta(r.fP.nome,Tmax2,false):null;
+    var placa2 = selecionarPlacaConjunta(r.fP, r.fS, Tmax2);
+    var gaxeta2 = selecionarGaxetaConjunta(r.fP, r.fS, Tmax2);
     var efic=(m.eficiencia*100).toFixed(1);
     var statusEfic=parseFloat(efic)>=85?'<span class="ok">✓</span>':'<span class="aviso">⚠</span>';
     html+='<div class="melhor-modelo"><h4>🏆 Seção '+(idx+1)+' — Melhor: '+m.modelo+' · '+m.config+' ('+m.angP+'°/'+m.angS+'°) · '+m.nomePasses+' passes</h4>'+
@@ -807,7 +851,7 @@ function exibirResultado(secoes, d){
       '<p><strong>Placas:</strong> '+m.Nplacas+' | <strong>Área:</strong> '+m.A_inst.toFixed(1)+' m² | <strong>U:</strong> '+fmt(m.U)+' W/m²·K</p>'+
       '<p><strong>Turbulência:</strong> '+m.turbP+' (Re '+fmt(m.ReP)+') / '+m.turbS+(m.ReS?' (Re '+fmt(m.ReS)+')':'')+' | <strong>ΔP:</strong> '+m.dPP.toFixed(1)+' / '+m.dPS.toFixed(1)+' kPa</p>'+
       '<p><strong>Bocal:</strong> '+m.conexao+' | <strong>Velocidade porta:</strong> Prod '+m.vPortaP.toFixed(1)+' m/s '+(m.vPortaOkP?'✓':'✗')+' · Serv '+m.vPortaS.toFixed(1)+' m/s '+(m.vPortaOkS?'✓':'✗')+'</p>'+
-      '<p><strong>Liga da placa:</strong> '+placaP2.mat+' | <strong>Gaxeta:</strong> '+(ehSemi2?(corpoP2?corpoP2.mat:'—'):gaxP2.mat)+(ehSemi2&&anelP2?' | <strong>Anel:</strong> '+anelP2.mat:'')+'</p>'+
+      '<p><strong>Liga da placa:</strong> '+placa2.mat+' | <strong>Gaxeta:</strong> '+gaxeta2.mat+'</p>'+
       '<p><strong>Serviço:</strong> '+r.fS.nome+' · entrada '+servT+'°C · saída '+r.toutS.toFixed(1)+'°C · vazão '+r.vazaoS.toFixed(1)+' m³/h</p></div>';
   });
   html+='<h4 style="margin:16px 0 10px;font-size:15px;color:#0a1f3c">📊 Parâmetros de projeto (por seção)</h4>'+
@@ -840,7 +884,7 @@ function exibirResultado(secoes, d){
     });
     html+='</tbody></table></div>';
   }catch(e){html+='<p style="font-size:11px;color:var(--texto-suave);margin-top:8px">Desempenho indisponível para esta combinação.</p>';}
-  html+='<p style="font-size:11px;color:var(--texto-suave);margin-top:10px">Base de cálculo revisada com dados oficiais Alfa Laval. Bocal padrão por modelo (produto = serviço). U global estimado por fluidos. Eficiência ε-NTU: 85-95% recomendado. Dh=2b/φ com φ por ângulo. Confira com o software oficial Alfa Laval.</p>';
+  html+='<p style="font-size:11px;color:var(--texto-suave);margin-top:10px">Base de cálculo revisada com dados oficiais Alfa Laval. Bocal padrão por modelo (produto = serviço). Material da placa e gaxeta ÚNICOS, selecionados pelo fluido mais exigente (ambos passam pela mesma placa). U global estimado por fluidos. Eficiência ε-NTU: 85-95% recomendado. Confira com o software oficial Alfa Laval.</p>';
   c.innerHTML=html;
 }
 
@@ -850,9 +894,14 @@ function gerarDatasheet(secoes){
   var totalA=0,totalQ=0;
   secoes.forEach(function(x){totalA+=x.melhor.A_inst;totalQ+=x.Q;});
   var m0=secoes[0].melhor;
+  var Tmax=Math.max(parseFloat(document.getElementById('tinS').value)||0,parseFloat(secoes[0].toutS)||0,parseFloat(document.getElementById('toutP').value)||0);
+  /* MATERIAL ÚNICO */
+  var placa = selecionarPlacaConjunta(secoes[0].fP, secoes[0].fS, Tmax);
+  var gaxeta = selecionarGaxetaConjunta(secoes[0].fP, secoes[0].fS, Tmax);
+  var ehSemi=(tipoAtual==='semisoldadas');
   var html='<div class="datasheet" id="dsImprimivel"><h2>AlfaVed Dimensionador-PHE</h2><div class="sub">Datasheet de Dimensionamento · Gerado em '+hoje+'</div>'+
-    '<div class="ds-secao"><h4>1. Identificação</h4><table class="ds-tabela"><tr><td>Projeto</td><td>'+proj+'</td></tr><tr><td>Cliente</td><td>'+cliente+'</td></tr><tr><td>Data</td><td>'+hoje+'</td></tr><tr><td>Número de seções</td><td>'+secoes.length+'</td></tr><tr><td>Tipo de trocador</td><td>'+(tipoAtual==='semisoldadas'?'Placas semi-soldadas':'Placas gaxetadas')+'</td></tr><tr><td>Bocal do modelo (produto e serviço)</td><td>'+m0.conexao+'</td></tr><tr><td>Velocidade no bocal — produto</td><td>'+m0.vPortaP.toFixed(1)+' m/s '+(m0.vPortaOkP?'✓':'✗')+'</td></tr><tr><td>Velocidade no bocal — serviço</td><td>'+m0.vPortaS.toFixed(1)+' m/s '+(m0.vPortaOkS?'✓':'✗')+'</td></tr></table></div>'+
-    /* NOVA SEÇÃO 2: DESENHO DIMENSIONAL COM DIAGRAMA SVG */
+    '<div class="ds-secao"><h4>1. Identificação</h4><table class="ds-tabela"><tr><td>Projeto</td><td>'+proj+'</td></tr><tr><td>Cliente</td><td>'+cliente+'</td></tr><tr><td>Data</td><td>'+hoje+'</td></tr><tr><td>Número de seções</td><td>'+secoes.length+'</td></tr><tr><td>Tipo de trocador</td><td>'+(ehSemi?'Placas semi-soldadas':'Placas gaxetadas')+'</td></tr><tr><td>Bocal do modelo (produto e serviço)</td><td>'+m0.conexao+'</td></tr><tr><td>Velocidade no bocal — produto</td><td>'+m0.vPortaP.toFixed(1)+' m/s '+(m0.vPortaOkP?'✓':'✗')+'</td></tr><tr><td>Velocidade no bocal — serviço</td><td>'+m0.vPortaS.toFixed(1)+' m/s '+(m0.vPortaOkS?'✓':'✗')+'</td></tr></table></div>'+
+    /* SEÇÃO 2: DESENHO DIMENSIONAL COM DIAGRAMA SVG */
     '<div class="ds-secao"><h4>2. Desenho dimensional</h4>'+
     '<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:420px;display:block;margin:0 auto 14px">'+
     '<text x="200" y="18" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#0a1f3c">Desenho Dimensional</text>'+
@@ -905,7 +954,7 @@ function gerarDatasheet(secoes){
     '<tr><td>Distância entre portas (h)</td><td>'+(m0.modRef.h?m0.modRef.h+' mm':'Consultar catálogo')+'</td></tr>'+
     '<tr><td>Bocal (conexão)</td><td>'+m0.conexao+'</td></tr>'+
     '</table></div>'+
-    /* NOVA SEÇÃO 3: CONEXÕES TIPO FLANGE */
+    /* SEÇÃO 3: CONEXÕES TIPO FLANGE */
     '<div class="ds-secao"><h4>3. Conexões tipo flange</h4><table class="ds-tabela">'+
     '<tr><td>Padrão</td><td>EN 1092-1 / ASME B16.5 / JIS B2220</td></tr>'+
     '<tr><td>Tamanho do bocal</td><td>'+m0.conexao+'</td></tr>'+
@@ -913,12 +962,9 @@ function gerarDatasheet(secoes){
     '</table></div>';
   secoes.forEach(function(r,idx){
     var m=r.melhor,servT=document.getElementById(idx===0?'tinS':'sec'+idx+'TinS').value;
-    var Tmax=Math.max(parseFloat(servT)||0,parseFloat(r.toutS)||0,parseFloat(document.getElementById(idx===0?'toutP':'sec'+idx+'ToutP').value)||0);
-    var gaxP=selecionarGaxeta(r.fP.nome,Tmax,false),gaxS=selecionarGaxeta(r.fS.nome,Tmax,!!r.fS.condensing);
-    var placaP=selecionarPlaca(r.fP.nome,Tmax,false),placaS=selecionarPlaca(r.fS.nome,Tmax,false);
-    var ehSemi=(tipoAtual==='semisoldadas');
-    var anelP=ehSemi?selecionarAnel(tipoAtual,r.fP.nome,Tmax):null,anelS=ehSemi?selecionarAnel(tipoAtual,r.fS.nome,Tmax):null;
-    var corpoP=ehSemi?selecionarCorpoGaxeta(r.fP.nome,Tmax,false):null,corpoS=ehSemi?selecionarCorpoGaxeta(r.fS.nome,Tmax,!!r.fS.condensing):null;
+    var Tmax2=Math.max(parseFloat(servT)||0,parseFloat(r.toutS)||0,parseFloat(document.getElementById(idx===0?'toutP':'sec'+idx+'ToutP').value)||0);
+    var placa2 = selecionarPlacaConjunta(r.fP, r.fS, Tmax2);
+    var gaxeta2 = selecionarGaxetaConjunta(r.fP, r.fS, Tmax2);
     var tinPv=document.getElementById(idx===0?'tinP':'sec'+idx+'TinP').value;
     var toutPv=document.getElementById(idx===0?'toutP':'sec'+idx+'ToutP').value;
     html+='<div class="ds-secao"><h4>'+(idx+3)+'. Seção '+(idx+1)+' — Condições operacionais de projeto</h4>'+
@@ -933,18 +979,10 @@ function gerarDatasheet(secoes){
       '<tr><td>Turbulência</td><td>'+m.turbP+'</td><td>'+m.turbS+'</td></tr>'+
       '<tr><td>ΔP (kPa)</td><td>'+m.dPP.toFixed(1)+'</td><td>'+m.dPS.toFixed(1)+'</td></tr>'+
       '<tr><td>Velocidade no bocal (m/s)</td><td>'+m.vPortaP.toFixed(1)+' '+(m.vPortaOkP?'✓':'✗')+'</td><td>'+m.vPortaS.toFixed(1)+' '+(m.vPortaOkS?'✓':'✗')+'</td></tr>'+
-      '<tr><td>Liga da placa</td><td>'+placaP.mat+'</td><td>'+placaS.mat+'</td></tr>'+
-      (ehSemi?'<tr><td>Corpo de gaxeta</td><td>'+(corpoP?corpoP.mat:'—')+'</td><td>'+(corpoS?corpoS.mat:'—')+'</td></tr>':'')+
-      (ehSemi?'<tr><td>Anel de vedação</td><td>'+(anelP?anelP.mat:'—')+'</td><td>'+(anelS?anelS.mat:'—')+'</td></tr>':'')+
-      (!ehSemi?'<tr><td>Gaxeta recomendada</td><td>'+gaxP.mat+'</td><td>'+gaxS.mat+'</td></tr>':'')+
       '</table>'+
-      '<div style="font-size:11px;color:var(--texto-suave);margin-top:6px">'+
-        '<strong>Liga da placa:</strong> '+(LIGAS_PLACA[placaP.mat]?LIGAS_PLACA[placaP.mat].apl:'')+'<br>'+
-        (ehSemi?'<strong>Anel (CR):</strong> Cloropreno — vedação em placas semi-soldadas, resistente a óleos, ozônio e intempéries.<br>':'')+
-        (ehSemi?'<strong>Corpo de gaxeta:</strong> conforme o líquido — '+(corpoP&&MATERIAIS_REF.gaxetas[corpoP.mat]?MATERIAIS_REF.gaxetas[corpoP.mat].apl:''):'')+
-        (!ehSemi?'<strong>Gaxeta:</strong> '+(MATERIAIS_REF.gaxetas[gaxP.mat]?MATERIAIS_REF.gaxetas[gaxP.mat].apl:''):'')+
-      '</div>'+
       '<div style="margin-top:8px"><table class="ds-tabela">'+
+        '<tr><td>Liga da placa (única)</td><td>'+placa2.mat+'</td></tr>'+
+        '<tr><td>Gaxeta (única)</td><td>'+gaxeta2.mat+'</td></tr>'+
         '<tr><td>Calor da seção</td><td>'+fmt(r.Q/1000)+' kW</td></tr>'+
         '<tr><td>LMTD corrigido</td><td>'+m.lmtdF.toFixed(1)+' °C (F='+m.F.toFixed(2)+')</td></tr>'+
         '<tr><td>Eficiência térmica (ε-NTU)</td><td>'+(m.eficiencia*100).toFixed(1)+'%</td></tr>'+
@@ -962,7 +1000,7 @@ function gerarDatasheet(secoes){
       '<tr><td>Configuração de placas</td><td>'+secoes[0].melhor.config+'</td></tr>'+
       '<tr><td>Passes</td><td>'+secoes[0].melhor.nomePasses+'</td></tr>'+
     '</table></div>'+
-    '<div class="ds-secao"><h4>'+(secoes.length+4)+'. Observações</h4><table class="ds-tabela"><tr><td>Nota</td><td>Dimensionamento preliminar baseado em dados oficiais Alfa Laval. O bocal é padrão do modelo — produto e serviço usam o mesmo diâmetro de conexão. Valores finais devem ser confirmados com o software oficial e catálogos. A seleção de materiais considera fluido, temperatura e corrosividade; casos especiais exigem análise de compatibilidade química detalhada.</td></tr></table></div>'+
+    '<div class="ds-secao"><h4>'+(secoes.length+4)+'. Observações</h4><table class="ds-tabela"><tr><td>Nota</td><td>Dimensionamento preliminar baseado em dados oficiais Alfa Laval. O bocal é padrão do modelo — produto e serviço usam o mesmo diâmetro de conexão. Material da placa e gaxeta ÚNICOS, selecionados pelo fluido mais exigente (ambos passam pela mesma placa). Valores finais devem ser confirmados com o software oficial e catálogos.</td></tr></table></div>'+
     '<div class="sub" style="margin-top:14px">© 2026 AlfaVed — CNPJ 50.093.389/0001-35</div></div>';
   c.innerHTML=html;
 }

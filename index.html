@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google" content="notranslate">
-<title>AlfaVed Dimensionador-PHE · v27</title>
+<title>AlfaVed Dimensionador-PHE · v28</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--azul-escuro:#0a1f3c;--azul:#123a6b;--azul-medio:#1d5aa8;--azul-claro:#2f7fd1;--laranja:#e8731c;--laranja-claro:#f59e4c;--cinza-fundo:#f4f6f9;--cinza-borda:#dde3ea;--texto:#1e293b;--texto-suave:#64748b;--branco:#fff;--verde:#16a34a;--vermelho:#dc2626;--sombra:0 4px 20px rgba(10,31,60,.08)}
@@ -182,9 +182,9 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
 <section class="hero">
   <div class="hero-overlay"></div>
   <div class="container hero-content">
-    <span class="hero-badge">⚙️ Dimensionamento de Engenharia · v27</span>
+    <span class="hero-badge">⚙️ Dimensionamento de Engenharia · v28</span>
     <h2>Dimensionador de Trocadores de Calor de Placas</h2>
-    <p>Base de cálculo revisada, bocal padrão por modelo, dimensões físicas integradas e datasheet em PDF.</p>
+    <p>Base de cálculo revisada, diagrama dimensional, bocal padrão e datasheet em PDF.</p>
   </div>
 </section>
 
@@ -370,8 +370,8 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
 
 <script>
 /* ============================================================
-   AlfaVed Dimensionador-PHE · v27
-   Dimensões físicas por modelo + bocal padrão + tabela visual
+   AlfaVed Dimensionador-PHE · v28
+   Diagrama dimensional SVG + dimensões por modelo
    ============================================================ */
 
 /* ---------- MODELOS ALFA LAVAL (com dimensões H, Wmm, h) ---------- */
@@ -852,8 +852,53 @@ function gerarDatasheet(secoes){
   var m0=secoes[0].melhor;
   var html='<div class="datasheet" id="dsImprimivel"><h2>AlfaVed Dimensionador-PHE</h2><div class="sub">Datasheet de Dimensionamento · Gerado em '+hoje+'</div>'+
     '<div class="ds-secao"><h4>1. Identificação</h4><table class="ds-tabela"><tr><td>Projeto</td><td>'+proj+'</td></tr><tr><td>Cliente</td><td>'+cliente+'</td></tr><tr><td>Data</td><td>'+hoje+'</td></tr><tr><td>Número de seções</td><td>'+secoes.length+'</td></tr><tr><td>Tipo de trocador</td><td>'+(tipoAtual==='semisoldadas'?'Placas semi-soldadas':'Placas gaxetadas')+'</td></tr><tr><td>Bocal do modelo (produto e serviço)</td><td>'+m0.conexao+'</td></tr><tr><td>Velocidade no bocal — produto</td><td>'+m0.vPortaP.toFixed(1)+' m/s '+(m0.vPortaOkP?'✓':'✗')+'</td></tr><tr><td>Velocidade no bocal — serviço</td><td>'+m0.vPortaS.toFixed(1)+' m/s '+(m0.vPortaOkS?'✓':'✗')+'</td></tr></table></div>'+
-    /* NOVA SEÇÃO 2: DESENHO DIMENSIONAL */
-    '<div class="ds-secao"><h4>2. Desenho dimensional</h4><table class="ds-tabela">'+
+    /* NOVA SEÇÃO 2: DESENHO DIMENSIONAL COM DIAGRAMA SVG */
+    '<div class="ds-secao"><h4>2. Desenho dimensional</h4>'+
+    '<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:420px;display:block;margin:0 auto 14px">'+
+    '<text x="200" y="18" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#0a1f3c">Desenho Dimensional</text>'+
+    '<g transform="translate(20,40)">'+
+    '<rect x="0" y="0" width="120" height="180" fill="#f4f6f9" stroke="#123a6b" stroke-width="2"/>'+
+    '<line x1="60" y1="0" x2="60" y2="180" stroke="#2f7fd1" stroke-width="1.5" stroke-dasharray="4,3"/>'+
+    '<text x="60" y="95" text-anchor="middle" font-family="Arial" font-size="13" font-weight="bold" fill="#123a6b">AlfaVed</text>'+
+    '<circle cx="30" cy="40" r="10" fill="#fff" stroke="#e8731c" stroke-width="2"/>'+
+    '<circle cx="90" cy="40" r="10" fill="#fff" stroke="#e8731c" stroke-width="2"/>'+
+    '<circle cx="90" cy="140" r="10" fill="#fff" stroke="#e8731c" stroke-width="2"/>'+
+    '<circle cx="30" cy="140" r="10" fill="#fff" stroke="#e8731c" stroke-width="2"/>'+
+    '<text x="30" y="25" text-anchor="middle" font-family="Arial" font-size="9" fill="#e8731c">S1</text>'+
+    '<text x="90" y="25" text-anchor="middle" font-family="Arial" font-size="9" fill="#e8731c">S2</text>'+
+    '<text x="90" y="165" text-anchor="middle" font-family="Arial" font-size="9" fill="#e8731c">S3</text>'+
+    '<text x="30" y="165" text-anchor="middle" font-family="Arial" font-size="9" fill="#e8731c">S4</text>'+
+    '<line x1="-12" y1="0" x2="-12" y2="180" stroke="#333" stroke-width="1"/>'+
+    '<line x1="-8" y1="0" x2="-16" y2="0" stroke="#333" stroke-width="1"/>'+
+    '<line x1="-8" y1="180" x2="-16" y2="180" stroke="#333" stroke-width="1"/>'+
+    '<text x="-22" y="92" text-anchor="middle" font-family="Arial" font-size="10" fill="#333" transform="rotate(-90,-22,92)">H</text>'+
+    '<line x1="0" y1="192" x2="120" y2="192" stroke="#333" stroke-width="1"/>'+
+    '<line x1="0" y1="188" x2="0" y2="196" stroke="#333" stroke-width="1"/>'+
+    '<line x1="120" y1="188" x2="120" y2="196" stroke="#333" stroke-width="1"/>'+
+    '<text x="60" y="205" text-anchor="middle" font-family="Arial" font-size="10" fill="#333">W</text>'+
+    '</g>'+
+    '<g transform="translate(230,40)">'+
+    '<rect x="0" y="0" width="80" height="180" fill="#f4f6f9" stroke="#123a6b" stroke-width="2"/>'+
+    '<line x1="20" y1="0" x2="20" y2="180" stroke="#2f7fd1" stroke-width="1"/>'+
+    '<line x1="40" y1="0" x2="40" y2="180" stroke="#2f7fd1" stroke-width="1"/>'+
+    '<line x1="60" y1="0" x2="60" y2="180" stroke="#2f7fd1" stroke-width="1"/>'+
+    '<line x1="92" y1="40" x2="92" y2="140" stroke="#333" stroke-width="1"/>'+
+    '<line x1="88" y1="40" x2="96" y2="40" stroke="#333" stroke-width="1"/>'+
+    '<line x1="88" y1="140" x2="96" y2="140" stroke="#333" stroke-width="1"/>'+
+    '<text x="102" y="92" text-anchor="middle" font-family="Arial" font-size="10" fill="#333">h</text>'+
+    '<line x1="0" y1="192" x2="80" y2="192" stroke="#333" stroke-width="1"/>'+
+    '<line x1="0" y1="188" x2="0" y2="196" stroke="#333" stroke-width="1"/>'+
+    '<line x1="80" y1="188" x2="80" y2="196" stroke="#333" stroke-width="1"/>'+
+    '<text x="40" y="205" text-anchor="middle" font-family="Arial" font-size="10" fill="#333">L</text>'+
+    '</g>'+
+    '<g transform="translate(20,245)">'+
+    '<circle cx="8" cy="0" r="5" fill="#fff" stroke="#e8731c" stroke-width="1.5"/>'+
+    '<text x="18" y="4" font-family="Arial" font-size="9" fill="#333">Bocais (S1-S4)</text>'+
+    '<line x1="90" y1="0" x2="110" y2="0" stroke="#2f7fd1" stroke-width="1.5" stroke-dasharray="4,3"/>'+
+    '<text x="115" y="4" font-family="Arial" font-size="9" fill="#333">Placas</text>'+
+    '</g>'+
+    '</svg>'+
+    '<table class="ds-tabela">'+
     '<tr><td>Modelo</td><td>'+m0.modelo+'</td></tr>'+
     '<tr><td>Altura (H)</td><td>'+(m0.modRef.H?m0.modRef.H+' mm':'Consultar catálogo')+'</td></tr>'+
     '<tr><td>Largura (W)</td><td>'+(m0.modRef.Wmm?m0.modRef.Wmm+' mm':'Consultar catálogo')+'</td></tr>'+

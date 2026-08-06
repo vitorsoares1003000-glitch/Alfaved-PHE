@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google" content="notranslate">
-<title>AlfaVed Dimensionador-PHE · v30</title>
+<title>AlfaVed Dimensionador-PHE · v31</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -46,6 +46,7 @@ label{display:block;margin-bottom:12px;font-size:13px;font-weight:600;color:#475
 input,select{width:100%;padding:10px 13px;margin-top:5px;border:1.5px solid var(--cinza-borda);border-radius:10px;font-size:14px;font-family:inherit;background:var(--branco);color:var(--texto);transition:all .2s}
 input:focus,select:focus{outline:none;border-color:var(--azul-claro);box-shadow:0 0 0 3px rgba(47,127,209,.15)}
 input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--azul-escuro);font-weight:600}
+#brixRow{display:none}
 .ident-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 .ident-card{background:linear-gradient(135deg,var(--azul-escuro),var(--azul));border-radius:12px;padding:18px;color:var(--branco)}
 .ident-card label{color:rgba(255,255,255,.85)}
@@ -158,9 +159,9 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
 <section class="hero">
   <div class="hero-overlay"></div>
   <div class="container hero-content">
-    <span class="hero-badge">⚙️ Dimensionamento de Engenharia · v30</span>
+    <span class="hero-badge">⚙️ Dimensionamento de Engenharia · v31</span>
     <h2>Dimensionador de Trocadores de Calor de Placas</h2>
-    <p>Materiais únicos, modelos Clip, viscosidade aprimorada e datasheet em PDF.</p>
+    <p>Fluidos revisados, passes identificados por lado, trava de capacidade e PDF real.</p>
   </div>
 </section>
 
@@ -188,7 +189,7 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
             <option value="suco">Suco de frutas</option>
             <option value="oleoveg">Óleo vegetal</option>
             <option value="salmoura">Salmoura (NaCl 20%)</option>
-            <option value="xarope">Xarope de açúcar</option>
+            <option value="xarope">Açúcar (informar °Brix)</option>
             <option value="glicol15">Glicol 15%</option>
             <option value="glicol20">Glicol 20%</option>
             <option value="glicol30">Glicol 30%</option>
@@ -198,9 +199,12 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
             <option value="amonia_v">Amônia (vapor)</option>
           </select>
         </label>
-        <label class="obrigatorio">Vazão do produto (m³/h)<input type="number" id="vazaoP" value="50" step="0.1" onchange="preencherAutomatico()"></label>
-        <label class="obrigatorio">Temperatura de entrada (°C)<input type="number" id="tinP" value="30"></label>
-        <label class="obrigatorio">Temperatura de saída (°C)<input type="number" id="toutP" value="96"></label>
+        <div id="brixRow">
+          <label>Concentração do açúcar (°Brix)<input type="number" id="brixP" value="6.5" min="0" max="70" step="0.5"><span style="font-size:11px;color:var(--texto-suave)">Diluído (6-10°Brix) ≈ água · Concentrado (50-65°Brix) = viscoso</span></label>
+        </div>
+        <label class="obrigatorio">Vazão do produto (m³/h)<input type="number" id="vazaoP" value="32.4" step="0.1" onchange="preencherAutomatico()"></label>
+        <label class="obrigatorio">Temperatura de entrada (°C)<input type="number" id="tinP" value="50"></label>
+        <label class="obrigatorio">Temperatura de saída (°C)<input type="number" id="toutP" value="85"></label>
       </div>
       <div class="sub-card servico">
         <div class="sub-card-head"><span class="side-icon servico-icon">⚙️</span><h4>Serviço — Seção 1</h4></div>
@@ -221,7 +225,7 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
             <option value="ar">Ar / gás de processo</option>
           </select>
         </label>
-        <label class="obrigatorio">Temperatura de entrada (°C)<input type="number" id="tinS" value="125"></label>
+        <label class="obrigatorio">Temperatura de entrada (°C)<input type="number" id="tinS" value="133"></label>
         <label>Temperatura de saída (°C)<input type="text" id="toutS" class="calculado" placeholder="calculada" readonly></label>
         <label>Vazão necessária do serviço (m³/h)<input type="text" id="vazaoS" class="calculado" placeholder="calculada" readonly></label>
       </div>
@@ -268,7 +272,7 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
     <div class="grid-4">
       <label>ΔP máx. produto (kPa)<input type="number" id="dpP" value="80"></label>
       <label>ΔP máx. serviço (kPa)<input type="number" id="dpS" value="80"></label>
-      <label>Incrustação produto (m²·K/W)<input type="number" id="incP" value="0.0001" step="0.00001"></label>
+      <label>Incrustação produto (m²·K/W)<input type="number" id="incP" value="0.0002" step="0.00001"></label>
       <label>Incrustação serviço (m²·K/W)<input type="number" id="incS" value="0.0001" step="0.00001"></label>
       <label>Margem de área (%)<input type="number" id="margem" value="10"></label>
       <label>Configuração de placas
@@ -281,12 +285,14 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
       </label>
       <label>Configuração de passes
         <select id="passes">
-          <option value="auto">Automática (testa 1×1 a 3×3)</option>
-          <option value="1x1">1 passe × 1 passe</option>
-          <option value="2x1">2 passes × 1 passe</option>
-          <option value="1x2">1 passe × 2 passes</option>
-          <option value="2x2">2 passes × 2 passes</option>
-          <option value="3x3">3 passes × 3 passes</option>
+          <option value="auto">Automática (testa todas as combinações)</option>
+          <option value="1x1">1 passe (produto) × 1 passe (serviço)</option>
+          <option value="1x2">1 passe (produto) × 2 passes (serviço)</option>
+          <option value="2x1">2 passes (produto) × 1 passe (serviço)</option>
+          <option value="2x2">2 passes (produto) × 2 passes (serviço)</option>
+          <option value="3x1">3 passes (produto) × 1 passe (serviço)</option>
+          <option value="1x3">1 passe (produto) × 3 passes (serviço)</option>
+          <option value="3x3">3 passes (produto) × 3 passes (serviço)</option>
         </select>
       </label>
     </div>
@@ -297,7 +303,7 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
   </div>
 
   <section id="resultado" class="card resultado-card fade-in" style="display:none;">
-    <div class="card-header"><span class="step-badge">4</span><div><h3>Resultado do dimensionamento</h3><p class="card-sub">Equipamento, parâmetros, desempenho, materiais e datasheet</p></div></div>
+    <div class="card-header"><span class="step-badge">4</span><div><h3>Resultado do dimensionamento</h3><p class="card-sub">Equipamento, parâmetros, passes por lado, desempenho, materiais e datasheet</p></div></div>
     <div class="tabs">
       <button class="tab-btn active" id="tabResultadoBtn" onclick="trocarAba('resultado')">📊 Resultado</button>
       <button class="tab-btn" id="tabDatasheetBtn" onclick="trocarAba('datasheet')">📋 Datasheet</button>
@@ -333,39 +339,41 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
 
 <script>
 /* ============================================================
-   AlfaVed Dimensionador-PHE · v30
-   Modelos Clip + viscosidade aprimorada + PDF real
+   AlfaVed Dimensionador-PHE · v31
+   - Fluidos revisados (viscosidade por °Brix p/ açúcar)
+   - Passes identificados por lado (produto × serviço)
+   - Trava de capacidade física de placas por modelo
+   - PDF real via html2pdf
    ============================================================ */
 
-/* ---------- MODELOS ALFA LAVAL (com dimensões H, Wmm, h) ---------- */
+/* ---------- MODELOS ALFA LAVAL (com dimensões H, Wmm, h e placasMax) ---------- */
 var ALFA_LAVAL = {
   gaxetadas: [
-    {nome:'M3-M', A:0.032, W:0.10, b:0.0020, vazaoMax:14,  Pmax:16, Tmax:180, kW:'50-250',    tipo:'Líquidos', porta:0.050, H:480, Wmm:180, h:null},
-    {nome:'M6-B', A:0.061, W:0.12, b:0.0022, vazaoMax:25,  Pmax:16, Tmax:180, kW:'300-800',   tipo:'Líquidos', porta:0.050, H:920, Wmm:320, h:null},
-    {nome:'M6-M', A:0.061, W:0.12, b:0.0025, vazaoMax:30,  Pmax:16, Tmax:180, kW:'300-800',   tipo:'Líquidos', porta:0.050, H:920, Wmm:320, h:null},
-    {nome:'TL6-B',A:0.08,  W:0.13, b:0.0025, vazaoMax:35,  Pmax:20, Tmax:180, kW:'400-900',   tipo:'Líquidos', porta:0.065, H:null, Wmm:null, h:null},
-    {nome:'M10-B',A:0.10,  W:0.15, b:0.0025, vazaoMax:50,  Pmax:20, Tmax:180, kW:'700-3000',  tipo:'Líquidos', porta:0.100, H:1084, Wmm:225, h:null},
-    {nome:'M10-M',A:0.10,  W:0.15, b:0.0030, vazaoMax:55,  Pmax:20, Tmax:180, kW:'700-3000',  tipo:'Líquidos', porta:0.100, H:1084, Wmm:225, h:null},
-    {nome:'M15-B',A:0.16,  W:0.18, b:0.0028, vazaoMax:80,  Pmax:25, Tmax:180, kW:'1000-4000', tipo:'Líquidos', porta:0.100, H:1815, Wmm:298, h:null},
-    {nome:'M15-M',A:0.16,  W:0.18, b:0.0032, vazaoMax:85,  Pmax:25, Tmax:180, kW:'1000-4000', tipo:'Líquidos', porta:0.100, H:1885, Wmm:298, h:null},
-    {nome:'M20-M',A:0.21,  W:0.20, b:0.0032, vazaoMax:100, Pmax:25, Tmax:180, kW:'1500-5000', tipo:'Líquidos', porta:0.150, H:2100, Wmm:800, h:2200},
-    {nome:'T20-B',A:0.20,  W:0.20, b:0.0030, vazaoMax:95,  Pmax:25, Tmax:180, kW:'1500-5000', tipo:'Líquidos', porta:0.150, H:2141, Wmm:780, h:280},
-    {nome:'TS20-M',A:0.70, W:0.20, b:0.0040, vazaoMax:677, Pmax:30, Tmax:210, kW:'2500-15000',tipo:'Alta vazão', porta:0.200, H:1405, Wmm:740, h:360},
-    {nome:'MA30', A:0.30,  W:0.24, b:0.0110, vazaoMax:120, Pmax:25, Tmax:200, kW:'2000-6000', tipo:'Fibrosos/viscosos', porta:0.200, H:1811, Wmm:561, h:null},
-    {nome:'WideGap 350',A:0.35,W:0.26,b:0.0110,vazaoMax:400,Pmax:22.9,Tmax:180,kW:'3000-9000',tipo:'Fibrosos/partículas', porta:0.350, H:null, Wmm:null, h:null},
-    /* Modelos Clip (higiênicos) - dados de datasheets oficiais Alfa Laval */
-    {nome:'Clip 6', A:0.02, W:0.10, b:0.0040, vazaoMax:15,  Pmax:16, Tmax:150, kW:'50-300',   tipo:'Higiênico (Clip)', porta:0.050, H:520, Wmm:370, h:null},
-    {nome:'Clip 8', A:0.04, W:0.12, b:0.0040, vazaoMax:30,  Pmax:16, Tmax:150, kW:'100-600',  tipo:'Higiênico (Clip)', porta:0.080, H:1095, Wmm:492, h:null},
-    {nome:'Clip 10',A:0.08, W:0.15, b:0.0040, vazaoMax:50,  Pmax:21, Tmax:150, kW:'200-1000', tipo:'Higiênico (Clip)', porta:0.100, H:850, Wmm:670, h:null}
+    {nome:'M3-M', A:0.032, W:0.10, b:0.0020, vazaoMax:14,  Pmax:16, Tmax:180, kW:'50-250',    tipo:'Líquidos', porta:0.050, H:480, Wmm:180, h:null, placasMax:300},
+    {nome:'M6-B', A:0.061, W:0.12, b:0.0022, vazaoMax:25,  Pmax:16, Tmax:180, kW:'300-800',   tipo:'Líquidos', porta:0.050, H:920, Wmm:320, h:null, placasMax:250},
+    {nome:'M6-M', A:0.061, W:0.12, b:0.0025, vazaoMax:30,  Pmax:16, Tmax:180, kW:'300-800',   tipo:'Líquidos', porta:0.050, H:920, Wmm:320, h:null, placasMax:250},
+    {nome:'TL6-B',A:0.08,  W:0.13, b:0.0025, vazaoMax:35,  Pmax:20, Tmax:180, kW:'400-900',   tipo:'Líquidos', porta:0.065, H:null, Wmm:null, h:null, placasMax:200},
+    {nome:'M10-B',A:0.10,  W:0.15, b:0.0025, vazaoMax:50,  Pmax:20, Tmax:180, kW:'700-3000',  tipo:'Líquidos', porta:0.100, H:1084, Wmm:225, h:null, placasMax:250},
+    {nome:'M10-M',A:0.10,  W:0.15, b:0.0030, vazaoMax:55,  Pmax:20, Tmax:180, kW:'700-3000',  tipo:'Líquidos', porta:0.100, H:1084, Wmm:225, h:null, placasMax:250},
+    {nome:'M15-B',A:0.16,  W:0.18, b:0.0028, vazaoMax:80,  Pmax:25, Tmax:180, kW:'1000-4000', tipo:'Líquidos', porta:0.100, H:1815, Wmm:298, h:null, placasMax:250},
+    {nome:'M15-M',A:0.16,  W:0.18, b:0.0032, vazaoMax:85,  Pmax:25, Tmax:180, kW:'1000-4000', tipo:'Líquidos', porta:0.100, H:1885, Wmm:298, h:null, placasMax:250},
+    {nome:'M20-M',A:0.21,  W:0.20, b:0.0032, vazaoMax:100, Pmax:25, Tmax:180, kW:'1500-5000', tipo:'Líquidos', porta:0.150, H:2100, Wmm:800, h:2200, placasMax:250},
+    {nome:'T20-B',A:0.20,  W:0.20, b:0.0030, vazaoMax:95,  Pmax:25, Tmax:180, kW:'1500-5000', tipo:'Líquidos', porta:0.150, H:2141, Wmm:780, h:280, placasMax:250},
+    {nome:'TS20-M',A:0.70, W:0.20, b:0.0040, vazaoMax:677, Pmax:30, Tmax:210, kW:'2500-15000',tipo:'Alta vazão', porta:0.200, H:1405, Wmm:740, h:360, placasMax:400},
+    {nome:'MA30', A:0.30,  W:0.24, b:0.0110, vazaoMax:120, Pmax:25, Tmax:200, kW:'2000-6000', tipo:'Fibrosos/viscosos', porta:0.200, H:1811, Wmm:561, h:null, placasMax:200},
+    {nome:'WideGap 350',A:0.35,W:0.26,b:0.0110,vazaoMax:400,Pmax:22.9,Tmax:180,kW:'3000-9000',tipo:'Fibrosos/partículas', porta:0.350, H:null, Wmm:null, h:null, placasMax:150},
+    {nome:'Clip 6', A:0.02, W:0.10, b:0.0040, vazaoMax:15,  Pmax:16, Tmax:150, kW:'50-300',   tipo:'Higiênico (Clip)', porta:0.050, H:520, Wmm:370, h:null, placasMax:120},
+    {nome:'Clip 8', A:0.04, W:0.12, b:0.0040, vazaoMax:30,  Pmax:16, Tmax:150, kW:'100-600',  tipo:'Higiênico (Clip)', porta:0.080, H:1095, Wmm:492, h:null, placasMax:141},
+    {nome:'Clip 10',A:0.08, W:0.15, b:0.0040, vazaoMax:50,  Pmax:21, Tmax:150, kW:'200-1000', tipo:'Higiênico (Clip)', porta:0.100, H:850, Wmm:670, h:null, placasMax:150}
   ],
   semisoldadas: [
-    {nome:'M10-BW', A:0.10, W:0.15, b:0.0025, vazaoMax:50,  Pmax:25, Tmax:180, kW:'175-875',  tipo:'Amônia/CO₂', porta:0.100, H:null, Wmm:null, h:null},
-    {nome:'T20-BW', A:0.20, W:0.20, b:0.0030, vazaoMax:95,  Pmax:25, Tmax:180, kW:'350-1500', tipo:'Amônia/CO₂', porta:0.150, H:null, Wmm:null, h:null},
-    {nome:'M20-MW', A:0.21, W:0.20, b:0.0032, vazaoMax:100, Pmax:25, Tmax:180, kW:'400-1600', tipo:'Amônia/CO₂', porta:0.150, H:null, Wmm:null, h:null},
-    {nome:'A15-BW', A:0.15, W:0.17, b:0.0028, vazaoMax:70,  Pmax:30, Tmax:200, kW:'300-1200', tipo:'Alta pressão', porta:0.100, H:null, Wmm:null, h:null},
-    {nome:'MK15-BW',A:0.15,W:0.18, b:0.0028, vazaoMax:80,  Pmax:25, Tmax:180, kW:'350-1575', tipo:'Evap/cond', porta:0.150, H:null, Wmm:null, h:null},
-    {nome:'AlfaWap', A:0.20, W:0.20, b:0.0030, vazaoMax:90,  Pmax:25, Tmax:180, kW:'400-1600', tipo:'Evaporador', porta:0.150, H:null, Wmm:null, h:null},
-    {nome:'AlfaCond',A:0.20, W:0.20, b:0.0030, vazaoMax:90,  Pmax:25, Tmax:180, kW:'400-1600', tipo:'Condensador', porta:0.150, H:null, Wmm:null, h:null}
+    {nome:'M10-BW', A:0.10, W:0.15, b:0.0025, vazaoMax:50,  Pmax:25, Tmax:180, kW:'175-875',  tipo:'Amônia/CO₂', porta:0.100, H:null, Wmm:null, h:null, placasMax:250},
+    {nome:'T20-BW', A:0.20, W:0.20, b:0.0030, vazaoMax:95,  Pmax:25, Tmax:180, kW:'350-1500', tipo:'Amônia/CO₂', porta:0.150, H:null, Wmm:null, h:null, placasMax:250},
+    {nome:'M20-MW', A:0.21, W:0.20, b:0.0032, vazaoMax:100, Pmax:25, Tmax:180, kW:'400-1600', tipo:'Amônia/CO₂', porta:0.150, H:null, Wmm:null, h:null, placasMax:250},
+    {nome:'A15-BW', A:0.15, W:0.17, b:0.0028, vazaoMax:70,  Pmax:30, Tmax:200, kW:'300-1200', tipo:'Alta pressão', porta:0.100, H:null, Wmm:null, h:null, placasMax:250},
+    {nome:'MK15-BW',A:0.15,W:0.18, b:0.0028, vazaoMax:80,  Pmax:25, Tmax:180, kW:'350-1575', tipo:'Evap/cond', porta:0.150, H:null, Wmm:null, h:null, placasMax:250},
+    {nome:'AlfaWap', A:0.20, W:0.20, b:0.0030, vazaoMax:90,  Pmax:25, Tmax:180, kW:'400-1600', tipo:'Evaporador', porta:0.150, H:null, Wmm:null, h:null, placasMax:250},
+    {nome:'AlfaCond',A:0.20, W:0.20, b:0.0030, vazaoMax:90,  Pmax:25, Tmax:180, kW:'400-1600', tipo:'Condensador', porta:0.150, H:null, Wmm:null, h:null, placasMax:250}
   ]
 };
 
@@ -391,14 +399,14 @@ function aplicarTempRefrigerante() {
 }
 
 /* ============================================================
-   SELEÇÃO CONJUNTA DE MATERIAIS (v30)
+   SELEÇÃO CONJUNTA DE MATERIAIS
    Os dois fluidos passam pela MESMA placa (frente/trás).
    Material ÚNICO escolhido pelo fluido MAIS EXIGENTE.
    ============================================================ */
 function nivelPlaca(nomeFluido) {
   var n = nomeFluido;
   if (n.indexOf('Salmoura') !== -1) return 5;
-  if (n.indexOf('Óleo térmico') !== -1 || n.indexOf('Xarope') !== -1) return 4;
+  if (n.indexOf('Óleo térmico') !== -1 || n.indexOf('Xarope') !== -1 || n.indexOf('Açúcar') !== -1) return 4;
   if (n.indexOf('Óleo vegetal') !== -1 || n.indexOf('Suco') !== -1 || n.indexOf('Leite') !== -1 || n.indexOf('Cerveja') !== -1) return 3;
   if (n.indexOf('Água') !== -1 || n.indexOf('Glicol') !== -1 || n.indexOf('Vapor') !== -1) return 2;
   return 1;
@@ -415,7 +423,7 @@ function nivelGaxeta(nomeFluido, condensante) {
   var n = nomeFluido;
   if (condensante || n.indexOf('Vapor') !== -1) return 3;
   if (n.indexOf('Amônia') !== -1 || n.indexOf('R134a') !== -1 || n.indexOf('R410A') !== -1 || n.indexOf('R22') !== -1) return 3;
-  if (n.indexOf('Óleo') !== -1 || n.indexOf('Xarope') !== -1 || n.indexOf('Salmoura') !== -1) return 2;
+  if (n.indexOf('Óleo') !== -1 || n.indexOf('Xarope') !== -1 || n.indexOf('Açúcar') !== -1 || n.indexOf('Salmoura') !== -1) return 2;
   return 1;
 }
 function selecionarGaxetaConjunta(fP, fS, Tmax) {
@@ -425,7 +433,7 @@ function selecionarGaxetaConjunta(fP, fS, Tmax) {
     return n.indexOf('Amônia') !== -1 || n.indexOf('R134a') !== -1 || n.indexOf('R410A') !== -1 || n.indexOf('R22') !== -1;
   });
   if (temRefrig) return {mat:'HNBR', temp:'-30 a 150°C', obs:'Refrigerantes e amônia'};
-  if (fS.condensing || fP.nome.indexOf('Vapor') !== -1) return {mat:'EPDM', temp:'-40 a 150°C', obs:'Vapor e água quente'};
+  if (fS.condensing || fP.nome.indexOf('Vapor') !== -1) return {mat:'EPDM', temp:'-40 a 150°C', obs:'Vapor e água quente — recomendado para alimentícios'};
   if (nivel >= 2) return {mat:'NBR (Nitrile)', temp:'-10 a 110°C', obs:'Resistente a óleos e salmoura'};
   return {mat:'EPDM', temp:'-40 a 150°C', obs:'Uso geral'};
 }
@@ -464,24 +472,39 @@ var TAB_GLICOL = {
   '15':[1017,4050,0.545,0.0019],'20':[1026,3960,0.525,0.0027],
   '30':[1040,3780,0.485,0.0045],'40':[1055,3600,0.445,0.0080]
 };
+/* Viscosidade de soluções de açúcar por °Brix (Pa·s a 20°C) — revisada */
+var TAB_BRIX = [
+  [0,0.0010],[5,0.0013],[10,0.0018],[15,0.0024],[20,0.0033],
+  [30,0.0065],[40,0.0130],[50,0.0280],[60,0.0750],[65,0.1500],[70,0.3000]
+];
+function muAçucar(tt, brix) {
+  var b = (brix === undefined || isNaN(brix)) ? 50 : brix;
+  var mu20 = interp(TAB_BRIX, Math.max(0, Math.min(70, b)));
+  return mu20 * Math.exp(-0.020 * (tt - 20));
+}
+function rhoAçucar(brix) {
+  var b = (brix === undefined || isNaN(brix)) ? 50 : brix;
+  return 998 + 3.8 * b;
+}
 var INC_SUG = {
   agua:0.0001, vapor:0.0001, amonia_l:0.0001, amonia_v:0.0001,
   glicol15:0.0002, glicol20:0.0002, glicol30:0.0002, glicol40:0.0002,
   r134a:0.0001, r410a:0.0001, r22:0.0001, oleo:0.0002, ar:0.0001,
   leite:0.0002, cerveja:0.0002, suco:0.0003, salmoura:0.0002,
-  xarope:0.0003, oleoveg:0.0002, co2:0.0001
+  xarope:0.0002, oleoveg:0.0002, co2:0.0001
 };
 
-/* ---------- PROPRIEDADES DOS FLUIDOS (viscosidade aprimorada) ---------- */
-function props(f, T) {
+/* ---------- PROPRIEDADES DOS FLUIDOS (revisadas) ---------- */
+function props(f, T, brix) {
   var t = T || 40;
-  function muAgua(tt) { return 0.001779 * Math.exp(-0.0337 * (tt - 20)); }
   switch (f) {
     case 'agua':
       return {rho: interp(TAB_AGUA.map(function(r){return [r[0],r[1]];}),t),
               cp: interp(TAB_AGUA.map(function(r){return [r[0],r[3]];}),t),
               k: interp(TAB_AGUA.map(function(r){return [r[0],r[4]];}),t),
-              mu: muAgua(t), muFn: muAgua, nome:'Água industrial'};
+              mu: interp(TAB_AGUA.map(function(r){return [r[0],r[2]];}),t),
+              muFn: function(tt){return interp(TAB_AGUA.map(function(r){return [r[0],r[2]];}),tt);},
+              nome:'Água industrial'};
     case 'vapor': {
       var rho = interp(TAB_VAPOR.map(function(r){return [r[0],r[1]];}), t);
       var hfg = interp(TAB_VAPOR.map(function(r){return [r[0],r[4]];}), t);
@@ -497,20 +520,20 @@ function props(f, T) {
       return {rho:3.2*(303)/(t+273), cp:2150, k:0.024, mu:muAmoniaV(t), muFn:muAmoniaV, nome:'Amônia (vapor)'};
     }
     case 'glicol15': {
-      function muG15(tt) { return 0.0019 * Math.exp(-0.024 * (tt - 20)); }
-      return {rho:TAB_GLICOL['15'][0], cp:TAB_GLICOL['15'][1], k:TAB_GLICOL['15'][2], mu:muG15(t), muFn:muG15, nome:'Glicol 15%'};
+      function muG(tt) { return TAB_GLICOL['15'][3] * Math.exp(-0.024 * (tt - 20)); }
+      return {rho:TAB_GLICOL['15'][0], cp:TAB_GLICOL['15'][1], k:TAB_GLICOL['15'][2], mu:muG(t), muFn:muG, nome:'Glicol 15%'};
     }
     case 'glicol20': {
-      function muG20(tt) { return 0.0027 * Math.exp(-0.026 * (tt - 20)); }
-      return {rho:TAB_GLICOL['20'][0], cp:TAB_GLICOL['20'][1], k:TAB_GLICOL['20'][2], mu:muG20(t), muFn:muG20, nome:'Glicol 20%'};
+      function muG(tt) { return TAB_GLICOL['20'][3] * Math.exp(-0.026 * (tt - 20)); }
+      return {rho:TAB_GLICOL['20'][0], cp:TAB_GLICOL['20'][1], k:TAB_GLICOL['20'][2], mu:muG(t), muFn:muG, nome:'Glicol 20%'};
     }
     case 'glicol30': {
-      function muG30(tt) { return 0.0045 * Math.exp(-0.028 * (tt - 20)); }
-      return {rho:TAB_GLICOL['30'][0], cp:TAB_GLICOL['30'][1], k:TAB_GLICOL['30'][2], mu:muG30(t), muFn:muG30, nome:'Glicol 30%'};
+      function muG(tt) { return TAB_GLICOL['30'][3] * Math.exp(-0.028 * (tt - 20)); }
+      return {rho:TAB_GLICOL['30'][0], cp:TAB_GLICOL['30'][1], k:TAB_GLICOL['30'][2], mu:muG(t), muFn:muG, nome:'Glicol 30%'};
     }
     case 'glicol40': {
-      function muG40(tt) { return 0.0080 * Math.exp(-0.030 * (tt - 20)); }
-      return {rho:TAB_GLICOL['40'][0], cp:TAB_GLICOL['40'][1], k:TAB_GLICOL['40'][2], mu:muG40(t), muFn:muG40, nome:'Glicol 40%'};
+      function muG(tt) { return TAB_GLICOL['40'][3] * Math.exp(-0.030 * (tt - 20)); }
+      return {rho:TAB_GLICOL['40'][0], cp:TAB_GLICOL['40'][1], k:TAB_GLICOL['40'][2], mu:muG(t), muFn:muG, nome:'Glicol 40%'};
     }
     case 'oleo': {
       function muOleo(tt) { return 0.06 * Math.exp(-0.027 * (tt - 20)); }
@@ -537,8 +560,10 @@ function props(f, T) {
       return {rho:920, cp:2000, k:0.17, mu:muOleoveg(t), muFn:muOleoveg, nome:'Óleo vegetal'};
     }
     case 'xarope': {
-      function muXarope(tt) { return 0.10 * Math.exp(-0.021 * (tt - 20)); }
-      return {rho:1300, cp:2900, k:0.40, mu:muXarope(t), muFn:muXarope, nome:'Xarope de açúcar'};
+      var b = (brix === undefined || isNaN(brix)) ? 50 : brix;
+      var nomeX = b <= 15 ? 'Solução de açúcar ' + b + '°Brix (diluída)' : 'Xarope de açúcar ' + b + '°Brix';
+      function muX(tt) { return muAçucar(tt, b); }
+      return {rho:rhoAçucar(b), cp: 4186 - 21.5*b, k: 0.60 - 0.003*b, mu:muX(t), muFn:muX, nome:nomeX};
     }
     case 'r134a': return {rho:1290, cp:1340, k:0.095, mu:3.3e-4, muFn:function(){return 3.3e-4;}, nome:'R134a (líquido)'};
     case 'r410a': return {rho:1100, cp:1600, k:0.090, mu:1.4e-4, muFn:function(){return 1.4e-4;}, nome:'R410A (líquido)'};
@@ -559,23 +584,23 @@ function props(f, T) {
 function preencherAutomatico() {
   var fP = document.getElementById('fluidoP').value;
   var fS = document.getElementById('fluidoS').value;
+  document.getElementById('brixRow').style.display = (fP === 'xarope') ? 'block' : 'none';
   if (INC_SUG[fP]) document.getElementById('incP').value = INC_SUG[fP];
   if (INC_SUG[fS]) document.getElementById('incS').value = INC_SUG[fS];
   var dpProduto = 80, dpServico = 80;
-  if (['oleo','oleoveg','xarope','salmoura','suco','leite','cerveja'].indexOf(fP) !== -1) dpProduto = 60;
-  if (['oleo','xarope','glicol40','glicol30'].indexOf(fS) !== -1) dpServico = 60;
+  if (['oleo','oleoveg','salmoura','suco','leite','cerveja'].indexOf(fP) !== -1) dpProduto = 60;
+  if (['oleo','glicol40','glicol30'].indexOf(fS) !== -1) dpServico = 60;
   if (['ar','co2','amonia_v'].indexOf(fP) !== -1) dpProduto = 100;
   if (['ar','amonia_v'].indexOf(fS) !== -1) dpServico = 100;
   document.getElementById('dpP').value = dpProduto;
   document.getElementById('dpS').value = dpServico;
   var cfg = document.getElementById('config');
-  if (['oleo','oleoveg','xarope','salmoura'].indexOf(fP) !== -1) cfg.value = 'L';
+  if (['oleo','oleoveg','salmoura'].indexOf(fP) !== -1) cfg.value = 'L';
   else if (['ar','co2','amonia_v'].indexOf(fP) !== -1) cfg.value = 'H';
   else cfg.value = 'auto';
   var vazao = parseFloat(document.getElementById('vazaoP').value) || 50;
   var passes = document.getElementById('passes');
   if (vazao > 200) passes.value = '1x1';
-  else if (vazao < 30) passes.value = '2x2';
   else passes.value = 'auto';
 }
 
@@ -614,7 +639,8 @@ function estimarU(fP, fS, vaporCond) {
     if (nomeP.indexOf('Suco') !== -1) return 3500;
     if (nomeP.indexOf('Óleo') !== -1) return 800;
     if (nomeP.indexOf('Salmoura') !== -1) return 3000;
-    if (nomeP.indexOf('Xarope') !== -1) return 2500;
+    if (nomeP.indexOf('diluída') !== -1) return 3500;
+    if (nomeP.indexOf('Xarope') !== -1 || nomeP.indexOf('Açúcar') !== -1) return 2000;
     return 3000;
   }
   if (nomeP.indexOf('Água') !== -1 && nomeS.indexOf('Água') !== -1) return 6500;
@@ -627,6 +653,7 @@ function estimarU(fP, fS, vaporCond) {
   if (nomeP.indexOf('Cerveja') !== -1 && nomeS.indexOf('Água') !== -1) return 3500;
   if (nomeP.indexOf('Suco') !== -1 && nomeS.indexOf('Água') !== -1) return 3000;
   if (nomeP.indexOf('Salmoura') !== -1 && nomeS.indexOf('Água') !== -1) return 3000;
+  if (nomeP.indexOf('diluída') !== -1 && nomeS.indexOf('Água') !== -1) return 3500;
   if (nomeP.indexOf('Óleo') !== -1) return 800;
   if (nomeP.indexOf('Salmoura') !== -1 && nomeS.indexOf('Glicol') !== -1) return 2500;
   if (nomeP.indexOf('Glicol') !== -1) return 2500;
@@ -670,7 +697,18 @@ function hCondensacao(tSat,tMedia) { var dT=Math.max(2,tSat-tMedia); return Math
 function fatorCorrecao(P,R) { if(P<=0||R<=0||Math.abs(R-1)<1e-6)return 1; if(P>=1||P*R>=1)return 0.8; var num=Math.sqrt(R*R+1)*Math.log((1-P)/(1-P*R)); var den=(R-1)*Math.log((2-P*(R+1-Math.sqrt(R*R+1)))/(2-P*(R+1+Math.sqrt(R*R+1)))); if(Math.abs(den)<1e-6)return 1; return Math.max(0.5,Math.min(1,num/den)); }
 function fatorMultiPass(P,R,pP,pS) { var parP=(pP%2)===0,parS=(pS%2)===0; if(parP===parS)return 1; return fatorCorrecao(P,R); }
 var CONFIGS = {'H':{nome:'Só H',ap:60,as:60},'L':{nome:'Só L',ap:30,as:30},'H-L':{nome:'Mista H/L',ap:60,as:30},'L-H':{nome:'Mista L/H',ap:30,as:60}};
-var LISTA_PASSES = ['1x1','2x1','1x2','2x2','3x3'];
+var LISTA_PASSES = [
+  {pP:1,pS:1,label:'1x1'},
+  {pP:1,pS:2,label:'1x2'},
+  {pP:2,pS:1,label:'2x1'},
+  {pP:2,pS:2,label:'2x2'},
+  {pP:3,pS:1,label:'3x1'},
+  {pP:1,pS:3,label:'1x3'},
+  {pP:3,pS:3,label:'3x3'}
+];
+function nomePassesExt(pP, pS) {
+  return pP + ' passe' + (pP > 1 ? 's' : '') + ' (produto) × ' + pS + ' passe' + (pS > 1 ? 's' : '') + ' (serviço)';
+}
 
 /* ---------- DIMENSIONAMENTO POR MODELO ---------- */
 function dimensionarModelo(mod,sec,d,fP,fS,Q,lmtd,cfgKey,pP,pS) {
@@ -679,7 +717,7 @@ function dimensionarModelo(mod,sec,d,fP,fS,Q,lmtd,cfgKey,pP,pS) {
   var vaporCond=!!fS.condensing,TmP=(sec.tinP+sec.toutP)/2,TmS=sec.tinS;
   var Uest=estimarU(fP,fS,vaporCond);
   var Nc=Math.max(3,Math.ceil((Q/(Uest*lmtd))*(1+d.margem/100)/(2*mod.A))),res=null;
-  for(var iter=0;iter<120;iter++){
+  for(var iter=0;iter<150;iter++){
     var A_inst=2*Nc*mod.A,canaisP=Math.max(1,Math.floor(Nc/pP)),canaisS=Math.max(1,Math.floor(Nc/pS));
     var GP=d.mP/(canaisP*mod.b*mod.W),GS=vaporCond?0:d.mS/(canaisS*mod.b*mod.W);
     var ladoP=calcLado(GP,DhP,fP,ap,TmP,TmS,null),hS;
@@ -707,8 +745,11 @@ function dimensionarModelo(mod,sec,d,fP,fS,Q,lmtd,cfgKey,pP,pS) {
   res.modelo=mod.nome;res.areaPlaca=mod.A;res.vazaoMax=mod.vazaoMax;res.Pmax=mod.Pmax;res.Tmax=mod.Tmax;res.kW=mod.kW;res.tipo=mod.tipo;
   res.porta=mod.porta;res.conexao=nomeConexao(mod.porta);
   res.config=cfg.nome;res.angP=ap;res.angS=as;res.pP=pP;res.pS=pS;res.nomePasses=pP+'x'+pS;
+  res.nomePassesExt=nomePassesExt(pP,pS);
   res.cfgKey=cfgKey;res.modRef=mod;res.sec=sec;
   res.dPPok=res.dPP<=d.dpP;res.dPSok=res.dPS<=d.dpS;
+  /* TRAVA DE CAPACIDADE FÍSICA: placas não podem exceder a capacidade do modelo */
+  res.capacidadeOk = res.Nplacas <= (mod.placasMax || 250);
   var gasP=ehGas(fP.rho),gasS=ehGas(fS.rho);
   var vp=verificarVelocidadePorta(d.mP,fP.rho,mod.porta,gasP);
   var vs=verificarVelocidadePorta(d.mS,fS.rho,mod.porta,gasS);
@@ -716,7 +757,7 @@ function dimensionarModelo(mod,sec,d,fP,fS,Q,lmtd,cfgKey,pP,pS) {
   res.vPortaOkP=vp.ok;res.vPortaOkS=vs.ok;
   var capOk;
   if(vaporCond){capOk=(d.mS*3600<=5000);}else if(d.tipo==='semisoldadas'){capOk=true;}else{capOk=(d.vazaoS<=mod.vazaoMax*1.5);}
-  res.atende=res.dPPok&&res.dPSok&&capOk&&res.vPortaOkP&&res.vPortaOkS;
+  res.atende=res.dPPok&&res.dPSok&&capOk&&res.vPortaOkP&&res.vPortaOkS&&res.capacidadeOk;
   return res;
 }
 
@@ -729,7 +770,7 @@ function dimensionarSeccao(sec,d,modelos) {
   if (!aquecendo && sec.tinS >= sec.toutP) {
     throw new Error('O produto está sendo RESFRIADO (saída menor que entrada), então o serviço deve entrar MAIS FRIO que a saída do produto (' + sec.toutP.toFixed(1) + ' °C). Ajuste a temperatura de entrada do serviço. Ex.: use refrigerante, glicol frio ou água gelada.');
   }
-  var fP=props(d.fluidoP,(sec.tinP+sec.toutP)/2),fS=props(sec.fluidoS,sec.tinS);
+  var fP=props(d.fluidoP,(sec.tinP+sec.toutP)/2,d.brix),fS=props(sec.fluidoS,sec.tinS);
   d.mP=(d.vazaoP/3600)*fP.rho;
   var Q=d.mP*fP.cp*(sec.toutP-sec.tinP),toutS,mS,vazaoS;
   if(fS.condensing){mS=Q/(fS.hfg*1000);vazaoS=mS/fS.rho*3600;toutS=sec.tinS;}
@@ -749,16 +790,16 @@ function dimensionarSeccao(sec,d,modelos) {
   var lmtd=(dT1a-dT2a)/Math.log(dT1a/dT2a);
   var P=(sec.toutP-sec.tinP)/(sec.tinS-sec.tinP),R=(sec.tinS-toutS)/(sec.toutP-sec.tinP);
   var cfgList=d.config==='auto'?Object.keys(CONFIGS):(d.config==='mista'?['H-L','L-H']:[d.config]);
-  var passList=d.passes==='auto'?LISTA_PASSES:[d.passes];
+  var passList=d.passes==='auto'?LISTA_PASSES:LISTA_PASSES.filter(function(x){return x.label===d.passes;});
   var resultados=[];
   for(var i=0;i<modelos.length;i++){
     var mod=modelos[i];
     for(var j=0;j<cfgList.length;j++){
       var cfgKey=cfgList[j];
       for(var k=0;k<passList.length;k++){
-        var ps=passList[k],partes=ps.split('x'),pP=parseInt(partes[0],10),pS=parseInt(partes[1],10);
-        var F=fatorMultiPass(Math.abs(P),Math.abs(R),pP,pS),lmtdF=lmtd*F;
-        var r=dimensionarModelo(mod,sec,d,fP,fS,Q,lmtdF,cfgKey,pP,pS);
+        var pp=passList[k];
+        var F=fatorMultiPass(Math.abs(P),Math.abs(R),pp.pP,pp.pS),lmtdF=lmtd*F;
+        var r=dimensionarModelo(mod,sec,d,fP,fS,Q,lmtdF,cfgKey,pp.pP,pp.pS);
         r.F=F;r.lmtdF=lmtdF;r.Q=Q;r.toutS=toutS;r.vazaoS=vazaoS;r.fP=fP;r.fS=fS;
         r.eficiencia=calcEficiencia(Q,d.mP,fP.cp,mS,fS.cp,sec.tinS,sec.tinP,!!fS.condensing);
         resultados.push(r);
@@ -781,7 +822,7 @@ function selecionarGrupo(){var grupo=document.getElementById('grupoModelos').val
 function adicionarSecao(){if(secoesExtras>=2){alert('Máximo de 3 seções.');return;}secoesExtras++;var cont=document.getElementById('secoesAdicionais');var div=document.createElement('div');div.className='secao-bloco';div.id='secaoExtra'+secoesExtras;div.innerHTML='<div class="secao-titulo">🔹 Seção '+(secoesExtras+1)+' (etapa adicional)</div><div class="grid-2"><div class="sub-card produto"><div class="sub-card-head"><span class="side-icon produto-icon">📦</span><h4>Produto — Seção '+(secoesExtras+1)+'</h4></div><label>Temperatura de entrada (°C)<input type="number" id="sec'+secoesExtras+'TinP" value="45"></label><label>Temperatura de saída (°C)<input type="number" id="sec'+secoesExtras+'ToutP" value="70"></label></div><div class="sub-card servico"><div class="sub-card-head"><span class="side-icon servico-icon">⚙️</span><h4>Serviço — Seção '+(secoesExtras+1)+'</h4></div><label>Fluido de serviço<select id="sec'+secoesExtras+'FluidoS"><option value="agua">Água industrial</option><option value="vapor">Vapor saturado</option><option value="glicol20">Glicol 20%</option><option value="glicol30">Glicol 30%</option><option value="oleo">Óleo térmico</option><option value="r134a">R134a</option></select></label><label>Temperatura de entrada (°C)<input type="number" id="sec'+secoesExtras+'TinS" value="90"></label></div></div>';cont.appendChild(div);}
 function removerSecao(){if(secoesExtras<=0){alert('Nenhuma seção adicional.');return;}var div=document.getElementById('secaoExtra'+secoesExtras);if(div)div.remove();secoesExtras--;}
 
-/* ---------- CURVA DE DESEMPENHO (para a tabela) ---------- */
+/* ---------- CURVA DE DESEMPENHO ---------- */
 function gerarCurvaDesempenho(mod, sec, d, fP, fS, cfgKey, pP, pS, lmtd, toutS) {
   var pontos=[],fatores=[0.6,0.8,1.0,1.2,1.4],i,fator,vazaoP,mP2,Qp,mS2,vazaoS2,d2,r;
   for(i=0;i<fatores.length;i++){
@@ -791,10 +832,10 @@ function gerarCurvaDesempenho(mod, sec, d, fP, fS, cfgKey, pP, pS, lmtd, toutS) 
     Qp=mP2*fP.cp*(sec.toutP-sec.tinP);
     if(fS.condensing){mS2=Qp/(fS.hfg*1000);vazaoS2=mS2/fS.rho*3600;}
     else{mS2=Qp/(fS.cp*Math.abs(sec.tinS-toutS));vazaoS2=mS2/fS.rho*3600;}
-    d2={mP:mP2,mS:mS2,vazaoS:vazaoS2,margem:d.margem,incP:d.incP,incS:d.incS,dpP:d.dpP,dpS:d.dpS,tipo:d.tipo};
+    d2={mP:mP2,mS:mS2,vazaoS:vazaoS2,margem:d.margem,incP:d.incP,incS:d.incS,dpP:d.dpP,dpS:d.dpS,tipo:d.tipo,brix:d.brix};
     r=dimensionarModelo(mod,sec,d2,fP,fS,Qp,lmtd,cfgKey,pP,pS);
     var efic=calcEficiencia(Qp,mP2,fP.cp,mS2,fS.cp,sec.tinS,sec.tinP,!!fS.condensing)*100;
-    pontos.push({fator:fator,vazao:vazaoP,Q:Qp/1000,U:r.U,dPP:r.dPP,dPS:r.dPS,placas:r.Nplacas,eficiencia:efic,vPortaP:r.vPortaP,vPortaS:r.vPortaS});
+    pontos.push({fator:fator,vazao:vazaoP,Q:Qp/1000,U:r.U,dPP:r.dPP,dPS:r.dPS,placas:r.Nplacas,eficiencia:efic,vPortaP:r.vPortaP,vPortaS:r.vPortaS,capOk:r.capacidadeOk});
   }
   return pontos;
 }
@@ -810,22 +851,27 @@ function exibirResultado(secoes, d){
   var gaxeta = selecionarGaxetaConjunta(secoes[0].fP, secoes[0].fS, Tmax);
   var statusPortaP=m0.vPortaOkP?'<span class="ok">✓</span>':'<span class="aviso">✗</span>';
   var statusPortaS=m0.vPortaOkS?'<span class="ok">✓</span>':'<span class="aviso">✗</span>';
+  var statusCap=m0.capacidadeOk?'<span class="ok">✓</span>':'<span class="aviso">✗ EXCEDE CAPACIDADE</span>';
   var resumoEquip='<div class="resumo-equip"><h4>🔧 Equipamento selecionado</h4><div class="grid-4">'+
     '<div><strong>Modelo</strong><br>'+m0.modelo+'</div>'+
-    '<div><strong>Placas</strong><br>'+m0.Nplacas+'</div>'+
+    '<div><strong>Placas</strong><br>'+m0.Nplacas+' ('+statusCap+')</div>'+
     '<div><strong>Área</strong><br>'+m0.A_inst.toFixed(1)+' m²</div>'+
-    '<div><strong>Configuração</strong><br>'+m0.config+' · '+m0.nomePasses+'</div>'+
+    '<div><strong>Passes</strong><br>'+m0.nomePassesExt+'</div>'+
+    '<div><strong>Configuração</strong><br>'+m0.config+' ('+m0.angP+'°/'+m0.angS+'°)</div>'+
     '<div><strong>Liga da placa</strong><br>'+placa.mat+'</div>'+
     '<div><strong>Gaxeta</strong><br>'+gaxeta.mat+'</div>'+
     '<div><strong>Bocal (conexão)</strong><br>'+m0.conexao+'</div>'+
-    '<div><strong>Velocidade no bocal</strong><br>Prod '+m0.vPortaP.toFixed(1)+' m/s '+statusPortaP+' · Serv '+m0.vPortaS.toFixed(1)+' m/s '+statusPortaS+'</div>'+
   '</div></div>';
   var html=resumoEquip;
   html+='<div class="resultado-resumo"><h4>📋 Projeto: '+proj+' · Cliente: '+cliente+'</h4>'+
     '<p><strong>Calor total trocado:</strong> '+fmt(totalQ/1000)+' kW ('+secoes.length+' seção/seções)</p>'+
     '<p><strong>Área total instalada:</strong> '+totalA.toFixed(1)+' m² · <strong>Placas totais:</strong> '+totalPlacas+'</p>'+
+    '<p><strong>Arranjo de passes:</strong> '+m0.nomePassesExt+'</p>'+
     '<p><strong>Bocal do modelo:</strong> '+m0.conexao+' — mesmo diâmetro para produto e serviço (padrão do fabricante)</p>'+
     '<p><strong>Material da placa (único):</strong> '+placa.mat+' · <strong>Gaxeta (única):</strong> '+gaxeta.mat+' — selecionados pelo fluido mais exigente, pois ambos passam pela mesma placa</p></div>';
+  if(!m0.capacidadeOk){
+    html+='<div style="background:#fef2f2;border:2px solid var(--vermelho);border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:var(--vermelho)"><strong>⚠️ RESULTADO REJEITADO:</strong> o modelo '+m0.modelo+' exige '+m0.Nplacas+' placas, mas sua capacidade máxima é '+m0.modRef.placasMax+'. Selecione um modelo maior ou revise os dados.</div>';
+  }
   secoes.forEach(function(r,idx){
     var m=r.melhor,servT=document.getElementById(idx===0?'tinS':'sec'+idx+'TinS').value;
     var Tmax2=Math.max(parseFloat(servT)||0,parseFloat(r.toutS)||0,parseFloat(document.getElementById(idx===0?'toutP':'sec'+idx+'ToutP').value)||0);
@@ -833,28 +879,35 @@ function exibirResultado(secoes, d){
     var gaxeta2 = selecionarGaxetaConjunta(r.fP, r.fS, Tmax2);
     var efic=(m.eficiencia*100).toFixed(1);
     var statusEfic=parseFloat(efic)>=85?'<span class="ok">✓</span>':'<span class="aviso">⚠</span>';
-    html+='<div class="melhor-modelo"><h4>🏆 Seção '+(idx+1)+' — Melhor: '+m.modelo+' · '+m.config+' ('+m.angP+'°/'+m.angS+'°) · '+m.nomePasses+' passes</h4>'+
+    html+='<div class="melhor-modelo"><h4>🏆 Seção '+(idx+1)+' — Melhor: '+m.modelo+' · '+m.config+' ('+m.angP+'°/'+m.angS+'°) · '+m.nomePassesExt+'</h4>'+
       '<p><strong>Q seção:</strong> '+fmt(r.Q/1000)+' kW | <strong>LMTD:</strong> '+m.lmtdF.toFixed(1)+' °C | <strong>F:</strong> '+m.F.toFixed(2)+' | <strong>Eficiência ε:</strong> '+efic+'% '+statusEfic+'</p>'+
-      '<p><strong>Placas:</strong> '+m.Nplacas+' | <strong>Área:</strong> '+m.A_inst.toFixed(1)+' m² | <strong>U:</strong> '+fmt(m.U)+' W/m²·K</p>'+
+      '<p><strong>Placas:</strong> '+m.Nplacas+' (máx '+m.modRef.placasMax+') | <strong>Área:</strong> '+m.A_inst.toFixed(1)+' m² | <strong>U:</strong> '+fmt(m.U)+' W/m²·K</p>'+
       '<p><strong>Turbulência:</strong> '+m.turbP+' (Re '+fmt(m.ReP)+') / '+m.turbS+(m.ReS?' (Re '+fmt(m.ReS)+')':'')+' | <strong>ΔP:</strong> '+m.dPP.toFixed(1)+' / '+m.dPS.toFixed(1)+' kPa</p>'+
       '<p><strong>Bocal:</strong> '+m.conexao+' | <strong>Velocidade porta:</strong> Prod '+m.vPortaP.toFixed(1)+' m/s '+(m.vPortaOkP?'✓':'✗')+' · Serv '+m.vPortaS.toFixed(1)+' m/s '+(m.vPortaOkS?'✓':'✗')+'</p>'+
       '<p><strong>Liga da placa:</strong> '+placa2.mat+' | <strong>Gaxeta:</strong> '+gaxeta2.mat+'</p>'+
       '<p><strong>Serviço:</strong> '+r.fS.nome+' · entrada '+servT+'°C · saída '+r.toutS.toFixed(1)+'°C · vazão '+r.vazaoS.toFixed(1)+' m³/h</p></div>';
   });
-  html+='<h4 style="margin:16px 0 10px;font-size:15px;color:#0a1f3c">📊 Parâmetros de projeto (por seção)</h4>'+
-    '<table class="tabela-comp"><thead><tr><th>Seção</th><th>Modelo</th><th>Config.</th><th>Passes</th><th>Placas</th><th>Área (m²)</th><th>U (W/m²·K)</th><th>ε (%)</th><th>ΔP P (kPa)</th><th>ΔP S (kPa)</th><th>Status</th></tr></thead><tbody>';
-  secoes.forEach(function(r,idx){r.resultados.slice(0,8).forEach(function(f,i){var status=f.atende?'<span class="ok">✓</span>':'<span class="aviso">✗</span>';html+='<tr class="'+(i===0?'melhor':'')+'"><td>'+(idx+1)+'</td><td><strong>'+f.modelo+'</strong></td><td>'+f.config+'</td><td>'+f.nomePasses+'</td><td>'+f.Nplacas+'</td><td>'+f.A_inst.toFixed(1)+'</td><td>'+fmt(f.U)+'</td><td>'+(f.eficiencia*100).toFixed(1)+'</td><td>'+f.dPP.toFixed(1)+'</td><td>'+f.dPS.toFixed(1)+'</td><td>'+status+'</td></tr>';});});
+  html+='<h4 style="margin:16px 0 10px;font-size:15px;color:#0a1f3c">📊 Parâmetros de projeto (por seção) — os melhores arranjos por modelo</h4>'+
+    '<table class="tabela-comp"><thead><tr><th>Seção</th><th>Modelo</th><th>Passes</th><th>Placas</th><th>Área (m²)</th><th>U (W/m²·K)</th><th>ε (%)</th><th>ΔP P (kPa)</th><th>ΔP S (kPa)</th><th>Status</th></tr></thead><tbody>';
+  secoes.forEach(function(r,idx){
+    var vistos={};
+    r.resultados.slice(0,25).forEach(function(f,i){
+      if(vistos[f.modelo])return;vistos[f.modelo]=true;
+      var status=f.atende?'<span class="ok">✓</span>':'<span class="aviso">✗</span>';
+      html+='<tr class="'+(f===r.melhor?'melhor':'')+'"><td>'+(idx+1)+'</td><td><strong>'+f.modelo+'</strong></td><td>'+f.nomePassesExt+'</td><td>'+f.Nplacas+'</td><td>'+f.A_inst.toFixed(1)+'</td><td>'+fmt(f.U)+'</td><td>'+(f.eficiencia*100).toFixed(1)+'</td><td>'+f.dPP.toFixed(1)+'</td><td>'+f.dPS.toFixed(1)+'</td><td>'+status+'</td></tr>';
+    });
+  });
   html+='</tbody></table>';
   var pontos=null;
   try{
     var m1=secoes[0].melhor;
     pontos=gerarCurvaDesempenho(m1.modRef,secoes[0].sec,d,secoes[0].fP,secoes[0].fS,m1.cfgKey,m1.pP,m1.pS,m1.lmtdF,secoes[0].toutS);
     var maxOk=null;
-    pontos.forEach(function(p){if(p.dPP<=d.dpP&&p.dPS<=d.dpS&&p.vPortaP<=8&&p.vPortaS<=8){maxOk=p.fator;}});
+    pontos.forEach(function(p){if(p.dPP<=d.dpP&&p.dPS<=d.dpS&&p.vPortaP<=8&&p.vPortaS<=8&&p.capOk){maxOk=p.fator;}});
     var textoInsight=maxOk!==null
-      ? '✅ O equipamento opera dentro dos limites até <strong>'+Math.round(maxOk*100)+'%</strong> da vazão de projeto. Acima disso, a perda de pressão ou a velocidade no bocal passa do máximo permitido.'
+      ? '✅ O equipamento opera dentro dos limites até <strong>'+Math.round(maxOk*100)+'%</strong> da vazão de projeto. Acima disso, a perda de pressão, a velocidade no bocal ou a capacidade de placas passa do máximo permitido.'
       : '⚠️ Mesmo na vazão de projeto há restrições: revise o ΔP máximo, a velocidade no bocal ou escolha outro modelo.';
-    html+='<div class="curva-box"><h4>📊 Desempenho do equipamento — '+m1.modelo+' ('+m1.config+' · '+m1.nomePasses+') · Bocal '+m1.conexao+'</h4>'+
+    html+='<div class="curva-box"><h4>📊 Desempenho do equipamento — '+m1.modelo+' ('+m1.config+' · '+m1.nomePassesExt+') · Bocal '+m1.conexao+'</h4>'+
       '<div class="insight">'+textoInsight+'<br><span style="font-size:12px;color:#166534">💡 Barras: azul = ΔP produto · vermelho = ΔP serviço · verde = eficiência. O bocal é padrão do modelo ('+m1.conexao+').</span></div>'+
       '<table class="curva-tabela"><thead><tr><th>Vazão</th><th>Q (kW)</th><th>U (W/m²·K)</th><th>ΔP Produto</th><th>ΔP Serviço</th><th>Eficiência</th><th>Placas</th></tr></thead><tbody>';
     pontos.forEach(function(p){
@@ -871,7 +924,7 @@ function exibirResultado(secoes, d){
     });
     html+='</tbody></table></div>';
   }catch(e){html+='<p style="font-size:11px;color:var(--texto-suave);margin-top:8px">Desempenho indisponível para esta combinação.</p>';}
-  html+='<p style="font-size:11px;color:var(--texto-suave);margin-top:10px">Base de cálculo revisada com dados oficiais Alfa Laval. Bocal padrão por modelo (produto = serviço). Material da placa e gaxeta ÚNICOS, selecionados pelo fluido mais exigente (ambos passam pela mesma placa). U global estimado por fluidos. Eficiência ε-NTU: 85-95% recomendado. Confira com o software oficial Alfa Laval.</p>';
+  html+='<p style="font-size:11px;color:var(--texto-suave);margin-top:10px">Base de cálculo revisada (v31): viscosidade de açúcar por °Brix, passes identificados por lado, trava de capacidade física de placas por modelo, U estimado por fluidos, eficiência ε-NTU (85-95% recomendado). Valores finais devem ser confirmados com o software oficial Alfa Laval.</p>';
   c.innerHTML=html;
 }
 
@@ -967,13 +1020,14 @@ function gerarDatasheet(secoes){
       '<div style="margin-top:8px"><table class="ds-tabela">'+
         '<tr><td>Liga da placa (única)</td><td>'+placa2.mat+'</td></tr>'+
         '<tr><td>Gaxeta (única)</td><td>'+gaxeta2.mat+'</td></tr>'+
+        '<tr><td>Arranjo de passes</td><td>'+m.nomePassesExt+'</td></tr>'+
         '<tr><td>Calor da seção</td><td>'+fmt(r.Q/1000)+' kW</td></tr>'+
         '<tr><td>LMTD corrigido</td><td>'+m.lmtdF.toFixed(1)+' °C (F='+m.F.toFixed(2)+')</td></tr>'+
         '<tr><td>Eficiência térmica (ε-NTU)</td><td>'+(m.eficiencia*100).toFixed(1)+'%</td></tr>'+
         '<tr><td>Modelo recomendado</td><td>'+m.modelo+' (Alfa Laval)</td></tr>'+
-        '<tr><td>Configuração / Passes</td><td>'+m.config+' ('+m.angP+'°/'+m.angS+'°) · '+m.nomePasses+'</td></tr>'+
+        '<tr><td>Configuração / Passes</td><td>'+m.config+' ('+m.angP+'°/'+m.angS+'°) · '+m.nomePassesExt+'</td></tr>'+
         '<tr><td>Bocal (conexão)</td><td>'+m.conexao+'</td></tr>'+
-        '<tr><td>Placas</td><td>'+m.Nplacas+'</td></tr>'+
+        '<tr><td>Placas</td><td>'+m.Nplacas+' (capacidade máx. '+m.modRef.placasMax+')</td></tr>'+
         '<tr><td>Área instalada</td><td>'+m.A_inst.toFixed(1)+' m²</td></tr>'+
         '<tr><td>Coeficiente U</td><td>'+fmt(m.U)+' W/m²·K</td></tr>'+
       '</table></div></div>';
@@ -982,7 +1036,7 @@ function gerarDatasheet(secoes){
       '<tr><td>Calor total</td><td>'+fmt(totalQ/1000)+' kW</td></tr>'+
       '<tr><td>Área total instalada</td><td>'+totalA.toFixed(1)+' m²</td></tr>'+
       '<tr><td>Configuração de placas</td><td>'+secoes[0].melhor.config+'</td></tr>'+
-      '<tr><td>Passes</td><td>'+secoes[0].melhor.nomePasses+'</td></tr>'+
+      '<tr><td>Passes</td><td>'+secoes[0].melhor.nomePassesExt+'</td></tr>'+
     '</table></div>'+
     '<div class="ds-secao"><h4>'+(secoes.length+4)+'. Observações</h4><table class="ds-tabela"><tr><td>Contatos</td><td>'+
       '<strong>Vitor Soares</strong> — P&D de projetos<br>E-mail: engenharia@alfaved.com.br · Tel: (18) 9.9669-7330<br><br>'+
@@ -1000,7 +1054,8 @@ function calcular(){
   var vazaoP=parseFloat(document.getElementById('vazaoP').value),tinP=parseFloat(document.getElementById('tinP').value),toutP=parseFloat(document.getElementById('toutP').value),tinS=parseFloat(document.getElementById('tinS').value);
   if(!vazaoP||!tinP||!toutP){alert('Preencha os campos obrigatórios do PRODUTO: vazão, entrada e saída.');return;}
   if(tinS===undefined||isNaN(tinS)){alert('Preencha a temperatura de entrada do SERVIÇO.');return;}
-  var d={fluidoP:document.getElementById('fluidoP').value,vazaoP:vazaoP,tinP:tinP,toutP:toutP,fluidoS:document.getElementById('fluidoS').value,tinS:tinS,
+  var brix=parseFloat(document.getElementById('brixP').value);
+  var d={fluidoP:document.getElementById('fluidoP').value,vazaoP:vazaoP,tinP:tinP,toutP:toutP,fluidoS:document.getElementById('fluidoS').value,tinS:tinS,brix:brix,
     dpP:parseFloat(document.getElementById('dpP').value)||80,dpS:parseFloat(document.getElementById('dpS').value)||80,
     incP:parseFloat(document.getElementById('incP').value)||0.0001,incS:parseFloat(document.getElementById('incS').value)||0.0001,
     margem:parseFloat(document.getElementById('margem').value)||10,config:document.getElementById('config').value,passes:document.getElementById('passes').value,
@@ -1026,6 +1081,7 @@ function calcular(){
 /* ---------- PDF (html2pdf - baixa arquivo real) ---------- */
 function baixarPDF(){
   if(!ultimoRelatorio){alert('Calcule primeiro para gerar o datasheet.');return;}
+  if(typeof html2pdf === 'undefined'){alert('Biblioteca de PDF não carregada. Verifique a conexão com a internet e recarregue a página.');return;}
   var elemento = document.getElementById('dsImprimivel');
   var opt = {
     margin: 10,

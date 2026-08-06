@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google" content="notranslate">
-<title>AlfaVed Dimensionador-PHE · v26</title>
+<title>AlfaVed Dimensionador-PHE · v27</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--azul-escuro:#0a1f3c;--azul:#123a6b;--azul-medio:#1d5aa8;--azul-claro:#2f7fd1;--laranja:#e8731c;--laranja-claro:#f59e4c;--cinza-fundo:#f4f6f9;--cinza-borda:#dde3ea;--texto:#1e293b;--texto-suave:#64748b;--branco:#fff;--verde:#16a34a;--vermelho:#dc2626;--sombra:0 4px 20px rgba(10,31,60,.08)}
@@ -182,9 +182,9 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
 <section class="hero">
   <div class="hero-overlay"></div>
   <div class="container hero-content">
-    <span class="hero-badge">⚙️ Dimensionamento de Engenharia · v26</span>
+    <span class="hero-badge">⚙️ Dimensionamento de Engenharia · v27</span>
     <h2>Dimensionador de Trocadores de Calor de Placas</h2>
-    <p>Tabela visual de desempenho, base de cálculo corrigida, seleção manual de modelos e datasheet em PDF.</p>
+    <p>Base de cálculo revisada, bocal padrão por modelo, dimensões físicas integradas e datasheet em PDF.</p>
   </div>
 </section>
 
@@ -370,35 +370,35 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
 
 <script>
 /* ============================================================
-   AlfaVed Dimensionador-PHE · v26
-   Sem gráfico — tabela visual de desempenho com barras
+   AlfaVed Dimensionador-PHE · v27
+   Dimensões físicas por modelo + bocal padrão + tabela visual
    ============================================================ */
 
-/* ---------- MODELOS ALFA LAVAL ---------- */
+/* ---------- MODELOS ALFA LAVAL (com dimensões H, Wmm, h) ---------- */
 var ALFA_LAVAL = {
   gaxetadas: [
-    {nome:'M3-M', A:0.032, W:0.10, b:0.0020, vazaoMax:14,  Pmax:16, Tmax:180, kW:'50-250',    tipo:'Líquidos', porta:0.050},
-    {nome:'M6-B', A:0.061, W:0.12, b:0.0022, vazaoMax:25,  Pmax:16, Tmax:180, kW:'300-800',   tipo:'Líquidos', porta:0.050},
-    {nome:'M6-M', A:0.061, W:0.12, b:0.0025, vazaoMax:30,  Pmax:16, Tmax:180, kW:'300-800',   tipo:'Líquidos', porta:0.050},
-    {nome:'TL6-B',A:0.08,  W:0.13, b:0.0025, vazaoMax:35,  Pmax:20, Tmax:180, kW:'400-900',   tipo:'Líquidos', porta:0.065},
-    {nome:'M10-B',A:0.10,  W:0.15, b:0.0025, vazaoMax:50,  Pmax:20, Tmax:180, kW:'700-3000',  tipo:'Líquidos', porta:0.100},
-    {nome:'M10-M',A:0.10,  W:0.15, b:0.0030, vazaoMax:55,  Pmax:20, Tmax:180, kW:'700-3000',  tipo:'Líquidos', porta:0.100},
-    {nome:'M15-B',A:0.16,  W:0.18, b:0.0028, vazaoMax:80,  Pmax:25, Tmax:180, kW:'1000-4000', tipo:'Líquidos', porta:0.100},
-    {nome:'M15-M',A:0.16,  W:0.18, b:0.0032, vazaoMax:85,  Pmax:25, Tmax:180, kW:'1000-4000', tipo:'Líquidos', porta:0.100},
-    {nome:'M20-M',A:0.21,  W:0.20, b:0.0032, vazaoMax:100, Pmax:25, Tmax:180, kW:'1500-5000', tipo:'Líquidos', porta:0.150},
-    {nome:'T20-B',A:0.20,  W:0.20, b:0.0030, vazaoMax:95,  Pmax:25, Tmax:180, kW:'1500-5000', tipo:'Líquidos', porta:0.150},
-    {nome:'TS20-M',A:0.70, W:0.20, b:0.0040, vazaoMax:677, Pmax:30, Tmax:210, kW:'2500-15000',tipo:'Alta vazão', porta:0.200},
-    {nome:'MA30', A:0.30,  W:0.24, b:0.0110, vazaoMax:120, Pmax:25, Tmax:200, kW:'2000-6000', tipo:'Fibrosos/viscosos', porta:0.200},
-    {nome:'WideGap 350',A:0.35,W:0.26,b:0.0110,vazaoMax:400,Pmax:22.9,Tmax:180,kW:'3000-9000',tipo:'Fibrosos/partículas', porta:0.350}
+    {nome:'M3-M', A:0.032, W:0.10, b:0.0020, vazaoMax:14,  Pmax:16, Tmax:180, kW:'50-250',    tipo:'Líquidos', porta:0.050, H:480, Wmm:180, h:null},
+    {nome:'M6-B', A:0.061, W:0.12, b:0.0022, vazaoMax:25,  Pmax:16, Tmax:180, kW:'300-800',   tipo:'Líquidos', porta:0.050, H:920, Wmm:320, h:null},
+    {nome:'M6-M', A:0.061, W:0.12, b:0.0025, vazaoMax:30,  Pmax:16, Tmax:180, kW:'300-800',   tipo:'Líquidos', porta:0.050, H:920, Wmm:320, h:null},
+    {nome:'TL6-B',A:0.08,  W:0.13, b:0.0025, vazaoMax:35,  Pmax:20, Tmax:180, kW:'400-900',   tipo:'Líquidos', porta:0.065, H:null, Wmm:null, h:null},
+    {nome:'M10-B',A:0.10,  W:0.15, b:0.0025, vazaoMax:50,  Pmax:20, Tmax:180, kW:'700-3000',  tipo:'Líquidos', porta:0.100, H:1084, Wmm:225, h:null},
+    {nome:'M10-M',A:0.10,  W:0.15, b:0.0030, vazaoMax:55,  Pmax:20, Tmax:180, kW:'700-3000',  tipo:'Líquidos', porta:0.100, H:1084, Wmm:225, h:null},
+    {nome:'M15-B',A:0.16,  W:0.18, b:0.0028, vazaoMax:80,  Pmax:25, Tmax:180, kW:'1000-4000', tipo:'Líquidos', porta:0.100, H:1815, Wmm:298, h:null},
+    {nome:'M15-M',A:0.16,  W:0.18, b:0.0032, vazaoMax:85,  Pmax:25, Tmax:180, kW:'1000-4000', tipo:'Líquidos', porta:0.100, H:1885, Wmm:298, h:null},
+    {nome:'M20-M',A:0.21,  W:0.20, b:0.0032, vazaoMax:100, Pmax:25, Tmax:180, kW:'1500-5000', tipo:'Líquidos', porta:0.150, H:2100, Wmm:800, h:2200},
+    {nome:'T20-B',A:0.20,  W:0.20, b:0.0030, vazaoMax:95,  Pmax:25, Tmax:180, kW:'1500-5000', tipo:'Líquidos', porta:0.150, H:2141, Wmm:780, h:280},
+    {nome:'TS20-M',A:0.70, W:0.20, b:0.0040, vazaoMax:677, Pmax:30, Tmax:210, kW:'2500-15000',tipo:'Alta vazão', porta:0.200, H:1405, Wmm:740, h:360},
+    {nome:'MA30', A:0.30,  W:0.24, b:0.0110, vazaoMax:120, Pmax:25, Tmax:200, kW:'2000-6000', tipo:'Fibrosos/viscosos', porta:0.200, H:1811, Wmm:561, h:null},
+    {nome:'WideGap 350',A:0.35,W:0.26,b:0.0110,vazaoMax:400,Pmax:22.9,Tmax:180,kW:'3000-9000',tipo:'Fibrosos/partículas', porta:0.350, H:null, Wmm:null, h:null}
   ],
   semisoldadas: [
-    {nome:'M10-BW', A:0.10, W:0.15, b:0.0025, vazaoMax:50,  Pmax:25, Tmax:180, kW:'175-875',  tipo:'Amônia/CO₂', porta:0.100},
-    {nome:'T20-BW', A:0.20, W:0.20, b:0.0030, vazaoMax:95,  Pmax:25, Tmax:180, kW:'350-1500', tipo:'Amônia/CO₂', porta:0.150},
-    {nome:'M20-MW', A:0.21, W:0.20, b:0.0032, vazaoMax:100, Pmax:25, Tmax:180, kW:'400-1600', tipo:'Amônia/CO₂', porta:0.150},
-    {nome:'A15-BW', A:0.15, W:0.17, b:0.0028, vazaoMax:70,  Pmax:30, Tmax:200, kW:'300-1200', tipo:'Alta pressão', porta:0.100},
-    {nome:'MK15-BW',A:0.15,W:0.18, b:0.0028, vazaoMax:80,  Pmax:25, Tmax:180, kW:'350-1575', tipo:'Evap/cond', porta:0.150},
-    {nome:'AlfaWap', A:0.20, W:0.20, b:0.0030, vazaoMax:90,  Pmax:25, Tmax:180, kW:'400-1600', tipo:'Evaporador', porta:0.150},
-    {nome:'AlfaCond',A:0.20, W:0.20, b:0.0030, vazaoMax:90,  Pmax:25, Tmax:180, kW:'400-1600', tipo:'Condensador', porta:0.150}
+    {nome:'M10-BW', A:0.10, W:0.15, b:0.0025, vazaoMax:50,  Pmax:25, Tmax:180, kW:'175-875',  tipo:'Amônia/CO₂', porta:0.100, H:null, Wmm:null, h:null},
+    {nome:'T20-BW', A:0.20, W:0.20, b:0.0030, vazaoMax:95,  Pmax:25, Tmax:180, kW:'350-1500', tipo:'Amônia/CO₂', porta:0.150, H:null, Wmm:null, h:null},
+    {nome:'M20-MW', A:0.21, W:0.20, b:0.0032, vazaoMax:100, Pmax:25, Tmax:180, kW:'400-1600', tipo:'Amônia/CO₂', porta:0.150, H:null, Wmm:null, h:null},
+    {nome:'A15-BW', A:0.15, W:0.17, b:0.0028, vazaoMax:70,  Pmax:30, Tmax:200, kW:'300-1200', tipo:'Alta pressão', porta:0.100, H:null, Wmm:null, h:null},
+    {nome:'MK15-BW',A:0.15,W:0.18, b:0.0028, vazaoMax:80,  Pmax:25, Tmax:180, kW:'350-1575', tipo:'Evap/cond', porta:0.150, H:null, Wmm:null, h:null},
+    {nome:'AlfaWap', A:0.20, W:0.20, b:0.0030, vazaoMax:90,  Pmax:25, Tmax:180, kW:'400-1600', tipo:'Evaporador', porta:0.150, H:null, Wmm:null, h:null},
+    {nome:'AlfaCond',A:0.20, W:0.20, b:0.0030, vazaoMax:90,  Pmax:25, Tmax:180, kW:'400-1600', tipo:'Condensador', porta:0.150, H:null, Wmm:null, h:null}
   ]
 };
 
@@ -823,7 +823,6 @@ function exibirResultado(secoes, d){
     var textoInsight=maxOk!==null
       ? '✅ O equipamento opera dentro dos limites até <strong>'+Math.round(maxOk*100)+'%</strong> da vazão de projeto. Acima disso, a perda de pressão ou a velocidade no bocal passa do máximo permitido.'
       : '⚠️ Mesmo na vazão de projeto há restrições: revise o ΔP máximo, a velocidade no bocal ou escolha outro modelo.';
-    /* TABELA VISUAL DE DESEMPENHO (sem gráfico) */
     html+='<div class="curva-box"><h4>📊 Desempenho do equipamento — '+m1.modelo+' ('+m1.config+' · '+m1.nomePasses+') · Bocal '+m1.conexao+'</h4>'+
       '<div class="insight">'+textoInsight+'<br><span style="font-size:12px;color:#166534">💡 Barras: azul = ΔP produto · vermelho = ΔP serviço · verde = eficiência. O bocal é padrão do modelo ('+m1.conexao+').</span></div>'+
       '<table class="curva-tabela"><thead><tr><th>Vazão</th><th>Q (kW)</th><th>U (W/m²·K)</th><th>ΔP Produto</th><th>ΔP Serviço</th><th>Eficiência</th><th>Placas</th></tr></thead><tbody>';
@@ -852,7 +851,21 @@ function gerarDatasheet(secoes){
   secoes.forEach(function(x){totalA+=x.melhor.A_inst;totalQ+=x.Q;});
   var m0=secoes[0].melhor;
   var html='<div class="datasheet" id="dsImprimivel"><h2>AlfaVed Dimensionador-PHE</h2><div class="sub">Datasheet de Dimensionamento · Gerado em '+hoje+'</div>'+
-    '<div class="ds-secao"><h4>1. Identificação</h4><table class="ds-tabela"><tr><td>Projeto</td><td>'+proj+'</td></tr><tr><td>Cliente</td><td>'+cliente+'</td></tr><tr><td>Data</td><td>'+hoje+'</td></tr><tr><td>Número de seções</td><td>'+secoes.length+'</td></tr><tr><td>Tipo de trocador</td><td>'+(tipoAtual==='semisoldadas'?'Placas semi-soldadas':'Placas gaxetadas')+'</td></tr><tr><td>Bocal do modelo (produto e serviço)</td><td>'+m0.conexao+'</td></tr><tr><td>Velocidade no bocal — produto</td><td>'+m0.vPortaP.toFixed(1)+' m/s '+(m0.vPortaOkP?'✓':'✗')+'</td></tr><tr><td>Velocidade no bocal — serviço</td><td>'+m0.vPortaS.toFixed(1)+' m/s '+(m0.vPortaOkS?'✓':'✗')+'</td></tr></table></div>';
+    '<div class="ds-secao"><h4>1. Identificação</h4><table class="ds-tabela"><tr><td>Projeto</td><td>'+proj+'</td></tr><tr><td>Cliente</td><td>'+cliente+'</td></tr><tr><td>Data</td><td>'+hoje+'</td></tr><tr><td>Número de seções</td><td>'+secoes.length+'</td></tr><tr><td>Tipo de trocador</td><td>'+(tipoAtual==='semisoldadas'?'Placas semi-soldadas':'Placas gaxetadas')+'</td></tr><tr><td>Bocal do modelo (produto e serviço)</td><td>'+m0.conexao+'</td></tr><tr><td>Velocidade no bocal — produto</td><td>'+m0.vPortaP.toFixed(1)+' m/s '+(m0.vPortaOkP?'✓':'✗')+'</td></tr><tr><td>Velocidade no bocal — serviço</td><td>'+m0.vPortaS.toFixed(1)+' m/s '+(m0.vPortaOkS?'✓':'✗')+'</td></tr></table></div>'+
+    /* NOVA SEÇÃO 2: DESENHO DIMENSIONAL */
+    '<div class="ds-secao"><h4>2. Desenho dimensional</h4><table class="ds-tabela">'+
+    '<tr><td>Modelo</td><td>'+m0.modelo+'</td></tr>'+
+    '<tr><td>Altura (H)</td><td>'+(m0.modRef.H?m0.modRef.H+' mm':'Consultar catálogo')+'</td></tr>'+
+    '<tr><td>Largura (W)</td><td>'+(m0.modRef.Wmm?m0.modRef.Wmm+' mm':'Consultar catálogo')+'</td></tr>'+
+    '<tr><td>Distância entre portas (h)</td><td>'+(m0.modRef.h?m0.modRef.h+' mm':'Consultar catálogo')+'</td></tr>'+
+    '<tr><td>Bocal (conexão)</td><td>'+m0.conexao+'</td></tr>'+
+    '</table></div>'+
+    /* NOVA SEÇÃO 3: CONEXÕES TIPO FLANGE */
+    '<div class="ds-secao"><h4>3. Conexões tipo flange</h4><table class="ds-tabela">'+
+    '<tr><td>Padrão</td><td>EN 1092-1 / ASME B16.5 / JIS B2220</td></tr>'+
+    '<tr><td>Tamanho do bocal</td><td>'+m0.conexao+'</td></tr>'+
+    '<tr><td>Classe de pressão</td><td>PN10/16/25/40 · ASME Cl. 150/300</td></tr>'+
+    '</table></div>';
   secoes.forEach(function(r,idx){
     var m=r.melhor,servT=document.getElementById(idx===0?'tinS':'sec'+idx+'TinS').value;
     var Tmax=Math.max(parseFloat(servT)||0,parseFloat(r.toutS)||0,parseFloat(document.getElementById(idx===0?'toutP':'sec'+idx+'ToutP').value)||0);
@@ -863,7 +876,7 @@ function gerarDatasheet(secoes){
     var corpoP=ehSemi?selecionarCorpoGaxeta(r.fP.nome,Tmax,false):null,corpoS=ehSemi?selecionarCorpoGaxeta(r.fS.nome,Tmax,!!r.fS.condensing):null;
     var tinPv=document.getElementById(idx===0?'tinP':'sec'+idx+'TinP').value;
     var toutPv=document.getElementById(idx===0?'toutP':'sec'+idx+'ToutP').value;
-    html+='<div class="ds-secao"><h4>'+(idx+1)+'. Seção '+(idx+1)+' — Condições operacionais de projeto</h4>'+
+    html+='<div class="ds-secao"><h4>'+(idx+3)+'. Seção '+(idx+1)+' — Condições operacionais de projeto</h4>'+
       '<table class="ds-lado"><tr><th></th><th>Produto</th><th>Serviço</th></tr>'+
       '<tr><td>Fluido</td><td>'+r.fP.nome+'</td><td>'+r.fS.nome+'</td></tr>'+
       '<tr><td>Vazão (m³/h)</td><td>'+document.getElementById('vazaoP').value+'</td><td>'+r.vazaoS.toFixed(1)+'</td></tr>'+
@@ -898,13 +911,13 @@ function gerarDatasheet(secoes){
         '<tr><td>Coeficiente U</td><td>'+fmt(m.U)+' W/m²·K</td></tr>'+
       '</table></div></div>';
   });
-  html+='<div class="ds-secao"><h4>'+(secoes.length+1)+'. Totais</h4><table class="ds-tabela">'+
+  html+='<div class="ds-secao"><h4>'+(secoes.length+3)+'. Totais</h4><table class="ds-tabela">'+
       '<tr><td>Calor total</td><td>'+fmt(totalQ/1000)+' kW</td></tr>'+
       '<tr><td>Área total instalada</td><td>'+totalA.toFixed(1)+' m²</td></tr>'+
       '<tr><td>Configuração de placas</td><td>'+secoes[0].melhor.config+'</td></tr>'+
       '<tr><td>Passes</td><td>'+secoes[0].melhor.nomePasses+'</td></tr>'+
     '</table></div>'+
-    '<div class="ds-secao"><h4>'+(secoes.length+2)+'. Observações</h4><table class="ds-tabela"><tr><td>Nota</td><td>Dimensionamento preliminar baseado em dados oficiais Alfa Laval. O bocal é padrão do modelo — produto e serviço usam o mesmo diâmetro de conexão. Valores finais devem ser confirmados com o software oficial e catálogos. A seleção de materiais considera fluido, temperatura e corrosividade; casos especiais exigem análise de compatibilidade química detalhada.</td></tr></table></div>'+
+    '<div class="ds-secao"><h4>'+(secoes.length+4)+'. Observações</h4><table class="ds-tabela"><tr><td>Nota</td><td>Dimensionamento preliminar baseado em dados oficiais Alfa Laval. O bocal é padrão do modelo — produto e serviço usam o mesmo diâmetro de conexão. Valores finais devem ser confirmados com o software oficial e catálogos. A seleção de materiais considera fluido, temperatura e corrosividade; casos especiais exigem análise de compatibilidade química detalhada.</td></tr></table></div>'+
     '<div class="sub" style="margin-top:14px">© 2026 AlfaVed — CNPJ 50.093.389/0001-35</div></div>';
   c.innerHTML=html;
 }

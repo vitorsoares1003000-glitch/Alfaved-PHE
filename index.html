@@ -4,102 +4,168 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google" content="notranslate">
-<title>AlfaVed Dimensionador-PHE · v27</title>
+<title>AlfaVed Dimensionador-PHE · v26</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--azul-escuro:#0a1f3c;--azul:#123a6b;--azul-medio:#1d5aa8;--azul-claro:#2f7fd1;--laranja:#e8731c;--laranja-claro:#f59e4c;--cinza-fundo:#f4f6f9;--cinza-borda:#dde3ea;--texto:#1e293b;--texto-suave:#64748b;--branco:#fff;--verde:#16a34a;--vermelho:#dc2626;--sombra:0 4px 20px rgba(10,31,60,.08)}
-body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:var(--cinza-fundo);color:var(--texto);line-height:1.6}<br/>
-.container{max-width:1180px;margin:0 auto;padding:0 24px}<br/>
-.header{background:linear-gradient(135deg,var(--azul-escuro),var(--azul));color:var(--branco);padding:16px 0;box-shadow:0 2px 12px rgba(0,0,0,.25)}<br/>
-.header-inner{display:flex;justify-content:center;align-items:center;gap:14px}<br/>
-.brand{display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--branco)}<br/>
-.brand-logo{width:54px;height:54px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:var(--branco);box-shadow:0 2px 10px rgba(0,0,0,.2)}<br/>
-.brand-logo svg{width:46px;height:46px}<br/>
-.brand-text h1{font-size:24px;letter-spacing:1px;font-weight:800;line-height:1.1}<br/>
-.brand-text span{font-size:13px;opacity:.9;letter-spacing:2px;text-transform:uppercase}<br/>
-.hero{position:relative;background:linear-gradient(135deg,var(--azul-escuro) 0%,var(--azul) 50%,var(--azul-medio) 100%);color:var(--branco);padding:40px 0;overflow:hidden}<br/>
-.hero-overlay{position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,rgba(232,115,28,.25),transparent 40%),radial-gradient(circle at 20% 80%,rgba(47,127,209,.3),transparent 40%)}<br/>
-.hero-content{position:relative;text-align:center;max-width:860px;margin:0 auto}<br/>
-.hero-badge{display:inline-block;background:rgba(232,115,28,.2);border:1px solid var(--laranja);color:var(--laranja-claro);padding:6px 16px;border-radius:30px;font-size:13px;font-weight:600;margin-bottom:14px}<br/>
-.hero h2{font-size:30px;font-weight:800;margin-bottom:10px;line-height:1.2}<br/>
-.hero p{font-size:14px;opacity:.92;max-width:720px;margin:0 auto 16px}<br/>
-#erroTela{display:none;background:#fef2f2;border:2px solid var(--vermelho);color:var(--vermelho);padding:14px 18px;border-radius:12px;margin:16px 0;font-size:13px;font-weight:600}<br/>
-.card{background:var(--branco);border-radius:16px;padding:24px;margin:22px 0;box-shadow:var(--sombra);border:1px solid var(--cinza-borda)}<br/>
-.card-header{display:flex;align-items:flex-start;gap:14px;margin-bottom:18px}<br/>
-.card-header h3{font-size:20px;color:var(--azul-escuro);font-weight:700}<br/>
-.card-sub{font-size:13px;color:var(--texto-suave);margin-top:2px}<br/>
-.step-badge{background:linear-gradient(135deg,var(--azul),var(--azul-claro));color:var(--branco);width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;flex-shrink:0}<br/>
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px}<br/>
-.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}<br/>
-@media(max-width:768px){.grid-2,.grid-4{grid-template-columns:1fr}}<br/>
-.sub-card{background:var(--cinza-fundo);border:1px solid var(--cinza-borda);border-radius:12px;padding:18px}<br/>
-.sub-card.produto{border-top:4px solid var(--azul-claro)}<br/>
-.sub-card.servico{border-top:4px solid var(--laranja)}<br/>
-.sub-card-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}<br/>
-.sub-card-head h4{font-size:15px;color:var(--azul-escuro)}<br/>
-.side-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}<br/>
-label{display:block;margin-bottom:12px;font-size:13px;font-weight:600;color:#475569}<br/>
-.obrigatorio::after{content:' *';color:var(--vermelho);font-weight:700}<br/>
-input,select{width:100%;padding:10px 13px;margin-top:5px;border:1.5px solid var(--cinza-borda);border-radius:10px;font-size:14px;font-family:inherit;background:var(--branco);color:var(--texto);transition:all .2s}<br/>
-input:focus,select:focus{outline:none;border-color:var(--azul-claro);box-shadow:0 0 0 3px rgba(47,127,209,.15)}<br/>
-input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--azul-escuro);font-weight:600}<br/>
-.ident-card{background:linear-gradient(135deg,var(--azul-escuro),var(--azul));border-radius:12px;padding:18px;color:var(--branco)}<br/>
-.ident-card label{color:rgba(255,255,255,.85)}<br/>
-.ident-card input{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.25);color:var(--branco)}<br/>
-.prj-prefixo{display:flex;align-items:center;gap:8px}<br/>
-.prj-prefixo .fixo{background:var(--laranja);color:var(--branco);padding:10px 14px;border-radius:10px;font-weight:800;font-size:14px;letter-spacing:1px;white-space:nowrap;margin-top:5px}<br/>
-.modelos-accordeon{border:2px solid var(--cinza-borda);border-radius:12px;margin-top:22px;overflow:hidden}<br/>
-.accordeon-header{width:100%;display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:linear-gradient(135deg,var(--cinza-fundo),#eef4fb);border:none;cursor:pointer;font-family:inherit;font-size:15px;font-weight:700;color:var(--azul-escuro)}<br/>
-.accordeon-body{padding:16px;display:none}<br/>
-.accordeon-body.open{display:block}<br/>
-.modelos-lista{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}<br/>
-.modelo-item{border:2px solid var(--cinza-borda);border-radius:12px;padding:12px;text-align:center;cursor:pointer;transition:all .2s;background:var(--branco);position:relative}<br/>
-.modelo-item.selected{border-color:var(--azul);background:#eef4fb}<br/>
-.modelo-item .fab-nome{font-weight:700;font-size:13px}<br/>
-.modelo-item .fab-desc{font-size:10px;color:var(--texto-suave);margin-top:2px;line-height:1.3}<br/>
-.calc-area{text-align:center;margin:26px 0}<br/>
-.btn-primary{background:linear-gradient(135deg,var(--laranja),var(--laranja-claro));color:var(--branco);border:none;padding:16px 44px;font-size:17px;font-weight:700;border-radius:12px;cursor:pointer}<br/>
-.resultado-card{border-left:5px solid var(--laranja)}<br/>
-.resumo-equip{background:linear-gradient(135deg,var(--azul-escuro),var(--azul));color:var(--branco);border-radius:12px;padding:18px;margin-bottom:18px}<br/>
-.resumo-equip .grid-4 div{font-size:13px}<br/>
-.resumo-equip .grid-4 strong{color:var(--laranja-claro)}<br/>
-.resultado-resumo{background:linear-gradient(135deg,var(--cinza-fundo),#eef4fb);border-radius:12px;padding:18px;margin-bottom:18px;border:1px solid var(--cinza-borda)}<br/>
-.melhor-modelo{background:linear-gradient(135deg,#fdf0e4,#fff7f0);border:2px solid var(--laranja);border-radius:12px;padding:18px;margin-bottom:18px}<br/>
-.tabela-comp{width:100%;border-collapse:collapse;margin-top:12px;font-size:11.5px}<br/>
-.tabela-comp th,.tabela-comp td{padding:7px 8px;border:1px solid var(--cinza-borda);text-align:center}<br/>
-.tabela-comp th{background:linear-gradient(135deg,var(--azul),var(--azul-medio));color:var(--branco)}<br/>
-.tabs{display:flex;gap:8px;margin-bottom:18px;border-bottom:2px solid var(--cinza-borda)}<br/>
-.tab-btn{background:var(--branco);border:2px solid var(--cinza-borda);border-radius:10px 10px 0 0;padding:10px 22px;font-size:14px;font-weight:600;cursor:pointer}<br/>
-.tab-btn.active{background:var(--azul);color:var(--branco);border-color:var(--azul)}<br/>
-.tab-pane{display:none}<br/>
-.tab-pane.active{display:block}<br/>
-.datasheet{background:var(--branco);border:1px solid var(--cinza-borda);border-radius:12px;padding:24px;font-size:13px}<br/>
-.ds-secao{margin-bottom:14px}<br/>
-.ds-secao h4{background:linear-gradient(135deg,var(--azul),var(--azul-medio));color:var(--branco);padding:7px 12px;border-radius:8px;font-size:13px;margin-bottom:8px}<br/>
-.ds-tabela{width:100%;border-collapse:collapse;font-size:12px}<br/>
-.ds-tabela td{padding:6px 10px;border:1px solid var(--cinza-borda)}<br/>
-.ds-tabela td:first-child{background:var(--cinza-fundo);font-weight:600;width:45%}<br/>
-.ds-lado{width:100%;border-collapse:collapse;font-size:12px}<br/>
-.ds-lado th,.ds-lado td{padding:6px 10px;border:1px solid var(--cinza-borda);text-align:center}<br/>
-.ds-lado th{background:var(--azul);color:var(--branco)}<br/>
-.curva-box{background:var(--branco);border:1px solid var(--cinza-borda);border-radius:12px;padding:16px;margin-top:16px}<br/>
-.curva-tabela{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:10px}<br/>
-.curva-tabela th,.curva-tabela td{padding:8px 10px;border:1px solid var(--cinza-borda);text-align:center}<br/>
-.barra{display:inline-block;width:60px;height:8px;background:#e2e8f0;border-radius:4px;overflow:hidden;vertical-align:middle;margin-left:4px}<br/>
-.barra-fill{height:100%;border-radius:4px}<br/>
-.barra-fill.azul{background:#1d5aa8}<br/>
-.barra-fill.vermelho{background:#dc2626}<br/>
-.barra-fill.verde{background:#16a34a}<br/>
-.insight{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:10px 14px;margin-top:12px;font-size:13px;color:#14532d}<br/>
-.ok{color:var(--verde);font-weight:700}<br/>
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:var(--cinza-fundo);color:var(--texto);line-height:1.6}
+.container{max-width:1180px;margin:0 auto;padding:0 24px}
+.header{background:linear-gradient(135deg,var(--azul-escuro),var(--azul));color:var(--branco);padding:16px 0;box-shadow:0 2px 12px rgba(0,0,0,.25)}
+.header-inner{display:flex;justify-content:center;align-items:center;gap:14px}
+.brand{display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--branco)}
+.brand-logo{width:54px;height:54px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:var(--branco);box-shadow:0 2px 10px rgba(0,0,0,.2)}
+.brand-logo svg{width:46px;height:46px}
+.brand-text h1{font-size:24px;letter-spacing:1px;font-weight:800;line-height:1.1}
+.brand-text span{font-size:13px;opacity:.9;letter-spacing:2px;text-transform:uppercase}
+.hero{position:relative;background:linear-gradient(135deg,var(--azul-escuro) 0%,var(--azul) 50%,var(--azul-medio) 100%);color:var(--branco);padding:40px 0;overflow:hidden}
+.hero-overlay{position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,rgba(232,115,28,.25),transparent 40%),radial-gradient(circle at 20% 80%,rgba(47,127,209,.3),transparent 40%)}
+.hero-content{position:relative;text-align:center;max-width:860px;margin:0 auto}
+.hero-badge{display:inline-block;background:rgba(232,115,28,.2);border:1px solid var(--laranja);color:var(--laranja-claro);padding:6px 16px;border-radius:30px;font-size:13px;font-weight:600;margin-bottom:14px}
+.hero h2{font-size:30px;font-weight:800;margin-bottom:10px;line-height:1.2}
+.hero p{font-size:14px;opacity:.92;max-width:720px;margin:0 auto 16px}
+.hero p strong{color:var(--laranja-claro)}
+#erroTela{display:none;background:#fef2f2;border:2px solid var(--vermelho);color:var(--vermelho);padding:14px 18px;border-radius:12px;margin:16px 0;font-size:13px;font-weight:600}
+.card{background:var(--branco);border-radius:16px;padding:24px;margin:22px 0;box-shadow:var(--sombra);border:1px solid var(--cinza-borda)}
+.card-header{display:flex;align-items:flex-start;gap:14px;margin-bottom:18px}
+.card-header h3{font-size:20px;color:var(--azul-escuro);font-weight:700}
+.card-sub{font-size:13px;color:var(--texto-suave);margin-top:2px}
+.step-badge{background:linear-gradient(135deg,var(--azul),var(--azul-claro));color:var(--branco);width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;flex-shrink:0}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:768px){.grid-2,.grid-4{grid-template-columns:1fr}}
+.sub-card{background:var(--cinza-fundo);border:1px solid var(--cinza-borda);border-radius:12px;padding:18px}
+.sub-card.produto{border-top:4px solid var(--azul-claro)}
+.sub-card.servico{border-top:4px solid var(--laranja)}
+.sub-card-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.sub-card-head h4{font-size:15px;color:var(--azul-escuro)}
+.side-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.produto-icon{background:rgba(47,127,209,.15)}
+.servico-icon{background:rgba(232,115,28,.15)}
+label{display:block;margin-bottom:12px;font-size:13px;font-weight:600;color:#475569}
+.obrigatorio::after{content:' *';color:var(--vermelho);font-weight:700}
+input,select{width:100%;padding:10px 13px;margin-top:5px;border:1.5px solid var(--cinza-borda);border-radius:10px;font-size:14px;font-family:inherit;background:var(--branco);color:var(--texto);transition:all .2s}
+input:focus,select:focus{outline:none;border-color:var(--azul-claro);box-shadow:0 0 0 3px rgba(47,127,209,.15)}
+input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--azul-escuro);font-weight:600}
+.ident-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:768px){.ident-grid{grid-template-columns:1fr}}
+.ident-card{background:linear-gradient(135deg,var(--azul-escuro),var(--azul));border-radius:12px;padding:18px;color:var(--branco)}
+.ident-card label{color:rgba(255,255,255,.85)}
+.ident-card input{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.25);color:var(--branco)}
+.ident-card input::placeholder{color:rgba(255,255,255,.5)}
+.ident-card input:focus{border-color:var(--laranja-claro);box-shadow:0 0 0 3px rgba(232,115,28,.25)}
+.prj-prefixo{display:flex;align-items:center;gap:8px}
+.prj-prefixo .fixo{background:var(--laranja);color:var(--branco);padding:10px 14px;border-radius:10px;font-weight:800;font-size:14px;letter-spacing:1px;white-space:nowrap;margin-top:5px}
+.prj-prefixo input{flex:1}
+.secao-bloco{border:2px dashed var(--cinza-borda);border-radius:12px;padding:16px;margin-top:14px}
+.secao-bloco .secao-titulo{font-size:14px;font-weight:700;color:var(--azul-escuro);margin-bottom:12px}
+.modelos-accordeon{border:2px solid var(--cinza-borda);border-radius:12px;margin-top:22px;overflow:hidden}
+.accordeon-header{width:100%;display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:linear-gradient(135deg,var(--cinza-fundo),#eef4fb);border:none;cursor:pointer;font-family:inherit;font-size:15px;font-weight:700;color:var(--azul-escuro);transition:background .2s}
+.accordeon-header:hover{background:#e6edf6}
+.accordeon-header .seta{font-size:13px;transition:transform .3s}
+.accordeon-header.open .seta{transform:rotate(180deg)}
+.accordeon-body{padding:16px;display:none}
+.accordeon-body.open{display:block}
+.grupo-seletor{margin-bottom:14px;padding:12px;background:var(--cinza-fundo);border:1px solid var(--cinza-borda);border-radius:10px}
+.toggle-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.toggle-btn{flex:1;min-width:200px;padding:14px 18px;border:2px solid var(--cinza-borda);border-radius:12px;background:var(--branco);cursor:pointer;text-align:left;transition:all .2s;font-family:inherit}
+.toggle-btn:hover{border-color:var(--azul-claro)}
+.toggle-btn.active{border-color:var(--azul);background:#eef4fb}
+.toggle-btn.active.semi{border-color:var(--laranja);background:#fdf0e4}
+.toggle-btn strong{display:block;font-size:15px;color:var(--azul-escuro)}
+.toggle-btn span{font-size:12px;color:var(--texto-suave)}
+.modelos-lista{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.modelo-item{border:2px solid var(--cinza-borda);border-radius:12px;padding:12px;text-align:center;cursor:pointer;transition:all .2s;background:var(--branco);position:relative}
+.modelo-item:hover{border-color:var(--azul-claro);transform:translateY(-3px)}
+.modelo-item.selected{border-color:var(--azul);background:#eef4fb}
+.modelo-item .fab-nome{font-weight:700;font-size:13px}
+.modelo-item .fab-desc{font-size:10px;color:var(--texto-suave);margin-top:2px;line-height:1.3}
+.checkbox-label{position:absolute;top:8px;right:8px;display:inline-block;width:18px;height:18px;cursor:pointer}
+.fab-checkbox{position:absolute;opacity:0;width:0;height:0}
+.checkmark{position:absolute;top:0;left:0;width:18px;height:18px;background:var(--branco);border:2px solid var(--cinza-borda);border-radius:4px;transition:all .2s}
+.fab-checkbox:checked+.checkmark{background:var(--azul);border-color:var(--azul)}
+.fab-checkbox:checked+.checkmark::after{content:'✓';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:var(--branco);font-size:12px;font-weight:700}
+.calc-area{text-align:center;margin:26px 0}
+.btn-primary{background:linear-gradient(135deg,var(--laranja),var(--laranja-claro));color:var(--branco);border:none;padding:16px 44px;font-size:17px;font-weight:700;font-family:inherit;border-radius:12px;cursor:pointer;transition:all .2s;box-shadow:0 6px 20px rgba(232,115,28,.35);display:inline-flex;align-items:center;gap:10px}
+.btn-primary:hover{transform:translateY(-3px)}
+.btn-secondary{background:linear-gradient(135deg,var(--azul),var(--azul-claro));color:var(--branco);border:none;padding:12px 32px;font-size:14px;font-weight:600;font-family:inherit;border-radius:10px;cursor:pointer;transition:all .2s}
+.btn-secondary:hover{transform:translateY(-2px)}
+.btn-pdf{background:linear-gradient(135deg,var(--vermelho),#b91c1c);color:var(--branco);border:none;padding:12px 32px;font-size:14px;font-weight:600;font-family:inherit;border-radius:10px;cursor:pointer;transition:all .2s}
+.btn-pdf:hover{transform:translateY(-2px)}
+.resultado-card{border-left:5px solid var(--laranja)}
+.resumo-equip{background:linear-gradient(135deg,var(--azul-escuro),var(--azul));color:var(--branco);border-radius:12px;padding:18px;margin-bottom:18px}
+.resumo-equip h4{color:var(--branco);margin-bottom:12px;font-size:16px}
+.resumo-equip .grid-4{color:var(--branco)}
+.resumo-equip .grid-4 strong{color:var(--laranja-claro)}
+.resumo-equip .grid-4 div{font-size:13px}
+.resultado-resumo{background:linear-gradient(135deg,var(--cinza-fundo),#eef4fb);border-radius:12px;padding:18px;margin-bottom:18px;border:1px solid var(--cinza-borda)}
+.resultado-resumo h4{color:var(--azul-escuro);margin-bottom:10px;font-size:15px}
+.resultado-resumo p{margin-bottom:5px;font-size:13px}
+.resultado-resumo strong{color:var(--azul-escuro)}
+.melhor-modelo{background:linear-gradient(135deg,#fdf0e4,#fff7f0);border:2px solid var(--laranja);border-radius:12px;padding:18px;margin-bottom:18px;box-shadow:0 4px 16px rgba(232,115,28,.15)}
+.melhor-modelo h4{color:var(--laranja);margin-bottom:8px;font-size:16px}
+.melhor-modelo p{font-size:13px;margin-bottom:5px}
+.tabela-comp{width:100%;border-collapse:collapse;margin-top:12px;font-size:11.5px}
+.tabela-comp th,.tabela-comp td{padding:7px 8px;border:1px solid var(--cinza-borda);text-align:center}
+.tabela-comp th{background:linear-gradient(135deg,var(--azul),var(--azul-medio));color:var(--branco);font-weight:600}
+.tabela-comp tr:nth-child(even){background:var(--cinza-fundo)}
+.tabela-comp tr.melhor{background:#fdf0e4;font-weight:700}
+.ok{color:var(--verde);font-weight:700}
 .aviso{color:var(--vermelho);font-weight:700}
+.tabs{display:flex;gap:8px;margin-bottom:18px;border-bottom:2px solid var(--cinza-borda);padding-bottom:8px}
+.tab-btn{background:var(--branco);border:2px solid var(--cinza-borda);border-radius:10px 10px 0 0;padding:10px 22px;font-size:14px;font-weight:600;font-family:inherit;color:var(--texto-suave);cursor:pointer;transition:all .2s}
+.tab-btn.active{background:var(--azul);border-color:var(--azul);color:var(--branco)}
+.tab-pane{display:none}
+.tab-pane.active{display:block}
+.datasheet{background:var(--branco);border:1px solid var(--cinza-borda);border-radius:12px;padding:24px;font-size:13px}
+.datasheet h2{color:var(--azul-escuro);text-align:center;margin-bottom:4px;font-size:20px}
+.datasheet .sub{text-align:center;color:var(--texto-suave);margin-bottom:18px;font-size:12px}
+.ds-secao{margin-bottom:14px}
+.ds-secao h4{background:linear-gradient(135deg,var(--azul),var(--azul-medio));color:var(--branco);padding:7px 12px;border-radius:8px;font-size:13px;margin-bottom:8px}
+.ds-tabela{width:100%;border-collapse:collapse;font-size:12px}
+.ds-tabela td{padding:6px 10px;border:1px solid var(--cinza-borda)}
+.ds-tabela td:first-child{background:var(--cinza-fundo);font-weight:600;width:45%}
+.ds-tabela td:last-child{text-align:right}
+.ds-lado{width:100%;border-collapse:collapse;font-size:12px}
+.ds-lado th,.ds-lado td{padding:6px 10px;border:1px solid var(--cinza-borda);text-align:center}
+.ds-lado th{background:var(--azul);color:var(--branco)}
+.ds-lado td:first-child{background:var(--cinza-fundo);font-weight:600;text-align:left;width:30%}
+.curva-box{background:var(--branco);border:1px solid var(--cinza-borda);border-radius:12px;padding:16px;margin-top:16px}
+.curva-box h4{color:var(--azul-escuro);margin-bottom:10px;font-size:15px}
+.curva-tabela{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:10px}
+.curva-tabela th,.curva-tabela td{padding:8px 10px;border:1px solid var(--cinza-borda);text-align:center}
+.curva-tabela th{background:var(--cinza-fundo);font-weight:600}
+.curva-tabela tr:nth-child(even){background:var(--cinza-fundo)}
+.barra{display:inline-block;width:60px;height:8px;background:#e2e8f0;border-radius:4px;overflow:hidden;vertical-align:middle;margin-left:4px}
+.barra-fill{height:100%;border-radius:4px}
+.barra-fill.azul{background:#1d5aa8}
+.barra-fill.vermelho{background:#dc2626}
+.barra-fill.verde{background:#16a34a}
+.insight{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:10px 14px;margin-top:12px;font-size:13px;color:#14532d}
+.insight strong{color:#15803d}
+.contato{background:linear-gradient(135deg,var(--azul-escuro),var(--azul));color:var(--branco);padding:46px 0;margin-top:34px}
+.contato h3{font-size:26px;text-align:center;margin-bottom:10px}
+.contato>.container>p{text-align:center;opacity:.9;max-width:650px;margin:0 auto 30px;font-size:14px}
+.contato-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px}
+.contato-item{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:18px;display:flex;align-items:center;gap:12px;transition:background .2s}
+.contato-item:hover{background:rgba(255,255,255,.15)}
+.contato-icon{font-size:22px}
+.contato-item strong{display:block;font-size:13px;margin-bottom:2px}
+.contato-item span,.contato-item a{font-size:12px;opacity:.9;color:var(--branco);text-decoration:none}
+.contato-item a:hover{color:var(--laranja-claro)}
+.footer{background:var(--azul-escuro);color:var(--branco);text-align:center;padding:26px 0;font-size:12px;border-top:3px solid var(--laranja)}
+.footer-brand{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px}
+.footer-note{opacity:.8;max-width:700px;margin:0 auto 8px;font-size:12px}
+.footer-copy{opacity:.6;font-size:11px}
+.fade-in{opacity:0;transform:translateY(20px);animation:fadeIn .6s ease forwards}
+@keyframes fadeIn{to{opacity:1;transform:translateY(0)}}
+@media(max-width:768px){.hero h2{font-size:24px}.hero{padding:34px 0}.card{padding:18px}}
 </style>
 </head>
 <body>
 
 <header class="header">
   <div class="container header-inner">
-    <div class="brand">
+    <a href="#" class="brand">
       <div class="brand-logo">
         <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
           <circle cx="50" cy="50" r="42" fill="none" stroke="#123b6d" stroke-width="8" stroke-dasharray="240 24" stroke-dashoffset="0" stroke-linecap="round"/>
@@ -109,35 +175,35 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
         </svg>
       </div>
       <div class="brand-text"><h1>AlfaVed</h1><span>Dimensionador-PHE</span></div>
-    </div>
+    </a>
   </div>
 </header>
 
 <section class="hero">
   <div class="hero-overlay"></div>
   <div class="container hero-content">
-    <span class="hero-badge">⚙️ Engenharia de Aplicações · v27</span>
+    <span class="hero-badge">⚙️ Dimensionamento de Engenharia · v26</span>
     <h2>Dimensionador de Trocadores de Calor de Placas</h2>
-    <p>Cálculos revisados com <strong>dados oficiais Alfa Laval</strong>, bocal padrão por modelo e desenho dimensional integrado.</p>
+    <p>Tabela visual de desempenho, base de cálculo corrigida, seleção manual de modelos e datasheet em PDF.</p>
   </div>
 </section>
 
 <main class="container">
   <div id="erroTela"></div>
 
-  <section id="identificacao" class="card">
-    <div class="card-header"><span class="step-badge">1</span><div><h3>Identificação do projeto</h3><p class="card-sub">Dados do cliente e referência</p></div></div>
-    <div class="grid-2">
+  <section id="identificacao" class="card fade-in">
+    <div class="card-header"><span class="step-badge">1</span><div><h3>Identificação do projeto</h3><p class="card-sub">Cliente e identificação do projeto</p></div></div>
+    <div class="ident-grid">
       <div class="ident-card"><label>Cliente<input type="text" id="cliente" placeholder="Nome do cliente"></label></div>
-      <div class="ident-card"><label>Identificação do projeto<div class="prj-prefixo"><span class="fixo">PRJ-AV</span><input type="text" id="numProjeto" placeholder="Número"></div></label></div>
+      <div class="ident-card"><label>Identificação do projeto<div class="prj-prefixo"><span class="fixo">PRJ-AV</span><input type="text" id="numProjeto" placeholder="Número do projeto"></div></label></div>
     </div>
   </section>
 
-  <section id="dados" class="card">
-    <div class="card-header"><span class="step-badge">2</span><div><h3>Dados do projeto</h3><p class="card-sub">Definição de fluidos e temperaturas</p></div></div>
+  <section id="dados" class="card fade-in">
+    <div class="card-header"><span class="step-badge">2</span><div><h3>Dados do projeto</h3><p class="card-sub">Produto (obrigatório) × Serviço (vazão e saída calculadas)</p></div></div>
     <div class="grid-2">
       <div class="sub-card produto">
-        <div class="sub-card-head"><h4>📦 Produto</h4></div>
+        <div class="sub-card-head"><span class="side-icon produto-icon">📦</span><h4>Produto</h4></div>
         <label class="obrigatorio">Fluido do processo
           <select id="fluidoP" onchange="preencherAutomatico()">
             <option value="agua">Água (produto)</option>
@@ -156,66 +222,105 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
             <option value="amonia_v">Amônia (vapor)</option>
           </select>
         </label>
-        <label class="obrigatorio">Vazão (m³/h)<input type="number" id="vazaoP" value="50" step="0.1" onchange="preencherAutomatico()"></label>
-        <label class="obrigatorio">Temp. Entrada (°C)<input type="number" id="tinP" value="30"></label>
-        <label class="obrigatorio">Temp. Saída (°C)<input type="number" id="toutP" value="96"></label>
+        <label class="obrigatorio">Vazão do produto (m³/h)<input type="number" id="vazaoP" value="50" step="0.1" onchange="preencherAutomatico()"></label>
+        <label class="obrigatorio">Temperatura de entrada (°C)<input type="number" id="tinP" value="30"></label>
+        <label class="obrigatorio">Temperatura de saída (°C)<input type="number" id="toutP" value="96"></label>
       </div>
       <div class="sub-card servico">
-        <div class="sub-card-head"><h4>⚙️ Serviço</h4></div>
+        <div class="sub-card-head"><span class="side-icon servico-icon">⚙️</span><h4>Serviço — Seção 1</h4></div>
         <label class="obrigatorio">Fluido de serviço
           <select id="fluidoS" onchange="preencherAutomatico(); aplicarTempRefrigerante()">
             <option value="agua">Água industrial</option>
-            <option value="vapor">Vapor saturado</option>
+            <option value="vapor">Vapor saturado (condensação)</option>
             <option value="amonia_l">Amônia (líquido)</option>
             <option value="amonia_v">Amônia (vapor)</option>
+            <option value="glicol15">Glicol 15%</option>
             <option value="glicol20">Glicol 20%</option>
             <option value="glicol30">Glicol 30%</option>
+            <option value="glicol40">Glicol 40%</option>
+            <option value="r134a">R134a (líquido)</option>
+            <option value="r410a">R410A (líquido)</option>
+            <option value="r22">R22 (líquido)</option>
             <option value="oleo">Óleo térmico</option>
+            <option value="ar">Ar / gás de processo</option>
           </select>
         </label>
-        <label class="obrigatorio">Temp. Entrada (°C)<input type="number" id="tinS" value="125"></label>
-        <label>Temp. Saída (°C)<input type="text" id="toutS" class="calculado" readonly></label>
-        <label>Vazão necessária (m³/h)<input type="text" id="vazaoS" class="calculado" readonly></label>
+        <label class="obrigatorio">Temperatura de entrada (°C)<input type="number" id="tinS" value="125"></label>
+        <label>Temperatura de saída (°C)<input type="text" id="toutS" class="calculado" placeholder="calculada" readonly></label>
+        <label>Vazão necessária do serviço (m³/h)<input type="text" id="vazaoS" class="calculado" placeholder="calculada" readonly></label>
       </div>
     </div>
 
     <div id="secoesAdicionais"></div>
     <div style="text-align:right;margin-top:12px">
-      <button type="button" class="btn-secondary" onclick="adicionarSecao()">➕ Adicionar seção</button>
-      <button type="button" class="btn-secondary" style="background:#dc2626; color:white" onclick="removerSecao()">➖ Remover seção</button>
+      <button type="button" class="btn-secondary" style="padding:8px 18px;font-size:13px" onclick="adicionarSecao()">➕ Adicionar seção</button>
+      <button type="button" class="btn-secondary" style="padding:8px 18px;font-size:13px;background:linear-gradient(135deg,#dc2626,#b91c1c)" onclick="removerSecao()">➖ Remover seção</button>
     </div>
 
     <div class="modelos-accordeon">
-      <button class="accordeon-header" onclick="toggleModelos()"><span>🔹 Modelos Alfa Laval</span></button>
+      <button class="accordeon-header open" id="hdrModelos" onclick="toggleModelos()">
+        <span>🔹 Modelos de placas Alfa Laval</span><span class="seta">▼</span>
+      </button>
       <div class="accordeon-body open" id="corpoModelos">
+        <div class="grupo-seletor">
+          <label>Seleção de modelos
+            <select id="grupoModelos" onchange="selecionarGrupo()">
+              <option value="auto">⚙️ Automático (software escolhe o melhor)</option>
+              <option value="alta_vazao">🔹 Alta vazão (TS20-M)</option>
+              <option value="media_vazao">🔹 Média vazão (M15-M20)</option>
+              <option value="baixa_vazao">🔹 Baixa vazão (M3-M10)</option>
+              <option value="fibrosos">🔹 Fibrosos/viscosos (MA30, WideGap)</option>
+              <option value="refrigerantes">🔸 Refrigerantes/condensação (semi-soldadas)</option>
+              <option value="alta_pressao">🔸 Alta pressão (A15-BW)</option>
+              <option value="evaporadores">🔸 Evaporadores/condensadores</option>
+            </select>
+          </label>
+        </div>
+        <div class="toggle-row">
+          <button class="toggle-btn active" id="btnGaxetadas" onclick="setTipo('gaxetadas')"><strong>🔹 Placas simples — Fluidos</strong><span>M3-M a WideGap 350 · líquidos, vapor, fibrosos</span></button>
+          <button class="toggle-btn semi" id="btnSemisoldadas" onclick="setTipo('semisoldadas')"><strong>🔸 Semi-soldadas — Gases</strong><span>M10-BW a MK15-BW · amônia, CO₂, condensação</span></button>
+        </div>
+        <p style="font-size:12px;color:var(--texto-suave);margin:0 0 10px">Marque os modelos desejados antes de calcular. Todos iniciam desmarcados.</p>
         <div class="modelos-lista" id="fabGrid"></div>
       </div>
     </div>
   </section>
 
-  <section id="restricoes" class="card">
-    <div class="card-header"><span class="step-badge">3</span><div><h3>Restrições</h3><p class="card-sub">Limites de projeto</p></div></div>
+  <section id="restricoes" class="card fade-in">
+    <div class="card-header"><span class="step-badge">3</span><div><h3>Restrições de projeto</h3><p class="card-sub">Preenchidas automaticamente conforme os fluidos selecionados</p></div></div>
     <div class="grid-4">
-      <label>ΔP máx. P (kPa)<input type="number" id="dpP" value="80"></label>
-      <label>ΔP máx. S (kPa)<input type="number" id="dpS" value="80"></label>
-      <label>Margem (%)<input type="number" id="margem" value="10"></label>
-      <label>Passes
+      <label>ΔP máx. produto (kPa)<input type="number" id="dpP" value="80"></label>
+      <label>ΔP máx. serviço (kPa)<input type="number" id="dpS" value="80"></label>
+      <label>Incrustação produto (m²·K/W)<input type="number" id="incP" value="0.0001" step="0.00001"></label>
+      <label>Incrustação serviço (m²·K/W)<input type="number" id="incS" value="0.0001" step="0.00001"></label>
+      <label>Margem de área (%)<input type="number" id="margem" value="10"></label>
+      <label>Configuração de placas
+        <select id="config">
+          <option value="auto">Automática (sugere a melhor)</option>
+          <option value="H">Só placas H — 60° (alta turbulência)</option>
+          <option value="L">Só placas L — 30° (baixa turbulência)</option>
+          <option value="mista">Mista H/L (produto + serviço)</option>
+        </select>
+      </label>
+      <label>Configuração de passes
         <select id="passes">
-          <option value="auto">Automática</option>
-          <option value="1x1">1x1</option>
-          <option value="2x1">2x1</option>
-          <option value="1x2">1x2</option>
-          <option value="2x2">2x2</option>
+          <option value="auto">Automática (testa 1×1 a 3×3)</option>
+          <option value="1x1">1 passe × 1 passe</option>
+          <option value="2x1">2 passes × 1 passe</option>
+          <option value="1x2">1 passe × 2 passes</option>
+          <option value="2x2">2 passes × 2 passes</option>
+          <option value="3x3">3 passes × 3 passes</option>
         </select>
       </label>
     </div>
   </section>
 
-  <div class="calc-area">
-    <button id="btnCalcular" class="btn-primary">⚙️ Calcular Dimensionamento</button>
+  <div class="calc-area fade-in">
+    <button id="btnCalcular" class="btn-primary"><span>⚙️</span> Calcular Dimensionamento</button>
   </div>
 
-  <section id="resultado" class="card resultado-card" style="display:none;">
+  <section id="resultado" class="card resultado-card fade-in" style="display:none;">
+    <div class="card-header"><span class="step-badge">4</span><div><h3>Resultado do dimensionamento</h3><p class="card-sub">Equipamento, parâmetros, desempenho, materiais e datasheet</p></div></div>
     <div class="tabs">
       <button class="tab-btn active" id="tabResultadoBtn" onclick="trocarAba('resultado')">📊 Resultado</button>
       <button class="tab-btn" id="tabDatasheetBtn" onclick="trocarAba('datasheet')">📋 Datasheet</button>
@@ -224,40 +329,100 @@ input.calculado{background:#eef4fb;border-color:var(--azul-claro);color:var(--az
     <div class="tab-pane" id="paneDatasheet">
       <div id="datasheetConteudo"></div>
       <div class="calc-area">
-        <button id="btnPdf" class="btn-primary" style="background:var(--vermelho)">📄 Baixar PDF</button>
+        <button id="btnPdf" class="btn-pdf">📄 Baixar Datasheet em PDF</button>
+        <button id="btnImprimir" class="btn-secondary">🖨️ Imprimir</button>
       </div>
     </div>
   </section>
+
 </main>
 
+<section id="contato" class="contato">
+  <div class="container">
+    <h3>Vamos construir soluções juntos?</h3>
+    <p>Fale com a equipe de engenharia de aplicações da AlfaVed para seleção e manutenção de trocadores de calor.</p>
+    <div class="contato-grid">
+      <div class="contato-item"><span class="contato-icon">📍</span><div><strong>Endereço</strong><span>Penápolis, SP, Brasil</span></div></div>
+      <div class="contato-item"><span class="contato-icon">📞</span><div><strong>Telefone</strong><span>(18) 3653-1000</span></div></div>
+      <div class="contato-item"><span class="contato-icon">✉️</span><div><strong>E-mail</strong><span>contato@alfaved.com.br</span></div></div>
+      <div class="contato-item"><span class="contato-icon">💬</span><div><strong>WhatsApp</strong><a href="https://wa.me/551836531000" target="_blank">Falar no WhatsApp</a></div></div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-brand">
+      <div class="brand-logo" style="width:34px;height:34px;border-radius:8px">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:28px;height:28px">
+          <circle cx="50" cy="50" r="42" fill="none" stroke="#123b6d" stroke-width="8" stroke-dasharray="240 24" stroke-dashoffset="0" stroke-linecap="round"/>
+          <path d="M50 22 L33 82 L42 82 L50 58 Z" fill="#2f7fd1"/>
+          <path d="M50 22 L67 82 L58 82 L50 58 Z" fill="#123b6d"/>
+          <path d="M50 58 L40 82 L60 82 Z" fill="#c8102e"/>
+        </svg>
+      </div>
+      <span>AlfaVed Dimensionador-PHE</span>
+    </div>
+    <p class="footer-note">Dimensionamento preliminar para seleção; valores finais devem ser confirmados com o software oficial e catálogos da Alfa Laval.</p>
+    <p class="footer-copy">© 2026 AlfaVed — CNPJ 50.093.389/0001-35</p>
+  </div>
+</footer>
+
 <script>
-/* LÓGICA DE ENGENHARIA v27 */
+/* ============================================================
+   AlfaVed Dimensionador-PHE · v26
+   Sem gráfico — tabela visual de desempenho com barras
+   ============================================================ */
+
+/* ---------- MODELOS ALFA LAVAL ---------- */
 var ALFA_LAVAL = {
-  gaxetadas: [<br/>
-    {nome:'M3-M', A:0.032, W:0.10, b:0.0020, vazaoMax:14, Pmax:16, Tmax:180, porta:0.050, H:480, Wmm:180, h:null},<br/>
-    {nome:'M6-B', A:0.061, W:0.12, b:0.0022, vazaoMax:25, Pmax:16, Tmax:180, porta:0.050, H:920, Wmm:320, h:null},<br/>
-    {nome:'M6-M', A:0.061, W:0.12, b:0.0025, vazaoMax:30, Pmax:16, Tmax:180, porta:0.050, H:920, Wmm:320, h:null},<br/>
-    {nome:'TL6-B',A:0.08, W:0.13, b:0.0025, vazaoMax:35, Pmax:20, Tmax:180, porta:0.065, H:null, Wmm:null, h:null},<br/>
-    {nome:'M10-B',A:0.10, W:0.15, b:0.0025, vazaoMax:50, Pmax:20, Tmax:180, porta:0.100, H:1084, Wmm:225, h:null},<br/>
-    {nome:'M10-M',A:0.10, W:0.15, b:0.0030, vazaoMax:55, Pmax:20, Tmax:180, porta:0.100, H:1084, Wmm:225, h:null},<br/>
-    {nome:'M15-B',A:0.16, W:0.18, b:0.0028, vazaoMax:80, Pmax:25, Tmax:180, porta:0.100, H:1815, Wmm:298, h:null},<br/>
-    {nome:'M15-M',A:0.16, W:0.18, b:0.0032, vazaoMax:85, Pmax:25, Tmax:180, porta:0.100, H:1885, Wmm:298, h:null},<br/>
-    {nome:'M20-M',A:0.21, W:0.20, b:0.0032, vazaoMax:100, Pmax:25, Tmax:180, porta:0.150, H:2100, Wmm:800, h:2200},<br/>
-    {nome:'T20-B',A:0.20, W:0.20, b:0.0030, vazaoMax:95, Pmax:25, Tmax:180, porta:0.150, H:2141, Wmm:780, h:280},<br/>
-    {nome:'TS20-M',A:0.70, W:0.20, b:0.0040, vazaoMax:677, Pmax:30, Tmax:210, porta:0.200, H:1405, Wmm:740, h:360},<br/>
-    {nome:'MA30', A:0.30, W:0.24, b:0.0110, vazaoMax:120, Pmax:25, Tmax:200, porta:0.200, H:1811, Wmm:561, h:null},<br/>
-    {nome:'WideGap 350',A:0.35, W:0.26, b:0.0110, vazaoMax:400, Pmax:22.9, Tmax:180, porta:0.350, H:null, Wmm:null, h:null}
+  gaxetadas: [
+    {nome:'M3-M', A:0.032, W:0.10, b:0.0020, vazaoMax:14,  Pmax:16, Tmax:180, kW:'50-250',    tipo:'Líquidos', porta:0.050},
+    {nome:'M6-B', A:0.061, W:0.12, b:0.0022, vazaoMax:25,  Pmax:16, Tmax:180, kW:'300-800',   tipo:'Líquidos', porta:0.050},
+    {nome:'M6-M', A:0.061, W:0.12, b:0.0025, vazaoMax:30,  Pmax:16, Tmax:180, kW:'300-800',   tipo:'Líquidos', porta:0.050},
+    {nome:'TL6-B',A:0.08,  W:0.13, b:0.0025, vazaoMax:35,  Pmax:20, Tmax:180, kW:'400-900',   tipo:'Líquidos', porta:0.065},
+    {nome:'M10-B',A:0.10,  W:0.15, b:0.0025, vazaoMax:50,  Pmax:20, Tmax:180, kW:'700-3000',  tipo:'Líquidos', porta:0.100},
+    {nome:'M10-M',A:0.10,  W:0.15, b:0.0030, vazaoMax:55,  Pmax:20, Tmax:180, kW:'700-3000',  tipo:'Líquidos', porta:0.100},
+    {nome:'M15-B',A:0.16,  W:0.18, b:0.0028, vazaoMax:80,  Pmax:25, Tmax:180, kW:'1000-4000', tipo:'Líquidos', porta:0.100},
+    {nome:'M15-M',A:0.16,  W:0.18, b:0.0032, vazaoMax:85,  Pmax:25, Tmax:180, kW:'1000-4000', tipo:'Líquidos', porta:0.100},
+    {nome:'M20-M',A:0.21,  W:0.20, b:0.0032, vazaoMax:100, Pmax:25, Tmax:180, kW:'1500-5000', tipo:'Líquidos', porta:0.150},
+    {nome:'T20-B',A:0.20,  W:0.20, b:0.0030, vazaoMax:95,  Pmax:25, Tmax:180, kW:'1500-5000', tipo:'Líquidos', porta:0.150},
+    {nome:'TS20-M',A:0.70, W:0.20, b:0.0040, vazaoMax:677, Pmax:30, Tmax:210, kW:'2500-15000',tipo:'Alta vazão', porta:0.200},
+    {nome:'MA30', A:0.30,  W:0.24, b:0.0110, vazaoMax:120, Pmax:25, Tmax:200, kW:'2000-6000', tipo:'Fibrosos/viscosos', porta:0.200},
+    {nome:'WideGap 350',A:0.35,W:0.26,b:0.0110,vazaoMax:400,Pmax:22.9,Tmax:180,kW:'3000-9000',tipo:'Fibrosos/partículas', porta:0.350}
   ],
-  semisoldadas: [<br/>
-    {nome:'M10-BW', A:0.10, W:0.15, b:0.0025, vazaoMax:50, Pmax:25, Tmax:180, porta:0.100, H:null, Wmm:null, h:null},<br/>
-    {nome:'T20-BW', A:0.20, W:0.20, b:0.0030, vazaoMax:95, Pmax:25, Tmax:180, porta:0.150, H:null, Wmm:null, h:null},<br/>
-    {nome:'M20-MW', A:0.21, W:0.20, b:0.0032, vazaoMax:100, Pmax:25, Tmax:180, porta:0.150, H:null, Wmm:null, h:null}
+  semisoldadas: [
+    {nome:'M10-BW', A:0.10, W:0.15, b:0.0025, vazaoMax:50,  Pmax:25, Tmax:180, kW:'175-875',  tipo:'Amônia/CO₂', porta:0.100},
+    {nome:'T20-BW', A:0.20, W:0.20, b:0.0030, vazaoMax:95,  Pmax:25, Tmax:180, kW:'350-1500', tipo:'Amônia/CO₂', porta:0.150},
+    {nome:'M20-MW', A:0.21, W:0.20, b:0.0032, vazaoMax:100, Pmax:25, Tmax:180, kW:'400-1600', tipo:'Amônia/CO₂', porta:0.150},
+    {nome:'A15-BW', A:0.15, W:0.17, b:0.0028, vazaoMax:70,  Pmax:30, Tmax:200, kW:'300-1200', tipo:'Alta pressão', porta:0.100},
+    {nome:'MK15-BW',A:0.15,W:0.18, b:0.0028, vazaoMax:80,  Pmax:25, Tmax:180, kW:'350-1575', tipo:'Evap/cond', porta:0.150},
+    {nome:'AlfaWap', A:0.20, W:0.20, b:0.0030, vazaoMax:90,  Pmax:25, Tmax:180, kW:'400-1600', tipo:'Evaporador', porta:0.150},
+    {nome:'AlfaCond',A:0.20, W:0.20, b:0.0030, vazaoMax:90,  Pmax:25, Tmax:180, kW:'400-1600', tipo:'Condensador', porta:0.150}
   ]
 };
 
-var TAB_AGUA = [[0,999.8,0.001792,4217,0.561],[10,999.7,0.001307,4193,0.580],[20,998.2,0.001002,4185,0.598],[30,995.7,0.000798,4179,0.615],[40,992.2,0.000653,4179,0.631],[50,988.0,0.000547,4181,0.643],[60,983.2,0.000467,4185,0.654],[70,977.8,0.000404,4190,0.663],[80,971.8,0.000355,4197,0.670],[90,965.3,0.000315,4207,0.676],[100,958.4,0.000282,4216,0.682]];
-var TAB_VAPOR = [[100,0.598,1.22e-5,0.0248,2257],[120,1.121,1.30e-5,0.0270,2202],[140,1.966,1.38e-5,0.0310,2145],[160,3.258,1.46e-5,0.0350,2081],[180,5.157,1.54e-5,0.0390,2011]];
+/* ---------- GRUPOS DE MODELOS ---------- */
+var GRUPOS_MODELOS = {
+  'auto': {nome:'Automático', tipo:null, modelos:null},
+  'alta_vazao': {nome:'Alta vazão', tipo:'gaxetadas', modelos:['TS20-M']},
+  'media_vazao': {nome:'Média vazão', tipo:'gaxetadas', modelos:['M15-B','M15-M','M20-M','T20-B']},
+  'baixa_vazao': {nome:'Baixa vazão', tipo:'gaxetadas', modelos:['M3-M','M6-B','M6-M','TL6-B','M10-B','M10-M']},
+  'fibrosos': {nome:'Fibrosos/viscosos', tipo:'gaxetadas', modelos:['MA30','WideGap 350']},
+  'refrigerantes': {nome:'Refrigerantes/condensação', tipo:'semisoldadas', modelos:['M10-BW','T20-BW','M20-MW','MK15-BW']},
+  'alta_pressao': {nome:'Alta pressão', tipo:'semisoldadas', modelos:['A15-BW']},
+  'evaporadores': {nome:'Evaporadores/condensadores', tipo:'semisoldadas', modelos:['AlfaWap','AlfaCond']}
+};
 
+/* ---------- TEMPERATURAS PADRÃO DE REFRIGERANTES ---------- */
+var TEMP_REFRIGERANTE = { 'r134a':-10, 'r410a':-5, 'r22':-10, 'amonia_l':-20, 'amonia_v':-20 };
+function aplicarTempRefrigerante() {
+  var fS = document.getElementById('fluidoS').value;
+  var tinS = document.getElementById('tinS');
+  if (TEMP_REFRIGERANTE[fS] !== undefined) tinS.value = TEMP_REFRIGERANTE[fS];
+}
+
+/* ---------- INTERPOLAÇÃO ---------- */
 function interp(arr, t) {
   if (t <= arr[0][0]) return arr[0][1];
   if (t >= arr[arr.length-1][0]) return arr[arr.length-1][1];
@@ -270,114 +435,533 @@ function interp(arr, t) {
   return arr[arr.length-1][1];
 }
 
+/* ---------- TABELAS REAIS ---------- */
+var TAB_AGUA = [
+  [0,999.8,0.001792,4217,0.561],[10,999.7,0.001307,4193,0.580],
+  [20,998.2,0.001002,4185,0.598],[30,995.7,0.000798,4179,0.615],
+  [40,992.2,0.000653,4179,0.631],[50,988.0,0.000547,4181,0.643],
+  [60,983.2,0.000467,4185,0.654],[70,977.8,0.000404,4190,0.663],
+  [80,971.8,0.000355,4197,0.670],[90,965.3,0.000315,4207,0.676],
+  [100,958.4,0.000282,4216,0.682]
+];
+var TAB_VAPOR = [
+  [100,0.598,1.22e-5,0.0248,2257],[110,0.826,1.26e-5,0.0260,2230],
+  [120,1.121,1.30e-5,0.0270,2202],[130,1.496,1.34e-5,0.0290,2174],
+  [140,1.966,1.38e-5,0.0310,2145],[150,2.547,1.42e-5,0.0330,2113],
+  [160,3.258,1.46e-5,0.0350,2081],[170,4.122,1.50e-5,0.0370,2047],
+  [180,5.157,1.54e-5,0.0390,2011],[190,6.394,1.58e-5,0.0410,1975],
+  [200,7.86,1.62e-5,0.0430,1938]
+];
+var TAB_GLICOL = {
+  '15':[1017,4050,0.545,0.0019],'20':[1026,3960,0.525,0.0027],
+  '30':[1040,3780,0.485,0.0045],'40':[1055,3600,0.445,0.0080]
+};
+var INC_SUG = {
+  agua:0.0001, vapor:0.0001, amonia_l:0.0001, amonia_v:0.0001,
+  glicol15:0.0002, glicol20:0.0002, glicol30:0.0002, glicol40:0.0002,
+  r134a:0.0001, r410a:0.0001, r22:0.0001, oleo:0.0002, ar:0.0001,
+  leite:0.0002, cerveja:0.0002, suco:0.0003, salmoura:0.0002,
+  xarope:0.0003, oleoveg:0.0002, co2:0.0001
+};
+
+/* ---------- PROPRIEDADES DOS FLUIDOS ---------- */
 function props(f, T) {
   var t = T || 40;
-  if(f==='agua') return {rho:interp(TAB_AGUA.map(r=>[r[0],r[1]]),t), cp:interp(TAB_AGUA.map(r=>[r[0],r[3]]),t), k:interp(TAB_AGUA.map(r=>[r[0],r[4]]),t), mu:interp(TAB_AGUA.map(r=>[r[0],r[2]]),t), nome:'Água'};<br/>
-  if(f==='vapor') return {rho:interp(TAB_VAPOR.map(r=>[r[0],r[1]]),t), cp:2040, k:0.026, mu:1.3e-5, hfg:interp(TAB_VAPOR.map(r=>[r[0],r[4]]),t), condensing:true, nome:'Vapor'};<br/>
-  return {rho:1000, cp:4186, k:0.6, mu:0.001, nome:'Fluido'};
+  switch (f) {
+    case 'agua':
+      return {rho:interp(TAB_AGUA.map(function(r){return [r[0],r[1]];}),t), cp:interp(TAB_AGUA.map(function(r){return [r[0],r[3]];}),t), k:interp(TAB_AGUA.map(function(r){return [r[0],r[4]];}),t), mu:interp(TAB_AGUA.map(function(r){return [r[0],r[2]];}),t), muFn:function(tt){return interp(TAB_AGUA.map(function(r){return [r[0],r[2]];}),tt);}, nome:'Água industrial'};
+    case 'vapor': {
+      var rho = interp(TAB_VAPOR.map(function(r){return [r[0],r[1]];}), t);
+      var mu  = interp(TAB_VAPOR.map(function(r){return [r[0],r[2]];}), t);
+      var k   = interp(TAB_VAPOR.map(function(r){return [r[0],r[3]];}), t);
+      var hfg = interp(TAB_VAPOR.map(function(r){return [r[0],r[4]];}), t);
+      return {rho:rho, cp:2040, k:k, mu:mu, muFn:function(tt){return interp(TAB_VAPOR.map(function(r){return [r[0],r[2]];}),tt);}, hfg:hfg, condensing:true, nome:'Vapor saturado'};
+    }
+    case 'amonia_l': return {rho:639-1.45*t, cp:4600+5*t, k:0.54-0.0015*t, mu:0.000225*Math.exp(-0.0058*t), muFn:function(tt){return 0.000225*Math.exp(-0.0058*tt);}, nome:'Amônia (líquido)'};
+    case 'amonia_v': return {rho:3.2*(303)/(t+273), cp:2150, k:0.024, mu:1.0e-5, muFn:function(){return 1.0e-5;}, nome:'Amônia (vapor)'};
+    case 'glicol15': return {rho:TAB_GLICOL['15'][0], cp:TAB_GLICOL['15'][1], k:TAB_GLICOL['15'][2], mu:TAB_GLICOL['15'][3]*Math.exp(-0.022*(t-20)), muFn:function(tt){return TAB_GLICOL['15'][3]*Math.exp(-0.022*(tt-20));}, nome:'Glicol 15%'};
+    case 'glicol20': return {rho:TAB_GLICOL['20'][0], cp:TAB_GLICOL['20'][1], k:TAB_GLICOL['20'][2], mu:TAB_GLICOL['20'][3]*Math.exp(-0.022*(t-20)), muFn:function(tt){return TAB_GLICOL['20'][3]*Math.exp(-0.022*(tt-20));}, nome:'Glicol 20%'};
+    case 'glicol30': return {rho:TAB_GLICOL['30'][0], cp:TAB_GLICOL['30'][1], k:TAB_GLICOL['30'][2], mu:TAB_GLICOL['30'][3]*Math.exp(-0.022*(t-20)), muFn:function(tt){return TAB_GLICOL['30'][3]*Math.exp(-0.022*(tt-20));}, nome:'Glicol 30%'};
+    case 'glicol40': return {rho:TAB_GLICOL['40'][0], cp:TAB_GLICOL['40'][1], k:TAB_GLICOL['40'][2], mu:TAB_GLICOL['40'][3]*Math.exp(-0.022*(t-20)), muFn:function(tt){return TAB_GLICOL['40'][3]*Math.exp(-0.022*(tt-20));}, nome:'Glicol 40%'};
+    case 'r134a': return {rho:1290, cp:1340, k:0.095, mu:3.3e-4, muFn:function(){return 3.3e-4;}, nome:'R134a (líquido)'};
+    case 'r410a': return {rho:1100, cp:1600, k:0.090, mu:1.4e-4, muFn:function(){return 1.4e-4;}, nome:'R410A (líquido)'};
+    case 'r22': return {rho:1200, cp:1180, k:0.085, mu:2.2e-4, muFn:function(){return 2.2e-4;}, nome:'R22 (líquido)'};
+    case 'oleo': return {rho:850, cp:2100, k:0.14, mu:0.06*Math.exp(-0.025*(t-20)), muFn:function(tt){return 0.06*Math.exp(-0.025*(tt-20));}, nome:'Óleo térmico'};
+    case 'ar': return {rho:1.16*(303)/(t+273), cp:1007, k:0.026, mu:1.85e-5, muFn:function(){return 1.85e-5;}, nome:'Ar / gás'};
+    case 'co2': return {rho:1.87*(303)/(t+273), cp:850, k:0.0166, mu:1.5e-5, muFn:function(){return 1.5e-5;}, nome:'CO₂'};
+    case 'leite': return {rho:1030, cp:3930, k:0.53, mu:0.0021*Math.exp(-0.018*(t-20)), muFn:function(tt){return 0.0021*Math.exp(-0.018*(tt-20));}, nome:'Leite'};
+    case 'cerveja': return {rho:1010, cp:4100, k:0.56, mu:0.0019*Math.exp(-0.018*(t-20)), muFn:function(tt){return 0.0019*Math.exp(-0.018*(tt-20));}, nome:'Cerveja'};
+    case 'suco': return {rho:1040, cp:3900, k:0.54, mu:0.0025*Math.exp(-0.018*(t-20)), muFn:function(tt){return 0.0025*Math.exp(-0.018*(tt-20));}, nome:'Suco de frutas'};
+    case 'oleoveg': return {rho:920, cp:2000, k:0.17, mu:0.05*Math.exp(-0.02*(t-20)), muFn:function(tt){return 0.05*Math.exp(-0.02*(tt-20));}, nome:'Óleo vegetal'};
+    case 'salmoura': return {rho:1170, cp:3200, k:0.50, mu:0.0025*Math.exp(-0.015*(t-20)), muFn:function(tt){return 0.0025*Math.exp(-0.015*(tt-20));}, nome:'Salmoura (NaCl 20%)'};
+    case 'xarope': return {rho:1300, cp:2900, k:0.40, mu:0.10*Math.exp(-0.02*(t-20)), muFn:function(tt){return 0.10*Math.exp(-0.02*(tt-20));}, nome:'Xarope de açúcar'};
+    default: return {rho:1000, cp:4186, k:0.60, mu:0.0010, muFn:function(){return 0.0010;}, nome:'Fluido genérico'};
+  }
 }
 
+/* ---------- TÓPICO 3 AUTOMÁTICO ---------- */
+function preencherAutomatico() {
+  var fP = document.getElementById('fluidoP').value;
+  var fS = document.getElementById('fluidoS').value;
+  if (INC_SUG[fP]) document.getElementById('incP').value = INC_SUG[fP];
+  if (INC_SUG[fS]) document.getElementById('incS').value = INC_SUG[fS];
+  var dpProduto = 80, dpServico = 80;
+  if (['oleo','oleoveg','xarope','salmoura','suco','leite','cerveja'].indexOf(fP) !== -1) dpProduto = 60;
+  if (['oleo','xarope','glicol40','glicol30'].indexOf(fS) !== -1) dpServico = 60;
+  if (['ar','co2','amonia_v'].indexOf(fP) !== -1) dpProduto = 100;
+  if (['ar','amonia_v'].indexOf(fS) !== -1) dpServico = 100;
+  document.getElementById('dpP').value = dpProduto;
+  document.getElementById('dpS').value = dpServico;
+  var cfg = document.getElementById('config');
+  if (['oleo','oleoveg','xarope','salmoura'].indexOf(fP) !== -1) cfg.value = 'L';
+  else if (['ar','co2','amonia_v'].indexOf(fP) !== -1) cfg.value = 'H';
+  else cfg.value = 'auto';
+  var vazao = parseFloat(document.getElementById('vazaoP').value) || 50;
+  var passes = document.getElementById('passes');
+  if (vazao > 200) passes.value = '1x1';
+  else if (vazao < 30) passes.value = '2x2';
+  else passes.value = 'auto';
+}
+
+/* ---------- SELEÇÃO DE MATERIAIS ---------- */
+function selecionarGaxeta(fluido, Tmax, condensante) {
+  if (Tmax > 180) return {mat:'FKM (Viton)', temp:'-5 a 180°C', obs:'Alta temperatura e meios agressivos'};
+  if (condensante) return {mat:'EPDM', temp:'-40 a 150°C', obs:'Vapor e água quente — excelente resistência'};
+  switch (fluido) {
+    case 'Óleo térmico': case 'Óleo vegetal': case 'Xarope de açúcar': case 'Salmoura (NaCl 20%)': return {mat:'NBR (Nitrile)', temp:'-10 a 110°C', obs:'Resistente a óleos e gorduras'};
+    case 'Água industrial': case 'Leite': case 'Cerveja': case 'Suco de frutas': case 'Glicol 15%': case 'Glicol 20%': case 'Glicol 30%': case 'Glicol 40%': return {mat:'EPDM', temp:'-40 a 150°C', obs:'Água, alimentos e CIP — padrão da indústria'};
+    case 'R134a (líquido)': case 'R410A (líquido)': case 'R22 (líquido)': case 'Amônia (líquido)': case 'Amônia (vapor)': return {mat:'HNBR', temp:'-30 a 150°C', obs:'Refrigerantes e amônia — resistência química'};
+    default: return {mat:'EPDM', temp:'-40 a 150°C', obs:'Uso geral'};
+  }
+}
+function selecionarCorpoGaxeta(fluido, Tmax, condensante) {
+  if (Tmax > 180) return {mat:'FKM (Viton)', obs:'Alta temperatura e meios agressivos'};
+  if (condensante) return {mat:'EPDM', obs:'Vapor e água quente'};
+  switch (fluido) {
+    case 'Óleo térmico': case 'Óleo vegetal': case 'Xarope de açúcar': case 'Salmoura (NaCl 20%)': return {mat:'NBR (Nitrile)', obs:'Resistente a óleos e gorduras'};
+    case 'Água industrial': case 'Leite': case 'Cerveja': case 'Suco de frutas': case 'Glicol 15%': case 'Glicol 20%': case 'Glicol 30%': case 'Glicol 40%': return {mat:'EPDM', obs:'Água, alimentos e CIP'};
+    case 'R134a (líquido)': case 'R410A (líquido)': case 'R22 (líquido)': case 'Amônia (líquido)': case 'Amônia (vapor)': return {mat:'HNBR', obs:'Refrigerantes e amônia'};
+    default: return {mat:'EPDM', obs:'Uso geral'};
+  }
+}
+function selecionarAnel(tipo, fluido, Tmax) {
+  if (tipo !== 'semisoldadas') return null;
+  return {mat:'CR (Cloropreno)', temp:'-30 a 120°C', obs:'Anel de vedação em placas semi-soldadas — resistente a óleos, ozônio e intempéries'};
+}
+var LIGAS_PLACA = {
+  'AISI 304L': {apl:'Custo-benefício, baixa temperatura, sem cloretos, refrigerantes, gases'},
+  'AISI 316L': {apl:'Padrão geral, alimentos, água, glicóis, boa resistência a cloretos moderados'},
+  '904L': {apl:'Meios com cloretos e ácidos, alta resistência à corrosão (super austenítico)'},
+  '254 SMO': {apl:'Águas com alto teor de cloretos, água do mar, meios agressivos — até ~6000 ppm Cl⁻'},
+  'Titânio (Ti)': {apl:'Águas salinas, cloretos, água do mar — resistência superior a corrosão'},
+  'Alloy 20/18/6': {apl:'Ácidos sulfúrico e fosfórico, meios químicos agressivos'},
+  'C-276 (Hastelloy)': {apl:'Ácidos fortes, cloretos, meios quimicamente agressivos, alta temperatura'},
+  'C-2000': {apl:'Meios oxidantes e redutores, ácidos, cloretos — resistência superior'},
+  'C-22': {apl:'Alternativa econômica ao C-276, ácidos e cloretos'},
+  'G-30': {apl:'Ácidos fosfórico e sulfúrico concentrados'},
+  '825': {apl:'Ácidos, cloretos, água do mar — liga níquel-ferro'},
+  'Níquel (Ni)': {apl:'Cáusticos (NaOH/KOH), meios alcalinos concentrados'}
+};
+function selecionarPlaca(fluido, Tmax, salino) {
+  if (salino || fluido === 'Salmoura (NaCl 20%)') return {mat:'Titânio (Ti)', obs:'Águas salinas e cloretos — resistência superior'};
+  if (['Água industrial','Leite','Cerveja','Suco de frutas','Glicol 15%','Glicol 20%','Glicol 30%','Glicol 40%','Xarope de açúcar'].indexOf(fluido) !== -1) return {mat:'AISI 316L', obs:'Padrão para alimentos, água e glicóis — boa resistência a cloretos'};
+  if (fluido === 'Óleo térmico' || fluido === 'Óleo vegetal') return {mat:'AISI 316L', obs:'Óleos — resistência padrão'};
+  if (['Amônia (líquido)','Amônia (vapor)','R134a (líquido)','R410A (líquido)','R22 (líquido)'].indexOf(fluido) !== -1) return {mat:'AISI 304L', obs:'Refrigerantes — custo-benefício'};
+  if (fluido === 'Ar / gás' || fluido === 'CO₂') return {mat:'AISI 304L', obs:'Gases — aplicação padrão'};
+  return {mat:'AISI 316L', obs:'Uso geral'};
+}
+var MATERIAIS_REF = {
+  gaxetas: {
+    'NBR (Nitrile)': {temp:'-10 a 110°C (pico 130°C)', apl:'Óleos, combustíveis, gorduras — NÃO usar com água quente/vapor'},
+    'EPDM': {temp:'-40 a 150°C', apl:'Água quente, vapor, alimentos, CIP, ácidos diluídos, álcalis — padrão indústria'},
+    'FKM (Viton)': {temp:'-5 a 180°C (pico 200°C)', apl:'Alta temperatura, meios agressivos, hidrocarbonetos, ácidos fortes'},
+    'HNBR': {temp:'-30 a 150°C', apl:'Refrigerantes, amônia, óleos com temperatura — resistência mecânica superior'}
+  }
+};
+
+/* ---------- U GLOBAL INICIAL VARIÁVEL ---------- */
+function estimarU(fP, fS, vaporCond) {
+  var nomeP = fP.nome, nomeS = fS.nome;
+  if (vaporCond) {
+    if (nomeP.indexOf('Água') !== -1) return 5000;
+    if (nomeP.indexOf('Glicol') !== -1) return 3000;
+    if (nomeP.indexOf('Óleo') !== -1) return 800;
+    return 3000;
+  }
+  if (nomeP.indexOf('Água') !== -1 && nomeS.indexOf('Água') !== -1) return 6500;
+  if (nomeP.indexOf('Água') !== -1 && nomeS.indexOf('Glicol') !== -1) return 3000;
+  if (nomeP.indexOf('Água') !== -1 && nomeS.indexOf('Óleo') !== -1) return 1000;
+  if (nomeP.indexOf('Glicol') !== -1 && nomeS.indexOf('Água') !== -1) return 3000;
+  if (nomeP.indexOf('Óleo') !== -1) return 800;
+  if (nomeP.indexOf('Glicol') !== -1) return 2500;
+  return 2500;
+}
+function fatorAmpliacao(ang) { if (ang === 60) return 1.25; if (ang === 30) return 1.15; return 1.20; }
 function calcEficiencia(Q, mP, cpP, mS, cpS, tinS, tinP, vaporCond) {
-  var Qmax = (vaporCond ? (mP*cpP) : Math.min(mP*cpP, mS*cpS)) * Math.abs(tinS - tinP);<br/>
-  return Qmax <= 0 ? 0 : Math.min(1, Q / Qmax);
+  if (vaporCond) {
+    var Qmax = mP * cpP * Math.abs(tinS - tinP);
+    if (Qmax <= 0) return 0;
+    return Math.min(1, Q / Qmax);
+  }
+  var Cmin = Math.min(mP*cpP, mS*cpS);
+  if (Cmin <= 0) return 0;
+  var Qmax = Cmin * Math.abs(tinS - tinP);
+  if (Qmax <= 0) return 0;
+  return Math.min(1, Q / Qmax);
 }
 
-function dimensionarModelo(mod, sec, d, fP, fS, Q, lmtd, cfgKey, pP, pS) {
-  var kw=16, tw=0.0005, L=mod.A/mod.W;
-  var DhP=2*mod.b/1.25, DhS=2*mod.b/1.25;
-  var Nc=Math.max(3, Math.ceil((Q/(estimarU(fP,fS,!!fS.condensing)*lmtd))*(1+d.margem/100)/(2*mod.A)));
-  var res=null;
-  for(var i=0; i<100; i++){
-    var A_inst=2*Nc*mod.A, canaisP=Math.max(1, Math.floor(Nc/pP)), canaisS=Math.max(1, Math.floor(Nc/pS));
-    var GP=d.mP/(canaisP*mod.b*mod.W), GS=fS.condensing?0:d.mS/(canaisS*mod.b*mod.W);<br/>
-    var hP=5000, hS=fS.condensing?8000:5000; // Simplificado para exemplo
-    var U=1/(1/hP + 0.0001 + tw/kw + 0.0001 + 1/hS);
-    if(A_inst >= (Q/(U*lmtd))*(1+d.margem/100)){
-      res={Nc:Nc, Nplacas:2*Nc+1, A_inst:A_inst, U:U, dPP:Math.min(300, 50), dPS:Math.min(300, 50)};
+/* ---------- BOCAL PADRÃO POR MODELO ---------- */
+function nomeConexao(portaM) {
+  var dn = Math.round(portaM * 1000);
+  var pol = (portaM * 39.3701).toFixed(1);
+  return 'DN ' + dn + ' (' + pol + '")';
+}
+function verificarVelocidadePorta(m, rho, portaM, gas) {
+  var Aporta = Math.PI * Math.pow(portaM, 2) / 4;
+  var vporta = m / (rho * Aporta);
+  var limite = gas ? 25 : 8;
+  return { vporta: vporta, ok: vporta <= limite, limite: limite };
+}
+function ehGas(rho) { return rho < 10; }
+
+/* ---------- CORRELAÇÕES ---------- */
+var CORR = {30:{C:0.348,m:0.663,K:1.20},45:{C:0.270,m:0.700,K:2.20},60:{C:0.122,m:0.750,K:4.50}};
+function classTurb(Re) { if (Re<400) return 'Laminar'; if (Re<2000) return 'Transição'; return 'Turbulento'; }
+function calcConveccao(G,Dh,mu,cp,k,ang) { var Re=G*Dh/mu,Pr=mu*cp/k,c=CORR[ang],Nu=c.C*Math.pow(Re,c.m)*Math.pow(Pr,1/3),h=Nu*k/Dh; return {Re:Re,Pr:Pr,Nu:Nu,h:h,turb:classTurb(Re)}; }
+function fAtrito(Re,ang) { return CORR[ang].K*Math.pow(Re,-0.20); }
+function calcLado(G,Dh,f,ang,Tm,TmOutro,hOutro) { var base=calcConveccao(G,Dh,f.mu,f.cp,f.k,ang),R1=1/base.h,R2=hOutro?1/hOutro:1e6,Tw=(Tm*R2+TmOutro*R1)/(R1+R2),muW=f.muFn?f.muFn(Tw):f.mu,h=base.h*Math.pow(f.mu/muW,0.17); return {Re:base.Re,Pr:base.Pr,Nu:base.Nu,h:h,turb:base.turb}; }
+function hCondensacao(tSat,tMedia) { var dT=Math.max(2,tSat-tMedia); return Math.min(12000,Math.max(5000,9500/Math.pow(dT,0.12))); }
+function fatorCorrecao(P,R) { if(P<=0||R<=0||Math.abs(R-1)<1e-6)return 1; if(P>=1||P*R>=1)return 0.8; var num=Math.sqrt(R*R+1)*Math.log((1-P)/(1-P*R)); var den=(R-1)*Math.log((2-P*(R+1-Math.sqrt(R*R+1)))/(2-P*(R+1+Math.sqrt(R*R+1)))); if(Math.abs(den)<1e-6)return 1; return Math.max(0.5,Math.min(1,num/den)); }
+function fatorMultiPass(P,R,pP,pS) { var parP=(pP%2)===0,parS=(pS%2)===0; if(parP===parS)return 1; return fatorCorrecao(P,R); }
+var CONFIGS = {'H':{nome:'Só H',ap:60,as:60},'L':{nome:'Só L',ap:30,as:30},'H-L':{nome:'Mista H/L',ap:60,as:30},'L-H':{nome:'Mista L/H',ap:30,as:60}};
+var LISTA_PASSES = ['1x1','2x1','1x2','2x2','3x3'];
+
+/* ---------- DIMENSIONAMENTO POR MODELO ---------- */
+function dimensionarModelo(mod,sec,d,fP,fS,Q,lmtd,cfgKey,pP,pS) {
+  var cfg=CONFIGS[cfgKey],ap=cfg.ap,as=cfg.as,kw=16,tw=0.0005,L=mod.A/mod.W;
+  var DhP=2*mod.b/fatorAmpliacao(ap),DhS=2*mod.b/fatorAmpliacao(as);
+  var vaporCond=!!fS.condensing,TmP=(sec.tinP+sec.toutP)/2,TmS=sec.tinS;
+  var Uest=estimarU(fP,fS,vaporCond);
+  var Nc=Math.max(3,Math.ceil((Q/(Uest*lmtd))*(1+d.margem/100)/(2*mod.A))),res=null;
+  for(var iter=0;iter<120;iter++){
+    var A_inst=2*Nc*mod.A,canaisP=Math.max(1,Math.floor(Nc/pP)),canaisS=Math.max(1,Math.floor(Nc/pS));
+    var GP=d.mP/(canaisP*mod.b*mod.W),GS=vaporCond?0:d.mS/(canaisS*mod.b*mod.W);
+    var ladoP=calcLado(GP,DhP,fP,ap,TmP,TmS,null),hS;
+    if(vaporCond){hS=hCondensacao(sec.tinS,TmP);}else{var lS=calcLado(GS,DhS,fS,as,TmS,TmP,ladoP.h);ladoP=calcLado(GP,DhP,fP,ap,TmP,TmS,lS.h);hS=lS.h;}
+    var U=1/(1/ladoP.h+d.incP+tw/kw+d.incS+1/hS),A_nec=Q/(U*lmtd),A_min=A_nec*(1+d.margem/100);
+    if(A_inst>=A_min){
+      var ReS=vaporCond?0:GS*DhS/fS.mu;
+      var dPP=Math.min(300, fAtrito(ladoP.Re,ap)*(L/DhP)*(GP*GP/(2*fP.rho))*pP);
+      var dPS=vaporCond?3.0:Math.min(300, fAtrito(ReS,as)*(L/DhS)*(GS*GS/(2*fS.rho))*pS);
+      res={Nc:Nc,Nplacas:2*Nc+1,A_inst:A_inst,A_nec:A_nec,U:U,hP:ladoP.h,hS:hS,ReP:ladoP.Re,ReS:ReS,PrP:ladoP.Pr,PrS:vaporCond?0:(fS.mu*fS.cp/fS.k),turbP:ladoP.turb,turbS:vaporCond?'Condensação':classTurb(ReS),vP:GP/fP.rho,vS:vaporCond?0:GS/fS.rho,dPP:dPP,dPS:dPS};
       break;
     }
     Nc++;
   }
-  res.modelo=mod.nome; res.porta=mod.porta; res.conexao=nomeConexao(mod.porta);
-  res.modRef=mod; res.sec=sec; res.pP=pP; res.pS=pS; res.nomePasses=pP+'x'+pS;
-  res.atende=true;
+  if(!res){
+    var A_inst2=2*Nc*mod.A,canaisP2=Math.max(1,Math.floor(Nc/pP)),canaisS2=Math.max(1,Math.floor(Nc/pS));
+    var GP2=d.mP/(canaisP2*mod.b*mod.W),GS2=vaporCond?0:d.mS/(canaisS2*mod.b*mod.W);
+    var ladoP2=calcLado(GP2,DhP,fP,ap,TmP,TmS,null),hS2;
+    if(vaporCond){hS2=hCondensacao(sec.tinS,TmP);}else{var lS2=calcLado(GS2,DhS,fS,as,TmS,TmP,ladoP2.h);ladoP2=calcLado(GP2,DhP,fP,ap,TmP,TmS,lS2.h);hS2=lS2.h;}
+    var U2=1/(1/ladoP2.h+d.incP+tw/kw+d.incS+1/hS2),A_nec2=Q/(U2*lmtd),ReS2=vaporCond?0:GS2*DhS/fS.mu;
+    var dPP2=Math.min(300, fAtrito(ladoP2.Re,ap)*(L/DhP)*(GP2*GP2/(2*fP.rho))*pP);
+    var dPS2=vaporCond?3.0:Math.min(300, fAtrito(ReS2,as)*(L/DhS)*(GS2*GS2/(2*fS.rho))*pS);
+    res={Nc:Nc,Nplacas:2*Nc+1,A_inst:A_inst2,A_nec:A_nec2,U:U2,hP:ladoP2.h,hS:hS2,ReP:ladoP2.Re,ReS:ReS2,PrP:ladoP2.Pr,PrS:vaporCond?0:(fS.mu*fS.cp/fS.k),turbP:ladoP2.turb,turbS:vaporCond?'Condensação':classTurb(ReS2),vP:GP2/fP.rho,vS:vaporCond?0:GS2/fS.rho,dPP:dPP2,dPS:dPS2};
+  }
+  res.modelo=mod.nome;res.areaPlaca=mod.A;res.vazaoMax=mod.vazaoMax;res.Pmax=mod.Pmax;res.Tmax=mod.Tmax;res.kW=mod.kW;res.tipo=mod.tipo;
+  res.porta=mod.porta;res.conexao=nomeConexao(mod.porta);
+  res.config=cfg.nome;res.angP=ap;res.angS=as;res.pP=pP;res.pS=pS;res.nomePasses=pP+'×'+pS;
+  res.cfgKey=cfgKey;res.modRef=mod;res.sec=sec;
+  res.dPPok=res.dPP<=d.dpP;res.dPSok=res.dPS<=d.dpS;
+  var gasP=ehGas(fP.rho),gasS=ehGas(fS.rho);
+  var vp=verificarVelocidadePorta(d.mP,fP.rho,mod.porta,gasP);
+  var vs=verificarVelocidadePorta(d.mS,fS.rho,mod.porta,gasS);
+  res.vPortaP=vp.vporta;res.vPortaS=vs.vporta;
+  res.vPortaOkP=vp.ok;res.vPortaOkS=vs.ok;
+  var capOk;
+  if(vaporCond){capOk=(d.mS*3600<=5000);}else if(d.tipo==='semisoldadas'){capOk=true;}else{capOk=(d.vazaoS<=mod.vazaoMax*1.5);}
+  res.atende=res.dPPok&&res.dPSok&&capOk&&res.vPortaOkP&&res.vPortaOkS;
   return res;
 }
 
-function dimensionarSeccao(sec, d, modelos) {
-  var fP=props(d.fluidoP, (sec.tinP+sec.toutP)/2), fS=props(sec.fluidoS, sec.tinS);
+/* ---------- DIMENSIONAMENTO POR SEÇÃO ---------- */
+function dimensionarSeccao(sec,d,modelos) {
+  var aquecendo = sec.toutP > sec.tinP;
+  if (aquecendo && sec.tinS <= sec.toutP) {
+    throw new Error('O produto está sendo AQUECIDO (saída maior que entrada), então o serviço deve entrar MAIS QUENTE que a saída do produto (' + sec.toutP.toFixed(1) + ' °C). Ajuste a temperatura de entrada do serviço. Ex.: use vapor ou água quente.');
+  }
+  if (!aquecendo && sec.tinS >= sec.toutP) {
+    throw new Error('O produto está sendo RESFRIADO (saída menor que entrada), então o serviço deve entrar MAIS FRIO que a saída do produto (' + sec.toutP.toFixed(1) + ' °C). Ajuste a temperatura de entrada do serviço. Ex.: use refrigerante, glicol frio ou água gelada.');
+  }
+  var fP=props(d.fluidoP,(sec.tinP+sec.toutP)/2),fS=props(sec.fluidoS,sec.tinS);
   d.mP=(d.vazaoP/3600)*fP.rho;
-  var Q=d.mP*fP.cp*(sec.toutP-sec.tinP), mS, vazaoS, toutS;
-  if(fS.condensing){ mS=Q/(fS.hfg*1000); toutS=sec.tinS; }
-  else { toutS=sec.tinS-20; mS=Q/(fS.cp*20); }
-  vazaoS=mS/fS.rho*3600; d.mS=mS;
-  var lmtd=30; // Simplificado
-  var r=dimensionarModelo(modelos[0], sec, d, fP, fS, Q, lmtd, 'H', 1, 1);
-  r.Q=Q; r.toutS=toutS; r.vazaoS=vazaoS; r.fP=fP; r.fS=fS;
-  r.eficiencia=calcEficiencia(Q, d.mP, fP.cp, mS, fS.cp, sec.tinS, sec.tinP, !!fS.condensing);
-  return {melhor:r, resultados:[r], Q:Q, toutS:toutS, vazaoS:vazaoS, fP:fP, fS:fS, sec:sec};
+  var Q=d.mP*fP.cp*(sec.toutP-sec.tinP),toutS,mS,vazaoS;
+  if(fS.condensing){mS=Q/(fS.hfg*1000);vazaoS=mS/fS.rho*3600;toutS=sec.tinS;}
+  else{
+    var refrigerante=['r134a','r410a','r22','amonia_l','amonia_v'].indexOf(sec.fluidoS)!==-1;
+    var gasoso=['ar','co2','amonia_v'].indexOf(sec.fluidoS)!==-1;
+    var dTS=refrigerante?2:(gasoso?Math.max(5,Math.abs(sec.toutP-sec.tinP)*0.5):Math.max(5,Math.abs(sec.toutP-sec.tinP)));
+    toutS=sec.tinS-dTS;
+    if (aquecendo) toutS = sec.tinS - dTS; else toutS = sec.tinS + dTS;
+    mS=Q/(fS.cp*Math.abs(sec.tinS-toutS));
+    vazaoS=mS/fS.rho*3600;
+  }
+  d.mS=mS;d.vazaoS=vazaoS;
+  var dT1=sec.tinS-sec.toutP,dT2=toutS-sec.tinP;
+  var dT1a=Math.abs(dT1),dT2a=Math.abs(dT2);
+  if(dT1a<1e-6||dT2a<1e-6){throw new Error('Temperaturas muito próximas: ajuste o programa de temperaturas.');}
+  var lmtd=(dT1a-dT2a)/Math.log(dT1a/dT2a);
+  var P=(sec.toutP-sec.tinP)/(sec.tinS-sec.tinP),R=(sec.tinS-toutS)/(sec.toutP-sec.tinP);
+  var cfgList=d.config==='auto'?Object.keys(CONFIGS):(d.config==='mista'?['H-L','L-H']:[d.config]);
+  var passList=d.passes==='auto'?LISTA_PASSES:[d.passes];
+  var resultados=[];
+  for(var i=0;i<modelos.length;i++){
+    var mod=modelos[i];
+    for(var j=0;j<cfgList.length;j++){
+      var cfgKey=cfgList[j];
+      for(var k=0;k<passList.length;k++){
+        var ps=passList[k],partes=ps.split('x'),pP=parseInt(partes[0],10),pS=parseInt(partes[1],10);
+        var F=fatorMultiPass(Math.abs(P),Math.abs(R),pP,pS),lmtdF=lmtd*F;
+        var r=dimensionarModelo(mod,sec,d,fP,fS,Q,lmtdF,cfgKey,pP,pS);
+        r.F=F;r.lmtdF=lmtdF;r.Q=Q;r.toutS=toutS;r.vazaoS=vazaoS;r.fP=fP;r.fS=fS;
+        r.eficiencia=calcEficiencia(Q,d.mP,fP.cp,mS,fS.cp,sec.tinS,sec.tinP,!!fS.condensing);
+        resultados.push(r);
+      }
+    }
+  }
+  resultados.sort(function(a,b){if(b.atende!==a.atende)return b.atende-a.atende;if(a.A_inst!==b.A_inst)return a.A_inst-b.A_inst;return a.Nplacas-b.Nplacas;});
+  return {resultados:resultados,Q:Q,toutS:toutS,vazaoS:vazaoS,fP:fP,fS:fS,melhor:resultados[0],sec:sec};
 }
 
-function nomeConexao(p){ return 'DN '+(p*1000)+' ('+(p*39.37).toFixed(1)+'")'; }
-function estimarU(p,s,v){ return v?3500:2500; }
-function toggleModelos(){ document.getElementById('corpoModelos').classList.toggle('open'); }
-function trocarAba(n){ document.getElementById('paneResultado').classList.toggle('active', n==='resultado'); document.getElementById('paneDatasheet').classList.toggle('active', n==='datasheet'); }
+/* ---------- ESTADO GLOBAL ---------- */
+var tipoAtual='gaxetadas',secoesExtras=0,ultimoRelatorio=null;
 
-function montarModelos(){
-  var g=document.getElementById('fabGrid'); g.innerHTML='';
-  ALFA_LAVAL.gaxetadas.forEach(m=>{
-    var d=document.createElement('div'); d.className='modelo-item';
-    d.innerHTML=`<label class="checkbox-label"><input type="checkbox" class="fab-checkbox"><span class="checkmark"></span></label>
-                 <div class="fab-nome">${m.nome}</div><div class="fab-desc">${m.A} m²/placa<br>Bocal ${nomeConexao(m.porta)}</div>`;
-    d.onclick=(e)=>{ if(e.target.type!=='checkbox') { var c=d.querySelector('input'); c.checked=!c.checked; } d.classList.toggle('selected', d.querySelector('input').checked); };
-    g.appendChild(d);
-  });
+/* ---------- INTERFACE ---------- */
+function trocarAba(nome){document.getElementById('tabResultadoBtn').classList.toggle('active',nome==='resultado');document.getElementById('tabDatasheetBtn').classList.toggle('active',nome==='datasheet');document.getElementById('paneResultado').classList.toggle('active',nome==='resultado');document.getElementById('paneDatasheet').classList.toggle('active',nome==='datasheet');}
+function toggleModelos(){var b=document.getElementById('corpoModelos'),h=document.getElementById('hdrModelos');b.classList.toggle('open');h.classList.toggle('open');}
+function setTipo(t){tipoAtual=t;document.getElementById('btnGaxetadas').classList.toggle('active',t==='gaxetadas');document.getElementById('btnSemisoldadas').classList.toggle('active',t==='semisoldadas');document.getElementById('btnSemisoldadas').classList.toggle('semi',t==='semisoldadas');montarModelos();}
+function montarModelos(){var grid=document.getElementById('fabGrid');grid.innerHTML='';ALFA_LAVAL[tipoAtual].forEach(function(mod){var card=document.createElement('div');card.className='modelo-item';card.dataset.nome=mod.nome;card.innerHTML='<label class="checkbox-label"><input type="checkbox" class="fab-checkbox"><span class="checkmark"></span></label><div class="fab-nome">'+mod.nome+'</div><div class="fab-desc">'+mod.A.toFixed(3)+' m²/placa<br>'+mod.vazaoMax+' m³/h · '+mod.Pmax+' bar<br>Bocal '+nomeConexao(mod.porta)+'</div>';card.addEventListener('click',function(e){if(e.target.classList.contains('fab-checkbox')){card.classList.toggle('selected',e.target.checked);return;}var cb=card.querySelector('.fab-checkbox');cb.checked=!cb.checked;card.classList.toggle('selected',cb.checked);});grid.appendChild(card);});}
+function selecionarGrupo(){var grupo=document.getElementById('grupoModelos').value;var g=GRUPOS_MODELOS[grupo];if(g.tipo&&g.tipo!==tipoAtual)setTipo(g.tipo);document.querySelectorAll('.fab-checkbox').forEach(function(cb){var nome=cb.closest('.modelo-item').dataset.nome;var pertence=(g.modelos===null)?true:(g.modelos.indexOf(nome)!==-1);cb.checked=pertence;cb.closest('.modelo-item').classList.toggle('selected',pertence);});}
+function adicionarSecao(){if(secoesExtras>=2){alert('Máximo de 3 seções.');return;}secoesExtras++;var cont=document.getElementById('secoesAdicionais');var div=document.createElement('div');div.className='secao-bloco';div.id='secaoExtra'+secoesExtras;div.innerHTML='<div class="secao-titulo">🔹 Seção '+(secoesExtras+1)+' (etapa adicional)</div><div class="grid-2"><div class="sub-card produto"><div class="sub-card-head"><span class="side-icon produto-icon">📦</span><h4>Produto — Seção '+(secoesExtras+1)+'</h4></div><label>Temperatura de entrada (°C)<input type="number" id="sec'+secoesExtras+'TinP" value="45"></label><label>Temperatura de saída (°C)<input type="number" id="sec'+secoesExtras+'ToutP" value="70"></label></div><div class="sub-card servico"><div class="sub-card-head"><span class="side-icon servico-icon">⚙️</span><h4>Serviço — Seção '+(secoesExtras+1)+'</h4></div><label>Fluido de serviço<select id="sec'+secoesExtras+'FluidoS"><option value="agua">Água industrial</option><option value="vapor">Vapor saturado</option><option value="glicol20">Glicol 20%</option><option value="glicol30">Glicol 30%</option><option value="oleo">Óleo térmico</option><option value="r134a">R134a</option></select></label><label>Temperatura de entrada (°C)<input type="number" id="sec'+secoesExtras+'TinS" value="90"></label></div></div>';cont.appendChild(div);}
+function removerSecao(){if(secoesExtras<=0){alert('Nenhuma seção adicional.');return;}var div=document.getElementById('secaoExtra'+secoesExtras);if(div)div.remove();secoesExtras--;}
+
+/* ---------- CURVA DE DESEMPENHO (para a tabela) ---------- */
+function gerarCurvaDesempenho(mod, sec, d, fP, fS, cfgKey, pP, pS, lmtd, toutS) {
+  var pontos=[],fatores=[0.6,0.8,1.0,1.2,1.4],i,fator,vazaoP,mP2,Qp,mS2,vazaoS2,d2,r;
+  for(i=0;i<fatores.length;i++){
+    fator=fatores[i];
+    vazaoP=d.vazaoP*fator;
+    mP2=(vazaoP/3600)*fP.rho;
+    Qp=mP2*fP.cp*(sec.toutP-sec.tinP);
+    if(fS.condensing){mS2=Qp/(fS.hfg*1000);vazaoS2=mS2/fS.rho*3600;}
+    else{mS2=Qp/(fS.cp*Math.abs(sec.tinS-toutS));vazaoS2=mS2/fS.rho*3600;}
+    d2={mP:mP2,mS:mS2,vazaoS:vazaoS2,margem:d.margem,incP:d.incP,incS:d.incS,dpP:d.dpP,dpS:d.dpS,tipo:d.tipo};
+    r=dimensionarModelo(mod,sec,d2,fP,fS,Qp,lmtd,cfgKey,pP,pS);
+    var efic=calcEficiencia(Qp,mP2,fP.cp,mS2,fS.cp,sec.tinS,sec.tinP,!!fS.condensing)*100;
+    pontos.push({fator:fator,vazao:vazaoP,Q:Qp/1000,U:r.U,dPP:r.dPP,dPS:r.dPS,placas:r.Nplacas,eficiencia:efic,vPortaP:r.vPortaP,vPortaS:r.vPortaS});
+  }
+  return pontos;
 }
 
-function calcular(){
-  var sel=[]; document.querySelectorAll('.fab-checkbox:checked').forEach(c=>sel.push(c.closest('.modelo-item').querySelector('.fab-nome').innerText));
-  if(!sel.length) return alert('Selecione um modelo');
-  var mods=ALFA_LAVAL.gaxetadas.filter(m=>sel.includes(m.nome));
-  var d={fluidoP:document.getElementById('fluidoP').value, vazaoP:parseFloat(document.getElementById('vazaoP').value), margem:10};<br/>
-  var sec={tinP:parseFloat(document.getElementById('tinP').value), toutP:parseFloat(document.getElementById('toutP').value), fluidoS:document.getElementById('fluidoS').value, tinS:parseFloat(document.getElementById('tinS').value)};
-  var res=dimensionarSeccao(sec, d, mods);
-  document.getElementById('toutS').value=res.toutS.toFixed(1);
-  document.getElementById('vazaoS').value=res.vazaoS.toFixed(1);
-  exibirResultado([res], d);
-  gerarDatasheet([res]);
-  document.getElementById('resultado').style.display='block';
-}
-
+/* ---------- RESULTADO ---------- */
 function exibirResultado(secoes, d){
-  var m=secoes[0].melhor;
-  var html=`<div class="resumo-equip"><h4>🔧 Equipamento: ${m.modelo}</h4><div class="grid-4">
-            <div><strong>Placas</strong><br>${m.Nplacas}</div><div><strong>Área</strong><br>${m.A_inst.toFixed(1)} m²</div>
-            <div><strong>Bocal</strong><br>${m.conexao}</div><div><strong>Eficiência</strong><br>${(m.eficiencia*100).toFixed(1)}%</div></div></div>`;
-  
-  html+=`<div class="curva-box"><h4>📊 Desempenho</h4><table class="curva-tabela"><thead><tr><th>Vazão</th><th>Q (kW)</th><th>ΔP P</th><th>ΔP S</th><th>Eficiência</th></tr></thead><tbody>`;
-  [0.6, 0.8, 1.0, 1.2, 1.4].forEach(f=>{
-    html+=`<tr><td>${f*100}%</td><td>${(m.Q*f/1000).toFixed(0)}</td><td>${(m.dPP*f).toFixed(1)}</td><td>${(m.dPS*f).toFixed(1)}</td>
-           <td>${(m.eficiencia*100).toFixed(1)}% <div class="barra"><div class="barra-fill verde" style="width:${m.eficiencia*100}%"></div></div></td></tr>`;
-  });
-  html+=`</tbody></table></div>`;
-  document.getElementById('resultadoConteudo').innerHTML=html;
-}
-
-function gerarDatasheet(secoes){
+  var c=document.getElementById('resultadoConteudo'),cliente=document.getElementById('cliente').value||'—',proj='PRJ-AV'+(document.getElementById('numProjeto').value||'');
+  var totalA=0,totalQ=0,totalPlacas=0;
+  secoes.forEach(function(x){totalA+=x.melhor.A_inst;totalQ+=x.Q;totalPlacas+=x.melhor.Nplacas;});
   var m0=secoes[0].melhor;
-  var html=`<div class="datasheet" id="dsImprimivel"><h2>AlfaVed Datasheet</h2>
-            <div class="ds-secao"><h4>1. Identificação</h4><table class="ds-tabela"><tr><td>Cliente</td><td>${document.getElementById('cliente').value}</td></tr><tr><td>Projeto</td><td>PRJ-AV${document.getElementById('numProjeto').value}</td></tr></table></div>
-            <div class="ds-secao"><h4>2. Desenho dimensional</h4><table class="ds-tabela">
-            <tr><td>Altura (H)</td><td>${m0.modRef.H || 'Consultar'} mm</td></tr><tr><td>Largura (W)</td><td>${m0.modRef.Wmm || 'Consultar'} mm</td></tr>
-            <tr><td>Bocal</td><td>${m0.conexao}</td></tr></table></div>
-            <div class="ds-secao"><h4>3. Conexões tipo flange</h4><table class="ds-tabela"><tr><td>Padrão</td><td>EN 1092-1 / ASME B16.5</td></tr><tr><td>Tamanho</td><td>${m0.conexao}</td></tr></table></div>
-            <div class="ds-secao"><h4>4. Condições Operacionais</h4><table class="ds-lado"><tr><th></th><th>Produto</th><th>Serviço</th></tr>
-            <tr><td>Fluido</td><td>${secoes[0].fP.nome}</td><td>${secoes[0].fS.nome}</td></tr><tr><td>Temp. In</td><td>${secoes[0].sec.tinP}</td><td>${secoes[0].sec.tinS}</td></tr></table></div></div>`;
-  document.getElementById('datasheetConteudo').innerHTML=html;
+  var Tmax=Math.max(parseFloat(document.getElementById('tinS').value)||0,parseFloat(secoes[0].toutS)||0,parseFloat(document.getElementById('toutP').value)||0);
+  var gaxP=selecionarGaxeta(secoes[0].fP.nome,Tmax,false);
+  var ehSemi=(tipoAtual==='semisoldadas');
+  var corpoP=ehSemi?selecionarCorpoGaxeta(secoes[0].fP.nome,Tmax,false):null;
+  var placaP=selecionarPlaca(secoes[0].fP.nome,Tmax,false);
+  var anelP=ehSemi?selecionarAnel(tipoAtual,secoes[0].fP.nome,Tmax):null;
+  var statusPortaP=m0.vPortaOkP?'<span class="ok">✓</span>':'<span class="aviso">✗</span>';
+  var statusPortaS=m0.vPortaOkS?'<span class="ok">✓</span>':'<span class="aviso">✗</span>';
+  var resumoEquip='<div class="resumo-equip"><h4>🔧 Equipamento selecionado</h4><div class="grid-4">'+
+    '<div><strong>Modelo</strong><br>'+m0.modelo+'</div>'+
+    '<div><strong>Placas</strong><br>'+m0.Nplacas+'</div>'+
+    '<div><strong>Área</strong><br>'+m0.A_inst.toFixed(1)+' m²</div>'+
+    '<div><strong>Configuração</strong><br>'+m0.config+' · '+m0.nomePasses+'</div>'+
+    '<div><strong>Liga da placa</strong><br>'+placaP.mat+'</div>'+
+    '<div><strong>Gaxeta</strong><br>'+(ehSemi?(corpoP?corpoP.mat:'—'):gaxP.mat)+(ehSemi&&anelP?' + '+anelP.mat:'')+'</div>'+
+    '<div><strong>Bocal (conexão)</strong><br>'+m0.conexao+'</div>'+
+    '<div><strong>Velocidade no bocal</strong><br>Prod '+m0.vPortaP.toFixed(1)+' m/s '+statusPortaP+' · Serv '+m0.vPortaS.toFixed(1)+' m/s '+statusPortaS+'</div>'+
+  '</div></div>';
+  var html=resumoEquip;
+  html+='<div class="resultado-resumo"><h4>📋 Projeto: '+proj+' · Cliente: '+cliente+'</h4>'+
+    '<p><strong>Calor total trocado:</strong> '+fmt(totalQ/1000)+' kW ('+secoes.length+' seção/seções)</p>'+
+    '<p><strong>Área total instalada:</strong> '+totalA.toFixed(1)+' m² · <strong>Placas totais:</strong> '+totalPlacas+'</p>'+
+    '<p><strong>Bocal do modelo:</strong> '+m0.conexao+' — mesmo diâmetro para produto e serviço (padrão do fabricante)</p></div>';
+  secoes.forEach(function(r,idx){
+    var m=r.melhor,servT=document.getElementById(idx===0?'tinS':'sec'+idx+'TinS').value;
+    var Tmax2=Math.max(parseFloat(servT)||0,parseFloat(r.toutS)||0,parseFloat(document.getElementById(idx===0?'toutP':'sec'+idx+'ToutP').value)||0);
+    var gaxP2=selecionarGaxeta(r.fP.nome,Tmax2,false),gaxS2=selecionarGaxeta(r.fS.nome,Tmax2,!!r.fS.condensing);
+    var placaP2=selecionarPlaca(r.fP.nome,Tmax2,false),placaS2=selecionarPlaca(r.fS.nome,Tmax2,false);
+    var ehSemi2=(tipoAtual==='semisoldadas');
+    var anelP2=ehSemi2?selecionarAnel(tipoAtual,r.fP.nome,Tmax2):null;
+    var corpoP2=ehSemi2?selecionarCorpoGaxeta(r.fP.nome,Tmax2,false):null;
+    var efic=(m.eficiencia*100).toFixed(1);
+    var statusEfic=parseFloat(efic)>=85?'<span class="ok">✓</span>':'<span class="aviso">⚠</span>';
+    html+='<div class="melhor-modelo"><h4>🏆 Seção '+(idx+1)+' — Melhor: '+m.modelo+' · '+m.config+' ('+m.angP+'°/'+m.angS+'°) · '+m.nomePasses+' passes</h4>'+
+      '<p><strong>Q seção:</strong> '+fmt(r.Q/1000)+' kW | <strong>LMTD:</strong> '+m.lmtdF.toFixed(1)+' °C | <strong>F:</strong> '+m.F.toFixed(2)+' | <strong>Eficiência ε:</strong> '+efic+'% '+statusEfic+'</p>'+
+      '<p><strong>Placas:</strong> '+m.Nplacas+' | <strong>Área:</strong> '+m.A_inst.toFixed(1)+' m² | <strong>U:</strong> '+fmt(m.U)+' W/m²·K</p>'+
+      '<p><strong>Turbulência:</strong> '+m.turbP+' (Re '+fmt(m.ReP)+') / '+m.turbS+(m.ReS?' (Re '+fmt(m.ReS)+')':'')+' | <strong>ΔP:</strong> '+m.dPP.toFixed(1)+' / '+m.dPS.toFixed(1)+' kPa</p>'+
+      '<p><strong>Bocal:</strong> '+m.conexao+' | <strong>Velocidade porta:</strong> Prod '+m.vPortaP.toFixed(1)+' m/s '+(m.vPortaOkP?'✓':'✗')+' · Serv '+m.vPortaS.toFixed(1)+' m/s '+(m.vPortaOkS?'✓':'✗')+'</p>'+
+      '<p><strong>Liga da placa:</strong> '+placaP2.mat+' | <strong>Gaxeta:</strong> '+(ehSemi2?(corpoP2?corpoP2.mat:'—'):gaxP2.mat)+(ehSemi2&&anelP2?' | <strong>Anel:</strong> '+anelP2.mat:'')+'</p>'+
+      '<p><strong>Serviço:</strong> '+r.fS.nome+' · entrada '+servT+'°C · saída '+r.toutS.toFixed(1)+'°C · vazão '+r.vazaoS.toFixed(1)+' m³/h</p></div>';
+  });
+  html+='<h4 style="margin:16px 0 10px;font-size:15px;color:#0a1f3c">📊 Parâmetros de projeto (por seção)</h4>'+
+    '<table class="tabela-comp"><thead><tr><th>Seção</th><th>Modelo</th><th>Config.</th><th>Passes</th><th>Placas</th><th>Área (m²)</th><th>U (W/m²·K)</th><th>ε (%)</th><th>ΔP P (kPa)</th><th>ΔP S (kPa)</th><th>Status</th></tr></thead><tbody>';
+  secoes.forEach(function(r,idx){r.resultados.slice(0,8).forEach(function(f,i){var status=f.atende?'<span class="ok">✓</span>':'<span class="aviso">✗</span>';html+='<tr class="'+(i===0?'melhor':'')+'"><td>'+(idx+1)+'</td><td><strong>'+f.modelo+'</strong></td><td>'+f.config+'</td><td>'+f.nomePasses+'</td><td>'+f.Nplacas+'</td><td>'+f.A_inst.toFixed(1)+'</td><td>'+fmt(f.U)+'</td><td>'+(f.eficiencia*100).toFixed(1)+'</td><td>'+f.dPP.toFixed(1)+'</td><td>'+f.dPS.toFixed(1)+'</td><td>'+status+'</td></tr>';});});
+  html+='</tbody></table>';
+  var pontos=null;
+  try{
+    var m1=secoes[0].melhor;
+    pontos=gerarCurvaDesempenho(m1.modRef,secoes[0].sec,d,secoes[0].fP,secoes[0].fS,m1.cfgKey,m1.pP,m1.pS,m1.lmtdF,secoes[0].toutS);
+    var maxOk=null;
+    pontos.forEach(function(p){if(p.dPP<=d.dpP&&p.dPS<=d.dpS&&p.vPortaP<=8&&p.vPortaS<=8){maxOk=p.fator;}});
+    var textoInsight=maxOk!==null
+      ? '✅ O equipamento opera dentro dos limites até <strong>'+Math.round(maxOk*100)+'%</strong> da vazão de projeto. Acima disso, a perda de pressão ou a velocidade no bocal passa do máximo permitido.'
+      : '⚠️ Mesmo na vazão de projeto há restrições: revise o ΔP máximo, a velocidade no bocal ou escolha outro modelo.';
+    /* TABELA VISUAL DE DESEMPENHO (sem gráfico) */
+    html+='<div class="curva-box"><h4>📊 Desempenho do equipamento — '+m1.modelo+' ('+m1.config+' · '+m1.nomePasses+') · Bocal '+m1.conexao+'</h4>'+
+      '<div class="insight">'+textoInsight+'<br><span style="font-size:12px;color:#166534">💡 Barras: azul = ΔP produto · vermelho = ΔP serviço · verde = eficiência. O bocal é padrão do modelo ('+m1.conexao+').</span></div>'+
+      '<table class="curva-tabela"><thead><tr><th>Vazão</th><th>Q (kW)</th><th>U (W/m²·K)</th><th>ΔP Produto</th><th>ΔP Serviço</th><th>Eficiência</th><th>Placas</th></tr></thead><tbody>';
+    pontos.forEach(function(p){
+      var dpPPct=Math.min(100,(p.dPP/d.dpP)*100);
+      var dpSPct=Math.min(100,(p.dPS/d.dpS)*100);
+      var dpPBar='<div class="barra"><div class="barra-fill azul" style="width:'+dpPPct+'%"></div></div>';
+      var dpSBar='<div class="barra"><div class="barra-fill vermelho" style="width:'+dpSPct+'%"></div></div>';
+      var eficBar='<div class="barra"><div class="barra-fill verde" style="width:'+Math.min(100,p.eficiencia)+'%"></div></div>';
+      html+='<tr><td>'+(p.fator*100)+'%</td><td>'+fmt(p.Q)+'</td><td>'+fmt(p.U)+'</td>'+
+        '<td>'+p.dPP.toFixed(1)+' kPa '+dpPBar+'</td>'+
+        '<td>'+p.dPS.toFixed(1)+' kPa '+dpSBar+'</td>'+
+        '<td>'+p.eficiencia.toFixed(1)+'% '+eficBar+'</td>'+
+        '<td>'+p.placas+'</td></tr>';
+    });
+    html+='</tbody></table></div>';
+  }catch(e){html+='<p style="font-size:11px;color:var(--texto-suave);margin-top:8px">Desempenho indisponível para esta combinação.</p>';}
+  html+='<p style="font-size:11px;color:var(--texto-suave);margin-top:10px">Base de cálculo revisada com dados oficiais Alfa Laval. Bocal padrão por modelo (produto = serviço). U global estimado por fluidos. Eficiência ε-NTU: 85-95% recomendado. Dh=2b/φ com φ por ângulo. Confira com o software oficial Alfa Laval.</p>';
+  c.innerHTML=html;
 }
 
-function fmt(n){ return n.toLocaleString('pt-BR'); }
-document.addEventListener('DOMContentLoaded', ()=>{ montarModelos(); document.getElementById('btnCalcular').onclick=calcular; document.getElementById('btnPdf').onclick=()=>window.print(); });
+/* ---------- DATASHEET ---------- */
+function gerarDatasheet(secoes){
+  var c=document.getElementById('datasheetConteudo'),cliente=document.getElementById('cliente').value||'—',proj='PRJ-AV'+(document.getElementById('numProjeto').value||''),hoje=new Date().toLocaleDateString('pt-BR');
+  var totalA=0,totalQ=0;
+  secoes.forEach(function(x){totalA+=x.melhor.A_inst;totalQ+=x.Q;});
+  var m0=secoes[0].melhor;
+  var html='<div class="datasheet" id="dsImprimivel"><h2>AlfaVed Dimensionador-PHE</h2><div class="sub">Datasheet de Dimensionamento · Gerado em '+hoje+'</div>'+
+    '<div class="ds-secao"><h4>1. Identificação</h4><table class="ds-tabela"><tr><td>Projeto</td><td>'+proj+'</td></tr><tr><td>Cliente</td><td>'+cliente+'</td></tr><tr><td>Data</td><td>'+hoje+'</td></tr><tr><td>Número de seções</td><td>'+secoes.length+'</td></tr><tr><td>Tipo de trocador</td><td>'+(tipoAtual==='semisoldadas'?'Placas semi-soldadas':'Placas gaxetadas')+'</td></tr><tr><td>Bocal do modelo (produto e serviço)</td><td>'+m0.conexao+'</td></tr><tr><td>Velocidade no bocal — produto</td><td>'+m0.vPortaP.toFixed(1)+' m/s '+(m0.vPortaOkP?'✓':'✗')+'</td></tr><tr><td>Velocidade no bocal — serviço</td><td>'+m0.vPortaS.toFixed(1)+' m/s '+(m0.vPortaOkS?'✓':'✗')+'</td></tr></table></div>';
+  secoes.forEach(function(r,idx){
+    var m=r.melhor,servT=document.getElementById(idx===0?'tinS':'sec'+idx+'TinS').value;
+    var Tmax=Math.max(parseFloat(servT)||0,parseFloat(r.toutS)||0,parseFloat(document.getElementById(idx===0?'toutP':'sec'+idx+'ToutP').value)||0);
+    var gaxP=selecionarGaxeta(r.fP.nome,Tmax,false),gaxS=selecionarGaxeta(r.fS.nome,Tmax,!!r.fS.condensing);
+    var placaP=selecionarPlaca(r.fP.nome,Tmax,false),placaS=selecionarPlaca(r.fS.nome,Tmax,false);
+    var ehSemi=(tipoAtual==='semisoldadas');
+    var anelP=ehSemi?selecionarAnel(tipoAtual,r.fP.nome,Tmax):null,anelS=ehSemi?selecionarAnel(tipoAtual,r.fS.nome,Tmax):null;
+    var corpoP=ehSemi?selecionarCorpoGaxeta(r.fP.nome,Tmax,false):null,corpoS=ehSemi?selecionarCorpoGaxeta(r.fS.nome,Tmax,!!r.fS.condensing):null;
+    var tinPv=document.getElementById(idx===0?'tinP':'sec'+idx+'TinP').value;
+    var toutPv=document.getElementById(idx===0?'toutP':'sec'+idx+'ToutP').value;
+    html+='<div class="ds-secao"><h4>'+(idx+1)+'. Seção '+(idx+1)+' — Condições operacionais de projeto</h4>'+
+      '<table class="ds-lado"><tr><th></th><th>Produto</th><th>Serviço</th></tr>'+
+      '<tr><td>Fluido</td><td>'+r.fP.nome+'</td><td>'+r.fS.nome+'</td></tr>'+
+      '<tr><td>Vazão (m³/h)</td><td>'+document.getElementById('vazaoP').value+'</td><td>'+r.vazaoS.toFixed(1)+'</td></tr>'+
+      '<tr><td>Temperatura entrada (°C)</td><td>'+tinPv+'</td><td>'+servT+'</td></tr>'+
+      '<tr><td>Temperatura saída (°C)</td><td>'+toutPv+'</td><td>'+r.toutS.toFixed(1)+'</td></tr>'+
+      '<tr><td>Reynolds</td><td>'+fmt(m.ReP)+'</td><td>'+(m.ReS?fmt(m.ReS):'—')+'</td></tr>'+
+      '<tr><td>Prandtl</td><td>'+m.PrP.toFixed(1)+'</td><td>'+(m.PrS?m.PrS.toFixed(1):'—')+'</td></tr>'+
+      '<tr><td>h convectivo (W/m²·K)</td><td>'+fmt(m.hP)+'</td><td>'+fmt(m.hS)+'</td></tr>'+
+      '<tr><td>Turbulência</td><td>'+m.turbP+'</td><td>'+m.turbS+'</td></tr>'+
+      '<tr><td>ΔP (kPa)</td><td>'+m.dPP.toFixed(1)+'</td><td>'+m.dPS.toFixed(1)+'</td></tr>'+
+      '<tr><td>Velocidade no bocal (m/s)</td><td>'+m.vPortaP.toFixed(1)+' '+(m.vPortaOkP?'✓':'✗')+'</td><td>'+m.vPortaS.toFixed(1)+' '+(m.vPortaOkS?'✓':'✗')+'</td></tr>'+
+      '<tr><td>Liga da placa</td><td>'+placaP.mat+'</td><td>'+placaS.mat+'</td></tr>'+
+      (ehSemi?'<tr><td>Corpo de gaxeta</td><td>'+(corpoP?corpoP.mat:'—')+'</td><td>'+(corpoS?corpoS.mat:'—')+'</td></tr>':'')+
+      (ehSemi?'<tr><td>Anel de vedação</td><td>'+(anelP?anelP.mat:'—')+'</td><td>'+(anelS?anelS.mat:'—')+'</td></tr>':'')+
+      (!ehSemi?'<tr><td>Gaxeta recomendada</td><td>'+gaxP.mat+'</td><td>'+gaxS.mat+'</td></tr>':'')+
+      '</table>'+
+      '<div style="font-size:11px;color:var(--texto-suave);margin-top:6px">'+
+        '<strong>Liga da placa:</strong> '+(LIGAS_PLACA[placaP.mat]?LIGAS_PLACA[placaP.mat].apl:'')+'<br>'+
+        (ehSemi?'<strong>Anel (CR):</strong> Cloropreno — vedação em placas semi-soldadas, resistente a óleos, ozônio e intempéries.<br>':'')+
+        (ehSemi?'<strong>Corpo de gaxeta:</strong> conforme o líquido — '+(corpoP&&MATERIAIS_REF.gaxetas[corpoP.mat]?MATERIAIS_REF.gaxetas[corpoP.mat].apl:''):'')+
+        (!ehSemi?'<strong>Gaxeta:</strong> '+(MATERIAIS_REF.gaxetas[gaxP.mat]?MATERIAIS_REF.gaxetas[gaxP.mat].apl:''):'')+
+      '</div>'+
+      '<div style="margin-top:8px"><table class="ds-tabela">'+
+        '<tr><td>Calor da seção</td><td>'+fmt(r.Q/1000)+' kW</td></tr>'+
+        '<tr><td>LMTD corrigido</td><td>'+m.lmtdF.toFixed(1)+' °C (F='+m.F.toFixed(2)+')</td></tr>'+
+        '<tr><td>Eficiência térmica (ε-NTU)</td><td>'+(m.eficiencia*100).toFixed(1)+'%</td></tr>'+
+        '<tr><td>Modelo recomendado</td><td>'+m.modelo+' (Alfa Laval)</td></tr>'+
+        '<tr><td>Configuração / Passes</td><td>'+m.config+' ('+m.angP+'°/'+m.angS+'°) · '+m.nomePasses+'</td></tr>'+
+        '<tr><td>Bocal (conexão)</td><td>'+m.conexao+'</td></tr>'+
+        '<tr><td>Placas</td><td>'+m.Nplacas+'</td></tr>'+
+        '<tr><td>Área instalada</td><td>'+m.A_inst.toFixed(1)+' m²</td></tr>'+
+        '<tr><td>Coeficiente U</td><td>'+fmt(m.U)+' W/m²·K</td></tr>'+
+      '</table></div></div>';
+  });
+  html+='<div class="ds-secao"><h4>'+(secoes.length+1)+'. Totais</h4><table class="ds-tabela">'+
+      '<tr><td>Calor total</td><td>'+fmt(totalQ/1000)+' kW</td></tr>'+
+      '<tr><td>Área total instalada</td><td>'+totalA.toFixed(1)+' m²</td></tr>'+
+      '<tr><td>Configuração de placas</td><td>'+secoes[0].melhor.config+'</td></tr>'+
+      '<tr><td>Passes</td><td>'+secoes[0].melhor.nomePasses+'</td></tr>'+
+    '</table></div>'+
+    '<div class="ds-secao"><h4>'+(secoes.length+2)+'. Observações</h4><table class="ds-tabela"><tr><td>Nota</td><td>Dimensionamento preliminar baseado em dados oficiais Alfa Laval. O bocal é padrão do modelo — produto e serviço usam o mesmo diâmetro de conexão. Valores finais devem ser confirmados com o software oficial e catálogos. A seleção de materiais considera fluido, temperatura e corrosividade; casos especiais exigem análise de compatibilidade química detalhada.</td></tr></table></div>'+
+    '<div class="sub" style="margin-top:14px">© 2026 AlfaVed — CNPJ 50.093.389/0001-35</div></div>';
+  c.innerHTML=html;
+}
+
+/* ---------- CÁLCULO PRINCIPAL ---------- */
+function calcular(){
+  var erroBox=document.getElementById('erroTela');erroBox.style.display='none';
+  var modelos=[];document.querySelectorAll('.fab-checkbox').forEach(function(cb){if(cb.checked)modelos.push(cb.closest('.modelo-item').dataset.nome);});
+  if(modelos.length===0){alert('Marque pelo menos um modelo de placa para calcular.');return;}
+  var modelosData=ALFA_LAVAL[tipoAtual].filter(function(m){return modelos.indexOf(m.nome)!==-1;});
+  var vazaoP=parseFloat(document.getElementById('vazaoP').value),tinP=parseFloat(document.getElementById('tinP').value),toutP=parseFloat(document.getElementById('toutP').value),tinS=parseFloat(document.getElementById('tinS').value);
+  if(!vazaoP||!tinP||!toutP){alert('Preencha os campos obrigatórios do PRODUTO: vazão, entrada e saída.');return;}
+  if(tinS===undefined||isNaN(tinS)){alert('Preencha a temperatura de entrada do SERVIÇO.');return;}
+  var d={fluidoP:document.getElementById('fluidoP').value,vazaoP:vazaoP,tinP:tinP,toutP:toutP,fluidoS:document.getElementById('fluidoS').value,tinS:tinS,
+    dpP:parseFloat(document.getElementById('dpP').value)||80,dpS:parseFloat(document.getElementById('dpS').value)||80,
+    incP:parseFloat(document.getElementById('incP').value)||0.0001,incS:parseFloat(document.getElementById('incS').value)||0.0001,
+    margem:parseFloat(document.getElementById('margem').value)||10,config:document.getElementById('config').value,passes:document.getElementById('passes').value,
+    modelos:modelosData,tipo:tipoAtual};
+  try{
+    var sec1={tinP:tinP,toutP:toutP,fluidoS:d.fluidoS,tinS:tinS};
+    var r1=dimensionarSeccao(sec1,d,modelosData),secoes=[r1];
+    for(var i=1;i<=secoesExtras;i++){
+      var eT=parseFloat(document.getElementById('sec'+i+'TinP').value),eTout=parseFloat(document.getElementById('sec'+i+'ToutP').value),eFS=document.getElementById('sec'+i+'FluidoS').value,eTinS=parseFloat(document.getElementById('sec'+i+'TinS').value);
+      if(!eT||!eTout||isNaN(eTinS)){alert('Preencha os dados da seção '+(i+1)+'.');return;}
+      secoes.push(dimensionarSeccao({tinP:eT,toutP:eTout,fluidoS:eFS,tinS:eTinS},d,modelosData));
+    }
+    document.getElementById('toutS').value=r1.toutS.toFixed(1);
+    document.getElementById('vazaoS').value=r1.vazaoS.toFixed(1);
+    ultimoRelatorio={d:d,secoes:secoes};
+    exibirResultado(secoes,d);
+    gerarDatasheet(secoes);
+    trocarAba('resultado');
+    var secRes=document.getElementById('resultado');secRes.style.display='block';secRes.scrollIntoView({behavior:'smooth'});
+  }catch(err){erroBox.style.display='block';erroBox.textContent='Não foi possível dimensionar: '+err.message;}
+}
+
+/* ---------- PDF ---------- */
+function baixarPDF(){
+  if(!ultimoRelatorio){alert('Calcule primeiro para gerar o datasheet.');return;}
+  var conteudo=document.getElementById('dsImprimivel').outerHTML;
+  var j=window.open('','_blank');
+  j.document.write('<html><head><title>Datasheet AlfaVed</title><style>'+
+    'body{font-family:Arial,sans-serif;padding:30px;color:#1e293b}'+
+    'table{width:100%;border-collapse:collapse;margin-bottom:14px}'+
+    'td,th{padding:8px 12px;border:1px solid #dde3ea;font-size:13px}'+
+    'td:first-child{background:#f4f6f9;font-weight:600;width:30%}'+
+    'th{background:#123a6b;color:#fff}'+
+    'h2{color:#0a1f3c;text-align:center}'+
+    'h4{background:#123a6b;color:#fff;padding:8px 12px;border-radius:6px;font-size:13px}'+
+    '.sub{text-align:center;color:#64748b;margin-bottom:16px;font-size:12px}'+
+    '</style></head><body>'+conteudo+'</body></html>');
+  j.document.close();j.focus();j.print();
+}
+
+function fmt(n){if(isNaN(n))return'—';return n.toLocaleString('pt-BR',{maximumFractionDigits:0});}
+window.onerror=function(msg,src,line){var box=document.getElementById('erroTela');if(box){box.style.display='block';box.textContent='Erro na página: '+msg+' (linha '+line+'). Verifique se o arquivo foi salvo por completo.';}return false;};
+document.addEventListener('DOMContentLoaded',function(){montarModelos();preencherAutomatico();aplicarTempRefrigerante();document.getElementById('btnCalcular').addEventListener('click',calcular);document.getElementById('btnImprimir').addEventListener('click',function(){window.print();});document.getElementById('btnPdf').addEventListener('click',baixarPDF);});
 </script>
 </body>
 </html>

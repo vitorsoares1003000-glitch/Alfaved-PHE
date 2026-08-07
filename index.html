@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AlfaVed PHE v37</title>
+<title>AlfaVed PHE v37.1</title>
 <style>
 :root{--ae:#1a3a5c;--am:#2d5a8e;--al:#4a90d9;--vd:#2d9e4a;--vm:#d94a4a;--am2:#f0a830;--cl:#f5f7fa;--cm:#d0d5dd;--ce:#4a5568;--br:#fff;--smb:0 2px 8px rgba(0,0,0,.08);--r:8px;--ft:'Segoe UI',system-ui,sans-serif;--rd:#cc3300;--az:#0099ff;--rx:#9933cc}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -46,7 +46,6 @@ body{font-family:var(--ft);background:var(--cl);color:#2d3748;font-size:13px}
 .tbl td{padding:6px 8px;border-bottom:1px solid var(--cm)}
 .tbl tr:hover td{background:var(--cl)}
 .tbl tr.hl td{background:#e6f4ea;font-weight:700}
-.tbl tr.hl td:first-child::before{content:'🏆 ';font-size:10px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .ck{display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid var(--cl);font-size:11px}
 .ck-ico{width:18px;text-align:center;font-size:12px}
@@ -74,50 +73,47 @@ body{font-family:var(--ft);background:var(--cl);color:#2d3748;font-size:13px}
 .ph{text-align:center;padding:80px 20px;color:var(--ce)}
 .ph-ico{font-size:48px;margin-bottom:12px;opacity:.3}
 .res-badge{background:var(--vd);color:var(--br);padding:3px 10px;border-radius:12px;font-size:10px;font-weight:700}
-.sec-tabs{display:flex;gap:4px;margin-bottom:8px}
-.sec-tab{padding:4px 10px;border-radius:4px;font-size:10px;font-weight:600;cursor:pointer;background:var(--cl);border:1px solid var(--cm)}
-.sec-tab.act{background:var(--ae);color:var(--br)}
 .sec-info{background:var(--cl);border-radius:6px;padding:8px;margin-top:6px;font-size:10px;color:var(--ce)}
 @media(max-width:1100px){.ctn{grid-template-columns:1fr}.sb{position:static;max-height:none}.cards-row{grid-template-columns:1fr 1fr}.grid2{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div class="hdr">
-<h1><div class="lg">AV</div>AlfaVed Dimensionador-PHE <span class="vbg">v37.0</span></h1>
+<h1><div class="lg">AV</div>AlfaVed Dimensionador-PHE <span class="vbg">v37.1</span></h1>
 </div>
 <div class="ctn">
 <div class="sb">
-<div class="sb-hdr">⚙️ Painel de Entrada</div>
-<div class="sb-sect"><h3>📋 Modo de Operação</h3>
+<div class="sb-hdr">Painel de Entrada</div>
+<div class="sb-sect"><h3>Modo de Operacao</h3>
 <div class="gp" style="grid-template-columns:1fr 1fr">
 <button class="bp act" id="btnSimples" onclick="setModo('simples')">Simples</button>
-<button class="bp" id="btnMulti" onclick="setModo('multi')">Multi-Seção</button>
+<button class="bp" id="btnMulti" onclick="setModo('multi')">Multi-Secao</button>
 </div>
-<div class="sec-info" id="modoInfo">Modo Simples: dimensionamento de trocador único (1 par de fluidos). Auto-otimização de passes ativada.</div>
+<div class="sec-info" id="modoInfo">Modo Simples: dimensionamento de trocador unico. Auto-otimizacao de passes ativada.</div>
 </div>
-<div class="sb-sect"><h3>🚀 Presets</h3><div class="gp">
+<div class="sb-sect"><h3>Presets</h3><div class="gp">
 <button class="bp" onclick="apPreset('cerveja')">Cerveja</button>
 <button class="bp" onclick="apPreset('mosto')">Mosto</button>
 <button class="bp" onclick="apPreset('vinho')">Vinho</button>
-<button class="bp" onclick="apPreset('nh3')">Amônia</button>
+<button class="bp" onclick="apPreset('nh3')">Amonia</button>
 <button class="bp" onclick="apPreset('levedura')">Levedura</button>
 <button class="bp" onclick="apPreset('pasteur')">Pasteurizador</button>
 </div></div>
-<div class="sb-sect" id="secProd"><h3>🔧 Lado Produto</h3>
+<div class="sb-sect" id="secProd"><h3>Lado Produto</h3>
 <div class="fg"><label>Fluido</label><select id="fp" onchange="upRef()">
 <optgroup label="Bebidas & Alimentos"><option value="cerveja">Cerveja</option><option value="mosto">Mosto</option><option value="vinho">Vinho</option><option value="vinho_cana">Vinho de Cana</option><option value="soft_drink">Soft Drink</option><option value="leite">Leite</option></optgroup>
-<optgroup label="Açúcar & Fermentação"><option value="sacarose">Calda Açúcar</option><option value="suco_cana">Suco de Cana</option><option value="levedura_cana">Levedura Cana</option><option value="levedura_cerveja">Levedura Cerv.</option></optgroup>
-<optgroup label="Outros"><option value="agua">Água</option><option value="etanol">Etanol</option></optgroup>
+<optgroup label="Acucar & Fermentacao"><option value="sacarose">Calda Acucar</option><option value="suco_cana">Suco de Cana</option><option value="levedura_cana">Levedura Cana</option><option value="levedura_cerveja">Levedura Cerv.</option></optgroup>
+<optgroup label="Outros"><option value="agua">Agua</option><option value="etanol">Etanol</option></optgroup>
 </select></div>
 <div class="fr"><div class="fg"><label>Brix/Conc(%)</label><input type="number" id="bp" value="12" step="0.1"></div>
-<div class="fg"><label>Vazão(m³/h)</label><input type="number" id="vp" value="10"></div></div>
-<div class="fr"><div class="fg"><label>T.Ent(°C)</label><input type="number" id="tip" value="25"></div>
-<div class="fg"><label>T.Sai(°C)</label><input type="number" id="top" value="5"></div>
-<div class="fg"><label>ΔP(kPa)</label><input type="number" id="dpp" value="50"></div></div>
+<div class="fg"><label>Vazao(m3/h)</label><input type="number" id="vp" value="10"></div></div>
+<div class="fr"><div class="fg"><label>T.Ent(C)</label><input type="number" id="tip" value="25"></div>
+<div class="fg"><label>T.Sai(C)</label><input type="number" id="top" value="5"></div>
+<div class="fg"><label>dP(kPa)</label><input type="number" id="dpp" value="50"></div></div>
 </div>
-<div class="sb-sect" id="secServ"><h3>❄️ Lado Serviço</h3>
+<div class="sb-sect" id="secServ"><h3>Lado Servico</h3>
 <div class="fg"><label>Fluido</label><select id="fs" onchange="tgServ()">
-<option value="agua">Água Industrial</option>
+<option value="agua">Agua Industrial</option>
 <option value="vapor">Vapor (Saturado)</option>
 <option value="glicol10">Glicol 10%</option>
 <option value="glicol15">Glicol 15%</option>
@@ -125,89 +121,89 @@ body{font-family:var(--ft);background:var(--cl);color:#2d3748;font-size:13px}
 <option value="glicol30">Glicol 30%</option>
 <option value="refrigerante">Refrigerante</option>
 </select></div>
-<div class="fg" id="bx_ref" style="display:none"><label>Gás</label><select id="gas">
-<option value="R717">R717 Amônia</option><option value="R134a">R134a</option>
+<div class="fg" id="bx_ref" style="display:none"><label>Gas</label><select id="gas">
+<option value="R717">R717 Amonia</option><option value="R134a">R134a</option>
 <option value="R22">R22</option><option value="R410A">R410A</option>
 <option value="R32">R32</option><option value="R404A">R404A</option></select></div>
-<div class="fg" id="bx_vapor" style="display:none"><label>Pressão Vapor (bar)</label><select id="pvap" onchange="tgServ()">
-<option value="2">2 bar (~120°C)</option><option value="3">3 bar (~134°C)</option>
-<option value="6">6 bar (~159°C)</option><option value="10">10 bar (~180°C)</option></select></div>
-<div class="fr"><div class="fg"><label>Vazão(m³/h)</label><input type="number" id="vs" value="15"></div>
-<div class="fg"><label>T.Ent(°C)</label><input type="number" id="tis" value="90"></div></div>
-<div class="fr"><div class="fg"><label>T.Sai(°C)</label><input type="number" id="tos" value="80"></div>
-<div class="fg"><label>ΔP(kPa)</label><input type="number" id="dps" value="50"></div></div>
+<div class="fg" id="bx_vapor" style="display:none"><label>Pressao Vapor (bar)</label><select id="pvap" onchange="tgServ()">
+<option value="2">2 bar (~120C)</option><option value="3">3 bar (~134C)</option>
+<option value="6">6 bar (~159C)</option><option value="10">10 bar (~180C)</option></select></div>
+<div class="fr"><div class="fg"><label>Vazao(m3/h)</label><input type="number" id="vs" value="15"></div>
+<div class="fg"><label>T.Ent(C)</label><input type="number" id="tis" value="90"></div></div>
+<div class="fr"><div class="fg"><label>T.Sai(C)</label><input type="number" id="tos" value="80"></div>
+<div class="fg"><label>dP(kPa)</label><input type="number" id="dps" value="50"></div></div>
 </div>
-<div class="sb-sect" id="secMulti" style="display:none"><h3>🏭 Configuração Multi-Seção</h3>
+<div class="sb-sect" id="secMulti" style="display:none"><h3>Configuracao Multi-Secao</h3>
 <div class="sec-info" style="margin-bottom:8px">
-<b>Seção 1 — Regeneração:</b> Produto frio ↔ Produto quente (recuperação de energia)<br>
-<b>Seção 2 — Aquecimento:</b> Produto ↔ Vapor/Água quente<br>
-<b>Seção 3 — Resfriamento:</b> Produto ↔ Água gelada/Glicol
+<b>Secao 1 - Regeneracao:</b> Produto frio vs Produto quente<br>
+<b>Secao 2 - Aquecimento:</b> Produto vs Vapor/Agua quente<br>
+<b>Secao 3 - Resfriamento:</b> Produto vs Agua gelada/Glicol
 </div>
-<div class="fg"><label>T. Pasteurização (°C)</label><input type="number" id="tpast" value="72"></div>
-<div class="fg"><label>T. Após Regeneração (°C)</label><input type="number" id="tregen" value="65"></div>
-<div class="fg"><label>T. Final Produto (°C)</label><input type="number" id="tfinal" value="4"></div>
-<div class="fg"><label>Fluido Aquecimento</label><select id="fs_aq"><option value="vapor">Vapor</option><option value="agua">Água Quente</option></select></div>
-<div class="fg"><label>Fluido Resfriamento</label><select id="fs_res"><option value="agua">Água Gelada</option><option value="glicol20">Glicol 20%</option><option value="glicol30">Glicol 30%</option></select></div>
-<div class="fr"><div class="fg"><label>T. Água Quente (°C)</label><input type="number" id="t_agua_q" value="85"></div>
-<div class="fg"><label>T. Água Gelada (°C)</label><input type="number" id="t_agua_g" value="2"></div></div>
+<div class="fg"><label>T. Pasteurizacao (C)</label><input type="number" id="tpast" value="72"></div>
+<div class="fg"><label>T. Apos Regeneracao (C)</label><input type="number" id="tregen" value="65"></div>
+<div class="fg"><label>T. Final Produto (C)</label><input type="number" id="tfinal" value="4"></div>
+<div class="fg"><label>Fluido Aquecimento</label><select id="fs_aq"><option value="vapor">Vapor</option><option value="agua">Agua Quente</option></select></div>
+<div class="fg"><label>Fluido Resfriamento</label><select id="fs_res"><option value="agua">Agua Gelada</option><option value="glicol20">Glicol 20%</option><option value="glicol30">Glicol 30%</option></select></div>
+<div class="fr"><div class="fg"><label>T. Agua Quente (C)</label><input type="number" id="t_agua_q" value="85"></div>
+<div class="fg"><label>T. Agua Gelada (C)</label><input type="number" id="t_agua_g" value="2"></div></div>
 </div>
-<div class="sb-sect"><h3>⚙️ Projeto</h3>
+<div class="sb-sect"><h3>Projeto</h3>
 <div class="fr"><div class="fg"><label>Placa</label><select id="tpl">
 <option value="g">Gasketed</option><option value="s">Semi-Welded</option><option value="t">Todas</option></select></div>
-<div class="fg"><label>Material</label><select id="mat"><option value="AISI316">AISI316</option><option value="TIT">Titânio</option></select></div></div>
+<div class="fg"><label>Material</label><select id="mat"><option value="AISI316">AISI316</option><option value="TIT">Titanio</option></select></div></div>
 <div class="fr"><div class="fg"><label>Passes</label><select id="ps">
 <option value="auto">Auto (otimizar)</option>
-<option value="1-1">1-1 (Forçado)</option>
-<option value="2-2">2-2 (Forçado)</option>
-<option value="1-2">1-2 (Forçado)</option>
-<option value="2-1">2-1 (Forçado)</option>
+<option value="1-1">1-1 (Forcado)</option>
+<option value="2-2">2-2 (Forcado)</option>
+<option value="1-2">1-2 (Forcado)</option>
+<option value="2-1">2-1 (Forcado)</option>
 </select></div>
 <div class="fg"><label>Margem(%)</label><input type="number" id="mg" value="10"></div></div>
-<button class="bc" onclick="calc()">🔄 Calcular</button>
-<button class="ba" id="btnA" onclick="autoCorr()">🔧 Auto-Corrigir</button>
+<button class="bc" onclick="calc()">Calcular</button>
+<button class="ba" id="btnA" onclick="autoCorr()">Auto-Corrigir</button>
 <button class="bl" onclick="limpar()">Limpar</button>
 </div>
-<div class="sb-sect"><h3>📋 Catálogo</h3><div class="ms">
-<table class="tm"><thead><tr><th>Mod</th><th>β</th><th>A</th><th>Dh</th><th>Boc</th><th>T</th></tr></thead>
+<div class="sb-sect"><h3>Catalogo</h3><div class="ms">
+<table class="tm"><thead><tr><th>Mod</th><th>beta</th><th>A</th><th>Dh</th><th>Boc</th><th>T</th></tr></thead>
 <tbody id="cat"></tbody></table></div></div>
-<div class="sb-sect" id="secRef"><h3>📊 Prop. Produto</h3>
-<table class="tr"><thead><tr><th>T</th><th>ρ</th><th>Cp</th><th>μ</th><th>k</th><th>Pr</th></tr></thead>
+<div class="sb-sect"><h3>Prop. Produto</h3>
+<table class="tr"><thead><tr><th>T</th><th>rho</th><th>Cp</th><th>mu</th><th>k</th><th>Pr</th></tr></thead>
 <tbody id="ref"></tbody></table></div>
 </div>
 <div class="main">
 <div id="ph" class="cr ph">
 <div class="ph-ico">📊</div>
 <h2 style="color:var(--ae);font-size:16px">Pronto para Dimensionar</h2>
-<p style="margin-top:8px;font-size:12px">Insira os dados e clique em <strong>Calcular</strong>. O sistema testa todas as configurações de passes automaticamente.</p>
+<p style="margin-top:8px;font-size:12px">Insira os dados e clique em <strong>Calcular</strong>.</p>
 </div>
 <div id="res" style="display:none">
 <div class="cards-row" id="cards"></div>
 <div class="cr" id="selCard" style="display:none">
-<div class="ct"><div class="ct-l">🏆 Modelo Selecionado</div><span class="res-badge" id="badge">VIÁVEL</span></div>
+<div class="ct"><div class="ct-l">Modelo Selecionado</div><span class="res-badge" id="badge">VIAVEL</span></div>
 <div id="selInfo"></div>
 </div>
 <div class="grid2">
-<div class="cr"><div class="ct"><div class="ct-l">🌡️ Diagrama de Temperatura</div></div>
+<div class="cr"><div class="ct"><div class="ct-l">Diagrama de Temperatura</div></div>
 <canvas id="tcanvas"></canvas>
 <div class="tdiag-legend" id="diagLegend">
 <div class="tdiag-leg"><span style="background:var(--rd)"></span>Quente</div>
 <div class="tdiag-leg"><span style="background:var(--az)"></span>Frio</div>
 <div class="tdiag-leg"><span style="background:var(--vd);border:1px dashed var(--vd)"></span>LMTD</div>
 </div></div>
-<div class="cr"><div class="ct"><div class="ct-l">📋 Comparativo</div></div>
+<div class="cr"><div class="ct"><div class="ct-l">Comparativo</div></div>
 <div id="comp" style="max-height:300px;overflow-y:auto"></div></div>
 </div>
 <div class="grid2">
-<div class="cr"><div class="ct"><div class="ct-l">✅ Verificações</div></div><div id="ver"></div></div>
-<div class="cr" id="cCorr" style="display:none"><div class="ct"><div class="ct-l">🔧 Correções</div></div><div id="corpoCorr"></div></div>
+<div class="cr"><div class="ct"><div class="ct-l">Verificacoes</div></div><div id="ver"></div></div>
+<div class="cr" id="cCorr" style="display:none"><div class="ct"><div class="ct-l">Correcoes</div></div><div id="corpoCorr"></div></div>
 </div>
-<div class="cr"><div class="ct"><div class="ct-l">🔬 Detalhes por Seção</div><button class="bp" style="width:auto;padding:4px 12px" onclick="var d=document.getElementById('det');d.style.display=d.style.display=='block'?'none':'block'">+/-</button></div>
+<div class="cr"><div class="ct"><div class="ct-l">Detalhes</div><button class="bp" style="width:auto;padding:4px 12px" onclick="var d=document.getElementById('det');d.style.display=d.style.display=='block'?'none':'block'">+/-</button></div>
 <div id="det" class="dc"></div></div>
-<div class="cr"><div class="ct"><div class="ct-l">📄 Datasheet</div></div><div id="ds"></div></div>
+<div class="cr"><div class="ct"><div class="ct-l">Datasheet</div></div><div id="ds"></div></div>
 </div>
 </div>
 </div>
-<div class="fi"><strong>AlfaVed PHE v37.0</strong> | Multipasse + Multi-Seção | Martin(1996) NBS/SysCAD ASHRAE Gut&Pinto(2003) | Validação c/ fabricante</div>
+<div class="fi"><strong>AlfaVed PHE v37.1</strong> | Multipasse + Multi-Secao | Martin(1996) NBS/SysCAD ASHRAE | Validacao c/ fabricante</div>
 <script>
 var BK=[
 {n:'M3',w:.1,l:.3,b:.0025,be:60,dp:.025,d:.0004,ph:1.15,ap:.032,t:'g'},
@@ -232,11 +228,11 @@ var BK=[
 {n:'T20-MW',w:.6,l:1.5,b:.004,be:45,dp:.1,d:.0006,ph:1.25,ap:1.1,t:'s'},
 {n:'M20-MW',w:.5,l:1.1,b:.004,be:45,dp:.08,d:.0006,ph:1.22,ap:.8,t:'s'}
 ];
-var MT={AISI316:{k:16.2,n:'AISI 316'},TIT:{k:15,n:'Titânio'}};
-var selM=null;var modo='simples';
+var MT={AISI316:{k:16.2,n:'AISI 316'},TIT:{k:15,n:'Titanio'}};
+var selM=null;
+var modo='simples';
 var PASSOS=['1-1','2-2','1-2','2-1'];
 
-// === PROPRIEDADES ===
 function pAg(T){var t=T;return{rho:Math.max(1000*(1-Math.pow(Math.abs(t-4)/622,1.71)),800),cp:Math.max(4182+(t-20)*(.06+.0008*(t-20)),3000),mu:Math.max(1e-3*(1.78-.057*t+.00106*t*t-8.5e-6*t*t*t),1e-5),k:Math.max(.5706+.00176*t-6.46e-6*t*t,.1)}}
 function pSa(T,B,q){var w=B/100;q=(q||100)/100;var wt=pAg(T);var dr=3.8749*w+.0174*w*w-.0063*w*T+1.836e-5*w*w*T+2.776e-5*w*T*T;var cp=wt.cp*(1-w)+(1262+4.524*T+.00624*T*T)*w+(-w*(.0297-4.6e-5*q)+7.5e-5*w*T)*1000;var lM=Math.log10(wt.mu);var lR=3.2488*w+7.5*w*w+14.2*w*w*w-.03*w*T-.02*w*w*T;return{rho:Math.max(wt.rho+dr,800),cp:Math.max(cp,1500),mu:Math.max(Math.pow(10,lM+lR),1e-5),k:Math.max(wt.k-.424*w+.001*T*(1-.5*w),.15)}}
 function pCe(T){var w=pAg(T),we=.04;return{rho:w.rho*(1-we)+(789-.8*(T-20))*we-30*we*(1-we),cp:w.cp*(1-we)+(2430+5*T)*we,mu:Math.max(Math.exp((1-we)*Math.log(w.mu)+we*Math.log(1.2e-3*Math.exp(-.018*(T-20))))*1.15,1e-5),k:Math.max(w.k*(1-we)+(.171-.0003*(T-20))*we-.02*we*(1-we),.3)}}
@@ -252,44 +248,47 @@ function pGl(T,conc){var w=conc/100;var wt=pAg(T);return{rho:wt.rho*(1-w)+(1113-
 function pRf(g,T){var TB={'R717':{'-40':[682,3.46e-4,.628,4426],'-20':[662,2.93e-4,.596,4515],'0':[639,2.52e-4,.567,4610],'20':[610,2.2e-4,.540,4722],'40':[580,1.95e-4,.514,4852]},'R134a':{'-40':[1387,4.81e-4,.111,1247],'-20':[1332,3.71e-4,.1,1300],'0':[1273,2.97e-4,.09,1358],'20':[1210,2.43e-4,.08,1427],'40':[1142,2.02e-4,.071,1512]},'R22':{'-40':[1406,4e-4,.114,1124],'-20':[1349,3.17e-4,.104,1173],'0':[1285,2.58e-4,.094,1230],'20':[1210,2.13e-4,.084,1299],'40':[1128,1.79e-4,.074,1383]},'R410A':{'-40':[1230,2.6e-4,.105,1421],'-20':[1172,2.09e-4,.097,1482],'0':[1106,1.72e-4,.089,1555],'20':[1028,1.44e-4,.081,1646],'40':[931,1.23e-4,.073,1765]},'R32':{'-40':[1142,2.75e-4,.181,1730],'-20':[1090,2.19e-4,.169,1798],'0':[1027,1.78e-4,.158,1883],'20':[950,1.48e-4,.147,1992],'40':[851,1.26e-4,.136,2141]},'R404A':{'-40':[1234,3e-4,.089,1335],'-20':[1174,2.36e-4,.081,1398],'0':[1103,1.91e-4,.074,1474],'20':[1018,1.58e-4,.067,1570],'40':[911,1.34e-4,.059,1697]}};var tb=TB[g];if(!tb)return pAg(T);var ks=Object.keys(tb).map(Number).sort(function(a,b){return a-b});var t1=ks[0],t2=ks[ks.length-1];for(var i=0;i<ks.length-1;i++){if(T>=ks[i]&&T<=ks[i+1]){t1=ks[i];t2=ks[i+1];break}}if(T<ks[0]){t1=ks[0];t2=ks[1]}if(T>ks[ks.length-1]){t1=ks[ks.length-2];t2=ks[ks.length-1]}var f=(T-t1)/Math.max(t2-t1,.001),d1=tb[t1],d2=tb[t2];return{rho:d1[0]+(d2[0]-d1[0])*f,cp:d1[3]+(d2[3]-d1[3])*f,mu:Math.max(d1[1]+(d2[1]-d1[1])*f,1e-5),k:Math.max(d1[2]+(d2[2]-d1[2])*f,.04)}}
 function gP(f,T,b,c){b=b||0;c=c||0;switch(f){case'sacarose':return pSa(T,b,100);case'suco_cana':return pSC(T,b);case'vinho_cana':return pVC(T,b);case'levedura_cana':return pLC(T,b);case'levedura_cerveja':return pLC(T,b||20);case'cerveja':return pCe(T);case'mosto':return pMo(T,b);case'vinho':return pVi(T);case'soft_drink':return pSD(T,b);case'leite':return pLt(T);case'etanol':return pEt(T,c);case'agua':return pAg(T);default:return pAg(T)}}
 function gPS(fs,T,gas){switch(fs){case'agua':return pAg(T);case'vapor':return pAg(T);case'glicol10':return pGl(T,10);case'glicol15':return pGl(T,15);case'glicol20':return pGl(T,20);case'glicol30':return pGl(T,30);case'refrigerante':return pRf(gas||'R717',T);default:return pAg(T)}}
-
-// === NUSSELT + ATRITO ===
 function nM(Re,Pr,be,mu,muw){var b=be*Math.PI/180;var g=(Math.cos(b)*Math.cos(b))/(.045*Math.tan(b)+3.7*Math.sin(b))+(Math.sin(b)*Math.sin(b))/(2.25/Math.tan(b)+.125*Math.cos(b));var z=Math.pow(1/Math.max(Re,1),.25)*Math.pow(Math.max(g,.001),-1/6);return Math.max(.122*Math.pow(Math.max(Pr,.1),1/3)*Math.pow(Math.max(z/2,.001),1/6)*Math.pow(Math.max(Re,1),.75)*Math.pow(Math.max(mu/muw,.1),.14),1)}
 function fA(Re,be){var b=be*Math.PI/180;var g=(Math.cos(b)*Math.cos(b))/(.045*Math.tan(b)+3.7*Math.sin(b))+(Math.sin(b)*Math.sin(b))/(2.25/Math.tan(b)+.125*Math.cos(b));return Math.max(.5*Math.pow(1/Math.max(Re,1),.25)*Math.pow(Math.max(g,.001),-1/6),.001)}
 function cDp(m,r,D,L,N,Ap,v,be,Re){var Cf=fA(Re,be);var dpc=4*Cf*(L*N/D)*(r*v*v/2);var vp=m/(r*Math.max(Ap,1e-6));var dpp=1.5*r*vp*vp/2*N;return{t:(dpc+dpp)/1000,c:dpc/1000,p:dpp/1000,vp:vp}}
 function cL(a,b,c,d){var d1=a-d,d2=b-c;if(Math.abs(d1-d2)<.01)return Math.abs(d1);if(Math.abs(d1)<.001||Math.abs(d2)<.001)return Math.abs(Math.max(d1,d2));return Math.abs((d1-d2)/Math.log(Math.abs(d1/d2)))}
 function fF(P,R,a){if(a==='1-1')return 1;var s=Math.sqrt(R*R+1);var n=s*Math.log(Math.abs((1-P)/(1-P*R)));var d=(R-1)*Math.log(Math.abs((2-P*(R+1-s))/(2-P*(R+1+s))));return Math.abs(d)<1e-10?.95:Math.max(n/d,0)}
 
-// === U ITERATIVO ===
-function cU(p){var Th=(p.t1i+p.t1o)/2,Tc=(p.t2i+p.t2o)/2,Tw=(Th+Tc)/2,Ua=0,r={};for(var i=0;i<30;i++){var wh=gPS(p.f1,Tw,p.gas);var wc=gP(p.f2,Tw,p.b2,p.c2);var bh=gPS(p.f1,Th,p.gas);var bc=gP(p.f2,Tc,p.b2,p.c2);var Nh=nM(p.Re1,p.Pr1,p.be,bh.mu,wh.mu);var Nc=nM(p.Re2,p.Pr2,p.be,bc.mu,wc.mu);var hh=Nh*bh.k/Math.max(p.Dh,1e-6);var hc=Nc*bc.k/Math.max(p.Dh,1e-6);var kc=1/(1/hh+1/hc+p.d/p.km);var kd=1/(1/hh+1/hc+p.d/p.km+p.rf1+p.rf2);Tw=Tc+(hh/Math.max(hh+hc,.001))*(Th-Tc);r={U:kd,kc:kc,h1:hh,h2:hc,Tw:Tw};if(Math.abs(kd-Ua)<.5)break;Ua=kd}return r}
+function cU(p){
+var Th=(p.t1i+p.t1o)/2,Tc=(p.t2i+p.t2o)/2,Tw=(Th+Tc)/2,Ua=0,r={};
+for(var i=0;i<30;i++){
+var wh=gPS(p.f1,Tw,p.gas);
+var wc=gP(p.f2,Tw,p.b2,p.c2);
+var bh=gPS(p.f1,Th,p.gas);
+var bc=gP(p.f2,Tc,p.b2,p.c2);
+var Nh=nM(p.Re1,p.Pr1,p.be,bh.mu,wh.mu);
+var Nc=nM(p.Re2,p.Pr2,p.be,bc.mu,wc.mu);
+var hh=Nh*bh.k/Math.max(p.Dh,1e-6);
+var hc=Nc*bc.k/Math.max(p.Dh,1e-6);
+var kc=1/(1/hh+1/hc+p.d/p.km);
+var kd=1/(1/hh+1/hc+p.d/p.km+p.rf1+p.rf2);
+Tw=Tc+(hh/Math.max(hh+hc,.001))*(Th-Tc);
+r={U:kd,kc:kc,h1:hh,h2:hc,Tw:Tw};
+if(Math.abs(kd-Ua)<.5)break;Ua=kd}
+return r}
 
-// === MOTOR CÁLCULO SEÇÃO ÚNICA (COM AUTO-PASSES) ===
-function mCalcSec(inp,passesArr){
-var bestResult=null;
-var passesToTry=passesArr||PASSOS;
-for(var pi=0;pi<passesToTry.length;pi++){
-var ps=passesToTry[pi];
-var inpC=Object.assign({},inp,{ps:ps});
-var rs=mCalcSingle(inpC);
-var vs=rs.filter(function(r){return r.vi});
-if(vs.length>0){
-vs.sort(function(a,b){return a.A-b.A});
-var best=vs[0];
-if(!bestResult||best.A<bestResult.A){
-bestResult=best;bestResult.passesUsado=ps;
-bestResult.todosViaveis=vs;
-bestResult.todosCalculados=rs;
-}
-}
-}
-if(bestResult)return bestResult;
-// Se nenhum viável, retorna o melhor não-viável com info
-var rs=mCalcSingle(inp);
-rs.sort(function(a,b){return a.A-b.A});
-return{mod:rs[0]?rs[0].mod:'N/A',n:0,A:0,U:0,dp1:999,dp2:999,Q:0,vi:false,
-passesUsado:inp.ps,todosViaveis:[],todosCalculados:rs,
-Rep:0,Res:0,lm:0,F:0,pb:pAg(20),sb:pAg(20),rU:{kc:0,Tw:0},m:rs[0]?rs[0].m:null,lmtd:0};
-}
+function cURegen(p){
+var Th=(p.t1i+p.t1o)/2,Tc=(p.t2i+p.t2o)/2,Tw=(Th+Tc)/2,Ua=0,r={};
+for(var i=0;i<30;i++){
+var wh=gP(p.fp,Tw,p.bp,p.bp);
+var wc=gP(p.fp,Tw,p.bp,p.bp);
+var bh=gP(p.fp,Th,p.bp,p.bp);
+var bc=gP(p.fp,Tc,p.bp,p.bp);
+var Nh=nM(p.Re1,p.Pr1,p.be,bh.mu,wh.mu);
+var Nc=nM(p.Re2,p.Pr2,p.be,bc.mu,wc.mu);
+var hh=Nh*bh.k/Math.max(p.Dh,1e-6);
+var hc=Nc*bc.k/Math.max(p.Dh,1e-6);
+var kc=1/(1/hh+1/hc+p.d/p.km);
+var kd=1/(1/hh+1/hc+p.d/p.km+p.rf1+p.rf2);
+Tw=Tc+(hh/Math.max(hh+hc,.001))*(Th-Tc);
+r={U:kd,kc:kc,h1:hh,h2:hc,Tw:Tw};
+if(Math.abs(kd-Ua)<.5)break;Ua=kd}
+return r}
 
 function mCalcSingle(inp){
 var pb=gP(inp.fp,(inp.tip+inp.top)/2,inp.bp,inp.bp);
@@ -323,82 +322,31 @@ var An=(Q*1000)/Math.max(rU.U*lc,.1);
 if(Ai>=An){
 var dp1=cDp(mp,pb.rho,Dh,m.l,Np,Ap,mcp/(pb.rho*Ac),m.be,Rep);
 var dp2=cDp(ms,sb.rho,Dh,m.l,Np2,Ap,mcs/(sb.rho*Ac),m.be,Res);
-rs.push({mod:m.n,n:n,A:Ai,U:rU.U,dp1:dp1.t,dp2:dp2.t,Q:Q,v1:dp1.vp,v2:dp2.vp,
-vi:dp1.t<=inp.dpp&&dp2.t<=inp.dps,
-Rep:Rep,Res:Res,lm:lc,F:F,pb:pb,sb:sb,rU:rU,m:m,lmtd:lm,passes:inp.ps});
-break
-}
-}
-});
-return rs
-}
+rs.push({mod:m.n,n:n,A:Ai,U:rU.U,dp1:dp1.t,dp2:dp2.t,Q:Q,v1:dp1.vp,v2:dp2.vp,vi:dp1.t<=inp.dpp&&dp2.t<=inp.dps,Rep:Rep,Res:Res,lm:lc,F:F,pb:pb,sb:sb,rU:rU,m:m,lmtd:lm,passes:inp.ps});
+break}}});
+return rs}
 
-// === MOTOR MULTI-SEÇÃO (PASTEURIZADOR) ===
-function mCalcMulti(inp){
-var ti=inp.tip,tp=parseFloat(document.getElementById('tpast').value)||72;
-var tr=parseFloat(document.getElementById('tregen').value)||65;
-var tf=parseFloat(document.getElementById('tfinal').value)||4;
-var vp=inp.vp,fp=inp.fp,bp=inp.bp;
-var dppTotal=inp.dpp;
-var fsAq=document.getElementById('fs_aq').value;
-var fsRes=document.getElementById('fs_res').value;
-var tAguaQ=parseFloat(document.getElementById('t_agua_q').value)||85;
-var tAguaG=parseFloat(document.getElementById('t_agua_g').value)||2;
-
-// SEÇÃO 1: Regeneração (produto frio ti→tr aquecido por produto quente tp→tr_saida)
-// Produto frio: ti→tr, Produto quente: tp→(tp-(tr-ti)) [balanço]
-var tQuenteSaidaRegen=tp-(tr-ti);
-var sec1Inp={fp:fp,bp:bp,vp:vp,tip:ti,top:tr,dpp:dppTotal*0.4,
-fs:fp,vs:vp,tis:tp,tos:tQuenteSaidaRegen,dps:dppTotal*0.4,
-tpl:inp.tpl,mat:inp.mat,ps:inp.ps,mg:inp.mg};
-// Para regeneração, o "serviço" é o próprio produto quente = mesmo fluido
-// Ajustar: usar gP para ambos os lados
-var sec1Result=mCalcSecRegen(sec1Inp);
-
-// SEÇÃO 2: Aquecimento (tr→tp com água quente/vapor)
-var tSaiAq=tAguaQ-20;
-var sec2Inp={fp:fp,bp:bp,vp:vp,tip:tr,top:tp,dpp:dppTotal*0.3,
-fs:fsAq==='vapor'?'vapor':'agua',vs:vp*1.5,tis:tAguaQ,tos:tSaiAq,dps:dppTotal*0.3,
-tpl:inp.tpl,mat:inp.mat,ps:inp.ps,mg:inp.mg};
-var sec2Result=mCalcSec(sec2Inp);
-
-// SEÇÃO 3: Resfriamento (tp→tf com água gelada/glicol)
-var tSaiRes=tAguaG+8;
-var sec3Inp={fp:fp,bp:bp,vp:vp,tip:tp,top:tf,dpp:dppTotal*0.3,
-fs:fsRes,vs:vp*1.5,tis:tAguaG,tos:tSaiRes,dps:dppTotal*0.3,
-tpl:inp.tpl,mat:inp.mat,ps:inp.ps,mg:inp.mg};
-var sec3Result=mCalcSec(sec3Inp);
-
-// Eficiência de regeneração
-var regenEff=(tr-ti)/(tp-ti)*100;
-
-// Combinar resultados
-var totalArea=sec1Result.A+sec2Result.A+sec3Result.A;
-var totalDpP=sec1Result.dp1+sec2Result.dp1+sec3Result.dp1;
-var totalDpS=sec1Result.dp2+sec2Result.dp2+sec3Result.dp2;
-var totalPlates=sec1Result.n+sec2Result.n+sec3Result.n;
-var Qtotal=sec2Result.Q+sec3Result.Q; // regeneração não conta como carga externa
-
-return{
-multi:true,
-sec1:sec1Result,sec2:sec2Result,sec3:sec3Result,
-regenEff:regenEff,
-totalArea:totalArea,totalDpP:totalDpP,totalDpS:totalDpS,
-totalPlates:totalPlates,Qexterno:Qtotal,
-Qregen:sec1Result.Q,
-mod:'Multi: '+sec1Result.mod+'+'+sec2Result.mod+'+'+sec3Result.mod,
-n:totalPlaces,A:totalArea,U:(sec1Result.U+sec2Result.U+sec3Result.U)/3,
-dp1:totalDpP,dp2:totalDpS,Q:Qtotal,
-vi:sec1Result.vi&&sec2Result.vi&&sec3Result.vi&&totalDpP<=inp.dpp,
-passesUsado:sec1Result.passesUsado+' / '+sec2Result.passesUsado+' / '+sec3Result.passesUsado,
-todosCalculados:[],
-lmtd:0,F:1,Rep:sec2Result.Rep,Res:sec3Result.Res,
-pb:sec2Result.pb,sb:sec3Result.sb,rU:sec2Result.rU,m:sec2Result.m,
-temperaturas:{ti:ti,tr:tr,tp:tp,tf:tf,tQout:tQuenteSaidaRegen,tAqIn:tAguaQ,tAqOut:tSaiAq,tGIn:tAguaG,tGOut:tSaiRes}
-}
+function mCalcSec(inp,passesArr){
+var bestResult=null;
+var passesToTry=passesArr||PASSOS;
+for(var pi=0;pi<passesToTry.length;pi++){
+var ps=passesToTry[pi];
+var inpC=Object.assign({},inp,{ps:ps});
+var rs=mCalcSingle(inpC);
+var vs=rs.filter(function(r){return r.vi});
+if(vs.length>0){
+vs.sort(function(a,b){return a.A-b.A});
+var best=vs[0];
+if(!bestResult||best.A<bestResult.A){
+bestResult=best;bestResult.passesUsado=ps;
+bestResult.todosViaveis=vs;
+bestResult.todosCalculados=rs;}}}
+if(bestResult)return bestResult;
+var rs2=mCalcSingle(Object.assign({},inp,{ps:passesToTry[0]}));
+rs2.sort(function(a,b){return a.A-b.A});
+return{mod:rs2[0]?rs2[0].mod:'N/A',n:0,A:0,U:0,dp1:999,dp2:999,Q:0,vi:false,passesUsado:passesToTry[0],todosViaveis:[],todosCalculados:rs2,Rep:0,Res:0,lm:0,F:0,pb:pAg(20),sb:pAg(20),rU:{kc:0,Tw:0},m:rs2[0]?rs2[0].m:null,lmtd:0,v1:0,v2:0};
 }
 
-// Regeneração: produto vs produto (mesmo fluido ambos os lados)
 function mCalcSecRegen(inp){
 var passesToTry=PASSOS;
 var bestResult=null;
@@ -408,7 +356,6 @@ var inpC=Object.assign({},inp,{ps:ps});
 var pb=gP(inpC.fp,(inpC.tip+inpC.top)/2,inpC.bp,inpC.bp);
 var mp=inpC.vp*pb.rho/3600;
 var Q=mp*pb.cp*Math.abs(inpC.top-inpC.tip)/1000;
-// Serviço = mesmo produto (quente)
 var sb=pb;var ms=mp;
 var lm=cL(inpC.tis,inpC.tos,inpC.tip,inpC.top);
 var Pval=(inpC.top-inpC.tip)/(inpC.tis-inpC.tip);
@@ -429,84 +376,79 @@ var Rep=(mcp*Dh)/(Math.max(Ac,1e-8)*Math.max(pb.mu,1e-8));
 var Res=(mcs*Dh)/(Math.max(Ac,1e-8)*Math.max(sb.mu,1e-8));
 var Prp=(pb.cp*pb.mu)/Math.max(pb.k,.001);
 var Prs=(sb.cp*sb.mu)/Math.max(sb.k,.001);
-// Regeneração: ambos lados usam gP (produto)
-var rU=cURegen({t1i:inpC.tis,t1o:inpC.tos,t2i:inpC.tip,t2o:inpC.top,
-f2:inpC.fp,b2:inpC.bp,c2:inpC.bp,
-Re1:Res,Pr1:Prs,Re2:Rep,Pr2:Prp,
-be:m.be,Dh:Dh,d:m.d,km:MT[inpC.mat].k,rf1:1.7e-5,rf2:2e-5,
-fp:inpC.fp,bp:inpC.bp});
+var rU=cURegen({t1i:inpC.tis,t1o:inpC.tos,t2i:inpC.tip,t2o:inpC.top,fp:inpC.fp,bp:inpC.bp,Re1:Res,Pr1:Prs,Re2:Rep,Pr2:Prp,be:m.be,Dh:Dh,d:m.d,km:MT[inpC.mat].k,rf1:1.7e-5,rf2:2e-5});
 var Ai=n*m.ap;
 var An=(Q*1000)/Math.max(rU.U*lc,.1);
 if(Ai>=An){
 var dp1=cDp(mp,pb.rho,Dh,m.l,Np,Ap,mcp/(pb.rho*Ac),m.be,Rep);
 var dp2=cDp(ms,sb.rho,Dh,m.l,Np2,Ap,mcs/(sb.rho*Ac),m.be,Res);
-rs.push({mod:m.n,n:n,A:Ai,U:rU.U,dp1:dp1.t,dp2:dp2.t,Q:Q,v1:dp1.vp,v2:dp2.vp,
-vi:dp1.t<=inpC.dpp&&dp2.t<=inpC.dps,
-Rep:Rep,Res:Res,lm:lc,F:F,pb:pb,sb:sb,rU:rU,m:m,lmtd:lm,passes:ps});
-break
-}
-}
-});
+rs.push({mod:m.n,n:n,A:Ai,U:rU.U,dp1:dp1.t,dp2:dp2.t,Q:Q,v1:dp1.vp,v2:dp2.vp,vi:dp1.t<=inpC.dpp&&dp2.t<=inpC.dps,Rep:Rep,Res:Res,lm:lc,F:F,pb:pb,sb:sb,rU:rU,m:m,lmtd:lm,passes:ps});
+break}}});
 var vs=rs.filter(function(r){return r.vi});
 if(vs.length>0){vs.sort(function(a,b){return a.A-b.A});var best=vs[0];
-if(!bestResult||best.A<bestResult.A){bestResult=best;bestResult.passesUsado=ps;bestResult.todosViaveis=vs;bestResult.todosCalculados=rs}}
-}
+if(!bestResult||best.A<bestResult.A){bestResult=best;bestResult.passesUsado=ps;bestResult.todosViaveis=vs;bestResult.todosCalculados=rs}}}
 if(bestResult)return bestResult;
-var rs2=[];return{mod:'N/A',n:0,A:0,U:0,dp1:999,dp2:999,Q:0,vi:false,passesUsado:'1-1',Rep:0,Res:0,lm:0,F:0,pb:pAg(20),sb:pAg(20),rU:{kc:0,Tw:0},m:null,lmtd:0,todosCalculados:rs2}
+return{mod:'N/A',n:0,A:0,U:0,dp1:999,dp2:999,Q:0,vi:false,passesUsado:'1-1',Rep:0,Res:0,lm:0,F:0,pb:pAg(20),sb:pAg(20),rU:{kc:0,Tw:0},m:null,lmtd:0,v1:0,v2:0};
 }
 
-// U iterativo para regeneração (ambos lados = produto)
-function cURegen(p){
-var Th=(p.t1i+p.t1o)/2,Tc=(p.t2i+p.t2o)/2,Tw=(Th+Tc)/2,Ua=0,r={};
-for(var i=0;i<30;i++){
-var wh=gP(p.fp,Tw,p.bp,p.bp);
-var wc=gP(p.fp,Tw,p.bp,p.bp);
-var bh=gP(p.fp,Th,p.bp,p.bp);
-var bc=gP(p.fp,Tc,p.bp,p.bp);
-var Nh=nM(p.Re1,p.Pr1,p.be,bh.mu,wh.mu);
-var Nc=nM(p.Re2,p.Pr2,p.be,bc.mu,wc.mu);
-var hh=Nh*bh.k/Math.max(p.Dh,1e-6);
-var hc=Nc*bc.k/Math.max(p.Dh,1e-6);
-var kc=1/(1/hh+1/hc+p.d/p.km);
-var kd=1/(1/hh+1/hc+p.d/p.km+p.rf1+p.rf2);
-Tw=Tc+(hh/Math.max(hh+hc,.001))*(Th-Tc);
-r={U:kd,kc:kc,h1:hh,h2:hc,Tw:Tw};
-if(Math.abs(kd-Ua)<.5)break;Ua=kd
-}
-return r
+function mCalcMulti(inp){
+var ti=inp.tip;
+var tp=parseFloat(document.getElementById('tpast').value)||72;
+var tr=parseFloat(document.getElementById('tregen').value)||65;
+var tf=parseFloat(document.getElementById('tfinal').value)||4;
+var vp=inp.vp,fp=inp.fp,bp=inp.bp;
+var dppTotal=inp.dpp;
+var fsAq=document.getElementById('fs_aq').value;
+var fsRes=document.getElementById('fs_res').value;
+var tAguaQ=parseFloat(document.getElementById('t_agua_q').value)||85;
+var tAguaG=parseFloat(document.getElementById('t_agua_g').value)||2;
+var tQuenteSaidaRegen=tp-(tr-ti);
+var sec1Inp={fp:fp,bp:bp,vp:vp,tip:ti,top:tr,dpp:dppTotal*0.4,fs:fp,vs:vp,tis:tp,tos:tQuenteSaidaRegen,dps:dppTotal*0.4,tpl:inp.tpl,mat:inp.mat,ps:inp.ps,mg:inp.mg};
+var sec1Result=mCalcSecRegen(sec1Inp);
+var tSaiAq=tAguaQ-20;
+var sec2Inp={fp:fp,bp:bp,vp:vp,tip:tr,top:tp,dpp:dppTotal*0.3,fs:fsAq==='vapor'?'vapor':'agua',vs:vp*1.5,tis:tAguaQ,tos:tSaiAq,dps:dppTotal*0.3,tpl:inp.tpl,mat:inp.mat,ps:inp.ps,mg:inp.mg};
+var sec2Result=mCalcSec(sec2Inp);
+var tSaiRes=tAguaG+8;
+var sec3Inp={fp:fp,bp:bp,vp:vp,tip:tp,top:tf,dpp:dppTotal*0.3,fs:fsRes,vs:vp*1.5,tis:tAguaG,tos:tSaiRes,dps:dppTotal*0.3,tpl:inp.tpl,mat:inp.mat,ps:inp.ps,mg:inp.mg};
+var sec3Result=mCalcSec(sec3Inp);
+var regenEff=(tr-ti)/(tp-ti)*100;
+var totalArea=sec1Result.A+sec2Result.A+sec3Result.A;
+var totalDpP=sec1Result.dp1+sec2Result.dp1+sec3Result.dp1;
+var totalDpS=sec1Result.dp2+sec2Result.dp2+sec3Result.dp2;
+var totalPlates=sec1Result.n+sec2Result.n+sec3Result.n;
+var Qtotal=sec2Result.Q+sec3Result.Q;
+return{multi:true,sec1:sec1Result,sec2:sec2Result,sec3:sec3Result,regenEff:regenEff,totalArea:totalArea,totalDpP:totalDpP,totalDpS:totalDpS,totalPlates:totalPlates,Qexterno:Qtotal,Qregen:sec1Result.Q,mod:'Multi: '+sec1Result.mod+'+'+sec2Result.mod+'+'+sec3Result.mod,n:totalPlates,A:totalArea,U:(sec1Result.U+sec2Result.U+sec3Result.U)/3,dp1:totalDpP,dp2:totalDpS,Q:Qtotal,vi:sec1Result.vi&&sec2Result.vi&&sec3Result.vi&&totalDpP<=inp.dpp,passesUsado:sec1Result.passesUsado+' / '+sec2Result.passesUsado+' / '+sec3Result.passesUsado,todosCalculados:[],lmtd:0,F:1,Rep:sec2Result.Rep,Res:sec3Result.Res,pb:sec2Result.pb,sb:sec3Result.sb,rU:sec2Result.rU,m:sec2Result.m,temperaturas:{ti:ti,tr:tr,tp:tp,tf:tf,tQout:tQuenteSaidaRegen,tAqIn:tAguaQ,tAqOut:tSaiAq,tGIn:tAguaG,tGOut:tSaiRes}};
 }
 
-// === MODO ===
 function setModo(m){
 modo=m;
 document.getElementById('btnSimples').classList.toggle('act',m==='simples');
 document.getElementById('btnMulti').classList.toggle('act',m==='multi');
 document.getElementById('secMulti').style.display=m==='multi'?'block':'none';
-document.getElementById('modoInfo').innerHTML=m==='multi'?
-'<b>Modo Multi-Seção:</b> Dimensiona pasteurizador com 3 seções (regeneração + aquecimento + resfriamento). Calcula eficiência de regeneração automaticamente.':
-'<b>Modo Simples:</b> Dimensionamento de trocador único. Auto-otimização depasses testando 1-1, 2-2, 1-2 e 2-1 automaticamente.';
+document.getElementById('modoInfo').innerHTML=m==='multi'?'<b>Modo Multi-Secao:</b> Dimensiona pasteurizador com 3 secoes (regeneracao + aquecimento + resfriamento).':'<b>Modo Simples:</b> Auto-otimizacao de passes testando 1-1, 2-2, 1-2 e 2-1.';
 }
 
-// === CALCULAR ===
 function calc(){
 var inp=rInp();
-if(!inp.vp||inp.vp<=0){alert('Vazão produto inválida');return}
-if(!inp.vs||inp.vs<=0){alert('Vazão serviço inválida');return}
+if(!inp.vp||inp.vp<=0){alert('Vazao produto invalida');return}
 if(modo==='multi'){
 var result=mCalcMulti(inp);
-showMulti(result,inp)
+showMulti(result,inp);
 }else{
-if(inp.tis<=inp.top&&inp.tip<inp.top){alert('T.ent serviço deve ser > T.sai produto');return}
+if(!inp.vs||inp.vs<=0){alert('Vazao servico invalida');return}
+if(inp.tis<=inp.top&&inp.tip<inp.top){alert('T.ent servico deve ser > T.sai produto');return}
 var passesToTest=inp.ps==='auto'?PASSOS:[inp.ps];
 var result=mCalcSec(inp,passesToTest);
-showR(result,inp,result.todosCalculados||[])
+showR(result,inp,result.todosCalculados||[]);
 }
 }
 
 function autoCorr(){
-var inp=rInp();var corr=[];
-inp.dpp=Math.min(inp.dpp+50,200);inp.dps=Math.min(inp.dps+50,200);
-corr.push({p:'ΔP +50 kPa'});
+var inp=rInp();
+var corr=[];
+inp.dpp=Math.min(inp.dpp+50,200);
+inp.dps=Math.min(inp.dps+50,200);
+corr.push({p:'dP +50 kPa'});
 var passesToTest=PASSOS;
 var result=mCalcSec(inp,passesToTest);
 var vs=result.todosViaveis||[];
@@ -514,120 +456,88 @@ if(vs.length===0){inp.tpl='t';corr.push({p:'Todas placas'});
 result=mCalcSec(inp,passesToTest);vs=result.todosViaveis||[]}
 if(vs.length===0){inp.mg=0;corr.push({p:'Margem 0%'});
 result=mCalcSec(inp,passesToTest);vs=result.todosViaveis||[]}
-if(vs.length===0){inp.dpp=250;inp.dps=250;corr.push({p:'ΔP máx 250'});
+if(vs.length===0){inp.dpp=250;inp.dps=250;corr.push({p:'dP max 250'});
 result=mCalcSec(inp,passesToTest);vs=result.todosViaveis||[]}
 if(vs.length>0){
 document.getElementById('cCorr').style.display='block';
-var h='<div class="cb"><b style="color:var(--vd)">Correções:</b><br>';
-corr.forEach(function(c){h+='<span style="font-size:11px">→ '+c.p+'</span><br>'});h+='</div>';
+var h='<div class="cb"><b style="color:var(--vd)">Correcoes:</b><br>';
+corr.forEach(function(c){h+='<span style="font-size:11px">-> '+c.p+'</span><br>'});
+h+='</div>';
 document.getElementById('corpoCorr').innerHTML=h;
-showR(result,inp,result.todosCalculados||[])
+showR(result,inp,result.todosCalculados||[]);
 }else{
 document.getElementById('cCorr').style.display='block';
-document.getElementById('corpoCorr').innerHTML='<div class="ae2">Não viável mesmo com correções.</div>'
+document.getElementById('corpoCorr').innerHTML='<div class="ae2">Nao viavel mesmo com correcoes.</div>';
 }
 }
 
-// === EXIBIR RESULTADO SIMPLES ===
 function showR(m,inp,todos){
 document.getElementById('ph').style.display='none';
 document.getElementById('res').style.display='block';
 document.getElementById('btnA').style.display='none';
 document.getElementById('selCard').style.display='block';
-var passInfo=m.passesUsado?' · Passes: '+m.passesUsado:'';
-document.getElementById('selInfo').innerHTML='<div style="display:flex;align-items:center;gap:12px"><div style="font-size:28px">🏆</div><div><div style="font-size:18px;font-weight:800;color:var(--ae)">'+m.mod+'</div><div style="font-size:11px;color:var(--ce)">'+m.n+' placas · '+m.A.toFixed(2)+' m²'+passInfo+' · '+(m.m&&m.m.t==='s'?'Semi-soldada':'Gasketed')+'</div></div></div>';
-document.getElementById('cards').innerHTML=
-'<div class="mc green"><div class="mc-ico">🔥</div><div class="mc-val">'+m.Q.toFixed(1)+'</div><div class="mc-lbl">Carga kW</div></div>'+
-'<div class="mc"><div class="mc-ico">📏</div><div class="mc-val">'+m.U.toFixed(0)+'</div><div class="mc-lbl">U W/m²K</div></div>'+
-'<div class="mc '+(m.dp1<=inp.dpp?'green':'red')+'"><div class="mc-ico">📊</div><div class="mc-val">'+m.dp1.toFixed(1)+'</div><div class="mc-lbl">ΔP Prod kPa</div></div>'+
-'<div class="mc '+(m.dp2<=inp.dps?'green':'red')+'"><div class="mc-ico">❄️</div><div class="mc-val">'+m.dp2.toFixed(1)+'</div><div class="mc-lbl">ΔP Serv kPa</div></div>';
-var h='<table class="tbl"><thead><tr><th>Modelo</th><th>Pl</th><th>Área</th><th>U</th><th>ΔP P</th><th>ΔP S</th><th>Passes</th><th>OK</th></tr></thead><tbody>';
-todos.slice(0,12).forEach(function(r,i){h+='<tr class="'+(i===0&&r.vi?'hl':'')+'"><td>'+r.mod+'</td><td>'+r.n+'</td><td>'+r.A.toFixed(2)+'</td><td>'+r.U.toFixed(0)+'</td><td>'+r.dp1.toFixed(1)+'</td><td>'+r.dp2.toFixed(1)+'</td><td>'+(r.passes||'')+'</td><td>'+(r.vi?'✓':'✗')+'</td></tr>'});
+var passInfo=m.passesUsado?' . Passes: '+m.passesUsado:'';
+document.getElementById('selInfo').innerHTML='<div style="display:flex;align-items:center;gap:12px"><div style="font-size:28px">T</div><div><div style="font-size:18px;font-weight:800;color:var(--ae)">'+m.mod+'</div><div style="font-size:11px;color:var(--ce)">'+m.n+' placas . '+m.A.toFixed(2)+' m2'+passInfo+' . '+(m.m&&m.m.t==='s'?'Semi-soldada':'Gasketed')+'</div></div></div>';
+document.getElementById('cards').innerHTML='<div class="mc green"><div class="mc-ico">F</div><div class="mc-val">'+m.Q.toFixed(1)+'</div><div class="mc-lbl">Carga kW</div></div><div class="mc"><div class="mc-ico">M</div><div class="mc-val">'+m.U.toFixed(0)+'</div><div class="mc-lbl">U W/m2K</div></div><div class="mc '+(m.dp1<=inp.dpp?'green':'red')+'"><div class="mc-ico">P</div><div class="mc-val">'+m.dp1.toFixed(1)+'</div><div class="mc-lbl">dP Prod kPa</div></div><div class="mc '+(m.dp2<=inp.dps?'green':'red')+'"><div class="mc-ico">S</div><div class="mc-val">'+m.dp2.toFixed(1)+'</div><div class="mc-lbl">dP Serv kPa</div></div>';
+var h='<table class="tbl"><thead><tr><th>Modelo</th><th>Pl</th><th>Area</th><th>U</th><th>dP P</th><th>dP S</th><th>Passes</th><th>OK</th></tr></thead><tbody>';
+todos.slice(0,12).forEach(function(r,i){h+='<tr class="'+(i===0&&r.vi?'hl':'')+'"><td>'+r.mod+'</td><td>'+r.n+'</td><td>'+r.A.toFixed(2)+'</td><td>'+r.U.toFixed(0)+'</td><td>'+r.dp1.toFixed(1)+'</td><td>'+r.dp2.toFixed(1)+'</td><td>'+(r.passes||'')+'</td><td>'+(r.vi?'OK':'X')+'</td></tr>'});
 h+='</tbody></table>';
 document.getElementById('comp').innerHTML=h;
-showVerifs(m,inp);
-showDetails(m);
-showDatasheet(m,inp);
-setTimeout(function(){drawTempDiagram(inp,m)},50)
+var app=Math.abs(inp.tis-inp.top);
+var v='<div class="ck"><span class="ck-ico '+(app>=2?'ck-ok':'ck-err')+'">'+(app>=2?'V':'X')+'</span>Approach: '+app.toFixed(1)+'C</div>';
+v+='<div class="ck"><span class="ck-ico '+(m.Rep>=100?'ck-ok':'ck-w')+'">'+(m.Rep>=100?'V':'!')+'</span>Re Prod: '+m.Rep.toFixed(0)+'</div>';
+v+='<div class="ck"><span class="ck-ico '+(m.Res>=100?'ck-ok':'ck-w')+'">'+(m.Res>=100?'V':'!')+'</span>Re Serv: '+m.Res.toFixed(0)+'</div>';
+v+='<div class="ck"><span class="ck-ok ck-ico">V</span>LMTD: '+m.lm.toFixed(1)+'C (F='+m.F.toFixed(3)+')</div>';
+var theta=Math.abs(inp.top-inp.tip)/Math.max(m.lm,0.01);
+v+='<div class="ck"><span class="ck-ico '+(theta<=1?'ck-ok':theta<=5?'ck-w':'ck-err')+'">'+(theta<=1?'V':theta<=5?'!':'X')+'</span>Theta: '+theta.toFixed(2)+'</div>';
+if(m.passesUsado&&m.passesUsado!=='1-1'){v+='<div class="ck"><span class="ck-ok ck-ico">V</span>Multipasse: '+m.passesUsado+'</div>'}
+document.getElementById('ver').innerHTML=v;
+document.getElementById('det').innerHTML='<table><tr><td>rho Prod</td><td>'+m.pb.rho.toFixed(1)+'</td></tr><tr><td>rho Serv</td><td>'+m.sb.rho.toFixed(1)+'</td></tr><tr><td>Cp Prod</td><td>'+m.pb.cp.toFixed(0)+'</td></tr><tr><td>Cp Serv</td><td>'+m.sb.cp.toFixed(0)+'</td></tr><tr><td>mu Prod</td><td>'+(m.pb.mu*1000).toFixed(3)+' cP</td></tr><tr><td>mu Serv</td><td>'+(m.sb.mu*1000).toFixed(3)+' cP</td></tr><tr><td>k Prod</td><td>'+m.pb.k.toFixed(4)+'</td></tr><tr><td>k Serv</td><td>'+m.sb.k.toFixed(4)+'</td></tr><tr><td>U limpo</td><td>'+m.rU.kc.toFixed(0)+' W/m2K</td></tr><tr><td>T. parede</td><td>'+m.rU.Tw.toFixed(1)+'C</td></tr><tr><td>Passes</td><td><b>'+(m.passesUsado||'1-1')+'</b></td></tr></table>';
+document.getElementById('ds').innerHTML='<table class="tbl"><tr><td><b>Modelo</b></td><td>'+m.mod+'</td></tr><tr><td><b>Placas</b></td><td>'+m.n+'</td></tr><tr><td><b>Area</b></td><td>'+m.A.toFixed(2)+' m2</td></tr><tr><td><b>Passes</b></td><td>'+(m.passesUsado||'')+'</td></tr><tr><td><b>Produto</b></td><td>'+inp.fp+(inp.bp>0?' '+inp.bp:'')+'</td></tr><tr><td><b>Vazao P</b></td><td>'+inp.vp+' m3/h</td></tr><tr><td><b>T P</b></td><td>'+inp.tip+'/'+inp.top+'C</td></tr><tr><td><b>dP P</b></td><td>'+m.dp1.toFixed(1)+' kPa</td></tr><tr><td><b>Servico</b></td><td>'+inp.fs+'</td></tr><tr><td><b>Vazao S</b></td><td>'+inp.vs+' m3/h</td></tr><tr><td><b>T S</b></td><td>'+inp.tis+'/'+inp.tos+'C</td></tr><tr><td><b>dP S</b></td><td>'+m.dp2.toFixed(1)+' kPa</td></tr><tr><td><b>Carga</b></td><td>'+m.Q.toFixed(1)+' kW</td></tr><tr><td><b>U</b></td><td>'+m.U.toFixed(0)+' W/m2K</td></tr></table>';
+setTimeout(function(){drawTempDiagram(inp,m)},50);
 }
 
-// === EXIBIR RESULTADO MULTI-SEÇÃO ===
 function showMulti(m,inp){
 document.getElementById('ph').style.display='none';
 document.getElementById('res').style.display='block';
 document.getElementById('btnA').style.display='none';
 document.getElementById('selCard').style.display='block';
-document.getElementById('selInfo').innerHTML='<div style="display:flex;align-items:center;gap:12px"><div style="font-size:28px">🏭</div><div><div style="font-size:16px;font-weight:800;color:var(--ae)">Pasteurizador 3 Seções</div><div style="font-size:11px;color:var(--ce)">'+m.totalPlates+' placas total · '+m.totalArea.toFixed(2)+' m² · Regen: '+m.regenEff.toFixed(0)+'%</div></div></div>';
-document.getElementById('cards').innerHTML=
-'<div class="mc purple"><div class="mc-ico">♻️</div><div class="mc-val">'+m.regenEff.toFixed(0)+'%</div><div class="mc-lbl">Regeneração</div></div>'+
-'<div class="mc green"><div class="mc-ico">🔥</div><div class="mc-val">'+m.Qexterno.toFixed(1)+'</div><div class="mc-lbl">Carga Ext kW</div></div>'+
-'<div class="mc '+(m.totalDpP<=inp.dpp?'green':'red')+'"><div class="mc-ico">📊</div><div class="mc-val">'+m.totalDpP.toFixed(1)+'</div><div class="mc-lbl">ΔP Total kPa</div></div>'+
-'<div class="mc"><div class="mc-ico">📋</div><div class="mc-val">'+m.totalPlates+'</div><div class="mc-lbl">Placas Total</div></div>';
-// Comparativo das 3 seções
-var h='<table class="tbl"><thead><tr><th>Seção</th><th>Modelo</th><th>Pl</th><th>Área</th><th>U</th><th>ΔP P</th><th>ΔP S</th><th>Passes</th></tr></thead><tbody>';
+document.getElementById('selInfo').innerHTML='<div style="display:flex;align-items:center;gap:12px"><div style="font-size:28px">P</div><div><div style="font-size:16px;font-weight:800;color:var(--ae)">Pasteurizador 3 Secoes</div><div style="font-size:11px;color:var(--ce)">'+m.totalPlates+' placas total . '+m.totalArea.toFixed(2)+' m2 . Regen: '+m.regenEff.toFixed(0)+'%</div></div></div>';
+document.getElementById('cards').innerHTML='<div class="mc purple"><div class="mc-ico">R</div><div class="mc-val">'+m.regenEff.toFixed(0)+'%</div><div class="mc-lbl">Regeneracao</div></div><div class="mc green"><div class="mc-ico">F</div><div class="mc-val">'+m.Qexterno.toFixed(1)+'</div><div class="mc-lbl">Carga Ext kW</div></div><div class="mc '+(m.totalDpP<=inp.dpp?'green':'red')+'"><div class="mc-ico">D</div><div class="mc-val">'+m.totalDpP.toFixed(1)+'</div><div class="mc-lbl">dP Total kPa</div></div><div class="mc"><div class="mc-ico">N</div><div class="mc-val">'+m.totalPlates+'</div><div class="mc-lbl">Placas Total</div></div>';
+var h='<table class="tbl"><thead><tr><th>Secao</th><th>Modelo</th><th>Pl</th><th>Area</th><th>U</th><th>dP P</th><th>dP S</th><th>Passes</th></tr></thead><tbody>';
 h+='<tr class="hl"><td>1 Regen</td><td>'+m.sec1.mod+'</td><td>'+m.sec1.n+'</td><td>'+m.sec1.A.toFixed(2)+'</td><td>'+m.sec1.U.toFixed(0)+'</td><td>'+m.sec1.dp1.toFixed(1)+'</td><td>'+m.sec1.dp2.toFixed(1)+'</td><td>'+m.sec1.passesUsado+'</td></tr>';
 h+='<tr><td>2 Aquec</td><td>'+m.sec2.mod+'</td><td>'+m.sec2.n+'</td><td>'+m.sec2.A.toFixed(2)+'</td><td>'+m.sec2.U.toFixed(0)+'</td><td>'+m.sec2.dp1.toFixed(1)+'</td><td>'+m.sec2.dp2.toFixed(1)+'</td><td>'+m.sec2.passesUsado+'</td></tr>';
 h+='<tr><td>3 Resfr</td><td>'+m.sec3.mod+'</td><td>'+m.sec3.n+'</td><td>'+m.sec3.A.toFixed(2)+'</td><td>'+m.sec3.U.toFixed(0)+'</td><td>'+m.sec3.dp1.toFixed(1)+'</td><td>'+m.sec3.dp2.toFixed(1)+'</td><td>'+m.sec3.passesUsado+'</td></tr>';
-h+='<tr style="background:#e7f0fd;font-weight:bold"><td>TOTAL</td><td>—</td><td>'+m.totalPlates+'</td><td>'+m.totalArea.toFixed(2)+'</td><td>—</td><td>'+m.totalDpP.toFixed(1)+'</td><td>'+m.totalDpS.toFixed(1)+'</td><td>—</td></tr>';
+h+='<tr style="background:#e7f0fd;font-weight:bold"><td>TOTAL</td><td>-</td><td>'+m.totalPlates+'</td><td>'+m.totalArea.toFixed(2)+'</td><td>-</td><td>'+m.totalDpP.toFixed(1)+'</td><td>'+m.totalDpS.toFixed(1)+'</td><td>-</td></tr>';
 h+='</tbody></table>';
 document.getElementById('comp').innerHTML=h;
-// Verificações
-var v='<div class="ck"><span class="ck-ico '+(m.regenEff>=70?'ck-ok':m.regenEff>=50?'ck-w':'ck-err')+'">'+(m.regenEff>=70?'✓':m.regenEff>=50?'⚠':'✗')+'</span>Regeneração: '+m.regenEff.toFixed(1)+'%</div>';
-v+='<div class="ck"><span class="ck-ico '+(m.totalDpP<=inp.dpp?'ck-ok':'ck-err')+'">'+(m.totalDpP<=inp.dpp?'✓':'✗')+'</span>ΔP Total: '+m.totalDpP.toFixed(1)+'/'+inp.dpp+' kPa</div>';
-v+='<div class="ck"><span class="ck-ico '+(m.sec1.vi?'ck-ok':'ck-err')+'">'+(m.sec1.vi?'✓':'✗')+'</span>Seção 1 (Regen): '+m.sec1.A.toFixed(2)+' m²</div>';
-v+='<div class="ck"><span class="ck-ico '+(m.sec2.vi?'ck-ok':'ck-err')+'">'+(m.sec2.vi?'✓':'✗')+'</span>Seção 2 (Aquec): '+m.sec2.A.toFixed(2)+' m²</div>';
-v+='<div class="ck"><span class="ck-ico '+(m.sec3.vi?'ck-ok':'ck-err')+'">'+(m.sec3.vi?'✓':'✗')+'</span>Seção 3 (Resfr): '+m.sec3.A.toFixed(2)+' m²</div>';
+var v='<div class="ck"><span class="ck-ico '+(m.regenEff>=70?'ck-ok':m.regenEff>=50?'ck-w':'ck-err')+'">'+(m.regenEff>=70?'V':m.regenEff>=50?'!':'X')+'</span>Regeneracao: '+m.regenEff.toFixed(1)+'%</div>';
+v+='<div class="ck"><span class="ck-ico '+(m.totalDpP<=inp.dpp?'ck-ok':'ck-err')+'">'+(m.totalDpP<=inp.dpp?'V':'X')+'</span>dP Total: '+m.totalDpP.toFixed(1)+'/'+inp.dpp+' kPa</div>';
+v+='<div class="ck"><span class="ck-ico '+(m.sec1.vi?'ck-ok':'ck-err')+'">'+(m.sec1.vi?'V':'X')+'</span>Sec 1 (Regen): '+m.sec1.A.toFixed(2)+' m2</div>';
+v+='<div class="ck"><span class="ck-ico '+(m.sec2.vi?'ck-ok':'ck-err')+'">'+(m.sec2.vi?'V':'X')+'</span>Sec 2 (Aquec): '+m.sec2.A.toFixed(2)+' m2</div>';
+v+='<div class="ck"><span class="ck-ico '+(m.sec3.vi?'ck-ok':'ck-err')+'">'+(m.sec3.vi?'V':'X')+'</span>Sec 3 (Resfr): '+m.sec3.A.toFixed(2)+' m2</div>';
 document.getElementById('ver').innerHTML=v;
-// Detalhes
-var d='<table><tr><td colspan="2" style="background:var(--ae);color:#fff;font-weight:bold">SEÇÃO 1 — REGENERAÇÃO</td></tr>';
-d+='<tr><td>Produto frio</td><td>'+m.temperaturas.ti+'°C → '+m.temperaturas.tr+'°C</td></tr>';
-d+='<tr><td>Produto quente</td><td>'+m.temperaturas.tp+'°C → '+m.temperaturas.tQout.toFixed(1)+'°C</td></tr>';
+var d='<table><tr><td colspan="2" style="background:var(--ae);color:#fff;font-weight:bold">SECAO 1 - REGENERACAO</td></tr>';
+d+='<tr><td>Produto frio</td><td>'+m.temperaturas.ti+'C -> '+m.temperaturas.tr+'C</td></tr>';
+d+='<tr><td>Produto quente</td><td>'+m.temperaturas.tp+'C -> '+m.temperaturas.tQout.toFixed(1)+'C</td></tr>';
 d+='<tr><td>Modelo</td><td>'+m.sec1.mod+' ('+m.sec1.n+' pl)</td></tr>';
-d+='<tr><td>Área</td><td>'+m.sec1.A.toFixed(2)+' m²</td></tr>';
-d+='<tr><td>U</td><td>'+m.sec1.U.toFixed(0)+' W/m²K</td></tr>';
-d+='<tr><td>Passes</td><td>'+m.sec1.passesUsado+'</td></tr>';
+d+='<tr><td>Area</td><td>'+m.sec1.A.toFixed(2)+' m2</td></tr>';
 d+='<tr><td>Q recuperado</td><td>'+m.sec1.Q.toFixed(1)+' kW</td></tr>';
-d+='<tr><td colspan="2" style="background:var(--ae);color:#fff;font-weight:bold">SEÇÃO 2 — AQUECIMENTO</td></tr>';
-d+='<tr><td>Produto</td><td>'+m.temperaturas.tr+'°C → '+m.temperaturas.tp+'°C</td></tr>';
-d+='<tr><td>Serviço</td><td>'+m.temperaturas.tAqIn+'°C → '+m.temperaturas.tAqOut.toFixed(1)+'°C</td></tr>';
+d+='<tr><td colspan="2" style="background:var(--ae);color:#fff;font-weight:bold">SECAO 2 - AQUECIMENTO</td></tr>';
+d+='<tr><td>Produto</td><td>'+m.temperaturas.tr+'C -> '+m.temperaturas.tp+'C</td></tr>';
+d+='<tr><td>Servico</td><td>'+m.temperaturas.tAqIn+'C -> '+m.temperaturas.tAqOut.toFixed(1)+'C</td></tr>';
 d+='<tr><td>Modelo</td><td>'+m.sec2.mod+' ('+m.sec2.n+' pl)</td></tr>';
-d+='<tr><td>Área</td><td>'+m.sec2.A.toFixed(2)+' m²</td></tr>';
-d+='<tr><td>U</td><td>'+m.sec2.U.toFixed(0)+' W/m²K</td></tr>';
-d+='<tr><td colspan="2" style="background:var(--ae);color:#fff;font-weight:bold">SEÇÃO 3 — RESFRIAMENTO</td></tr>';
-d+='<tr><td>Produto</td><td>'+m.temperaturas.tp+'°C → '+m.temperaturas.tf+'°C</td></tr>';
-d+='<tr><td>Serviço</td><td>'+m.temperaturas.tGIn+'°C → '+m.temperaturas.tGOut.toFixed(1)+'°C</td></tr>';
+d+='<tr><td>Area</td><td>'+m.sec2.A.toFixed(2)+' m2</td></tr>';
+d+='<tr><td colspan="2" style="background:var(--ae);color:#fff;font-weight:bold">SECAO 3 - RESFRIAMENTO</td></tr>';
+d+='<tr><td>Produto</td><td>'+m.temperaturas.tp+'C -> '+m.temperaturas.tf+'C</td></tr>';
+d+='<tr><td>Servico</td><td>'+m.temperaturas.tGIn+'C -> '+m.temperaturas.tGOut.toFixed(1)+'C</td></tr>';
 d+='<tr><td>Modelo</td><td>'+m.sec3.mod+' ('+m.sec3.n+' pl)</td></tr>';
-d+='<tr><td>Área</td><td>'+m.sec3.A.toFixed(2)+' m²</td></tr></table>';
+d+='<tr><td>Area</td><td>'+m.sec3.A.toFixed(2)+' m2</td></tr></table>';
 document.getElementById('det').innerHTML=d;
-// Datasheet
-document.getElementById('ds').innerHTML='<table class="tbl"><tr><td><b>Tipo</b></td><td>Pasteurizador 3 Seções</td></tr><tr><td><b>Placas Total</b></td><td>'+m.totalPlates+'</td></tr><tr><td><b>Área Total</b></td><td>'+m.totalArea.toFixed(2)+' m²</td></tr><tr><td><b>Regeneração</b></td><td>'+m.regenEff.toFixed(1)+'%</td></tr><tr><td><b>Carga Externa</b></td><td>'+m.Qexterno.toFixed(1)+' kW</td></tr><tr><td><b>Q Recuperado</b></td><td>'+m.Qregen.toFixed(1)+' kW</td></tr><tr><td><b>ΔP Total Produto</b></td><td>'+m.totalDpP.toFixed(1)+' kPa</td></tr><tr><td><b>Sec 1 (Regen)</b></td><td>'+m.sec1.mod+' / '+m.sec1.n+'pl / '+m.sec1.A.toFixed(1)+'m²</td></tr><tr><td><b>Sec 2 (Aquec)</b></td><td>'+m.sec2.mod+' / '+m.sec2.n+'pl / '+m.sec2.A.toFixed(1)+'m²</td></tr><tr><td><b>Sec 3 (Resfr)</b></td><td>'+m.sec3.mod+' / '+m.sec3.n+'pl / '+m.sec3.A.toFixed(1)+'m²</td></tr></table>';
-// Diagrama multi-seção
-setTimeout(function(){drawMultiDiagram(m)},50)
+document.getElementById('ds').innerHTML='<table class="tbl"><tr><td><b>Tipo</b></td><td>Pasteurizador 3 Secoes</td></tr><tr><td><b>Placas Total</b></td><td>'+m.totalPlates+'</td></tr><tr><td><b>Area Total</b></td><td>'+m.totalArea.toFixed(2)+' m2</td></tr><tr><td><b>Regeneracao</b></td><td>'+m.regenEff.toFixed(1)+'%</td></tr><tr><td><b>Carga Externa</b></td><td>'+m.Qexterno.toFixed(1)+' kW</td></tr><tr><td><b>Q Recuperado</b></td><td>'+m.Qregen.toFixed(1)+' kW</td></tr><tr><td><b>dP Total Produto</b></td><td>'+m.totalDpP.toFixed(1)+' kPa</td></tr><tr><td><b>Sec 1 (Regen)</b></td><td>'+m.sec1.mod+' / '+m.sec1.n+'pl / '+m.sec1.A.toFixed(1)+'m2</td></tr><tr><td><b>Sec 2 (Aquec)</b></td><td>'+m.sec2.mod+' / '+m.sec2.n+'pl / '+m.sec2.A.toFixed(1)+'m2</td></tr><tr><td><b>Sec 3 (Resfr)</b></td><td>'+m.sec3.mod+' / '+m.sec3.n+'pl / '+m.sec3.A.toFixed(1)+'m2</td></tr></table>';
+setTimeout(function(){drawMultiDiagram(m)},50);
 }
 
-function showVerifs(m,inp){
-var app=Math.abs(inp.tis-inp.top);
-var v='<div class="ck"><span class="ck-ico '+(app>=2?'ck-ok':'ck-err')+'">'+(app>=2?'✓':'✗')+'</span>Approach: '+app.toFixed(1)+'°C</div>';
-v+='<div class="ck"><span class="ck-ico '+(m.Rep>=100?'ck-ok':'ck-w')+'">'+(m.Rep>=100?'✓':'⚠')+'</span>Re Prod: '+m.Rep.toFixed(0)+'</div>';
-v+='<div class="ck"><span class="ck-ico '+(m.Res>=100?'ck-ok':'ck-w')+'">'+(m.Res>=100?'✓':'⚠')+'</span>Re Serv: '+m.Res.toFixed(0)+'</div>';
-v+='<div class="ck"><span class="ck-ico '+(m.v1<=5?'ck-ok':'ck-err')+'">'+(m.v1<=5?'✓':'✗')+'</span>V.Bocal P: '+m.v1.toFixed(2)+' m/s</div>';
-v+='<div class="ck"><span class="ck-ok ck-ico">✓</span>LMTD: '+m.lm.toFixed(1)+'°C (F='+m.F.toFixed(3)+')</div>';
-// Theta
-var theta=Math.abs(inp.top-inp.tip)/Math.max(m.lm,0.01);
-v+='<div class="ck"><span class="ck-ico '+(theta<=1?'ck-ok':theta<=5?'ck-w':'ck-err')+'">'+(theta<=1?'✓':theta<=5?'⚠':'✗')+'</span>Theta (Θ): '+theta.toFixed(2)+'</div>';
-if(m.passesUsado&&m.passesUsado!=='1-1'){
-v+='<div class="ck"><span class="ck-ok ck-ico">✓</span>Multipasse: '+m.passesUsado+' (otimizado)</div>'
-}
-document.getElementById('ver').innerHTML=v
-}
-function showDetails(m){
-document.getElementById('det').innerHTML='<table><tr><td>ρ Prod</td><td>'+m.pb.rho.toFixed(1)+'</td></tr><tr><td>ρ Serv</td><td>'+m.sb.rho.toFixed(1)+'</td></tr><tr><td>Cp Prod</td><td>'+m.pb.cp.toFixed(0)+'</td></tr><tr><td>Cp Serv</td><td>'+m.sb.cp.toFixed(0)+'</td></tr><tr><td>μ Prod</td><td>'+(m.pb.mu*1000).toFixed(3)+' cP</td></tr><tr><td>μ Serv</td><td>'+(m.sb.mu*1000).toFixed(3)+' cP</td></tr><tr><td>k Prod</td><td>'+m.pb.k.toFixed(4)+'</td></tr><tr><td>k Serv</td><td>'+m.sb.k.toFixed(4)+'</td></tr><tr><td>U limpo</td><td>'+m.rU.kc.toFixed(0)+' W/m²K</td></tr><tr><td>T. parede</td><td>'+m.rU.Tw.toFixed(1)+'°C</td></tr><tr><td>Passes usado</td><td><b>'+(m.passesUsado||'1-1')+'</b></td></tr></table>'
-}
-function showDatasheet(m,inp){
-document.getElementById('ds').innerHTML='<table class="tbl"><tr><td><b>Modelo</b></td><td>'+m.mod+'</td></tr><tr><td><b>Placas</b></td><td>'+m.n+'</td></tr><tr><td><b>Área</b></td><td>'+m.A.toFixed(2)+' m²</td></tr><tr><td><b>Passes</b></td><td>'+(m.passesUsado||'')+'</td></tr><tr><td><b>Produto</b></td><td>'+inp.fp+(inp.bp>0?' '+inp.bp+'°':'')+'</td></tr><tr><td><b>Vazão P</b></td><td>'+inp.vp+' m³/h</td></tr><tr><td><b>T P</b></td><td>'+inp.tip+'/'+inp.top+'°C</td></tr><tr><td><b>ΔP P</b></td><td>'+m.dp1.toFixed(1)+' kPa</td></tr><tr><td><b>Serviço</b></td><td>'+inp.fs+(inp.gas&&inp.fs==='refrigerante'?' '+inp.gas:'')+'</td></tr><tr><td><b>Vazão S</b></td><td>'+inp.vs+' m³/h</td></tr><tr><td><b>T S</b></td><td>'+inp.tis+'/'+inp.tos+'°C</td></tr><tr><td><b>ΔP S</b></td><td>'+m.dp2.toFixed(1)+' kPa</td></tr><tr><td><b>Carga</b></td><td>'+m.Q.toFixed(1)+' kW</td></tr><tr><td><b>U</b></td><td>'+m.U.toFixed(0)+' W/m²K</td></tr><tr><td><b>LMTD</b></td><td>'+m.lm.toFixed(1)+'°C</td></tr></table>'
-}
-
-// === GRÁFICO SIMPLES ===
 function drawTempDiagram(inp,m){
 var c=document.getElementById('tcanvas');if(!c)return;
 var ctx=c.getContext('2d');var w=c.offsetWidth,h=c.offsetHeight;c.width=w;c.height=h;ctx.clearRect(0,0,w,h);
@@ -638,8 +548,8 @@ var tMin=Math.min.apply(null,allT)-5,tMax=Math.max.apply(null,allT)+5;
 var padL=50,padR=20,padT=30,padB=35;var plotW=w-padL-padR,plotH=h-padT-padB;
 var xS=function(f){return padL+f*plotW};var yS=function(T){return padT+(tMax-T)/(tMax-tMin)*plotH};
 ctx.strokeStyle='#e0e0e0';ctx.lineWidth=1;ctx.font='9px Segoe UI';ctx.fillStyle='#999';
-for(var tg=Math.ceil(tMin/10)*10;tg<=tMax;tg+=10){var y=yS(tg);ctx.beginPath();ctx.moveTo(padL,y);ctx.lineTo(w-padR,y);ctx.stroke();ctx.textAlign='right';ctx.fillText(tg+'°C',padL-4,y+3)}
-ctx.textAlign='center';ctx.fillText('Entrada',padL,h-12);ctx.fillText('Saída',w-padR,h-12);
+for(var tg=Math.ceil(tMin/10)*10;tg<=tMax;tg+=10){var y=yS(tg);ctx.beginPath();ctx.moveTo(padL,y);ctx.lineTo(w-padR,y);ctx.stroke();ctx.textAlign='right';ctx.fillText(tg+'C',padL-4,y+3)}
+ctx.textAlign='center';ctx.fillText('Entrada',padL,h-12);ctx.fillText('Saida',w-padR,h-12);
 var lmtd=m.lmtd||0;
 ctx.fillStyle='rgba(45,158,74,0.1)';var steps=50;ctx.beginPath();
 for(var i=0;i<=steps;i++){var f=i/steps;var t=hotIn+(hotOut-hotIn)*f;ctx.lineTo(xS(f),yS(t))}
@@ -653,17 +563,16 @@ for(var i=0;i<=steps;i++){var f=i/steps;var t=coldIn+(coldOut-coldIn)*f;if(i===0
 ctx.stroke();
 ctx.fillStyle='#cc3300';ctx.beginPath();ctx.arc(xS(0),yS(hotIn),4,0,7);ctx.fill();ctx.beginPath();ctx.arc(xS(1),yS(hotOut),4,0,7);ctx.fill();
 ctx.fillStyle='#0099ff';ctx.beginPath();ctx.arc(xS(0),yS(coldIn),4,0,7);ctx.fill();ctx.beginPath();ctx.arc(xS(1),yS(coldOut),4,0,7);ctx.fill();
-ctx.font='bold 10px Segoe UI';ctx.fillStyle='#cc3300';ctx.textAlign='left';ctx.fillText(hotIn.toFixed(1)+'°C',xS(0)+8,yS(hotIn)-8);
-ctx.textAlign='right';ctx.fillText(hotOut.toFixed(1)+'°C',xS(1)-8,yS(hotOut)-8);
-ctx.fillStyle='#0099ff';ctx.textAlign='left';ctx.fillText(coldIn.toFixed(1)+'°C',xS(0)+8,yS(coldIn)+14);
-ctx.textAlign='right';ctx.fillText(coldOut.toFixed(1)+'°C',xS(1)-8,yS(coldOut)+14);
-ctx.fillStyle='#2d9e4a';ctx.textAlign='center';ctx.fillText('LMTD='+lmtd.toFixed(1)+'°C',w/2,padT+12);
+ctx.font='bold 10px Segoe UI';ctx.fillStyle='#cc3300';ctx.textAlign='left';ctx.fillText(hotIn.toFixed(1)+'C',xS(0)+8,yS(hotIn)-8);
+ctx.textAlign='right';ctx.fillText(hotOut.toFixed(1)+'C',xS(1)-8,yS(hotOut)-8);
+ctx.fillStyle='#0099ff';ctx.textAlign='left';ctx.fillText(coldIn.toFixed(1)+'C',xS(0)+8,yS(coldIn)+14);
+ctx.textAlign='right';ctx.fillText(coldOut.toFixed(1)+'C',xS(1)-8,yS(coldOut)+14);
+ctx.fillStyle='#2d9e4a';ctx.textAlign='center';ctx.fillText('LMTD='+lmtd.toFixed(1)+'C',w/2,padT+12);
 ctx.fillStyle='#1a3a5c';ctx.font='bold 11px Segoe UI';ctx.textAlign='left';
-var passTxt=m.passesUsado?' · Passes: '+m.passesUsado:'';
-ctx.fillText('Perfil Térmico'+passTxt,padL,padT-6)
+var passTxt=m.passesUsado?' . Passes: '+m.passesUsado:'';
+ctx.fillText('Perfil Termico'+passTxt,padL,padT-6);
 }
 
-// === GRÁFICO MULTI-SEÇÃO ===
 function drawMultiDiagram(m){
 var c=document.getElementById('tcanvas');if(!c)return;
 var ctx=c.getContext('2d');var w=c.offsetWidth,h=c.offsetHeight;c.width=w;c.height=h;ctx.clearRect(0,0,w,h);
@@ -674,74 +583,57 @@ var padL=55,padR=15,padT=30,padB=40;var plotW=w-padL-padR,plotH=h-padT-padB;
 var secW=plotW/3;
 var xS=function(sec,frac){return padL+sec*secW+frac*secW};
 var yS=function(T){return padT+(tMax-T)/(tMax-tMin)*plotH};
-// Grid
 ctx.strokeStyle='#e0e0e0';ctx.lineWidth=1;ctx.font='9px Segoe UI';ctx.fillStyle='#999';
-for(var tg=Math.ceil(tMin/10)*10;tg<=tMax;tg+=10){var y=yS(tg);ctx.beginPath();ctx.moveTo(padL,y);ctx.lineTo(w-padR,y);ctx.stroke();ctx.textAlign='right';ctx.fillText(tg+'°',padL-4,y+3)}
-// Separadores de seção
+for(var tg=Math.ceil(tMin/10)*10;tg<=tMax;tg+=10){var y=yS(tg);ctx.beginPath();ctx.moveTo(padL,y);ctx.lineTo(w-padR,y);ctx.stroke();ctx.textAlign='right';ctx.fillText(tg+'C',padL-4,y+3)}
 ctx.strokeStyle='#d0d5dd';ctx.lineWidth=2;ctx.setLineDash([4,4]);
 for(var s=1;s<3;s++){var x=padL+s*secW;ctx.beginPath();ctx.moveTo(x,padT);ctx.lineTo(x,h-padB);ctx.stroke()}
 ctx.setLineDash([]);
-// SEÇÃO 1: Regen (quente tp→tQout, frio ti→tr) — contracorrente
 drawSecCurve(ctx,xS,yS,0,t.tp,t.tQout,t.ti,t.tr,'#cc3300','#0099ff',50);
-// SEÇÃO 2: Aquec (quente tAqIn→tAqOut, frio tr→tp)
 drawSecCurve(ctx,xS,yS,1,t.tAqIn,t.tAqOut,t.tr,t.tp,'#cc3300','#0099ff',50);
-// SEÇÃO 3: Resfr (quente tp→tf, frio tGIn→tGOut)
 drawSecCurve(ctx,xS,yS,2,t.tp,t.tf,t.tGIn,t.tGOut,'#cc3300','#0099ff',50);
-// Labels seções
 ctx.font='bold 10px Segoe UI';ctx.textAlign='center';
-ctx.fillStyle='#9933cc';ctx.fillText('♻️ REGENERAÇÃO',padL+secW*0.5,h-15);
-ctx.fillStyle='#cc3300';ctx.fillText('🔥 AQUECIMENTO',padL+secW*1.5,h-15);
-ctx.fillStyle='#0099ff';ctx.fillText('❄️ RESFRIAMENTO',padL+secW*2.5,h-15);
-// Title
+ctx.fillStyle='#9933cc';ctx.fillText('REGEN',padL+secW*0.5,h-15);
+ctx.fillStyle='#cc3300';ctx.fillText('AQUEC',padL+secW*1.5,h-15);
+ctx.fillStyle='#0099ff';ctx.fillText('RESFR',padL+secW*2.5,h-15);
 ctx.fillStyle='#1a3a5c';ctx.font='bold 11px Segoe UI';ctx.textAlign='left';
-ctx.fillText('Perfil Térmico Composto (3 Seções)',padL,padT-6);
-// Regen efficiency
+ctx.fillText('Perfil Termico Composto (3 Secoes)',padL,padT-6);
 ctx.fillStyle='#9933cc';ctx.textAlign='center';ctx.font='bold 11px Segoe UI';
-ctx.fillText('Regen: '+m.regenEff.toFixed(0)+'%',padL+secW*0.5,padT+12)
+ctx.fillText('Regen: '+m.regenEff.toFixed(0)+'%',padL+secW*0.5,padT+12);
 }
 
 function drawSecCurve(ctx,xS,yS,sec,hIn,hOut,cIn,cOut,hColor,cColor,steps){
-// Hot line
 ctx.strokeStyle=hColor;ctx.lineWidth=2.5;ctx.beginPath();
 for(var i=0;i<=steps;i++){var f=i/steps;var t=hIn+(hOut-hIn)*f;
 if(i===0)ctx.moveTo(xS(sec,f),yS(t));else ctx.lineTo(xS(sec,f),yS(t))}
 ctx.stroke();
-// Cold line (counter-current: reversed)
 ctx.strokeStyle=cColor;ctx.lineWidth=2.5;ctx.beginPath();
 for(var i=0;i<=steps;i++){var f=i/steps;var t=cOut+(cIn-cOut)*f;
 if(i===0)ctx.moveTo(xS(sec,f),yS(t));else ctx.lineTo(xS(sec,f),yS(t))}
 ctx.stroke();
-// Points
 ctx.fillStyle=hColor;
 ctx.beginPath();ctx.arc(xS(sec,0),yS(hIn),3,0,7);ctx.fill();
 ctx.beginPath();ctx.arc(xS(sec,1),yS(hOut),3,0,7);ctx.fill();
 ctx.fillStyle=cColor;
-ctx.beginPath();ctx.arc(xS(sec,0),yS(yS(cOut)?cOut:cIn),3,0,7);ctx.fill();
-// Labels
+ctx.beginPath();ctx.arc(xS(sec,0),yS(cOut),3,0,7);ctx.fill();
+ctx.beginPath();ctx.arc(xS(sec,1),yS(cIn),3,0,7);ctx.fill();
 ctx.font='8px Segoe UI';
-ctx.fillStyle=hColor;ctx.textAlign='left';ctx.fillText(hIn.toFixed(0)+'°',xS(sec,0)+4,yS(hIn)-5);
-ctx.textAlign='right';ctx.fillText(hOut.toFixed(0)+'°',xS(sec,1)-4,yS(hOut)-5);
-ctx.fillStyle=cColor;ctx.textAlign='left';ctx.fillText((cOut||cIn).toFixed(0)+'°',xS(sec,0)+4,yS(cOut||cIn)+10)
+ctx.fillStyle=hColor;ctx.textAlign='left';ctx.fillText(hIn.toFixed(0)+'C',xS(sec,0)+4,yS(hIn)-5);
+ctx.textAlign='right';ctx.fillText(hOut.toFixed(0)+'C',xS(sec,1)-4,yS(hOut)-5);
+ctx.fillStyle=cColor;ctx.textAlign='left';ctx.fillText(cIn.toFixed(0)+'C',xS(sec,0)+4,yS(cIn)+12);
+ctx.textAlign='right';ctx.fillText(cOut.toFixed(0)+'C',xS(sec,1)-4,yS(cOut)-5);
 }
 
-// === UI ===
 function rInp(){return{fp:document.getElementById('fp').value,bp:parseFloat(document.getElementById('bp').value)||0,vp:parseFloat(document.getElementById('vp').value),tip:parseFloat(document.getElementById('tip').value),top:parseFloat(document.getElementById('top').value),dpp:parseFloat(document.getElementById('dpp').value),fs:document.getElementById('fs').value,gas:document.getElementById('gas')?document.getElementById('gas').value:'R717',vs:parseFloat(document.getElementById('vs').value),tis:parseFloat(document.getElementById('tis').value),tos:parseFloat(document.getElementById('tos').value),dps:parseFloat(document.getElementById('dps').value),tpl:document.getElementById('tpl').value,mat:document.getElementById('mat').value,ps:document.getElementById('ps').value,mg:parseFloat(document.getElementById('mg').value)}}
 function tgServ(){var fs=document.getElementById('fs').value;document.getElementById('bx_ref').style.display=fs==='refrigerante'?'block':'none';document.getElementById('bx_vapor').style.display=fs==='vapor'?'block':'none';if(fs==='vapor'){var pv=document.getElementById('pvap').value;var tsat={2:120,3:134,6:159,10:180}[pv]||120;document.getElementById('tis').value=tsat;document.getElementById('tos').value=tsat}}
 function apPreset(p){
-var s={cerveja:{fp:'cerveja',bp:5,tip:25,top:5,fs:'glicol20',vs:12,tis:-5,tos:0,dps:50},
-mosto:{fp:'mosto',bp:12,tip:95,top:8,fs:'agua',vs:25,tis:3,tos:8,dps:50},
-vinho:{fp:'vinho',bp:12,tip:20,top:-2,fs:'glicol20',vs:12,tis:-7,tos:-2,dps:50},
-nh3:{fp:'cerveja',bp:5,tip:25,top:5,fs:'refrigerante',gas:'R717',vs:8,tis:-10,tos:-5,dps:50},
-levedura:{fp:'levedura_cana',bp:25,tip:35,top:15,fs:'agua',vs:20,tis:10,tos:15,dps:50},
-soft:{fp:'soft_drink',bp:6,tip:25,top:4,fs:'agua',vs:18,tis:1,tos:4,dps:50}
-}[p];
-if(p==='pasteur'){setModo('multi');document.getElementById('fp').value='leite';document.getElementById('bp').value=0;document.getElementById('vp').value=10;document.getElementById('tip').value=4;document.getElementById('top').value=4;document.getElementById('tpast').value=72;document.getElementById('tregen').value=65;document.getElementById('tfinal').value=4;document.getElementById('t_agua_q').value=85;document.getElementById('t_agua_g').value=2;document.getElementById('dpp').value=200;return}
+if(p==='pasteur'){setModo('multi');document.getElementById('fp').value='leite';document.getElementById('bp').value=0;document.getElementById('vp').value=10;document.getElementById('tip').value=4;document.getElementById('top').value=4;document.getElementById('tpast').value=72;document.getElementById('tregen').value=65;document.getElementById('tfinal').value=4;document.getElementById('t_agua_q').value=85;document.getElementById('t_agua_g').value=2;document.getElementById('dpp').value=200;upRef();return}
+var s={cerveja:{fp:'cerveja',bp:5,tip:25,top:5,fs:'glicol20',vs:12,tis:-5,tos:0,dps:50},mosto:{fp:'mosto',bp:12,tip:95,top:8,fs:'agua',vs:25,tis:3,tos:8,dps:50},vinho:{fp:'vinho',bp:12,tip:20,top:-2,fs:'glicol20',vs:12,tis:-7,tos:-2,dps:50},nh3:{fp:'cerveja',bp:5,tip:25,top:5,fs:'refrigerante',gas:'R717',vs:8,tis:-10,tos:-5,dps:50},levedura:{fp:'levedura_cana',bp:25,tip:35,top:15,fs:'agua',vs:20,tis:10,tos:15,dps:50},soft:{fp:'soft_drink',bp:6,tip:25,top:4,fs:'agua',vs:18,tis:1,tos:4,dps:50}}[p];
 for(var k in s){var el=document.getElementById(k);if(el)el.value=s[k]}
-tgServ();upRef()
+tgServ();upRef();
 }
 function upRef(){var f=document.getElementById('fp').value;var b=parseFloat(document.getElementById('bp').value)||0;var h='';[0,20,40,60,80,100].forEach(function(t){var p=gP(f,t,b,b);var pr=(p.cp*p.mu)/p.k;h+='<tr><td>'+t+'</td><td>'+p.rho.toFixed(0)+'</td><td>'+p.cp.toFixed(0)+'</td><td>'+(p.mu*1000).toFixed(2)+'</td><td>'+p.k.toFixed(3)+'</td><td>'+pr.toFixed(1)+'</td></tr>'});document.getElementById('ref').innerHTML=h}
 function limpar(){document.getElementById('res').style.display='none';document.getElementById('ph').style.display='block';document.getElementById('btnA').style.display='none';document.getElementById('cCorr').style.display='none'}
-window.onload=function(){var h='';BK.forEach(function(m){h+='<tr onclick="selM=\''+m.n+'\';calc()" style="cursor:pointer"><td><b>'+m.n+'</b></td><td>'+m.be+'°</td><td>'+m.ap+'</td><td>'+(m.b*2000).toFixed(1)+'</td><td>'+(m.dp*1000)+'</td><td>'+(m.t==='s'?'SW':'G')+'</td></tr>'});document.getElementById('cat').innerHTML=h;upRef()};
+window.onload=function(){var h='';BK.forEach(function(m){h+='<tr onclick="selM=\''+m.n+'\';calc()" style="cursor:pointer"><td><b>'+m.n+'</b></td><td>'+m.be+'</td><td>'+m.ap+'</td><td>'+(m.b*2000).toFixed(1)+'</td><td>'+(m.dp*1000)+'</td><td>'+(m.t==='s'?'SW':'G')+'</td></tr>'});document.getElementById('cat').innerHTML=h;upRef()};
 </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AlfaVed Dimensionador-PHE v32</title>
+<title>AlfaVed Dimensionador-PHE v33</title>
 <style>
 :root {
   --azul-escuro: #1a3a5c;
@@ -118,6 +118,21 @@ body {
   margin-top: 6px;
 }
 .btn-limpar:hover { background: #b0b5bd; }
+.btn-auto {
+  width: 100%;
+  background: var(--azul-claro);
+  color: var(--branco);
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 6px;
+  transition: background 0.2s;
+}
+.btn-auto:hover { background: #3a7db8; }
+.btn-auto:disabled { background: var(--cinza-medio); cursor: not-allowed; }
 .resultado-area { display: none; }
 .resultado-area.visivel { display: block; }
 .card-resultado {
@@ -146,6 +161,7 @@ body {
 .badge-verde { background: #d4f4dd; color: #1a7a3a; }
 .badge-amarelo { background: #fff3cd; color: #856404; }
 .badge-vermelho { background: #f8d7da; color: #721c24; }
+.badge-azul { background: #d6eaff; color: #1a3a5c; }
 .tabela-resultados {
   width: 100%;
   border-collapse: collapse;
@@ -165,6 +181,34 @@ body {
 }
 .tabela-resultados tr:hover td { background: var(--cinza-claro); }
 .tabela-resultados tr.destaque td { background: #e6f4ea; font-weight: 600; }
+.tabela-modelos {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+.tabela-modelos th {
+  background: var(--azul-medio);
+  color: var(--branco);
+  padding: 5px 6px;
+  text-align: left;
+  font-weight: 500;
+  font-size: 10px;
+}
+.tabela-modelos td {
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--cinza-medio);
+  cursor: pointer;
+}
+.tabela-modelos tr:hover td { background: var(--cinza-claro); }
+.tabela-modelos tr.selecionado td {
+  background: #e6f4ea;
+  border: 2px solid var(--verde);
+}
+.tabela-modelos tr.selecionado td:first-child::before {
+  content: '✓ ';
+  color: var(--verde);
+  font-weight: bold;
+}
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .metrica-box {
   background: var(--cinza-claro);
@@ -226,6 +270,15 @@ body {
   font-size: 12px;
   color: #856404;
 }
+.aviso-erro {
+  background: #f8d7da;
+  border-left: 4px solid var(--vermelho);
+  padding: 10px 14px;
+  border-radius: 4px;
+  margin: 10px 0;
+  font-size: 12px;
+  color: #721c24;
+}
 .info-box {
   background: #e7f0fd;
   border-left: 4px solid var(--azul-claro);
@@ -235,21 +288,62 @@ body {
   font-size: 12px;
   color: var(--azul-escuro);
 }
-.modelo-select-card {
-  border: 2px solid var(--cinza-medio);
+.correcao-box {
+  background: #e6f4ea;
+  border: 1px solid var(--verde);
   border-radius: 6px;
-  padding: 10px;
+  padding: 14px;
+  margin: 10px 0;
+}
+.correcao-box h4 {
+  color: var(--verde);
+  font-size: 13px;
   margin-bottom: 8px;
-  cursor: pointer;
-  transition: all 0.2s;
 }
-.modelo-select-card:hover { border-color: var(--azul-claro); }
-.modelo-select-card.selecionado {
-  border-color: var(--verde);
-  background: #f0fff4;
+.correcao-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  font-size: 12px;
 }
-.modelo-nome { font-weight: 600; font-size: 14px; color: var(--azul-escuro); }
-.modelo-specs { font-size: 11px; color: var(--cinza-escuro); margin-top: 4px; }
+.correcao-seta {
+  color: var(--verde);
+  font-weight: bold;
+  margin: 0 4px;
+}
+.modelo-filtro {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.modelo-filtro input {
+  flex: 1;
+  padding: 5px 8px;
+  border: 1px solid var(--cinza-medio);
+  border-radius: 4px;
+  font-size: 12px;
+}
+.modelo-filtro select {
+  padding: 5px 8px;
+  border: 1px solid var(--cinza-medio);
+  border-radius: 4px;
+  font-size: 12px;
+}
+.modelo-scroll {
+  max-height: 280px;
+  overflow-y: auto;
+  border: 1px solid var(--cinza-medio);
+  border-radius: 4px;
+}
+.modelo-info {
+  margin-top: 8px;
+  padding: 8px;
+  background: var(--cinza-claro);
+  border-radius: 4px;
+  font-size: 11px;
+  color: var(--cinza-escuro);
+}
 .footer-info {
   text-align: center;
   padding: 14px;
@@ -267,7 +361,7 @@ body {
 
 <div class="header">
   <h1>AlfaVed Dimensionador-PHE</h1>
-  <div class="sub">v32.0 — Dimensionamento de Trocadores de Calor a Placas | Inspirado na metodologia Alfa Laval CAS</div>
+  <div class="sub">v33.0 — Auto-correção de falhas + Seleção manual de modelos | Metodologia Alfa Laval CAS</div>
 </div>
 
 <div class="container">
@@ -410,12 +504,52 @@ body {
       </div>
 
       <button class="btn-calcular" onclick="calcular()">🔄 Calcular e Selecionar Modelo</button>
+      <button class="btn-auto" id="btn_autocorrigir" onclick="autoCorrigir()" style="display:none;">
+        🔧 Auto-Corrigir e Recalcular
+      </button>
       <button class="btn-limpar" onclick="limparForm()">Limpar Campos</button>
     </div>
 
+    <!-- Catálogo de Modelos Visível -->
+    <div class="painel">
+      <div class="painel-titulo">📋 Catálogo de Placas — Seleção Manual</div>
+
+      <div class="modelo-filtro">
+        <input type="text" id="filtro_modelo" placeholder="Buscar modelo..." oninput="filtrarModelos()">
+        <select id="filtro_chevron" onchange="filtrarModelos()">
+          <option value="">Todos os ângulos</option>
+          <option value="30">30°</option>
+          <option value="45">45°</option>
+          <option value="60">60°</option>
+        </select>
+      </div>
+
+      <div class="modelo-scroll">
+        <table class="tabela-modelos" id="tabela_catalogo">
+          <thead>
+            <tr>
+              <th>Modelo</th>
+              <th>Ângulo</th>
+              <th>Área/Placa</th>
+              <th>L</th>
+              <th>W</th>
+              <th>b</th>
+              <th>Dh</th>
+              <th>Bocal</th>
+            </tr>
+          </thead>
+          <tbody id="corpo_catalogo"></tbody>
+        </table>
+      </div>
+
+      <div class="modelo-info" id="modelo_selecionado_info">
+        ℹ️ Nenhum modelo selecionado manualmente. O sistema escolherá automaticamente o mais eficiente.
+      </div>
+    </div>
+
     <div class="info-box">
-      💡 <strong>v32 — Melhorias:</strong> Propriedades de sacarose T/Brix-dependentes, correlação de Martin (1996),
-      iteração de parede (μ/μw), queda de pressão de porta, fator F (P-NTU), ε-NTU completo.
+      💡 <strong>v33 — Novidades:</strong> Auto-correção inteligente de falhas, catálogo de placas visível para seleção manual,
+      sugestões automáticas de ajuste de parâmetros.
     </div>
 
   </div>
@@ -423,33 +557,33 @@ body {
   <!-- ========== COLUNA DIREITA: RESULTADOS ========== -->
   <div class="resultado-area" id="area_resultados">
 
-    <!-- Resultados principais -->
     <div class="card-resultado">
       <div class="card-titulo">📊 Resultado do Dimensionamento</div>
       <div id="modelo_selecionado"></div>
       <div class="grid-2" style="margin-top: 16px;" id="grid_metricas"></div>
     </div>
 
-    <!-- Comparações de modelos -->
+    <div class="card-resultado" id="card_correcoes" style="display:none;">
+      <div class="card-titulo">🔧 Correções Aplicadas Automaticamente</div>
+      <div id="corpo_correcoes"></div>
+    </div>
+
     <div class="card-resultado" id="card_comparacao">
       <div class="card-titulo">📋 Modelos Viáveis Encontrados</div>
       <div id="tabela_comparacao"></div>
     </div>
 
-    <!-- Verificações -->
     <div class="card-resultado">
       <div class="card-titulo">✅ Verificações de Projeto</div>
       <div id="lista_verificacoes"></div>
     </div>
 
-    <!-- Detalhamento técnico -->
     <div class="card-resultado">
       <div class="card-titulo">🔬 Detalhamento Técnico Completo</div>
       <button class="detalhes-toggle" onclick="toggleDetalhes()">Mostrar/Ocultar Detalhes</button>
       <div class="detalhes-corpo" id="detalhes_corpo"></div>
     </div>
 
-    <!-- Datasheet -->
     <div class="card-resultado">
       <div class="card-titulo">📄 Datasheet Resumido</div>
       <div id="datasheet"></div>
@@ -457,14 +591,14 @@ body {
 
   </div>
 
-  <!-- Placeholder antes do cálculo -->
   <div class="resultado-area" id="placeholder" style="display:block;">
     <div class="card-resultado" style="text-align: center; padding: 60px 20px;">
       <div style="font-size: 48px; margin-bottom: 16px;">📊</div>
       <h2 style="color: var(--azul-escuro); font-size: 18px;">Pronto para Dimensionar</h2>
       <p style="color: var(--cinza-escuro); margin-top: 8px; font-size: 13px;">
         Preencha os parâmetros à esquerda e clique em <strong>Calcular</strong>.<br>
-        O sistema avaliará todos os modelos de placa disponíveis e selecionará o mais eficiente.
+        Se nenhum modelo for viável, o sistema sugere correções automaticamente.<br>
+        Você também pode selecionar um modelo específico no catálogo acima.
       </p>
     </div>
   </div>
@@ -472,20 +606,18 @@ body {
 </div>
 
 <div class="footer-info">
-  <strong>AlfaVed Dimensionador-PHE v32.0</strong> — Baseado na metodologia de cálculo Alfa Laval CAS.
+  <strong>AlfaVed Dimensionador-PHE v33.0</strong> — Baseado na metodologia de cálculo Alfa Laval CAS.
   Correlações: Martin (1996), Sugar Technologists Manual, IAPWS-97.
   <br>Para uso interno de engenharia. Validação final obrigatória com fabricante.
 </div>
 
 <script>
 // ===================================================================
-// AlfaVed Dimensionador-PHE v32.0
-// Melhorias: Martin(1996), sacarose T/Brix, iteração de parede,
-//            ΔP porta, fator F P-NTU, ε-NTU completo
+// AlfaVed Dimensionador-PHE v33.0
+// Novidades: Auto-correção de falhas + Catálogo visível + Seleção manual
 // ===================================================================
 
 // ========== BANCO DE MODELOS DE PLACA ==========
-// Geometrias típicas inspiradas em linhas Alfa Laval (valores aproximados)
 const BANCO_MODELOS = [
   { nome: 'M3',        W: 0.100, L: 0.300, b: 0.0025, beta: 60, Dp: 0.025, delta: 0.0004, phi: 1.15, A_p: 0.032 },
   { nome: 'M6',        W: 0.200, L: 0.500, b: 0.0028, beta: 60, Dp: 0.040, delta: 0.0004, phi: 1.17, A_p: 0.108 },
@@ -512,132 +644,69 @@ const MATERIAIS = {
   'HASTELLOY':  { k: 9.7,  nome: 'Hastelloy C-276' },
 };
 
+// Estado global: modelo selecionado manualmente
+let modeloManualSelecionado = null;
+
 // ========== 1. PROPRIEDADES TERMODINÂMICAS ==========
 
-// --- Água pura — IAPWS-97 simplificada (0-200°C) ---
 function propAgua(T) {
   const t = T;
-  // Densidade
   const rho = 1000 * (1 - Math.pow(Math.abs(t - 4) / 622, 1.71));
-  // Calor específico
   const cp = 4182 + (t - 20) * (0.060 + 0.0008 * (t - 20));
-  // Viscosidade dinâmica (Pa·s) — correlação polinomial
   const mu = 1e-3 * (1.780 - 0.057 * t + 0.00106 * t * t - 8.5e-6 * t * t * t);
-  // Condutividade térmica
   const k = 0.5706 + 0.00176 * t - 6.46e-6 * t * t;
   return { rho: rho, cp: cp, mu: Math.max(mu, 1e-5), k: Math.max(k, 0.1) };
 }
 
-// --- Solução de sacarose — Sugar Technologists Manual ---
 function propSacarose(T, Brix, pureza) {
-  const w = Brix / 100; // fração mássica de sólidos dissolvidos
-  const q = pureza / 100; // pureza (fração de sacarose nos sólidos)
+  const w = Brix / 100;
+  const q = pureza / 100;
   const wtr = propAgua(T);
-
-  // Densidade (kg/m³) — Clarke / Bubnik
-  const rho = wtr.rho - w * (383.7 + 1.072 * T - 0.005 * T * T)
-              + w * w * (243.4 - 0.659 * T);
-
-  // Calor específico (J/kg·K) — correção sobre água
-  const a1 = 0.0297;
-  const a2 = 4.6e-5;
-  const a3 = 7.5e-5;
+  const rho = wtr.rho - w * (383.7 + 1.072 * T - 0.005 * T * T) + w * w * (243.4 - 0.659 * T);
+  const a1 = 0.0297, a2 = 4.6e-5, a3 = 7.5e-5;
   const deltaCp = -w * (a1 - a2 * q) + (a3 * w * T);
-  // cp cristalina da sacarose
   const cp_sacarose_cristal = 1262 + 4.524e-3 * T + 6.24e-6 * T * T;
   const cp = wtr.cp * (1 - w) + cp_sacarose_cristal * w + deltaCp * 1000;
-
-  // Viscosidade (Pa·s) — Mathlouthi ajustada
-  const A_visc = 2.083;
-  const B_visc = -0.00623;
-  const C_visc = 2.36e-5;
+  const A_visc = 2.083, B_visc = -0.00623, C_visc = 2.36e-5;
   const log10MuAgua = Math.log10(wtr.mu);
   const log10Mu = log10MuAgua + w * (A_visc + B_visc * T + C_visc * T * T) * 0.4343;
   const mu = Math.pow(10, log10Mu);
-
-  // Condutividade térmica (W/m·K)
   const k = wtr.k * (1 - 0.54 * w) + 0.0012 * w * T;
-
-  return {
-    rho: Math.max(rho, 800),
-    cp: Math.max(cp, 1500),
-    mu: Math.max(mu, 1e-5),
-    k: Math.max(k, 0.1)
-  };
+  return { rho: Math.max(rho, 800), cp: Math.max(cp, 1500), mu: Math.max(mu, 1e-5), k: Math.max(k, 0.1) };
 }
 
-// --- Óleo térmico — dados genéricos (substituir por dados do fabricante) ---
 function propOleo(T) {
   const rho = 850 - 0.65 * (T - 20);
   const cp = 1900 + 3.5 * T;
-  const mu = 0.08 * Math.exp(-0.025 * T); // diminui exponencialmente com T
+  const mu = 0.08 * Math.exp(-0.025 * T);
   const k = 0.13 - 0.0001 * T;
   return { rho, cp, mu: Math.max(mu, 1e-4), k: Math.max(k, 0.08) };
 }
 
-// --- Despachante ---
 function propriedadesFluido(fluido, T, Brix, pureza) {
   Brix = Brix || 0;
   pureza = pureza || 100;
   switch (fluido) {
-    case 'agua':
-    case 'agua_gelada':
-      return propAgua(T);
-    case 'sacarose':
-      return propSacarose(T, Brix, pureza);
-    case 'oleo':
-      return propOleo(T);
-    default:
-      return propAgua(T);
+    case 'agua': case 'agua_gelada': return propAgua(T);
+    case 'sacarose': return propSacarose(T, Brix, pureza);
+    case 'oleo': return propOleo(T);
+    default: return propAgua(T);
   }
 }
 
-// --- Temperatura de bulk ---
-function Tbulk(Tin, Tout) {
-  return (Tin + Tout) / 2;
-}
+function Tbulk(Tin, Tout) { return (Tin + Tout) / 2; }
 
 // ========== 2. CORRELAÇÃO DE NUSSELT — MARTIN (1996) ==========
 
 function nusseltMartin(Re, Pr, beta_graus, mu, mu_w) {
   const beta = beta_graus * Math.PI / 180;
-
-  // Fator de atrito teórico (Darcy) de Martin
   const b1 = 0.045, b2 = 3.7, b3 = 2.25, b4 = 0.125;
   const termoGeo = (Math.cos(beta) * Math.cos(beta)) / (b1 * Math.tan(beta) + b2 * Math.sin(beta))
                  + (Math.sin(beta) * Math.sin(beta)) / (b3 / Math.tan(beta) + b4 * Math.cos(beta));
-
   const zeta = Math.pow(1 / Math.max(Re, 1), 0.25) * Math.pow(Math.max(termoGeo, 0.001), -1/6);
-
-  // Nusselt — analogia de Reynolds (Martin 1996)
-  const Nu = 0.122 * Math.pow(Pr, 1/3)
-           * Math.pow(Math.max(zeta / 2, 0.001), 1/6)
-           * Math.pow(Math.max(Re, 1), 3/4)
-           * Math.pow(Math.max(mu / mu_w, 0.1), 0.14);
-
+  const Nu = 0.122 * Math.pow(Pr, 1/3) * Math.pow(Math.max(zeta / 2, 0.001), 1/6)
+           * Math.pow(Math.max(Re, 1), 3/4) * Math.pow(Math.max(mu / mu_w, 0.1), 0.14);
   return Math.max(Nu, 1.0);
-}
-
-// --- Kumar (1984) — alternativa para ângulos específicos ---
-function nusseltKumar(Re, Pr, beta_graus, mu, mu_w) {
-  const visCorr = Math.pow(Math.max(mu / mu_w, 0.1), 0.14);
-  const pr13 = Math.pow(Math.max(Pr, 0.1), 1/3);
-
-  if (beta_graus === 30) {
-    if (Re < 10)       return 0.729 * Math.pow(Re, 0.343) * pr13 * visCorr;
-    else if (Re < 100) return 0.400 * Math.pow(Re, 0.503) * pr13 * visCorr;
-    else               return 0.348 * Math.pow(Re, 0.663) * pr13 * visCorr;
-  } else if (beta_graus === 45) {
-    if (Re < 10)       return 0.729 * Math.pow(Re, 0.343) * pr13 * visCorr;
-    else if (Re < 100) return 0.400 * Math.pow(Re, 0.503) * pr13 * visCorr;
-    else               return 0.276 * Math.pow(Re, 0.678) * pr13 * visCorr;
-  } else if (beta_graus === 60) {
-    if (Re < 20)       return 0.630 * Math.pow(Re, 0.333) * pr13 * visCorr;
-    else if (Re < 300) return 0.291 * Math.pow(Re, 0.591) * pr13 * visCorr;
-    else               return 0.130 * Math.pow(Re, 0.732) * pr13 * visCorr;
-  }
-  // Ângulo misto ou não catalogado → Martin
-  return nusseltMartin(Re, Pr, beta_graus, mu, mu_w);
 }
 
 // ========== 3. FATOR DE ATRITO E QUEDA DE PRESSÃO ==========
@@ -647,466 +716,272 @@ function fatorAtritoMartin(Re, beta_graus) {
   const b1 = 0.045, b2 = 3.7, b3 = 2.25, b4 = 0.125;
   const termoGeo = (Math.cos(beta) * Math.cos(beta)) / (b1 * Math.tan(beta) + b2 * Math.sin(beta))
                  + (Math.sin(beta) * Math.sin(beta)) / (b3 / Math.tan(beta) + b4 * Math.cos(beta));
-  // Fanning friction factor
   const Cf = 0.5 * Math.pow(1 / Math.max(Re, 1), 0.25) * Math.pow(Math.max(termoGeo, 0.001), -1/6);
   return Math.max(Cf, 0.001);
 }
 
 function quedaPressaoPHE(params) {
-  const {
-    m_dot, rho, mu, Dh, L_placa, Np_passes,
-    A_porta, A_canal_total, v_canal, beta_graus, Re, n_canais_paralelos
-  } = params;
-
-  // 1. Queda no canal (Fanning → Darcy-Weisbach)
+  const { m_dot, rho, Dh, L_placa, Np_passes, A_porta, v_canal, beta_graus, Re } = params;
   const Cf = fatorAtritoMartin(Re, beta_graus);
-  const fDarcy = 4 * Cf;
   const dP_canal = 4 * Cf * (L_placa * Np_passes / Dh) * (rho * v_canal * v_canal / 2);
-
-  // 2. Queda na porta (manifold) — 1.5 * ρv²/2 por entrada/saída
   const v_porta = m_dot / (rho * A_porta);
   const dP_porta = 1.5 * rho * v_porta * v_porta / 2 * Np_passes;
-
-  // 3. Correção de momento (desprezível para líquidos)
-  const dP_momentum = 0;
-
-  // 4. Altura hidrostática (0 se mesma altura)
-  const dP_altura = 0;
-
-  const dP_total = dP_canal + dP_porta + dP_momentum + dP_altura;
-
+  const dP_total = dP_canal + dP_porta;
   return {
-    dP_canal: dP_canal / 1000,
-    dP_porta: dP_porta / 1000,
-    dP_total: dP_total / 1000,
-    Cf: Cf,
-    fDarcy: fDarcy,
-    v_porta: v_porta,
-    v_canal: v_canal,
+    dP_canal: dP_canal / 1000, dP_porta: dP_porta / 1000, dP_total: dP_total / 1000,
+    Cf, v_porta, v_canal,
     fracao_porta: dP_total > 0 ? (dP_porta / dP_total * 100) : 0
   };
 }
 
 function verificarBocal(v_porta) {
-  if (v_porta <= 5.0)  return { ok: true,  status: '✓', obs: 'Adequada' };
-  if (v_porta <= 7.0)  return { ok: true,  status: '⚠', obs: 'Limite aceitável' };
-  return { ok: false, status: '✗', obs: 'Acima do limite — considerar bocal maior' };
+  if (v_porta <= 5.0) return { ok: true, status: '✓', obs: 'Adequada' };
+  if (v_porta <= 7.0) return { ok: true, status: '⚠', obs: 'Limite aceitável' };
+  return { ok: false, status: '✗', obs: 'Acima do limite' };
 }
 
-// ========== 4. LMTD E FATOR DE CORREÇÃO F ==========
+// ========== 4. LMTD E FATOR F ==========
 
 function calcularLMTD(T1_in, T1_out, T2_in, T2_out) {
   const dT1 = T1_in - T2_out;
   const dT2 = T1_out - T2_in;
-
   if (Math.abs(dT1 - dT2) < 0.01) return Math.abs(dT1);
   if (Math.abs(dT1) < 0.001 || Math.abs(dT2) < 0.001) return 0;
-
-  const LMTD = (dT1 - dT2) / Math.log(dT1 / dT2);
-  return Math.abs(LMTD);
+  return Math.abs((dT1 - dT2) / Math.log(dT1 / dT2));
 }
 
 function fatorCorrecaoF(P, R, tipoArranjo) {
-  if (tipoArranjo === '1-1') return 1.0; // contracorrente pura
-
-  // Evitar divisões por zero
+  if (tipoArranjo === '1-1') return 1.0;
   if (Math.abs(R - 1) < 0.001) R = 1.001;
   if (Math.abs(1 - P * R) < 0.001) P = 0.999 / Math.max(R, 0.001);
-
-  if (tipoArranjo === '1-2' || tipoArranjo === '2-1') {
-    return calcularF_12(P, R);
-  }
-
+  if (tipoArranjo === '1-2' || tipoArranjo === '2-1') return calcularF_12(P, R);
   if (tipoArranjo === '2-2') {
-    // Para 2-2: aproximação como 2 arranjos 1-2 em série
     const P1 = 1 - Math.sqrt((1 - P * R) / (1 - P));
     return calcularF_12(P1, R);
   }
-
   return 0.95;
 }
 
 function calcularF_12(P, R) {
   if (Math.abs(R - 1) < 0.001) R = 1.001;
   if (Math.abs(1 - P * R) < 0.001) P = 0.999 / Math.max(R, 0.001);
-
   const sqrtR = Math.sqrt(R * R + 1);
-  const numerador = sqrtR * Math.log((1 - P) / (1 - P * R));
-  const denominador = (R - 1) * Math.log(
-    (2 - P * (R + 1 - sqrtR)) / (2 - P * (R + 1 + sqrtR))
-  );
-
-  if (Math.abs(denominador) < 1e-10) return 0.95;
-
-  const F = numerador / denominador;
-  return Math.max(F, 0);
+  const num = sqrtR * Math.log((1 - P) / (1 - P * R));
+  const den = (R - 1) * Math.log((2 - P * (R + 1 - sqrtR)) / (2 - P * (R + 1 + sqrtR)));
+  return Math.abs(den) < 1e-10 ? 0.95 : Math.max(num / den, 0);
 }
 
-// ========== 5. MÉTODO ε-NTU ==========
+// ========== 5. ε-NTU ==========
 
 function calcularNTU(U, A, Cmin, Cmax) {
-  const NTU = (U * A) / Math.max(Cmin, 0.001);
-  const Cr = Cmax > 0 ? Cmin / Cmax : 0;
-  return { NTU, Cr };
+  return { NTU: (U * A) / Math.max(Cmin, 0.001), Cr: Cmax > 0 ? Cmin / Cmax : 0 };
 }
 
 function efetividadeNTU(NTU, Cr, arranjo) {
   let eps = 0;
-  NTU = Math.max(NTU, 0);
-  Cr = Math.max(Math.min(Cr, 1), 0);
-
+  NTU = Math.max(NTU, 0); Cr = Math.max(Math.min(Cr, 1), 0);
   switch (arranjo) {
-    case '1-1': // contracorrente
-      if (Cr < 0.999) {
-        eps = (1 - Math.exp(-NTU * (1 - Cr))) / (1 - Cr * Math.exp(-NTU * (1 - Cr)));
-      } else {
-        eps = NTU / (1 + NTU);
-      }
+    case '1-1':
+      eps = Cr < 0.999
+        ? (1 - Math.exp(-NTU * (1 - Cr))) / (1 - Cr * Math.exp(-NTU * (1 - Cr)))
+        : NTU / (1 + NTU);
       break;
-
-    case '1-2':
-    case '2-1':
-      const sqrtTerm = Math.sqrt(1 + Cr * Cr);
-      eps = 2 / (1 + Cr + sqrtTerm * (1 + Math.exp(-NTU * sqrtTerm)) / (1 - Math.exp(-NTU * sqrtTerm)));
+    case '1-2': case '2-1':
+      const s = Math.sqrt(1 + Cr * Cr);
+      eps = 2 / (1 + Cr + s * (1 + Math.exp(-NTU * s)) / Math.max(1 - Math.exp(-NTU * s), 1e-10));
       break;
-
     case '2-2':
-      // N passes cruzados
       const n = 2;
-      const eps1 = (1 - Math.exp(-Cr * NTU / n * (1 + Math.sqrt(1 + Cr * Cr)) / 2))
-                 / (1 + Math.sqrt(1 + Cr * Cr));
-      eps = 1 - Math.pow(1 - eps1, n) * (1 - Cr) / (1 - Cr * Math.pow(1 - eps1, n));
+      const eps1 = (1 - Math.exp(-Cr * NTU / n * (1 + Math.sqrt(1 + Cr * Cr)) / 2)) / (1 + Math.sqrt(1 + Cr * Cr));
+      eps = 1 - Math.pow(1 - eps1, n) * (1 - Cr) / Math.max(1 - Cr * Math.pow(1 - eps1, n), 1e-10);
       break;
-
     default:
-      if (Cr < 0.999) {
-        eps = (1 - Math.exp(-NTU * (1 - Cr))) / (1 - Cr * Math.exp(-NTU * (1 - Cr)));
-      } else {
-        eps = NTU / (1 + NTU);
-      }
+      eps = Cr < 0.999
+        ? (1 - Math.exp(-NTU * (1 - Cr))) / (1 - Cr * Math.exp(-NTU * (1 - Cr)))
+        : NTU / (1 + NTU);
       eps *= 0.95;
   }
-
   return Math.min(Math.max(eps, 0), 1);
 }
 
-// ========== 6. GEOMETRIA DO CANAL ==========
+// ========== 6. GEOMETRIA ==========
 
 function geometriaCanal(modelo) {
   const { W, L, b, beta, Dp, delta, phi, A_p } = modelo;
-
-  const Dh = 2 * b; // diâmetro hidráulico
-  const A_canal = b * W; // área de escoamento por canal
-  const A_porta = Math.PI * Dp * Dp / 4;
-  const A_placa = A_p || (L * W * phi); // área de troca por placa
-
-  return { Dh, A_canal, A_porta, A_placa, phi, Dp, L, W, b, beta, delta };
+  return { Dh: 2 * b, A_canal: b * W, A_porta: Math.PI * Dp * Dp / 4,
+           A_placa: A_p || (L * W * phi), phi, Dp, L, W, b, beta, delta };
 }
 
-function reynoldsCanal(m_dot_por_canal, Dh, A_canal, mu) {
-  // Re = m_dot * Dh / (A * mu)
-  return (m_dot_por_canal * Dh) / (Math.max(A_canal, 1e-8) * Math.max(mu, 1e-8));
-}
+function reynoldsCanal(m, Dh, A, mu) { return (m * Dh) / (Math.max(A, 1e-8) * Math.max(mu, 1e-8)); }
+function prandtl(cp, mu, k) { return (cp * mu) / Math.max(k, 0.001); }
 
-function prandtl(cp, mu, k) {
-  return (cp * mu) / Math.max(k, 0.001);
-}
-
-// ========== 7. COEFICIENTE U COM ITERAÇÃO DE PAREDE ==========
+// ========== 7. COEFICIENTE U ITERATIVO ==========
 
 function calcularU_iterativo(params, maxIter, tol) {
-  maxIter = maxIter || 50;
-  tol = tol || 0.01;
-
-  const {
-    Tin_hot, Tout_hot, Tin_cold, Tout_cold,
-    fluido_hot, fluido_cold, Brix_hot, Brix_cold, pureza,
-    Re_hot, Pr_hot, Re_cold, Pr_cold,
-    beta_hot, beta_cold,
-    Dh_hot, Dh_cold,
-    delta, k_placa,
-    Rf_hot, Rf_cold
-  } = params;
-
-  const Tb_hot = Tbulk(Tin_hot, Tout_hot);
-  const Tb_cold = Tbulk(Tin_cold, Tout_cold);
-
-  let Tw = (Tb_hot + Tb_cold) / 2;
-  let U_anterior = 0;
-  let resultado = {};
-
+  maxIter = maxIter || 50; tol = tol || 0.01;
+  const { Tin_hot, Tout_hot, Tin_cold, Tout_cold, fluido_hot, fluido_cold,
+          Brix_hot, Brix_cold, pureza, Re_hot, Pr_hot, Re_cold, Pr_cold,
+          beta_hot, beta_cold, Dh_hot, Dh_cold, delta, k_placa, Rf_hot, Rf_cold } = params;
+  const Tb_hot = Tbulk(Tin_hot, Tout_hot), Tb_cold = Tbulk(Tin_cold, Tout_cold);
+  let Tw = (Tb_hot + Tb_cold) / 2, U_ant = 0, res = {};
   for (let i = 0; i < maxIter; i++) {
-    // Propriedades na parede
-    const prop_w_hot = propriedadesFluido(fluido_hot, Tw, Brix_hot, pureza);
-    const prop_w_cold = propriedadesFluido(fluido_cold, Tw, Brix_cold, pureza);
-
-    // Propriedades no bulk
-    const prop_b_hot = propriedadesFluido(fluido_hot, Tb_hot, Brix_hot, pureza);
-    const prop_b_cold = propriedadesFluido(fluido_cold, Tb_cold, Brix_cold, pureza);
-
-    // Nusselt com Martin (1996)
-    const Nu_hot = nusseltMartin(Re_hot, Pr_hot, beta_hot, prop_b_hot.mu, prop_w_hot.mu);
-    const Nu_cold = nusseltMartin(Re_cold, Pr_cold, beta_cold, prop_b_cold.mu, prop_w_cold.mu);
-
-    // h = Nu * k / Dh
-    const h_hot = Nu_hot * prop_b_hot.k / Math.max(Dh_hot, 1e-6);
-    const h_cold = Nu_cold * prop_b_cold.k / Math.max(Dh_cold, 1e-6);
-
-    // kc (limpo)
+    const pw_hot = propriedadesFluido(fluido_hot, Tw, Brix_hot, pureza);
+    const pw_cold = propriedadesFluido(fluido_cold, Tw, Brix_cold, pureza);
+    const pb_hot = propriedadesFluido(fluido_hot, Tb_hot, Brix_hot, pureza);
+    const pb_cold = propriedadesFluido(fluido_cold, Tb_cold, Brix_cold, pureza);
+    const Nu_hot = nusseltMartin(Re_hot, Pr_hot, beta_hot, pb_hot.mu, pw_hot.mu);
+    const Nu_cold = nusseltMartin(Re_cold, Pr_cold, beta_cold, pb_cold.mu, pw_cold.mu);
+    const h_hot = Nu_hot * pb_hot.k / Math.max(Dh_hot, 1e-6);
+    const h_cold = Nu_cold * pb_cold.k / Math.max(Dh_cold, 1e-6);
     const kc = 1 / (1/h_hot + 1/h_cold + delta / Math.max(k_placa, 0.1));
-
-    // k (com incrustração)
     const k = 1 / (1/h_hot + 1/h_cold + delta / Math.max(k_placa, 0.1) + Rf_hot + Rf_cold);
-
-    // Margem de projeto
     const M = k > 0 ? (kc - k) / k * 100 : 0;
-
-    // Atualizar Tw
     Tw = Tb_cold + (h_hot / Math.max(h_hot + h_cold, 0.001)) * (Tb_hot - Tb_cold);
-
-    resultado = {
-      U: k, kc: kc, M: M,
-      h_hot: h_hot, h_cold: h_cold,
-      Nu_hot: Nu_hot, Nu_cold: Nu_cold,
-      Tw: Tw, iteracoes: i + 1,
-      prop_b_hot: prop_b_hot, prop_b_cold: prop_b_cold,
-      prop_w_hot: prop_w_hot, prop_w_cold: prop_w_cold
-    };
-
-    if (Math.abs(k - U_anterior) < tol) break;
-    U_anterior = k;
+    res = { U: k, kc, M, h_hot, h_cold, Nu_hot, Nu_cold, Tw, iteracoes: i + 1,
+            prop_b_hot: pb_hot, prop_b_cold: pb_cold };
+    if (Math.abs(k - U_ant) < tol) break;
+    U_ant = k;
   }
-
-  return resultado;
+  return res;
 }
 
-// ========== 8. VERIFICAÇÕES DE PROJETO ==========
+// ========== 8. VERIFICAÇÕES ==========
 
-function verificacoesProjeto(params) {
+function verificacoesProjeto(p) {
   const checks = [];
+  const app1 = Math.abs(p.Tin_serv - p.Tout_prod), app2 = Math.abs(p.Tout_serv - p.Tin_prod);
+  const appMin = Math.min(app1, app2);
+  checks.push({ item: 'Approach mínimo (ΔT mínimo)', valor: appMin.toFixed(1) + ' °C',
+    status: appMin >= 2.0 ? 'ok' : appMin >= 1.0 ? 'alerta' : 'erro',
+    obs: appMin >= 2.0 ? 'Adequado' : appMin >= 1.0 ? 'Baixo' : 'Muito baixo — inviável' });
 
-  // 1. Approach mínimo
-  const approach1 = Math.abs(params.Tin_serv - params.Tout_prod);
-  const approach2 = Math.abs(params.Tout_serv - params.Tin_prod);
-  const approach_min = Math.min(approach1, approach2);
-  checks.push({
-    item: 'Approach mínimo (ΔT mínimo entre fluidos)',
-    valor: approach_min.toFixed(1) + ' °C',
-    status: approach_min >= 2.0 ? 'ok' : approach_min >= 1.0 ? 'alerta' : 'erro',
-    obs: approach_min >= 2.0 ? 'Adequado' : approach_min >= 1.0 ? 'Baixo — verificar viabilidade' : 'Muito baixo — inviável'
-  });
+  const theta = Math.abs(p.Tout_prod - p.Tin_prod) / Math.max(p.LMTD_corr, 0.01);
+  checks.push({ item: 'Theta (Θ)', valor: theta.toFixed(2),
+    status: theta <= 1.0 ? 'ok' : theta <= 5.0 ? 'alerta' : 'erro',
+    obs: theta <= 1.0 ? 'Baixo theta' : theta <= 5.0 ? 'Moderado' : 'Alto — passes múltiplos' });
 
-  // 2. Theta
-  const theta_prod = Math.abs(params.Tout_prod - params.Tin_prod) / Math.max(params.LMTD_corr, 0.01);
-  checks.push({
-    item: 'Theta (Θ) — comprimento térmico',
-    valor: theta_prod.toFixed(2),
-    status: theta_prod <= 1.0 ? 'ok' : theta_prod <= 5.0 ? 'alerta' : 'erro',
-    obs: theta_prod <= 1.0 ? 'Baixo theta — OK' : theta_prod <= 5.0 ? 'Theta moderado' : 'Theta alto — requer passes múltiplos'
-  });
+  const reg = p.Re_prod < 10 ? 'Laminar' : p.Re_prod < 100 ? 'Transição' : 'Turbulento';
+  checks.push({ item: 'Regime (Reynolds) — Produto', valor: p.Re_prod.toFixed(0) + ' — ' + reg,
+    status: p.Re_prod >= 100 ? 'ok' : p.Re_prod >= 10 ? 'alerta' : 'erro',
+    obs: p.Re_prod >= 100 ? 'Turbulento' : p.Re_prod >= 10 ? 'Transição' : 'Laminar' });
 
-  // 3. Reynolds
-  const regime = params.Re_prod < 10 ? 'Laminar' : params.Re_prod < 100 ? 'Transição' : 'Turbulento';
-  checks.push({
-    item: 'Regime de escoamento (Reynolds) — Produto',
-    valor: params.Re_prod.toFixed(0) + ' — ' + regime,
-    status: params.Re_prod >= 100 ? 'ok' : params.Re_prod >= 10 ? 'alerta' : 'erro',
-    obs: params.Re_prod >= 100 ? 'Turbulento — bom' : params.Re_prod >= 10 ? 'Transição — aceitável' : 'Laminar — baixa eficiência'
-  });
+  checks.push({ item: 'ΔP Produto vs. limite', valor: p.dP_prod.toFixed(1) + ' / ' + p.dP_max_prod + ' kPa',
+    status: p.dP_prod <= p.dP_max_prod ? 'ok' : 'erro',
+    obs: p.dP_prod <= p.dP_max_prod ? 'Dentro do limite' : 'Excede' });
 
-  // 4. Queda de pressão vs. limite
-  checks.push({
-    item: 'ΔP Produto vs. limite',
-    valor: params.dP_prod.toFixed(1) + ' / ' + params.dP_max_prod + ' kPa',
-    status: params.dP_prod <= params.dP_max_prod ? 'ok' : 'erro',
-    obs: params.dP_prod <= params.dP_max_prod ? 'Dentro do limite' : 'Excede o limite'
-  });
+  checks.push({ item: 'ΔP Serviço vs. limite', valor: p.dP_serv.toFixed(1) + ' / ' + p.dP_max_serv + ' kPa',
+    status: p.dP_serv <= p.dP_max_serv ? 'ok' : 'erro',
+    obs: p.dP_serv <= p.dP_max_serv ? 'Dentro do limite' : 'Excede' });
 
-  checks.push({
-    item: 'ΔP Serviço vs. limite',
-    valor: params.dP_serv.toFixed(1) + ' / ' + params.dP_max_serv + ' kPa',
-    status: params.dP_serv <= params.dP_max_serv ? 'ok' : 'erro',
-    obs: params.dP_serv <= params.dP_max_serv ? 'Dentro do limite' : 'Excede o limite'
-  });
+  const bc = verificarBocal(p.v_porta_prod);
+  checks.push({ item: 'Velocidade bocal — Produto', valor: p.v_porta_prod.toFixed(2) + ' m/s',
+    status: bc.ok ? 'ok' : 'erro', obs: bc.obs });
 
-  // 5. Velocidade no bocal
-  const bocal = verificarBocal(params.v_porta_prod);
-  checks.push({
-    item: 'Velocidade no bocal — Produto',
-    valor: params.v_porta_prod.toFixed(2) + ' m/s',
-    status: bocal.ok ? 'ok' : 'erro',
-    obs: bocal.obs
-  });
+  const bcS = verificarBocal(p.v_porta_serv);
+  checks.push({ item: 'Velocidade bocal — Serviço', valor: p.v_porta_serv.toFixed(2) + ' m/s',
+    status: bcS.ok ? 'ok' : 'erro', obs: bcS.obs });
 
-  const bocalS = verificarBocal(params.v_porta_serv);
-  checks.push({
-    item: 'Velocidade no bocal — Serviço',
-    valor: params.v_porta_serv.toFixed(2) + ' m/s',
-    status: bocalS.ok ? 'ok' : 'erro',
-    obs: bocalS.obs
-  });
+  const marg = (p.A_inst / Math.max(p.A_nec, 0.001) - 1) * 100;
+  checks.push({ item: 'Margem de área', valor: marg.toFixed(1) + '%',
+    status: marg >= 0 ? 'ok' : 'erro', obs: marg >= 0 ? 'Suficiente' : 'Insuficiente' });
 
-  // 6. Margem de área
-  const margem_real = (params.A_inst / Math.max(params.A_nec, 0.001) - 1) * 100;
-  checks.push({
-    item: 'Margem de área instalada',
-    valor: margem_real.toFixed(1) + '%',
-    status: margem_real >= 0 ? 'ok' : 'erro',
-    obs: margem_real >= 0 ? 'Área suficiente' : 'Área insuficiente'
-  });
+  checks.push({ item: 'Fator F (LMTD)', valor: p.F.toFixed(3),
+    status: p.F >= 0.75 ? 'ok' : p.F >= 0.5 ? 'alerta' : 'erro',
+    obs: p.F >= 0.75 ? 'Adequado' : p.F >= 0.5 ? 'Baixo' : 'Muito baixo' });
 
-  // 7. Fator F
-  checks.push({
-    item: 'Fator de correção F (LMTD)',
-    valor: params.F.toFixed(3),
-    status: params.F >= 0.75 ? 'ok' : params.F >= 0.5 ? 'alerta' : 'erro',
-    obs: params.F >= 0.75 ? 'Adequado' : params.F >= 0.5 ? 'Baixo — considerar mais passes' : 'Muito baixo — rever configuração'
-  });
+  checks.push({ item: 'Coef. global U', valor: p.U.toFixed(0) + ' W/m²·°C',
+    status: p.U >= 2000 ? 'ok' : p.U >= 1000 ? 'alerta' : 'erro',
+    obs: p.U >= 2000 ? 'Excelente' : p.U >= 1000 ? 'Aceitável' : 'Baixo' });
 
-  // 8. U global
-  checks.push({
-    item: 'Coeficiente global U',
-    valor: params.U.toFixed(0) + ' W/m²·°C',
-    status: params.U >= 2000 ? 'ok' : params.U >= 1000 ? 'alerta' : 'erro',
-    obs: params.U >= 2000 ? 'Excelente' : params.U >= 1000 ? 'Aceitável' : 'Baixo — verificar propriedades'
-  });
+  checks.push({ item: 'Fração ΔP na porta', valor: p.fracao_porta.toFixed(1) + '%',
+    status: p.fracao_porta <= 40 ? 'ok' : 'alerta',
+    obs: p.fracao_porta <= 40 ? 'Normal' : 'Elevada' });
 
-  // 9. Fração de perda na porta
-  checks.push({
-    item: 'Fração de ΔP na porta (manifold)',
-    valor: params.fracao_porta.toFixed(1) + '%',
-    status: params.fracao_porta <= 40 ? 'ok' : 'alerta',
-    obs: params.fracao_porta <= 40 ? 'Normal' : 'Elevada — considerar bocal maior'
-  });
-
-  // 10. LMTD
-  checks.push({
-    item: 'LMTD corrigido',
-    valor: params.LMTD_corr.toFixed(1) + ' °C',
-    status: params.LMTD_corr >= 3.0 ? 'ok' : params.LMTD_corr >= 1.0 ? 'alerta' : 'erro',
-    obs: params.LMTD_corr >= 3.0 ? 'Adequado' : 'Baixo — pode superdimensionar'
-  });
+  checks.push({ item: 'LMTD corrigido', valor: p.LMTD_corr.toFixed(1) + ' °C',
+    status: p.LMTD_corr >= 3.0 ? 'ok' : p.LMTD_corr >= 1.0 ? 'alerta' : 'erro',
+    obs: p.LMTD_corr >= 3.0 ? 'Adequado' : 'Baixo' });
 
   return checks;
 }
 
-// ========== 9. FUNÇÃO PRINCIPAL DE DIMENSIONAMENTO ==========
+// ========== 9. MOTOR DE CÁLCULO PRINCIPAL ==========
 
-function calcular() {
-  // --- Ler inputs ---
-  const fluido_prod = document.getElementById('fluido_prod').value;
-  const Brix = parseFloat(document.getElementById('brix').value) || 0;
-  const vazao_prod = parseFloat(document.getElementById('vazao_prod').value);
-  const tin_prod = parseFloat(document.getElementById('tin_prod').value);
-  const tout_prod = parseFloat(document.getElementById('tout_prod').value);
-  const dp_max_prod = parseFloat(document.getElementById('dp_prod').value);
-  const rf_prod = parseFloat(document.getElementById('rf_prod').value);
-  const pureza = parseFloat(document.getElementById('pureza').value) || 100;
+function motorCalculo(inputs) {
+  // inputs: { fluido_prod, Brix, vazao_prod, tin_prod, tout_prod, dp_max_prod, rf_prod, pureza,
+  //           fluido_serv, vazao_serv, tin_serv, tout_serv, dp_max_serv, rf_serv,
+  //           margem_area, material, config_passes, chevron_str, modelo_forcado }
 
-  const fluido_serv = document.getElementById('fluido_serv').value;
-  const vazao_serv = parseFloat(document.getElementById('vazao_serv').value);
-  const tin_serv = parseFloat(document.getElementById('tin_serv').value);
-  const tout_serv_input = parseFloat(document.getElementById('tout_serv').value);
-  const dp_max_serv = parseFloat(document.getElementById('dp_serv').value);
-  const rf_serv = parseFloat(document.getElementById('rf_serv').value);
+  const { fluido_prod, Brix, vazao_prod, tin_prod, tout_prod, dp_max_prod, rf_prod, pureza,
+          fluido_serv, vazao_serv, tin_serv, dp_max_serv, rf_serv,
+          margem_area, material, config_passes, chevron_str, modelo_forcado } = inputs;
 
-  const margem_area = parseFloat(document.getElementById('margem').value);
-  const material = MATERIAIS[document.getElementById('material').value];
-  const config_passes = document.getElementById('config_passes').value;
-  const chevron_str = document.getElementById('chevron').value;
-  const beta_graus = chevron_str === '30/60' ? 45 : parseInt(chevron_str); // misto → 45 como média
+  const beta_sel = chevron_str === '30/60' ? 45 : parseInt(chevron_str);
 
-  // --- Validações básicas ---
-  if (!vazao_prod || vazao_prod <= 0) { alert('Informe vazão válida do produto.'); return; }
-  if (!vazao_serv || vazao_serv <= 0) { alert('Informe vazão válida do serviço.'); return; }
-  if (tin_serv <= tout_prod) { alert('Temperatura de entrada do serviço deve ser maior que saída do produto (para aquecimento).'); return; }
-
-  // --- Propriedades no bulk — Produto ---
   const Tb_prod = Tbulk(tin_prod, tout_prod);
   const prop_prod = propriedadesFluido(fluido_prod, Tb_prod, Brix, pureza);
+  const m_dot_prod = vazao_prod * prop_prod.rho / 3600;
+  const Q = m_dot_prod * prop_prod.cp * (tout_prod - tin_prod) / 1000;
 
-  // --- Calor trocado ---
-  const m_dot_prod = vazao_prod * prop_prod.rho / 3600; // kg/s
-  const Q = m_dot_prod * prop_prod.cp * (tout_prod - tin_prod) / 1000; // kW
-
-  // --- Iterar Tout_serv com propriedades T-dependentes ---
-  let tout_serv = tout_serv_input;
-  let m_dot_serv = vazao_serv * 1000 / 3600; // estimativa inicial
-  for (let iter = 0; iter < 30; iter++) {
-    const Tb_serv = Tbulk(tin_serv, tout_serv);
-    const prop_serv_atual = propriedadesFluido(fluido_serv, Tb_serv, 0, 100);
-    m_dot_serv = vazao_serv * prop_serv_atual.rho / 3600;
-    const tout_novo = tin_serv - (Q * 1000) / (m_dot_serv * prop_serv_atual.cp);
-    if (Math.abs(tout_novo - tout_serv) < 0.01) {
-      tout_serv = tout_novo;
-      break;
-    }
-    tout_serv = tout_novo;
+  // Iterar Tout_serv
+  let tout_serv = inputs.tout_serv || (tin_serv - 20);
+  let m_dot_serv = vazao_serv * 1000 / 3600;
+  for (let it = 0; it < 30; it++) {
+    const Tb_s = Tbulk(tin_serv, tout_serv);
+    const ps = propriedadesFluido(fluido_serv, Tb_s, 0, 100);
+    m_dot_serv = vazao_serv * ps.rho / 3600;
+    const tn = tin_serv - (Q * 1000) / (m_dot_serv * ps.cp);
+    if (Math.abs(tn - tout_serv) < 0.01) { tout_serv = tn; break; }
+    tout_serv = tn;
   }
+  const prop_serv = propriedadesFluido(fluido_serv, Tbulk(tin_serv, tout_serv), 0, 100);
 
-  // --- Propriedades finais do serviço ---
-  const Tb_serv = Tbulk(tin_serv, tout_serv);
-  const prop_serv = propriedadesFluido(fluido_serv, Tb_serv, 0, 100);
-
-  // --- LMTD e Fator F ---
   const LMTD = calcularLMTD(tin_serv, tout_serv, tin_prod, tout_prod);
   const P = (tout_prod - tin_prod) / (tin_serv - tin_prod);
   const R = (tin_serv - tout_serv) / Math.max(tout_prod - tin_prod, 0.001);
   const F = fatorCorrecaoF(P, R, config_passes);
   const LMTD_corr = LMTD * F;
 
-  // --- Capacidades térmicas ---
   const C_prod = m_dot_prod * prop_prod.cp;
   const C_serv = m_dot_serv * prop_serv.cp;
   const Cmin = Math.min(C_prod, C_serv);
   const Cmax = Math.max(C_prod, C_serv);
-  const Cr = Cmin / Math.max(Cmax, 0.001);
 
-  // --- Avaliar todos os modelos ---
+  const Np = parseInt(config_passes.split('-')[0]);
+  const Np_serv = parseInt(config_passes.split('-')[1]);
   const resultados = [];
-  const Np = parseInt(config_passes.split('-')[0]); // passes do produto
 
-  for (const modelo of BANCO_MODELOS) {
-    // Filtrar por ângulo de chevron selecionado
-    if (chevron_str !== '30/60' && modelo.beta !== beta_graus) continue;
+  // Determinar quais modelos avaliar
+  let modelosAvaliar;
+  if (modelo_forcado) {
+    modelosAvaliar = BANCO_MODELOS.filter(m => m.nome === modelo_forcado);
+  } else {
+    modelosAvaliar = BANCO_MODELOS.filter(m => {
+      if (chevron_str === '30/60') return true;
+      return m.beta === beta_sel;
+    });
+  }
 
+  for (const modelo of modelosAvaliar) {
     const geo = geometriaCanal(modelo);
-
-    // Número de canais: estimar com área necessária aproximada
-    // Área estimada (primeira aproximação)
-    const U_estimado = 3000; // W/m²·°C — estimativa inicial
-    const A_est = (Q * 1000) / Math.max(U_estimado * LMTD_corr, 0.1);
+    const U_est = 3000;
+    const A_est = (Q * 1000) / Math.max(U_est * LMTD_corr, 0.1);
     const n_placas_est = Math.ceil(A_est / geo.A_placa * (1 + margem_area / 100));
-    const n_placas_par = Math.max(Math.ceil(n_placas_est / 2), 2); // sempre par
 
-    // Para cada número de placas candidato (variar em torno da estimativa)
-    for (let n_placas = Math.max(n_placas_par - 6, 4); n_placas <= n_placas_par + 20; n_placas += 2) {
-      const n_canais_totais = n_placas - 1; // canais entre placas
-      // Para Np passes no produto: canais paralelos = n_canais_totais / (2 * Np)
-      const n_canais_paralelos_prod = Math.max(Math.floor(n_canais_totais / (2 * Np)), 1);
-      const n_canais_paralelos_serv = Math.max(Math.floor(n_canais_totais / (2 * Np)), 1);
-
-      // Vazão mássica por canal
-      const m_dot_canal_prod = m_dot_prod / n_canais_paralelos_prod;
-      const m_dot_canal_serv = m_dot_serv / n_canais_paralelos_serv;
-
-      // Velocidade no canal
-      const v_canal_prod = m_dot_canal_prod / (prop_prod.rho * geo.A_canal);
-      const v_canal_serv = m_dot_canal_serv / (prop_serv.rho * geo.A_canal);
-
-      // Reynolds
-      const Re_prod = reynoldsCanal(m_dot_canal_prod, geo.Dh, geo.A_canal, prop_prod.mu);
-      const Re_serv = reynoldsCanal(m_dot_canal_serv, geo.Dh, geo.A_canal, prop_serv.mu);
-
-      // Prandtl
+    for (let n_placas = Math.max(Math.ceil(n_placas_est / 2) - 6, 4); n_placas <= Math.ceil(n_placas_est / 2) + 30; n_placas += 2) {
+      const n_canais = n_placas - 1;
+      const n_paralelos_prod = Math.max(Math.floor(n_canais / (2 * Np)), 1);
+      const n_paralelos_serv = Math.max(Math.floor(n_canais / (2 * Np)), 1);
+      const m_canal_prod = m_dot_prod / n_paralelos_prod;
+      const m_canal_serv = m_dot_serv / n_paralelos_serv;
+      const v_canal_prod = m_canal_prod / (prop_prod.rho * geo.A_canal);
+      const v_canal_serv = m_canal_serv / (prop_serv.rho * geo.A_canal);
+      const Re_prod = reynoldsCanal(m_canal_prod, geo.Dh, geo.A_canal, prop_prod.mu);
+      const Re_serv = reynoldsCanal(m_canal_serv, geo.Dh, geo.A_canal, prop_serv.mu);
       const Pr_prod = prandtl(prop_prod.cp, prop_prod.mu, prop_prod.k);
       const Pr_serv = prandtl(prop_serv.cp, prop_serv.mu, prop_serv.k);
 
-      // Calcular U iterativo (com parede)
-      // Determinar qual lado é quente
       const hot_is_serv = tin_serv > tin_prod;
-
-      const paramsU = {
+      const resU = calcularU_iterativo({
         Tin_hot: hot_is_serv ? tin_serv : tin_prod,
         Tout_hot: hot_is_serv ? tout_serv : tout_prod,
         Tin_cold: hot_is_serv ? tin_prod : tin_serv,
@@ -1115,143 +990,238 @@ function calcular() {
         fluido_cold: hot_is_serv ? fluido_prod : fluido_serv,
         Brix_hot: hot_is_serv ? 0 : Brix,
         Brix_cold: hot_is_serv ? Brix : 0,
-        pureza: pureza,
-        Re_hot: hot_is_serv ? Re_serv : Re_prod,
-        Pr_hot: hot_is_serv ? Pr_serv : Pr_prod,
-        Re_cold: hot_is_serv ? Re_prod : Re_serv,
-        Pr_cold: hot_is_serv ? Pr_prod : Pr_serv,
-        beta_hot: modelo.beta,
-        beta_cold: modelo.beta,
-        Dh_hot: geo.Dh,
-        Dh_cold: geo.Dh,
-        delta: geo.delta,
-        k_placa: material.k,
-        Rf_hot: hot_is_serv ? rf_serv : rf_prod,
+        pureza, Re_hot: hot_is_serv ? Re_serv : Re_prod, Pr_hot: hot_is_serv ? Pr_serv : Pr_prod,
+        Re_cold: hot_is_serv ? Re_prod : Re_serv, Pr_cold: hot_is_serv ? Pr_prod : Pr_serv,
+        beta_hot: modelo.beta, beta_cold: modelo.beta, Dh_hot: geo.Dh, Dh_cold: geo.Dh,
+        delta: geo.delta, k_placa: material.k, Rf_hot: hot_is_serv ? rf_serv : rf_prod,
         Rf_cold: hot_is_serv ? rf_prod : rf_serv
+      });
+
+      const A_inst = n_placas * geo.A_placa;
+      const A_nec = (Q * 1000) / Math.max(resU.U * LMTD_corr, 0.1);
+      if (A_inst < A_nec * (1 - margem_area / 200)) continue;
+
+      const { NTU, Cr } = calcularNTU(resU.U, A_inst, Cmin, Cmax);
+      const eps = efetividadeNTU(NTU, Cr, config_passes);
+
+      const dP_prod_r = quedaPressaoPHE({
+        m_dot: m_dot_prod, rho: prop_prod.rho, Dh: geo.Dh, L_placa: geo.L, Np_passes: Np,
+        A_porta: geo.A_porta, v_canal: v_canal_prod, beta_graus: modelo.beta, Re: Re_prod
+      });
+      const dP_serv_r = quedaPressaoPHE({
+        m_dot: m_dot_serv, rho: prop_serv.rho, Dh: geo.Dh, L_placa: geo.L, Np_passes: Np_serv,
+        A_porta: geo.A_porta, v_canal: v_canal_serv, beta_graus: modelo.beta, Re: Re_serv
+      });
+
+      const bc_p = verificarBocal(dP_prod_r.v_porta);
+      const bc_s = verificarBocal(dP_serv_r.v_porta);
+
+      // Mesmo se não viável, guardar com motivos de falha
+      const viavel = dP_prod_r.dP_total <= dp_max_prod && dP_serv_r.dP_total <= dp_max_serv
+                  && bc_p.ok && bc_s.ok && A_inst >= A_nec && resU.U > 0;
+
+      const margem_real = (A_inst / Math.max(A_nec, 0.001) - 1) * 100;
+      const resultado = {
+        modelo: modelo.nome, n_placas, A_instalada: A_inst, A_necessaria: A_nec,
+        U: resU.U, kc: resU.kc, margem_U: resU.M, margem_area: margem_real, Q,
+        dP_prod: dP_prod_r.dP_total, dP_serv: dP_serv_r.dP_total,
+        dP_canal_prod: dP_prod_r.dP_canal, dP_porta_prod: dP_prod_r.dP_porta,
+        dP_canal_serv: dP_serv_r.dP_canal, dP_porta_serv: dP_serv_r.dP_porta,
+        fracao_porta_prod: dP_prod_r.fracao_porta, fracao_porta_serv: dP_serv_r.fracao_porta,
+        v_porta_prod: dP_prod_r.v_porta, v_porta_serv: dP_serv_r.v_porta,
+        v_canal_prod, v_canal_serv, Re_prod, Re_serv, Pr_prod, Pr_serv,
+        Nu_prod: hot_is_serv ? resU.Nu_cold : resU.Nu_hot,
+        Nu_serv: hot_is_serv ? resU.Nu_hot : resU.Nu_cold,
+        h_prod: hot_is_serv ? resU.h_cold : resU.h_hot,
+        h_serv: hot_is_serv ? resU.h_hot : resU.h_cold,
+        eps, NTU, LMTD, LMTD_corr, F,
+        theta: Math.abs(tout_prod - tin_prod) / Math.max(LMTD_corr, 0.01),
+        Cf_prod: dP_prod_r.Cf, Cf_serv: dP_serv_r.Cf, Tw: resU.Tw, iteracoes_parede: resU.iteracoes,
+        prop_prod, prop_serv, geo, tout_serv, m_dot_prod, m_dot_serv,
+        viavel, falhas: {
+          dP_prod: dP_prod_r.dP_total > dp_max_prod,
+          dP_serv: dP_serv_r.dP_total > dp_max_serv,
+          bocal_prod: !bc_p.ok, bocal_serv: !bc_s.ok,
+          area: A_inst < A_nec
+        }
       };
-
-      const resU = calcularU_iterativo(paramsU);
-
-      // Área instalada
-      const A_instalada = n_placas * geo.A_placa;
-
-      // Área necessária
-      const A_necessaria = (Q * 1000) / Math.max(resU.U * LMTD_corr, 0.1);
-
-      // Verificar se área é suficiente
-      if (A_instalada < A_necessaria * (1 - margem_area / 200)) continue;
-
-      // ε-NTU
-      const { NTU, Cr: Cr_ntu } = calcularNTU(resU.U, A_instalada, Cmin, Cmax);
-      const eps = efetividadeNTU(NTU, Cr_ntu, config_passes);
-
-      // Queda de pressão — Produto
-      const A_canal_total_prod = geo.A_canal * n_canais_paralelos_prod;
-      const dP_prod_res = quedaPressaoPHE({
-        m_dot: m_dot_prod, rho: prop_prod.rho, mu: prop_prod.mu,
-        Dh: geo.Dh, L_placa: geo.L, Np_passes: Np,
-        A_porta: geo.A_porta, A_canal_total: A_canal_total_prod,
-        v_canal: v_canal_prod, beta_graus: modelo.beta, Re: Re_prod,
-        n_canais_paralelos: n_canais_paralelos_prod
-      });
-
-      // Queda de pressão — Serviço
-      const Np_serv = parseInt(config_passes.split('-')[1]);
-      const A_canal_total_serv = geo.A_canal * n_canais_paralelos_serv;
-      const dP_serv_res = quedaPressaoPHE({
-        m_dot: m_dot_serv, rho: prop_serv.rho, mu: prop_serv.mu,
-        Dh: geo.Dh, L_placa: geo.L, Np_passes: Np_serv,
-        A_porta: geo.A_porta, A_canal_total: A_canal_total_serv,
-        v_canal: v_canal_serv, beta_graus: modelo.beta, Re: Re_serv,
-        n_canais_paralelos: n_canais_paralelos_serv
-      });
-
-      // Verificar restrições
-      const bocal_prod = verificarBocal(dP_prod_res.v_porta);
-      const bocal_serv = verificarBocal(dP_serv_res.v_porta);
-
-      const viavel = dP_prod_res.dP_total <= dp_max_prod
-                  && dP_serv_res.dP_total <= dp_max_serv
-                  && bocal_prod.ok && bocal_serv.ok
-                  && A_instalada >= A_necessaria
-                  && resU.U > 0;
-
-      if (viavel) {
-        const margem_real = (A_instalada / Math.max(A_necessaria, 0.001) - 1) * 100;
-        resultados.push({
-          modelo: modelo.nome,
-          n_placas: n_placas,
-          A_instalada: A_instalada,
-          A_necessaria: A_necessaria,
-          U: resU.U,
-          kc: resU.kc,
-          margem_U: resU.M,
-          margem_area: margem_real,
-          Q: Q,
-          dP_prod: dP_prod_res.dP_total,
-          dP_serv: dP_serv_res.dP_total,
-          dP_canal_prod: dP_prod_res.dP_canal,
-          dP_porta_prod: dP_prod_res.dP_porta,
-          dP_canal_serv: dP_serv_res.dP_canal,
-          dP_porta_serv: dP_serv_res.dP_porta,
-          fracao_porta_prod: dP_prod_res.fracao_porta,
-          fracao_porta_serv: dP_serv_res.fracao_porta,
-          v_porta_prod: dP_prod_res.v_porta,
-          v_porta_serv: dP_serv_res.v_porta,
-          v_canal_prod: v_canal_prod,
-          v_canal_serv: v_canal_serv,
-          Re_prod: Re_prod,
-          Re_serv: Re_serv,
-          Pr_prod: Pr_prod,
-          Pr_serv: Pr_serv,
-          Nu_prod: hot_is_serv ? resU.Nu_cold : resU.Nu_hot,
-          Nu_serv: hot_is_serv ? resU.Nu_hot : resU.Nu_cold,
-          h_prod: hot_is_serv ? resU.h_cold : resU.h_hot,
-          h_serv: hot_is_serv ? resU.h_hot : resU.h_cold,
-          eps: eps,
-          NTU: NTU,
-          LMTD: LMTD,
-          LMTD_corr: LMTD_corr,
-          F: F,
-          theta: Math.abs(tout_prod - tin_prod) / Math.max(LMTD_corr, 0.01),
-          Cf_prod: dP_prod_res.Cf,
-          Cf_serv: dP_serv_res.Cf,
-          Tw: resU.Tw,
-          iteracoes_parede: resU.iteracoes,
-          prop_prod: prop_prod,
-          prop_serv: prop_serv,
-          geo: geo,
-          tout_serv: tout_serv,
-          m_dot_prod: m_dot_prod,
-          m_dot_serv: m_dot_serv
-        });
-      }
+      resultados.push(resultado);
     }
   }
 
-  if (resultados.length === 0) {
-    document.getElementById('placeholder').style.display = 'none';
-    document.getElementById('area_resultados').classList.add('visivel');
-    document.getElementById('area_resultados').style.display = 'block';
-    document.getElementById('modelo_selecionado').innerHTML =
-      '<div class="aviso">⚠️ Nenhum modelo viável encontrado para os parâmetros informados. ' +
-      'Tente: aumentar ΔP permitido, alterar ângulo chevron, ou reduzir margem de área.</div>';
-    document.getElementById('grid_metricas').innerHTML = '';
-    document.getElementById('card_comparacao').style.display = 'none';
-    document.getElementById('lista_verificacoes').innerHTML = '';
-    document.getElementById('detalhes_corpo').innerHTML = '';
-    document.getElementById('datasheet').innerHTML = '';
+  return { resultados, Q, prop_prod, prop_serv, tout_serv, LMTD, F, LMTD_corr,
+           m_dot_prod, m_dot_serv, Cmin, Cmax, Tb_prod, Tb_serv: Tbulk(tin_serv, tout_serv) };
+}
+
+// ========== 10. AUTO-CORREÇÃO DE FALHAS ==========
+
+function autoCorrigir() {
+  const inputsOriginais = lerInputs();
+  const resultado = motorCalculo(inputsOriginais);
+  const viaveis = resultado.resultados.filter(r => r.viavel);
+
+  if (viaveis.length > 0) {
+    exibirResultados(resultado, inputsOriginais, []);
     return;
   }
 
-  // --- Ordenar por menor área (mais eficiente) ---
-  resultados.sort((a, b) => a.A_instalada - b.A_instalada);
-  const melhor = resultados[0];
+  // --- Analisar falhas ---
+  const melhores = resultado.resultados.sort((a, b) => b.A_instalada - a.A_instalada).slice(0, 5);
+  const falhasComuns = { dP_prod: 0, dP_serv: 0, bocal_prod: 0, bocal_serv: 0, area: 0 };
+  melhores.forEach(r => {
+    if (r.falhas.dP_prod) falhasComuns.dP_prod++;
+    if (r.falhas.dP_serv) falhasComuns.dP_serv++;
+    if (r.falhas.bocal_prod) falhasComuns.bocal_prod++;
+    if (r.falhas.bocal_serv) falhasComuns.bocal_serv++;
+    if (r.falhas.area) falhasComuns.area++;
+  });
 
-  // --- Exibir resultados ---
+  const correcoes = [];
+  let inputsCorrigidos = { ...inputsOriginais };
+  let alterado = false;
+
+  // Estratégia 1: Aumentar ΔP progressivamente
+  if (falhasComuns.dP_prod > 0 || falhasComuns.dP_serv > 0) {
+    const novo_dp_prod = Math.min(inputsOriginais.dp_max_prod + 30, 200);
+    const novo_dp_serv = Math.min(inputsOriginais.dp_max_serv + 30, 200);
+    if (novo_dp_prod > inputsOriginais.dp_max_prod) {
+      correcoes.push({
+        param: 'ΔP máximo — Produto',
+        antes: inputsOriginais.dp_max_prod + ' kPa',
+        depois: novo_dp_prod + ' kPa',
+        motivo: 'Modelos excedem ΔP atual — aumentar permite maior vazão por canal'
+      });
+      inputsCorrigidos.dp_max_prod = novo_dp_prod;
+      alterado = true;
+    }
+    if (novo_dp_serv > inputsOriginais.dp_max_serv) {
+      correcoes.push({
+        param: 'ΔP máximo — Serviço',
+        antes: inputsOriginais.dp_max_serv + ' kPa',
+        depois: novo_dp_serv + ' kPa',
+        motivo: 'Lado serviço excede ΔP — flexibilizar reduz número de placas'
+      });
+      inputsCorrigidos.dp_max_serv = novo_dp_serv;
+      alterado = true;
+    }
+  }
+
+  // Estratégia 2: Tentar todos os ângulos chevron
+  if (inputsOriginais.chevron_str !== '30/60') {
+    const testeTodos = motorCalculo({ ...inputsCorrigidos, chevron_str: '30/60' });
+    const viaveisTodos = testeTodos.resultados.filter(r => r.viavel);
+    if (viaveisTodos.length > 0) {
+      const melhorAngulo = viaveisTodos.sort((a,b) => a.A_instalada - b.A_instalada)[0];
+      const anguloModelo = BANCO_MODELOS.find(m => m.nome === melhorAngulo.modelo)?.beta || 45;
+      correcoes.push({
+        param: 'Ângulo Chevron',
+        antes: inputsOriginais.chevron_str + '°',
+        depois: anguloModelo + '°',
+        motivo: 'Ângulo diferente oferece melhor relação área/ΔP para esta aplicação'
+      });
+      inputsCorrigidos.chevron_str = '30/60';
+      inputsCorrigidos.modelo_forcado = melhorAngulo.modelo;
+      alterado = true;
+    }
+  }
+
+  // Estratégia 3: Reduzir margem de área
+  if (falhasComuns.area > 0 && inputsCorrigidos.margem_area > 5) {
+    const novaMargem = Math.max(inputsCorrigidos.margem_area - 5, 0);
+    correcoes.push({
+      param: 'Margem de Área',
+      antes: inputsCorrigidos.margem_area + '%',
+      depois: novaMargem + '%',
+      motivo: 'Margem excessiva exige mais placas que o necessário — reduzir otimiza seleção'
+    });
+    inputsCorrigidos.margem_area = novaMargem;
+    alterado = true;
+  }
+
+  // Estratégia 4: Tentar configurações de passes alternativas
+  const passesAlternativos = ['1-1', '2-2', '1-2', '2-1'].filter(p => p !== inputsCorrigidos.config_passes);
+  for (const pa of passesAlternativos) {
+    const testePa = motorCalculo({ ...inputsCorrigidos, config_passes: pa });
+    const viaveisPa = testePa.resultados.filter(r => r.viavel);
+    if (viaveisPa.length > 0) {
+      correcoes.push({
+        param: 'Configuração de Passes',
+        antes: inputsCorrigidos.config_passes,
+        depois: pa,
+        motivo: 'Configuração alternativa melhora distribuição de fluxo e reduz ΔP'
+      });
+      inputsCorrigidos.config_passes = pa;
+      alterado = true;
+      break;
+    }
+  }
+
+  // Estratégia 5: Aumentar vazão de serviço se ΔP serviço é o gargalo
+  if (falhasComuns.dP_serv > 0 && falhasComuns.dP_prod === 0) {
+    const novaVazao = inputsCorrigidos.vazao_serv * 1.3;
+    correcoes.push({
+      param: 'Vazão de Serviço',
+      antes: inputsOriginais.vazao_serv + ' m³/h',
+      depois: novaVazao.toFixed(1) + ' m³/h',
+      motivo: 'Maior vazão reduz velocidade por canal, diminuindo ΔP no lado serviço'
+    });
+    inputsCorrigidos.vazao_serv = novaVazao;
+    alterado = true;
+  }
+
+  // Recalcular com correções
+  const resultadoFinal = motorCalculo(inputsCorrigidos);
+  const viaveisFinal = resultadoFinal.resultados.filter(r => r.viavel);
+
+  if (viaveisFinal.length > 0) {
+    exibirResultados(resultadoFinal, inputsCorrigidos, correcoes);
+    // Atualizar campos do formulário com valores corrigidos
+    aplicarInputsNoForm(inputsCorrigidos);
+  } else {
+    // Mesmo com correções, não encontrou — mostrar melhor não-viável + sugestões
+    exibirSemResultado(resultadoFinal, correcoes);
+  }
+}
+
+// ========== 11. CÁLCULO PRINCIPAL ==========
+
+function calcular() {
+  const inputs = lerInputs();
+  if (!inputs.vazao_prod || inputs.vazao_prod <= 0) { alert('Informe vazão válida do produto.'); return; }
+  if (!inputs.vazao_serv || inputs.vazao_serv <= 0) { alert('Informe vazão válida do serviço.'); return; }
+  if (inputs.tin_serv <= inputs.tout_prod) { alert('T. entrada do serviço deve ser > T. saída do produto (para aquecimento).'); return; }
+
+  const resultado = motorCalculo(inputs);
+  const viaveis = resultado.resultados.filter(r => r.viavel);
+
+  if (viaveis.length > 0) {
+    exibirResultados(resultado, inputs, []);
+  } else {
+    exibirSemResultado(resultado, []);
+    // Mostrar botão de auto-correção
+    document.getElementById('btn_autocorrigir').style.display = 'block';
+  }
+}
+
+// ========== 12. EXIBIÇÃO DE RESULTADOS ==========
+
+function exibirResultados(resultado, inputs, correcoes) {
+  const { resultados, Q, prop_prod, prop_serv, tout_serv, LMTD, F, LMTD_corr,
+          m_dot_prod, m_dot_serv, Cmin, Cmax, Tb_prod, Tb_serv } = resultado;
+
+  const viaveis = resultados.filter(r => r.viavel);
+  if (viaveis.length === 0) {
+    exibirSemResultado(resultado, correcoes);
+    return;
+  }
+
+  viaveis.sort((a, b) => a.A_instalada - b.A_instalada);
+  const melhor = viaveis[0];
+
   document.getElementById('placeholder').style.display = 'none';
   document.getElementById('area_resultados').classList.add('visivel');
   document.getElementById('area_resultados').style.display = 'block';
+  document.getElementById('btn_autocorrigir').style.display = 'none';
 
   // Modelo selecionado
   document.getElementById('modelo_selecionado').innerHTML = `
@@ -1259,151 +1229,135 @@ function calcular() {
       <div style="font-size: 28px;">🏆</div>
       <div>
         <div style="font-size: 18px; font-weight: 700; color: var(--azul-escuro);">Modelo ${melhor.modelo}</div>
-        <div style="font-size: 12px; color: var(--cinza-escuro);">${melhor.n_placas} placas · ${melhor.A_instalada.toFixed(2)} m² · ${config_passes}</div>
+        <div style="font-size: 12px; color: var(--cinza-escuro);">${melhor.n_placas} placas · ${melhor.A_instalada.toFixed(2)} m² · ${inputs.config_passes}</div>
       </div>
       <span class="badge badge-verde" style="margin-left: auto;">Selecionado</span>
-    </div>
-  `;
+    </div>`;
 
-  // Métricas principais
+  // Métricas
   document.getElementById('grid_metricas').innerHTML = `
-    <div class="metrica-box">
-      <div class="metrica-valor">${Q.toFixed(1)}</div>
-      <div class="metrica-label">Carga Térmica (kW)</div>
-    </div>
-    <div class="metrica-box">
-      <div class="metrica-valor">${melhor.U.toFixed(0)}</div>
-      <div class="metrica-label">Coef. Global U (W/m²·°C)</div>
-    </div>
-    <div class="metrica-box">
-      <div class="metrica-valor">${melhor.dP_prod.toFixed(1)}</div>
-      <div class="metrica-label">ΔP Produto (kPa)</div>
-    </div>
-    <div class="metrica-box">
-      <div class="metrica-valor">${melhor.dP_serv.toFixed(1)}</div>
-      <div class="metrica-label">ΔP Serviço (kPa)</div>
-    </div>
-    <div class="metrica-box">
-      <div class="metrica-valor">${(melhor.eps * 100).toFixed(1)}%</div>
-      <div class="metrica-label">Efetividade (ε)</div>
-    </div>
-    <div class="metrica-box">
-      <div class="metrica-valor">${melhor.margem_area.toFixed(0)}%</div>
-      <div class="metrica-label">Margem de Área</div>
-    </div>
-  `;
+    <div class="metrica-box"><div class="metrica-valor">${Q.toFixed(1)}</div><div class="metrica-label">Carga Térmica (kW)</div></div>
+    <div class="metrica-box"><div class="metrica-valor">${melhor.U.toFixed(0)}</div><div class="metrica-label">U Global (W/m²·°C)</div></div>
+    <div class="metrica-box"><div class="metrica-valor">${melhor.dP_prod.toFixed(1)}</div><div class="metrica-label">ΔP Produto (kPa)</div></div>
+    <div class="metrica-box"><div class="metrica-valor">${melhor.dP_serv.toFixed(1)}</div><div class="metrica-label">ΔP Serviço (kPa)</div></div>
+    <div class="metrica-box"><div class="metrica-valor">${(melhor.eps * 100).toFixed(1)}%</div><div class="metrica-label">Efetividade (ε)</div></div>
+    <div class="metrica-box"><div class="metrica-valor">${melhor.margem_area.toFixed(0)}%</div><div class="metrica-label">Margem de Área</div></div>`;
+
+  // Correções aplicadas
+  if (correcoes.length > 0) {
+    let corrHTML = '<div class="correcao-box"><h4>✅ Correções aplicadas automaticamente:</h4>';
+    correcoes.forEach(c => {
+      corrHTML += `<div class="correcao-item">
+        <span><strong>${c.param}:</strong> ${c.antes}</span>
+        <span class="correcao-seta">→</span>
+        <span style="color: var(--verde); font-weight: 600;">${c.depois}</span>
+      </div>
+      <div style="font-size: 11px; color: var(--cinza-escuro); margin-left: 8px; margin-bottom: 4px;">${c.motivo}</div>`;
+    });
+    corrHTML += '</div>';
+    document.getElementById('corpo_correcoes').innerHTML = corrHTML;
+    document.getElementById('card_correcoes').style.display = 'block';
+  } else {
+    document.getElementById('card_correcoes').style.display = 'none';
+  }
 
   // Tabela de comparação
-  let tabelaHTML = '<table class="tabela-resultados"><thead><tr>' +
+  let tabHTML = '<table class="tabela-resultados"><thead><tr>' +
     '<th>Modelo</th><th>Placas</th><th>Área (m²)</th><th>U (W/m²·°C)</th>' +
-    '<th>ΔP Prod (kPa)</th><th>ΔP Serv (kPa)</th><th>ε (%)</th><th>Margem</th>' +
-    '</tr></thead><tbody>';
-
-  resultados.slice(0, 10).forEach((r, idx) => {
-    tabelaHTML += `<tr class="${idx === 0 ? 'destaque' : ''}">` +
-      `<td>${r.modelo}</td><td>${r.n_placas}</td><td>${r.A_instalada.toFixed(2)}</td>` +
-      `<td>${r.U.toFixed(0)}</td><td>${r.dP_prod.toFixed(1)}</td><td>${r.dP_serv.toFixed(1)}</td>` +
-      `<td>${(r.eps * 100).toFixed(1)}</td><td>${r.margem_area.toFixed(0)}%</td></tr>`;
+    '<th>ΔP Prod (kPa)</th><th>ΔP Serv (kPa)</th><th>ε (%)</th><th>Margem</th></tr></thead><tbody>';
+  viaveis.slice(0, 10).forEach((r, i) => {
+    tabHTML += `<tr class="${i === 0 ? 'destaque' : ''}"><td>${r.modelo}</td><td>${r.n_placas}</td>` +
+      `<td>${r.A_instalada.toFixed(2)}</td><td>${r.U.toFixed(0)}</td><td>${r.dP_prod.toFixed(1)}</td>` +
+      `<td>${r.dP_serv.toFixed(1)}</td><td>${(r.eps * 100).toFixed(1)}</td><td>${r.margem_area.toFixed(0)}%</td></tr>`;
   });
-  tabelaHTML += '</tbody></table>';
-  document.getElementById('tabela_comparacao').innerHTML = tabelaHTML;
+  tabHTML += '</tbody></table>';
+  document.getElementById('tabela_comparacao').innerHTML = tabHTML;
   document.getElementById('card_comparacao').style.display = 'block';
 
   // Verificações
   const paramsVerif = {
-    Tin_serv: tin_serv, Tout_serv: melhor.tout_serv,
-    Tin_prod: tin_prod, Tout_prod: tout_prod,
-    LMTD_corr: melhor.LMTD_corr,
-    Re_prod: melhor.Re_prod,
-    dP_prod: melhor.dP_prod, dP_max_prod: dp_max_prod,
-    dP_serv: melhor.dP_serv, dP_max_serv: dp_max_serv,
+    Tin_serv: inputs.tin_serv, Tout_serv: tout_serv, Tin_prod: inputs.tin_prod, Tout_prod: inputs.tout_prod,
+    LMTD_corr, Re_prod: melhor.Re_prod, dP_prod: melhor.dP_prod, dP_max_prod: inputs.dp_max_prod,
+    dP_serv: melhor.dP_serv, dP_max_serv: inputs.dp_max_serv,
     v_porta_prod: melhor.v_porta_prod, v_porta_serv: melhor.v_porta_serv,
-    A_inst: melhor.A_instalada, A_nec: melhor.A_necessaria,
-    F: melhor.F, U: melhor.U, fracao_porta: melhor.fracao_porta_prod
+    A_inst: melhor.A_instalada, A_nec: melhor.A_necessaria, F, U: melhor.U,
+    fracao_porta: melhor.fracao_porta_prod
   };
   const checks = verificacoesProjeto(paramsVerif);
-
-  let checksHTML = '';
+  let chkHTML = '';
   checks.forEach(c => {
-    const iconClass = c.status === 'ok' ? 'check-ok' : c.status === 'alerta' ? 'check-alerta' : 'check-erro';
+    const ic = c.status === 'ok' ? 'check-ok' : c.status === 'alerta' ? 'check-alerta' : 'check-erro';
     const icon = c.status === 'ok' ? '✓' : c.status === 'alerta' ? '⚠' : '✗';
-    checksHTML += `<div class="check-item">` +
-      `<span class="check-icon ${iconClass}">${icon}</span>` +
+    chkHTML += `<div class="check-item"><span class="check-icon ${ic}">${icon}</span>` +
       `<span style="flex:1;"><strong>${c.item}:</strong> ${c.valor}</span>` +
       `<span style="font-size: 11px; color: var(--cinza-escuro);">${c.obs}</span></div>`;
   });
-  document.getElementById('lista_verificacoes').innerHTML = checksHTML;
+  document.getElementById('lista_verificacoes').innerHTML = chkHTML;
 
-  // Detalhamento técnico
-  const det = melhor;
+  // Detalhamento
+  const d = melhor;
+  const mat = MATERIAIS[inputs.material];
   document.getElementById('detalhes_corpo').innerHTML = `
     <h4 style="color: var(--azul-escuro); margin-bottom: 8px;">Propriedades dos Fluidos</h4>
     <table>
       <tr><td></td><td><strong>Produto</strong></td><td><strong>Serviço</strong></td></tr>
-      <tr><td>Fluido</td><td>${fluido_prod}${Brix > 0 ? ' (' + Brix + '°Brix)' : ''}</td><td>${fluido_serv}</td></tr>
+      <tr><td>Fluido</td><td>${inputs.fluido_prod}${inputs.Brix > 0 ? ' (' + inputs.Brix + '°Brix)' : ''}</td><td>${inputs.fluido_serv}</td></tr>
       <tr><td>T. Bulk (°C)</td><td>${Tb_prod.toFixed(1)}</td><td>${Tb_serv.toFixed(1)}</td></tr>
-      <tr><td>Densidade (kg/m³)</td><td>${det.prop_prod.rho.toFixed(1)}</td><td>${det.prop_serv.rho.toFixed(1)}</td></tr>
-      <tr><td>Calor específico (J/kg·K)</td><td>${det.prop_prod.cp.toFixed(0)}</td><td>${det.prop_serv.cp.toFixed(0)}</td></tr>
-      <tr><td>Viscosidade (Pa·s)</td><td>${(det.prop_prod.mu * 1000).toFixed(3)} cP</td><td>${(det.prop_serv.mu * 1000).toFixed(3)} cP</td></tr>
-      <tr><td>Condutividade (W/m·K)</td><td>${det.prop_prod.k.toFixed(4)}</td><td>${det.prop_serv.k.toFixed(4)}</td></tr>
-    </table>
-    <br>
+      <tr><td>Densidade (kg/m³)</td><td>${prop_prod.rho.toFixed(1)}</td><td>${prop_serv.rho.toFixed(1)}</td></tr>
+      <tr><td>Calor específico (J/kg·K)</td><td>${prop_prod.cp.toFixed(0)}</td><td>${prop_serv.cp.toFixed(0)}</td></tr>
+      <tr><td>Viscosidade (cP)</td><td>${(prop_prod.mu * 1000).toFixed(3)}</td><td>${(prop_serv.mu * 1000).toFixed(3)}</td></tr>
+      <tr><td>Condutividade (W/m·K)</td><td>${prop_prod.k.toFixed(4)}</td><td>${prop_serv.k.toFixed(4)}</td></tr>
+    </table><br>
     <h4 style="color: var(--azul-escuro); margin-bottom: 8px;">Parâmetros Térmicos</h4>
     <table>
-      <tr><td>Reynolds (produto)</td><td>${det.Re_prod.toFixed(0)}</td></tr>
-      <tr><td>Reynolds (serviço)</td><td>${det.Re_serv.toFixed(0)}</td></tr>
-      <tr><td>Prandtl (produto)</td><td>${det.Pr_prod.toFixed(2)}</td></tr>
-      <tr><td>Prandtl (serviço)</td><td>${det.Pr_serv.toFixed(2)}</td></tr>
-      <tr><td>Nusselt (produto)</td><td>${det.Nu_prod.toFixed(1)}</td></tr>
-      <tr><td>Nusselt (serviço)</td><td>${det.Nu_serv.toFixed(1)}</td></tr>
-      <tr><td>h convectivo (produto)</td><td>${det.h_prod.toFixed(0)} W/m²·°C</td></tr>
-      <tr><td>h convectivo (serviço)</td><td>${det.h_serv.toFixed(0)} W/m²·°C</td></tr>
-      <tr><td>T. parede (iterada)</td><td>${det.Tw.toFixed(1)} °C (${det.iteracoes_parede} iterações)</td></tr>
-      <tr><td>U limpo (kc)</td><td>${det.kc.toFixed(0)} W/m²·°C</td></tr>
-      <tr><td>U projeto (k)</td><td>${det.U.toFixed(0)} W/m²·°C</td></tr>
-      <tr><td>Margem U (incrustração)</td><td>${det.margem_U.toFixed(1)}%</td></tr>
-    </table>
-    <br>
+      <tr><td>Reynolds (produto)</td><td>${d.Re_prod.toFixed(0)}</td></tr>
+      <tr><td>Reynolds (serviço)</td><td>${d.Re_serv.toFixed(0)}</td></tr>
+      <tr><td>Prandtl (produto)</td><td>${d.Pr_prod.toFixed(2)}</td></tr>
+      <tr><td>Prandtl (serviço)</td><td>${d.Pr_serv.toFixed(2)}</td></tr>
+      <tr><td>Nusselt (produto)</td><td>${d.Nu_prod.toFixed(1)}</td></tr>
+      <tr><td>Nusselt (serviço)</td><td>${d.Nu_serv.toFixed(1)}</td></tr>
+      <tr><td>h (produto)</td><td>${d.h_prod.toFixed(0)} W/m²·°C</td></tr>
+      <tr><td>h (serviço)</td><td>${d.h_serv.toFixed(0)} W/m²·°C</td></tr>
+      <tr><td>T. parede iterada</td><td>${d.Tw.toFixed(1)} °C (${d.iteracoes_parede} it.)</td></tr>
+      <tr><td>U limpo (kc)</td><td>${d.kc.toFixed(0)} W/m²·°C</td></tr>
+      <tr><td>U projeto</td><td>${d.U.toFixed(0)} W/m²·°C</td></tr>
+      <tr><td>Margem U</td><td>${d.margem_U.toFixed(1)}%</td></tr>
+    </table><br>
     <h4 style="color: var(--azul-escuro); margin-bottom: 8px;">LMTD e ε-NTU</h4>
     <table>
-      <tr><td>LMTD</td><td>${det.LMTD.toFixed(2)} °C</td></tr>
-      <tr><td>Fator F</td><td>${det.F.toFixed(4)}</td></tr>
-      <tr><td>LMTD corrigido</td><td>${det.LMTD_corr.toFixed(2)} °C</td></tr>
-      <tr><td>Theta (Θ)</td><td>${det.theta.toFixed(3)}</td></tr>
-      <tr><td>NTU</td><td>${det.NTU.toFixed(3)}</td></tr>
-      <tr><td>Cr (Cmin/Cmax)</td><td>${(Cmin / Math.max(Cmax, 0.001)).toFixed(3)}</td></tr>
-      <tr><td>Efetividade (ε)</td><td>${(det.eps * 100).toFixed(2)}%</td></tr>
-    </table>
-    <br>
+      <tr><td>LMTD</td><td>${d.LMTD.toFixed(2)} °C</td></tr>
+      <tr><td>Fator F</td><td>${d.F.toFixed(4)}</td></tr>
+      <tr><td>LMTD corrigido</td><td>${d.LMTD_corr.toFixed(2)} °C</td></tr>
+      <tr><td>Theta (Θ)</td><td>${d.theta.toFixed(3)}</td></tr>
+      <tr><td>NTU</td><td>${d.NTU.toFixed(3)}</td></tr>
+      <tr><td>Efetividade (ε)</td><td>${(d.eps * 100).toFixed(2)}%</td></tr>
+    </table><br>
     <h4 style="color: var(--azul-escuro); margin-bottom: 8px;">Queda de Pressão</h4>
     <table>
       <tr><td></td><td><strong>Produto</strong></td><td><strong>Serviço</strong></td></tr>
-      <tr><td>Cf (Fanning)</td><td>${det.Cf_prod.toFixed(5)}</td><td>${det.Cf_serv.toFixed(5)}</td></tr>
-      <tr><td>ΔP canal (kPa)</td><td>${det.dP_canal_prod.toFixed(2)}</td><td>${det.dP_canal_serv.toFixed(2)}</td></tr>
-      <tr><td>ΔP porta (kPa)</td><td>${det.dP_porta_prod.toFixed(2)}</td><td>${det.dP_porta_serv.toFixed(2)}</td></tr>
-      <tr><td>ΔP total (kPa)</td><td><strong>${det.dP_prod.toFixed(2)}</strong></td><td><strong>${det.dP_serv.toFixed(2)}</strong></td></tr>
-      <tr><td>% na porta</td><td>${det.fracao_porta_prod.toFixed(1)}%</td><td>${det.fracao_porta_serv.toFixed(1)}%</td></tr>
-      <tr><td>v. canal (m/s)</td><td>${det.v_canal_prod.toFixed(3)}</td><td>${det.v_canal_serv.toFixed(3)}</td></tr>
-      <tr><td>v. bocal (m/s)</td><td>${det.v_porta_prod.toFixed(2)}</td><td>${det.v_porta_serv.toFixed(2)}</td></tr>
-    </table>
-    <br>
-    <h4 style="color: var(--azul-escuro); margin-bottom: 8px;">Geometria da Placa</h4>
+      <tr><td>Cf (Fanning)</td><td>${d.Cf_prod.toFixed(5)}</td><td>${d.Cf_serv.toFixed(5)}</td></tr>
+      <tr><td>ΔP canal (kPa)</td><td>${d.dP_canal_prod.toFixed(2)}</td><td>${d.dP_canal_serv.toFixed(2)}</td></tr>
+      <tr><td>ΔP porta (kPa)</td><td>${d.dP_porta_prod.toFixed(2)}</td><td>${d.dP_porta_serv.toFixed(2)}</td></tr>
+      <tr><td>ΔP total (kPa)</td><td><strong>${d.dP_prod.toFixed(2)}</strong></td><td><strong>${d.dP_serv.toFixed(2)}</strong></td></tr>
+      <tr><td>% na porta</td><td>${d.fracao_porta_prod.toFixed(1)}%</td><td>${d.fracao_porta_serv.toFixed(1)}%</td></tr>
+      <tr><td>v. canal (m/s)</td><td>${d.v_canal_prod.toFixed(3)}</td><td>${d.v_canal_serv.toFixed(3)}</td></tr>
+      <tr><td>v. bocal (m/s)</td><td>${d.v_porta_prod.toFixed(2)}</td><td>${d.v_porta_serv.toFixed(2)}</td></tr>
+    </table><br>
+    <h4 style="color: var(--azul-escuro); margin-bottom: 8px;">Geometria</h4>
     <table>
-      <tr><td>Modelo</td><td>${det.modelo}</td></tr>
-      <tr><td>N° de placas</td><td>${det.n_placas}</td></tr>
-      <tr><td>Área por placa</td><td>${det.geo.A_placa.toFixed(4)} m²</td></tr>
-      <tr><td>Área total instalada</td><td>${det.A_instalada.toFixed(3)} m²</td></tr>
-      <tr><td>Área necessária</td><td>${det.A_necessaria.toFixed(3)} m²</td></tr>
-      <tr><td>Largura (W)</td><td>${(det.geo.W * 1000).toFixed(0)} mm</td></tr>
-      <tr><td>Comprimento (L)</td><td>${(det.geo.L * 1000).toFixed(0)} mm</td></tr>
-      <tr><td>Espaçamento (b)</td><td>${(det.geo.b * 1000).toFixed(2)} mm</td></tr>
-      <tr><td>Dh hidráulico</td><td>${(det.geo.Dh * 1000).toFixed(2)} mm</td></tr>
-      <tr><td>Ângulo chevron</td><td>${det.geo.beta}°</td></tr>
-      <tr><td>Diâmetro do bocal</td><td>${(det.geo.Dp * 1000).toFixed(0)} mm</td></tr>
-      <tr><td>Espessura da placa</td><td>${(det.geo.delta * 1000).toFixed(2)} mm</td></tr>
-      <tr><td>Material</td><td>${material.nome} (k=${material.k} W/m·K)</td></tr>
-    </table>
-  `;
+      <tr><td>Modelo</td><td>${d.modelo}</td></tr>
+      <tr><td>N° placas</td><td>${d.n_placas}</td></tr>
+      <tr><td>Área/placa</td><td>${d.geo.A_placa.toFixed(4)} m²</td></tr>
+      <tr><td>Área total</td><td>${d.A_instalada.toFixed(3)} m²</td></tr>
+      <tr><td>Área necessária</td><td>${d.A_necessaria.toFixed(3)} m²</td></tr>
+      <tr><td>L × W</td><td>${(d.geo.L*1000).toFixed(0)} × ${(d.geo.W*1000).toFixed(0)} mm</td></tr>
+      <tr><td>Espaçamento (b)</td><td>${(d.geo.b*1000).toFixed(2)} mm</td></tr>
+      <tr><td>Dh</td><td>${(d.geo.Dh*1000).toFixed(2)} mm</td></tr>
+      <tr><td>Chevron</td><td>${d.geo.beta}°</td></tr>
+      <tr><td>Bocal</td><td>${(d.geo.Dp*1000).toFixed(0)} mm</td></tr>
+      <tr><td>Espessura</td><td>${(d.geo.delta*1000).toFixed(2)} mm</td></tr>
+      <tr><td>Material</td><td>${mat.nome} (k=${mat.k})</td></tr>
+    </table>`;
 
   // Datasheet
   document.getElementById('datasheet').innerHTML = `
@@ -1413,83 +1367,222 @@ function calcular() {
         <tr><td><strong>Modelo</strong></td><td>${melhor.modelo}</td></tr>
         <tr><td><strong>N° Placas</strong></td><td>${melhor.n_placas}</td></tr>
         <tr><td><strong>Área Total</strong></td><td>${melhor.A_instalada.toFixed(2)} m²</td></tr>
-        <tr><td><strong>Material</strong></td><td>${material.nome}</td></tr>
-        <tr><td><strong>Configuração</strong></td><td>${config_passes}</td></tr>
-        <tr><td><strong>Ângulo Chevron</strong></td><td>${det.geo.beta}°</td></tr>
+        <tr><td><strong>Material</strong></td><td>${mat.nome}</td></tr>
+        <tr><td><strong>Configuração</strong></td><td>${inputs.config_passes}</td></tr>
+        <tr><td><strong>Chevron</strong></td><td>${d.geo.beta}°</td></tr>
         <tr><td colspan="2" style="background: var(--cinza-claro);"><strong>PRODUTO</strong></td></tr>
-        <tr><td>Fluido</td><td>${fluido_prod}${Brix > 0 ? ' / ' + Brix + '°Brix' : ''}</td></tr>
-        <tr><td>Vazão</td><td>${vazao_prod} m³/h (${(melhor.m_dot_prod * 3600).toFixed(0)} kg/h)</td></tr>
-        <tr><td>T. Entrada / Saída</td><td>${tin_prod}°C / ${tout_prod}°C</td></tr>
-        <tr><td>ΔP</td><td>${melhor.dP_prod.toFixed(1)} kPa (máx: ${dp_max_prod} kPa)</td></tr>
-        <tr><td>Rf</td><td>${rf_prod} m²·°C/W</td></tr>
+        <tr><td>Fluido</td><td>${inputs.fluido_prod}${inputs.Brix > 0 ? ' / ' + inputs.Brix + '°Brix' : ''}</td></tr>
+        <tr><td>Vazão</td><td>${inputs.vazao_prod} m³/h</td></tr>
+        <tr><td>T. Ent./Saída</td><td>${inputs.tin_prod}°C / ${inputs.tout_prod}°C</td></tr>
+        <tr><td>ΔP</td><td>${melhor.dP_prod.toFixed(1)} kPa (máx: ${inputs.dp_max_prod})</td></tr>
         <tr><td colspan="2" style="background: var(--cinza-claro);"><strong>SERVIÇO</strong></td></tr>
-        <tr><td>Fluido</td><td>${fluido_serv}</td></tr>
-        <tr><td>Vazão</td><td>${vazao_serv} m³/h (${(melhor.m_dot_serv * 3600).toFixed(0)} kg/h)</td></tr>
-        <tr><td>T. Entrada / Saída</td><td>${tin_serv}°C / ${melhor.tout_serv.toFixed(1)}°C</td></tr>
-        <tr><td>ΔP</td><td>${melhor.dP_serv.toFixed(1)} kPa (máx: ${dp_max_serv} kPa)</td></tr>
-        <tr><td>Rf</td><td>${rf_serv} m²·°C/W</td></tr>
+        <tr><td>Fluido</td><td>${inputs.fluido_serv}</td></tr>
+        <tr><td>Vazão</td><td>${inputs.vazao_serv} m³/h</td></tr>
+        <tr><td>T. Ent./Saída</td><td>${inputs.tin_serv}°C / ${tout_serv.toFixed(1)}°C</td></tr>
+        <tr><td>ΔP</td><td>${melhor.dP_serv.toFixed(1)} kPa (máx: ${inputs.dp_max_serv})</td></tr>
         <tr><td colspan="2" style="background: var(--cinza-claro);"><strong>DESEMPENHO</strong></td></tr>
         <tr><td>Carga Térmica</td><td>${Q.toFixed(1)} kW</td></tr>
         <tr><td>U global</td><td>${melhor.U.toFixed(0)} W/m²·°C</td></tr>
-        <tr><td>LMTD corrigido</td><td>${melhor.LMTD_corr.toFixed(1)} °C (F=${melhor.F.toFixed(3)})</td></tr>
-        <tr><td>Efetividade</td><td>${(melhor.eps * 100).toFixed(1)}%</td></tr>
+        <tr><td>LMTD corr.</td><td>${melhor.LMTD_corr.toFixed(1)} °C (F=${melhor.F.toFixed(3)})</td></tr>
+        <tr><td>Efetividade</td><td>${(melhor.eps*100).toFixed(1)}%</td></tr>
         <tr><td>NTU</td><td>${melhor.NTU.toFixed(2)}</td></tr>
         <tr><td>Theta</td><td>${melhor.theta.toFixed(2)}</td></tr>
-        <tr><td>Margem de área</td><td>${melhor.margem_area.toFixed(0)}%</td></tr>
+        <tr><td>Margem área</td><td>${melhor.margem_area.toFixed(0)}%</td></tr>
       </tbody>
     </table>
     <div style="margin-top: 12px; font-size: 11px; color: var(--cinza-escuro);">
-      Gerado por AlfaVed Dimensionador-PHE v32.0 em ${new Date().toLocaleString('pt-BR')}<br>
+      Gerado por AlfaVed Dimensionador-PHE v33.0 em ${new Date().toLocaleString('pt-BR')}<br>
       Correlações: Martin (1996), Sugar Technologists Manual, IAPWS-97<br>
-      <em>Validação final obrigatória com fabricante antes de fabricação.</em>
-    </div>
-  `;
+      <em>Validação final obrigatória com fabricante.</em>
+    </div>`;
 }
 
-// ========== UTILITÁRIOS ==========
+function exibirSemResultado(resultado, correcoes) {
+  document.getElementById('placeholder').style.display = 'none';
+  document.getElementById('area_resultados').classList.add('visivel');
+  document.getElementById('area_resultados').style.display = 'block';
+
+  // Analisar motivos de falha
+  const todos = resultado.resultados;
+  let motivosHTML = '';
+
+  if (todos.length === 0) {
+    motivosHTML = '<div class="aviso-erro">Nenhum modelo foi avaliado. Verifique se os parâmetros de entrada estão corretos.</div>';
+  } else {
+    const falhas = { dP_prod: 0, dP_serv: 0, bocal_prod: 0, bocal_serv: 0, area: 0 };
+    todos.forEach(r => {
+      if (r.falhas.dP_prod) falhas.dP_prod++;
+      if (r.falhas.dP_serv) falhas.dP_serv++;
+      if (r.falhas.bocal_prod) falhas.bocal_prod++;
+      if (r.falhas.bocal_serv) falhas.bocal_serv++;
+      if (r.falhas.area) falhas.area++;
+    });
+
+    motivosHTML = '<div class="aviso-erro"><strong>⚠️ Nenhum modelo viável encontrado.</strong><br><br>';
+    motivosHTML += '<strong>Motivos principais:</strong><ul style="margin-top:6px; margin-left: 20px;">';
+    if (falhas.dP_prod > 0) motivosHTML += `<li>ΔP Produto excede limite em ${falhas.dP_prod} modelos</li>`;
+    if (falhas.dP_serv > 0) motivosHTML += `<li>ΔP Serviço excede limite em ${falhas.dP_serv} modelos</li>`;
+    if (falhas.bocal_prod > 0) motivosHTML += `<li>Velocidade no bocal produto acima do limite em ${falhas.bocal_prod} modelos</li>`;
+    if (falhas.bocal_serv > 0) motivosHTML += `<li>Velocidade no bocal serviço acima do limite em ${falhas.bocal_serv} modelos</li>`;
+    if (falhas.area > 0) motivosHTML += `<li>Área insuficiente em ${falhas.area} modelos</li>`;
+    motivosHTML += '</ul>';
+
+    motivosHTML += '<br><strong>Sugestões manuais:</strong><ul style="margin-top:6px; margin-left: 20px;">' +
+      '<li>Aumentar ΔP permitido (produto e/ou serviço)</li>' +
+      '<li>Alterar ângulo chevron (30° = menor ΔP)</li>' +
+      '<li>Reduzir margem de área</li>' +
+      '<li>Aumentar vazão de serviço</li>' +
+      '<li>Tentar configuração de passes diferente</li>' +
+      '<li>Selecionar manualmente um modelo maior no catálogo</li></ul></div>';
+  }
+
+  if (correcoes.length > 0) {
+    motivosHTML += '<div class="correcao-box"><h4>🔧 Correções que foram tentadas automaticamente:</h4>';
+    correcoes.forEach(c => {
+      motivosHTML += `<div class="correcao-item"><span><strong>${c.param}:</strong> ${c.antes}</span>` +
+        `<span class="correcao-seta">→</span><span style="color: var(--verde);">${c.depois}</span></div>` +
+        `<div style="font-size:11px; color:var(--cinza-escuro); margin-left:8px; margin-bottom:4px;">${c.motivo}</div>`;
+    });
+    motivosHTML += '<div style="margin-top:8px; font-size:12px; color:#721c24;"><strong>Mesmo com correções, não foi possível encontrar modelo viável.</strong><br>' +
+      'Considere: selecionar manualmente um modelo maior (T20) ou revisar as condições de processo.</div></div>';
+  }
+
+  document.getElementById('modelo_selecionado').innerHTML = motivosHTML;
+  document.getElementById('grid_metricas').innerHTML = '';
+  document.getElementById('card_correcoes').style.display = 'none';
+  document.getElementById('card_comparacao').style.display = 'none';
+  document.getElementById('lista_verificacoes').innerHTML = '';
+  document.getElementById('detalhes_corpo').innerHTML = '';
+  document.getElementById('datasheet').innerHTML = '';
+}
+
+// ========== 13. CATÁLOGO DE MODELOS (UI) ==========
+
+function renderizarCatalogo() {
+  const tbody = document.getElementById('corpo_catalogo');
+  let html = '';
+  BANCO_MODELOS.forEach(m => {
+    const Dh = 2 * m.b;
+    html += `<tr onclick="selecionarModeloManual('${m.nome}')" id="row_${m.nome}">` +
+      `<td><strong>${m.nome}</strong></td><td>${m.beta}°</td><td>${m.A_p.toFixed(3)}</td>` +
+      `<td>${(m.L*1000).toFixed(0)}</td><td>${(m.W*1000).toFixed(0)}</td>` +
+      `<td>${(m.b*1000).toFixed(2)}</td><td>${(Dh*1000).toFixed(2)}</td>` +
+      `<td>${(m.Dp*1000).toFixed(0)}</td></tr>`;
+  });
+  tbody.innerHTML = html;
+}
+
+function selecionarModeloManual(nome) {
+  // Toggle
+  if (modeloManualSelecionado === nome) {
+    modeloManualSelecionado = null;
+  } else {
+    modeloManualSelecionado = nome;
+  }
+
+  // Atualizar UI
+  document.querySelectorAll('#corpo_catalogo tr').forEach(tr => tr.classList.remove('selecionado'));
+  if (modeloManualSelecionado) {
+    const row = document.getElementById('row_' + modeloManualSelecionado);
+    if (row) row.classList.add('selecionado');
+    const m = BANCO_MODELOS.find(x => x.nome === modeloManualSelecionado);
+    document.getElementById('modelo_selecionado_info').innerHTML =
+      `✅ <strong>Modelo ${m.nome}</strong> selecionado manualmente — ${m.beta}° chevron, ` +
+      `área/placa: ${m.A_p.toFixed(3)} m², bocal: ${(m.Dp*1000).toFixed(0)} mm. ` +
+      `<a href="#" onclick="limparModeloManual(); return false;" style="color: var(--vermelho);">remover seleção</a>`;
+  } else {
+    document.getElementById('modelo_selecionado_info').innerHTML =
+      'ℹ️ Nenhum modelo selecionado manualmente. O sistema escolherá automaticamente o mais eficiente.';
+  }
+}
+
+function limparModeloManual() {
+  modeloManualSelecionado = null;
+  document.querySelectorAll('#corpo_catalogo tr').forEach(tr => tr.classList.remove('selecionado'));
+  document.getElementById('modelo_selecionado_info').innerHTML =
+    'ℹ️ Nenhum modelo selecionado manualmente. O sistema escolherá automaticamente o mais eficiente.';
+}
+
+function filtrarModelos() {
+  const txt = document.getElementById('filtro_modelo').value.toLowerCase();
+  const chev = document.getElementById('filtro_chevron').value;
+  BANCO_MODELOS.forEach(m => {
+    const row = document.getElementById('row_' + m.nome);
+    if (!row) return;
+    const matchTxt = m.nome.toLowerCase().includes(txt);
+    const matchChev = !chev || m.beta === parseInt(chev);
+    row.style.display = (matchTxt && matchChev) ? '' : 'none';
+  });
+}
+
+// ========== 14. UTILITÁRIOS ==========
+
+function lerInputs() {
+  return {
+    fluido_prod: document.getElementById('fluido_prod').value,
+    Brix: parseFloat(document.getElementById('brix').value) || 0,
+    vazao_prod: parseFloat(document.getElementById('vazao_prod').value),
+    tin_prod: parseFloat(document.getElementById('tin_prod').value),
+    tout_prod: parseFloat(document.getElementById('tout_prod').value),
+    dp_max_prod: parseFloat(document.getElementById('dp_prod').value),
+    rf_prod: parseFloat(document.getElementById('rf_prod').value),
+    pureza: parseFloat(document.getElementById('pureza').value) || 100,
+    fluido_serv: document.getElementById('fluido_serv').value,
+    vazao_serv: parseFloat(document.getElementById('vazao_serv').value),
+    tin_serv: parseFloat(document.getElementById('tin_serv').value),
+    tout_serv: parseFloat(document.getElementById('tout_serv').value),
+    dp_max_serv: parseFloat(document.getElementById('dp_serv').value),
+    rf_serv: parseFloat(document.getElementById('rf_serv').value),
+    margem_area: parseFloat(document.getElementById('margem').value),
+    material: MATERIAIS[document.getElementById('material').value],
+    config_passes: document.getElementById('config_passes').value,
+    chevron_str: document.getElementById('chevron').value,
+    modelo_forcado: modeloManualSelecionado
+  };
+}
+
+function aplicarInputsNoForm(inputs) {
+  if (inputs.dp_max_prod) document.getElementById('dp_prod').value = inputs.dp_max_prod;
+  if (inputs.dp_max_serv) document.getElementById('dp_serv').value = inputs.dp_max_serv;
+  if (inputs.margem_area !== undefined) document.getElementById('margem').value = inputs.margem_area;
+  if (inputs.config_passes) document.getElementById('config_passes').value = inputs.config_passes;
+  if (inputs.chevron_str) document.getElementById('chevron').value = inputs.chevron_str;
+  if (inputs.vazao_serv) document.getElementById('vazao_serv').value = inputs.vazao_serv.toFixed(1);
+}
 
 function limparForm() {
   document.getElementById('area_resultados').classList.remove('visivel');
   document.getElementById('area_resultados').style.display = 'none';
   document.getElementById('placeholder').style.display = 'block';
+  document.getElementById('btn_autocorrigir').style.display = 'none';
 }
 
 function toggleDetalhes() {
-  const corpo = document.getElementById('detalhes_corpo');
-  corpo.classList.toggle('visivel');
+  document.getElementById('detalhes_corpo').classList.toggle('visivel');
 }
 
-// Validação de entrada — atualizar Tout_serv quando vazões/temperaturas mudam
+function estimarToutServ() {
+  try {
+    const i = lerInputs();
+    if (i.vazao_prod > 0 && i.vazao_serv > 0 && i.tin_serv > i.tout_prod) {
+      const Tb_p = Tbulk(i.tin_prod, i.tout_prod);
+      const pp = propriedadesFluido(i.fluido_prod, Tb_p, i.Brix, i.pureza);
+      const ps = propriedadesFluido(i.fluido_serv, i.tin_serv, 0, 100);
+      const Q = i.vazao_prod * pp.rho / 3600 * pp.cp * (i.tout_prod - i.tin_prod);
+      const ms = i.vazao_serv * ps.rho / 3600;
+      const ts = i.tin_serv - Q / (ms * ps.cp);
+      document.getElementById('tout_serv').value = ts.toFixed(1);
+    }
+  } catch(e) {}
+}
+
 document.addEventListener('DOMContentLoaded', function() {
-  const inputs = ['vazao_prod', 'vazao_serv', 'tin_prod', 'tout_prod', 'tin_serv', 'brix'];
-  inputs.forEach(id => {
+  renderizarCatalogo();
+  ['vazao_prod','vazao_serv','tin_prod','tout_prod','tin_serv','brix'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.addEventListener('change', estimarToutServ);
   });
 });
-
-function estimarToutServ() {
-  try {
-    const vazao_prod = parseFloat(document.getElementById('vazao_prod').value) || 0;
-    const tin_prod = parseFloat(document.getElementById('tin_prod').value) || 0;
-    const tout_prod = parseFloat(document.getElementById('tout_prod').value) || 0;
-    const vazao_serv = parseFloat(document.getElementById('vazao_serv').value) || 0;
-    const tin_serv = parseFloat(document.getElementById('tin_serv').value) || 0;
-    const Brix = parseFloat(document.getElementById('brix').value) || 0;
-
-    if (vazao_prod > 0 && vazao_serv > 0 && tin_serv > tout_prod) {
-      const Tb_p = Tbulk(tin_prod, tout_prod);
-      const prop_p = propriedadesFluido('sacarose', Tb_p, Brix, 100);
-      const Tb_s = tin_serv;
-      const prop_s = propriedadesFluido('agua', Tb_s, 0, 100);
-      const Q = vazao_prod * prop_p.rho / 3600 * prop_p.cp * (tout_prod - tin_prod);
-      const m_dot_s = vazao_serv * prop_s.rho / 3600;
-      const tout_s = tin_serv - Q / (m_dot_s * prop_s.cp);
-      document.getElementById('tout_serv').value = tout_s.toFixed(1);
-    }
-  } catch(e) { /* silencioso */ }
-}
-
 </script>
 </body>
 </html>

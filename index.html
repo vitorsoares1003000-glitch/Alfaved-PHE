@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AlfaVed PHE v42.2</title>
+<title>AlfaVed PHE v42.3</title>
 <style>
-:root{--ae:#1a3a5c;--am:#2d5a8e;--al:#4a90d9;--vd:#2d9e4a;--vm:#d94a4a;--am2:#f0a830;--cl:#f5f7fa;--cm:#d0d5dd;--ce:#4a5568;--br:#fff;--smb:0 2px 8px rgba(0,0,0,.08);--r:8px;--ft:'Segoe UI',system-ui,sans-serif;--rd:#cc3300;--az:#0099ff;--rx:#9933cc;--or:#ff6600}
+:root{--ae:#1a3a5c;--am:#2d5a8e;--al:#4a90d9;--vd:#2d9e4a;--vm:#d94a4a;--am2:#f0a830;--cl:#f5f7fa;--cm:#d0d5dd;--ce:#4a5568;--br:#fff;--smb:0 2px 8px rgba(0,0,0,.08);--r:8px;--ft:'Segoe UI',system-ui,sans-serif;--rd:#cc3300;--az:#0099ff;--rx:#9933cc;--or:#ff6600;--ved:#cc3300}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:var(--ft);background:var(--cl);color:#2d3748;font-size:13px}
-.hdr{background:linear-gradient(135deg,var(--ae),var(--am));color:var(--br);padding:12px 24px;box-shadow:var(--smb);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-.hdr h1{font-size:18px;font-weight:600;display:flex;align-items:center;gap:8px}
-.hdr .lg{width:32px;height:32px;background:var(--am2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--ae);font-size:14px}
+.hdr{background:linear-gradient(135deg,var(--ae),var(--am));color:var(--br);padding:10px 24px;box-shadow:var(--smb);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.hdr-l{display:flex;align-items:center;gap:10px}
+.hdr h1{font-size:16px;font-weight:600;display:flex;align-items:center;gap:8px}
 .vbg{background:var(--am2);color:var(--ae);padding:2px 8px;border-radius:4px;font-weight:800;font-size:11px}
 .ctn{max-width:1600px;margin:0 auto;padding:15px;display:grid;grid-template-columns:360px 1fr;gap:15px}
-.sb{background:var(--br);border-radius:var(--r);box-shadow:var(--smb);overflow-y:auto;max-height:calc(100vh - 80px);position:sticky;top:72px}
+.sb{background:var(--br);border-radius:var(--r);box-shadow:var(--smb);overflow-y:auto;max-height:calc(100vh - 80px);position:sticky;top:68px}
 .sb-hdr{background:var(--ae);color:var(--br);padding:10px 15px;font-size:12px;font-weight:700}
 .sb-sect{padding:12px 15px;border-bottom:1px solid var(--cl)}
 .sb-sect h3{font-size:11px;font-weight:700;color:var(--ae);margin-bottom:8px}
@@ -64,7 +64,8 @@ body{font-family:var(--ft);background:var(--cl);color:#2d3748;font-size:13px}
 #tcanvas{width:100%;height:300px;border-radius:6px;background:#fff}
 .tdiag-legend{display:flex;gap:15px;margin-top:8px;font-size:10px;justify-content:center;flex-wrap:wrap}
 .tdiag-leg{display:flex;align-items:center;gap:4px}.tdiag-leg span{width:12px;height:3px;border-radius:2px}
-.ph{text-align:center;padding:80px 20px;color:var(--ce)}.ph-ico{font-size:48px;margin-bottom:12px;opacity:.3}
+.ph{text-align:center;padding:60px 20px;color:var(--ce)}
+.ph-logo{margin-bottom:16px}
 .res-badge{background:var(--vd);color:var(--br);padding:3px 10px;border-radius:12px;font-size:10px;font-weight:700}
 .sec-info{background:var(--cl);border-radius:6px;padding:8px;margin-top:6px;font-size:10px;color:var(--ce)}
 .mat-card{background:linear-gradient(135deg,#fff8e1,#fff);border:2px solid var(--am2);border-radius:8px;padding:12px;margin-top:10px}
@@ -78,12 +79,20 @@ body{font-family:var(--ft);background:var(--cl);color:#2d3748;font-size:13px}
 .note{font-size:9px;color:var(--am2);margin-top:2px}
 .val-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700;margin-left:4px}
 .val-badge.v2{background:#d4edda;color:#155724}
+.ds-toggle{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;padding:8px;background:var(--cl);border-radius:6px}
+.ds-toggle label{display:flex;align-items:center;gap:4px;font-size:10px;cursor:pointer;color:var(--ce)}
+.ds-toggle input[type=checkbox]{margin:0;cursor:pointer}
+.ds-section.hidden{display:none}
 @media(max-width:1100px){.ctn{grid-template-columns:1fr}.sb{position:static;max-height:none}.cards-row{grid-template-columns:1fr 1fr}.grid2{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div class="hdr">
-<h1><div class="lg">AV</div>AlfaVed Dimensionador-PHE <span class="vbg">v42.2</span></h1>
+<div class="hdr-l">
+<svg width="36" height="36" viewBox="0 0 50 50"><circle cx="25" cy="25" r="22" fill="none" stroke="#f0a830" stroke-width="3"/><path d="M16 36 L25 12 L34 36 M20 29 L30 29" fill="none" stroke="#f0a830" stroke-width="2.5" stroke-linecap="round"/><path d="M21 36 L29 36 L25 31 Z" fill="#cc3300"/></svg>
+<div><div style="font-size:16px;font-weight:800;color:#fff">AlfaVed <span style="color:#cc3300">Dimensionador PHE-V2.0</span></div><div style="font-size:9px;color:#a0b4c8">Soluções Industriais · Trocadores de Calor a Placas</div></div>
+</div>
+<span class="vbg">v42.3</span>
 </div>
 <div class="ctn">
 <div class="sb">
@@ -169,7 +178,7 @@ body{font-family:var(--ft);background:var(--cl);color:#2d3748;font-size:13px}
 <button class="ba" id="btnA" onclick="autoCorr()">Auto-Corrigir</button>
 <button class="bl" onclick="limpar()">Limpar</button>
 </div>
-<div class="sb-sect"><h3>Catalogo</h3><div class="ms">
+<div class="sb-sect"><h3>Catalogo (26 modelos)</h3><div class="ms">
 <table class="tm"><thead><tr><th>Mod</th><th>beta</th><th>A</th><th>Dh</th><th>Boc</th><th>T</th></tr></thead>
 <tbody id="cat"></tbody></table></div></div>
 <div class="sb-sect"><h3>Prop. Produto</h3>
@@ -178,9 +187,10 @@ body{font-family:var(--ft);background:var(--cl);color:#2d3748;font-size:13px}
 </div>
 <div class="main">
 <div id="ph" class="cr ph">
-<div class="ph-ico">📊</div>
-<h2 style="color:var(--ae);font-size:16px">Pronto para Dimensionar</h2>
-<p style="margin-top:8px;font-size:12px">v42.2: Martin+Kumar | Multipasse 4x4 | Nusselt cond | Grafico eficiencia no datasheet</p>
+<div class="ph-logo"><svg width="80" height="80" viewBox="0 0 50 50"><circle cx="25" cy="25" r="22" fill="none" stroke="#f0a830" stroke-width="3"/><path d="M16 36 L25 12 L34 36 M20 29 L30 29" fill="none" stroke="#f0a830" stroke-width="2.5" stroke-linecap="round"/><path d="M21 36 L29 36 L25 31 Z" fill="#cc3300"/></svg></div>
+<div style="font-size:20px;font-weight:800;color:var(--ae)">Alfa<span style="color:var(--ved)">Ved</span> Dimensionador PHE-V2.0</div>
+<div style="font-size:11px;color:var(--ce);margin-top:4px">Trocadores de Calor a Placas · Martin+Kumar · Multipasse 4x4 · 26 modelos · 18 fluidos</div>
+<p style="margin-top:12px;font-size:12px;color:var(--ce)">Insira os dados e clique em <strong>Calcular</strong>.</p>
 </div>
 <div id="res" style="display:none">
 <div class="cards-row" id="cards"></div>
@@ -207,17 +217,27 @@ body{font-family:var(--ft);background:var(--cl);color:#2d3748;font-size:13px}
 <div class="cr"><div class="ct"><div class="ct-l">Detalhes</div><button class="bp" style="width:auto;padding:4px 12px" onclick="var d=document.getElementById('det');d.style.display=d.style.display=='block'?'none':'block'">+/-</button></div>
 <div id="det" class="dc"></div></div>
 <div class="cr"><div class="ct"><div class="ct-l">Datasheet</div>
-<div style="display:flex;gap:6px;margin-bottom:10px">
+<div style="display:flex;gap:6px;margin-bottom:8px">
 <button class="btn-print" onclick="printDatasheet()">Imprimir</button>
 <button class="btn-pdf" onclick="downloadPDF()">Baixar PDF</button>
-</div></div>
+</div>
+<div class="ds-toggle" id="dsToggle">
+<label><input type="checkbox" id="ds_s1" checked onchange="toggleDS(1)"> 1.Projeto</label>
+<label><input type="checkbox" id="ds_s2" checked onchange="toggleDS(2)"> 2.Operacional</label>
+<label><input type="checkbox" id="ds_s3" checked onchange="toggleDS(3)"> 3.Resultados</label>
+<label><input type="checkbox" id="ds_s4" checked onchange="toggleDS(4)"> 4.Eficiencia</label>
+</div>
+</div>
 <div id="ds"></div></div>
 </div>
 </div>
 </div>
-<div class="fi"><strong>AlfaVed PHE v42.2</strong> | Martin+Kumar avg | Nusselt cond | Multipasse 4x4 | 18 fluidos | 5 benchmarks | Grafico eficiencia datasheet</div>
+<div class="fi"><strong>AlfaVed PHE v42.3</strong> | 26 modelos (CLIP6/8 + TL10-B/P) | Martin+Kumar avg | Nusselt cond | Multipasse 4x4 | 18 fluidos | 5 benchmarks | Logo + Datasheet editavel</div>
 <script>
+// v42.3: +CLIP6, CLIP8, TL10-B, TL10-P (26 modelos total)
 var BK=[
+{n:'CLIP6',w:.15,l:.40,b:.0025,be:60,dp:.025,d:.0004,ph:1.15,ap:.024,t:'g'},
+{n:'CLIP8',w:.22,l:.55,b:.003,be:45,dp:.032,d:.0004,ph:1.17,ap:.050,t:'g'},
 {n:'M3',w:.18,l:.48,b:.0025,be:60,dp:.032,d:.0004,ph:1.15,ap:.032,t:'g'},
 {n:'T5',w:.245,l:.737,b:.003,be:30,dp:.05,d:.0005,ph:1.17,ap:.080,t:'g'},
 {n:'M6-B',w:.32,l:.92,b:.0035,be:30,dp:.05,d:.0004,ph:1.17,ap:.108,t:'g'},
@@ -226,6 +246,8 @@ var BK=[
 {n:'TS6-M',w:.4,l:.704,b:.0035,be:45,dp:.065,d:.0005,ph:1.20,ap:.140,t:'g'},
 {n:'M10-B',w:.47,l:1.084,b:.0035,be:30,dp:.1,d:.0005,ph:1.20,ap:.242,t:'g'},
 {n:'M10-M',w:.47,l:1.084,b:.003,be:45,dp:.1,d:.0005,ph:1.20,ap:.242,t:'g'},
+{n:'TL10-B',w:.65,l:1.95,b:.004,be:30,dp:.1,d:.0005,ph:1.22,ap:.560,t:'g'},
+{n:'TL10-P',w:.65,l:1.95,b:.004,be:60,dp:.1,d:.0005,ph:1.22,ap:.560,t:'g'},
 {n:'M15-B',w:.61,l:1.941,b:.004,be:30,dp:.15,d:.0005,ph:1.22,ap:.480,t:'g'},
 {n:'M15-M',w:.61,l:1.941,b:.0035,be:45,dp:.15,d:.0005,ph:1.22,ap:.480,t:'g'},
 {n:'T20-B',w:.78,l:2.145,b:.005,be:30,dp:.2,d:.0006,ph:1.25,ap:.800,t:'g'},
@@ -294,7 +316,13 @@ function setModo(m){modo=m;document.getElementById('btnSimples').classList.toggl
 function calc(){var inp=rInp();if(!inp.vp||inp.vp<=0){alert('Vazao produto invalida');return}if(isVapor(inp.fs,inp.tis,inp.tos)){var pb=gP(inp.fp,(inp.tip+inp.top)/2,inp.bp,inp.bp);var mp=inp.vp*pb.rho/3600;var Q=mp*pb.cp*Math.abs(inp.top-inp.tip)/1000;var vf=calcVaporFlow(Q,inp.pressure||2);inp.vs=vf.vCond*5;inp.vaporInfo=vf;document.getElementById('vs').value=inp.vs.toFixed(2);document.getElementById('vapor_note').style.display='block'}else{document.getElementById('vapor_note').style.display='none'}if(modo==='multi'){var result=mCalcMulti(inp);showMulti(result,inp)}else{if(!inp.vs||inp.vs<=0){alert('Vazao servico invalida');return}if(inp.tis<=inp.top&&inp.tip<inp.top&&!isVapor(inp.fs,inp.tis,inp.tos)){alert('T.ent servico deve ser > T.sai produto');return}var passesToTest=inp.ps==='auto'?PASSOS:[inp.ps];var result=mCalcSec(inp,passesToTest);showR(result,inp,result.todosCalculados||[])}}
 function autoCorr(){var inp=rInp();var corr=[];inp.dpp=Math.min(inp.dpp+50,200);inp.dps=Math.min(inp.dps+50,200);corr.push({p:'dP+50'});var passesToTest=PASSOS;var result=mCalcSec(inp,passesToTest);var vs=result.todosViaveis||[];if(vs.length===0){inp.tpl='t';corr.push({p:'Todas placas'});result=mCalcSec(inp,passesToTest);vs=result.todosViaveis||[]}if(vs.length===0){inp.mg=0;corr.push({p:'Margem 0%'});result=mCalcSec(inp,passesToTest);vs=result.todosViaveis||[]}if(vs.length>0){document.getElementById('cCorr').style.display='block';var h='<div class="cb"><b>Correcoes:</b><br>';corr.forEach(function(c){h+='<span style="font-size:11px">-> '+c.p+'</span><br>'});h+='</div>';document.getElementById('corpoCorr').innerHTML=h;showR(result,inp,result.todosCalculados||[])}else{document.getElementById('cCorr').style.display='block';document.getElementById('corpoCorr').innerHTML='<div class="ae2">Nao viavel.</div>'}}
 
-// === DATASHEET COM GRAFICO DE EFICIENCIA (v42.2) ===
+// v42.3: LOGO SVG reutilizavel
+var LOGO_SVG='<svg width="40" height="40" viewBox="0 0 50 50" style="vertical-align:middle"><circle cx="25" cy="25" r="22" fill="none" stroke="#f0a830" stroke-width="3"/><path d="M16 36 L25 12 L34 36 M20 29 L30 29" fill="none" stroke="#f0a830" stroke-width="2.5" stroke-linecap="round"/><path d="M21 36 L29 36 L25 31 Z" fill="#cc3300"/></svg>';
+
+// v42.3: toggle datasheet sections
+function toggleDS(n){var el=document.getElementById('ds_sec'+n);if(el){var sec=document.querySelector('#ds [data-sec="'+n+'"]');if(sec){sec.classList.toggle('hidden',!el.checked)}}}
+
+// v42.3: DATASHEET com logo + secoes editaveis + cores dP corrigidas
 function genDatasheetHTML(m,inp){
 var tag=(document.getElementById('tag_eq')?document.getElementById('tag_eq').value:'TC-101')||'TC-101';
 var proj=(document.getElementById('proj_nome')?document.getElementById('proj_nome').value:'DIMENSIONAMENTO PHE')||'DIMENSIONAMENTO PHE';
@@ -302,15 +330,16 @@ var data=new Date().toLocaleDateString('pt-BR');
 var mr=recommendMaterial(inp.fp,inp.fs,inp.tip,inp.top,inp.tis,inp.tos,inp.gas);
 var passesArr=(m.passesUsado||'1-1').split('-');
 var isMulti=m.multi||false;
-// Calcular efetividade
 var Qmax=Math.min(inp.vp*m.pb.rho/3600*m.pb.cp,inp.vs*m.sb.rho/3600*m.sb.cp)*(Math.abs(inp.tis-inp.tip));
-var eff=m.Q*1000/Math.max(Qmax,1)*100;
-if(eff>100)eff=100;
+var eff=m.Q*1000/Math.max(Qmax,1)*100;if(eff>100)eff=100;
 var effColor=eff>=80?'#2d9e4a':eff>=60?'#f0a830':'#d94a4a';
 var valBadge='<span class="val-badge v2">Martin+Kumar</span>';
 if(m.rU&&m.rU.vapor)valBadge='<span class="val-badge v2">Nusselt cond</span>';
-var h='<div style="text-align:center;margin-bottom:20px"><div style="font-size:20px;font-weight:bold;color:#1a3a5c">AlfaVed Solucoes Industriais</div><div style="font-size:14px;color:#4a5568;margin-top:4px">Relatorio Tecnico - Trocador de Calor a Placas</div><div style="font-size:11px;color:#999;margin-top:4px">Data: '+data+'</div></div>';
-h+='<h2 style="font-size:13px;background:#1a3a5c;color:#fff;padding:6px 10px;margin:0 0 8px">1. Informacoes do Projeto</h2>';
+// Logo no canto superior esquerdo
+var h='<div style="display:flex;align-items:center;gap:10px;margin-bottom:15px">'+LOGO_SVG+'<div><div style="font-size:18px;font-weight:bold;color:#1a3a5c">Alfa<span style="color:#cc3300">Ved</span> Solucoes Industriais</div><div style="font-size:11px;color:#4a5568">Relatorio Tecnico - Trocador de Calor a Placas</div></div><div style="margin-left:auto;font-size:10px;color:#999;text-align:right">Data: '+data+'<br>Tag: '+tag+'</div></div>';
+
+// Secao 1 - Projeto
+h+='<div data-sec="1"><h2 style="font-size:13px;background:#1a3a5c;color:#fff;padding:6px 10px;margin:0 0 8px">1. Informacoes do Projeto</h2>';
 h+='<table style="width:100%;border-collapse:collapse;margin-bottom:12px">';
 h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa;width:35%">Tag</td><td style="padding:5px 8px;border:1px solid #d0d5dd">'+tag+'</td></tr>';
 h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">Projeto</td><td style="padding:5px 8px;border:1px solid #d0d5dd">'+proj+'</td></tr>';
@@ -319,91 +348,68 @@ h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;bac
 h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">Material</td><td style="padding:5px 8px;border:1px solid #d0d5dd">'+MT[mr.plate].n+' + '+mr.gasket+'</td></tr>';
 h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">Correlacao</td><td style="padding:5px 8px;border:1px solid #d0d5dd">'+valBadge+'</td></tr>';
 if(m.theta)h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">Theta</td><td style="padding:5px 8px;border:1px solid #d0d5dd">'+m.theta.toFixed(2)+'</td></tr>';
-h+='</table>';
-h+='<h2 style="font-size:13px;background:#1a3a5c;color:#fff;padding:6px 10px;margin:0 0 8px">2. Dados Operacionais</h2>';
+h+='</table></div>';
+
+// Secao 2 - Operacional
+h+='<div data-sec="2"><h2 style="font-size:13px;background:#1a3a5c;color:#fff;padding:6px 10px;margin:0 0 8px">2. Dados Operacionais</h2>';
 h+='<table style="width:100%;border-collapse:collapse;margin-bottom:12px">';
 h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;background:#1a3a5c;color:#fff;font-weight:bold;width:35%">Parametro</td><td style="padding:5px 8px;border:1px solid #d0d5dd;background:#1a3a5c;color:#fff;font-weight:bold;text-align:center">Produto</td><td style="padding:5px 8px;border:1px solid #d0d5dd;background:#1a3a5c;color:#fff;font-weight:bold;text-align:center">Servico</td></tr>';
 h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">Fluido</td><td style="padding:5px 8px;border:1px solid #d0d5dd;text-align:center">'+inp.fp+'</td><td style="padding:5px 8px;border:1px solid #d0d5dd;text-align:center">'+inp.fs+'</td></tr>';
 h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">T.Ent(C)</td><td style="padding:5px 8px;border:1px solid #d0d5dd;text-align:center">'+inp.tip.toFixed(1)+'</td><td style="padding:5px 8px;border:1px solid #d0d5dd;text-align:center">'+inp.tis.toFixed(1)+'</td></tr>';
 h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">T.Sai(C)</td><td style="padding:5px 8px;border:1px solid #d0d5dd;text-align:center">'+inp.top.toFixed(1)+'</td><td style="padding:5px 8px;border:1px solid #d0d5dd;text-align:center">'+inp.tos.toFixed(1)+'</td></tr>';
 h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">rho(kg/m3)</td><td style="padding:5px 8px;border:1px solid #d0d5dd;text-align:center">'+m.pb.rho.toFixed(1)+'</td><td style="padding:5px 8px;border:1px solid #d0d5dd;text-align:center">'+m.sb.rho.toFixed(1)+'</td></tr>';
-h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">mu(cP)</td><td style="padding:5px 8px;border:1px solid #d0d5dd;text-align:center">'+(m.pb.mu*1000).toFixed(3)+'</td><td style="padding:5px 8px;border:1px solid #d0d5dd;text-align:center">'+(m.sb.mu*1000).toFixed(3)+'</td></tr></table>';
-h+='<h2 style="font-size:13px;background:#1a3a5c;color:#fff;padding:6px 10px;margin:0 0 8px">3. Resultados</h2>';
+h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">mu(cP)</td><td style="padding:5px 8px;border:1px solid #d0d5dd;text-align:center">'+(m.pb.mu*1000).toFixed(3)+'</td><td style="padding:5px 8px;border:1px solid #d0d5dd;text-align:center">'+(m.sb.mu*1000).toFixed(3)+'</td></tr></table></div>';
+
+// Secao 3 - Resultados
+h+='<div data-sec="3"><h2 style="font-size:13px;background:#1a3a5c;color:#fff;padding:6px 10px;margin:0 0 8px">3. Resultados</h2>';
 h+='<table style="width:100%;border-collapse:collapse;margin-bottom:12px">';
 h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa;width:50%">Carga(kW)</td><td style="padding:5px 8px;border:1px solid #d0d5dd">'+m.Q.toFixed(2)+'</td></tr>';
 h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">LMTD(C)</td><td style="padding:5px 8px;border:1px solid #d0d5dd">'+(m.lmtd||m.lm||0).toFixed(2)+'</td></tr>';
 h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">Area(m2)</td><td style="padding:5px 8px;border:1px solid #d0d5dd">'+m.A.toFixed(2)+'</td></tr>';
 h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">Placas</td><td style="padding:5px 8px;border:1px solid #d0d5dd">'+m.n+'</td></tr>';
 h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">U(W/m2K)</td><td style="padding:5px 8px;border:1px solid #d0d5dd">'+m.U.toFixed(0)+'</td></tr>';
-h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">dP Prod(kPa)</td><td style="padding:5px 8px;border:1px solid #d0d5dd">'+(m.dp1||0).toFixed(2)+'</td></tr>';
-h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">dP Serv(kPa)</td><td style="padding:5px 8px;border:1px solid #d0d5dd">'+(m.dp2||0).toFixed(2)+'</td></tr>';
+// v42.3: cores dP corrigidas — verde=eficiente, amarelo=seguro, vermelho=falha
+var dp1Over=(m.dp1||0)>inp.dpp;
+h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">dP Prod(kPa)</td><td style="padding:5px 8px;border:1px solid #d0d5dd;color:'+(dp1Over?'#d94a4a':(m.dp1||0)/inp.dpp>=0.7?'#2d9e4a':'#f0a830')+';font-weight:bold">'+(m.dp1||0).toFixed(2)+'/'+inp.dpp+'</td></tr>';
+if(!isMulti){var dp2Over=(m.dp2||0)>inp.dps;h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">dP Serv(kPa)</td><td style="padding:5px 8px;border:1px solid #d0d5dd;color:'+(dp2Over?'#d94a4a':(m.dp2||0)/inp.dps>=0.7?'#2d9e4a':'#f0a830')+';font-weight:bold">'+(m.dp2||0).toFixed(2)+'/'+inp.dps+'</td></tr>'}
 h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">Vel Canal(m/s)</td><td style="padding:5px 8px;border:1px solid #d0d5dd">'+(m.vcP||0).toFixed(2)+'</td></tr>';
-h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">Wall Shear(Pa)</td><td style="padding:5px 8px;border:1px solid #d0d5dd">'+(m.tauP||0).toFixed(1)+'</td></tr>';
+var tauOver=(m.tauP||0)<35;
+h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">Wall Shear(Pa)</td><td style="padding:5px 8px;border:1px solid #d0d5dd;color:'+(tauOver?'#d94a4a':(m.tauP||0)>=40?'#2d9e4a':'#f0a830')+';font-weight:bold">'+(m.tauP||0).toFixed(1)+'</td></tr>';
 h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">%Porta</td><td style="padding:5px 8px;border:1px solid #d0d5dd">'+(m.fracPortaP||0).toFixed(1)+'%</td></tr>';
 h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">Vel Bocal(m/s)</td><td style="padding:5px 8px;border:1px solid #d0d5dd">'+(m.v1||0).toFixed(2)+'</td></tr>';
 if(m.rU&&m.rU.vapor)h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">Modo Servico</td><td style="padding:5px 8px;border:1px solid #d0d5dd">NUSSELT CONDENSACAO</td></tr>';
 if(m.hMartin&&m.hKumar){h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">h Martin</td><td style="padding:5px 8px;border:1px solid #d0d5dd">'+m.hMartin.toFixed(0)+'</td></tr>';h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">h Kumar</td><td style="padding:5px 8px;border:1px solid #d0d5dd">'+m.hKumar.toFixed(0)+'</td></tr>'}
 if(m.passesUsado){h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">Passes</td><td style="padding:5px 8px;border:1px solid #d0d5dd">'+m.passesUsado+'</td></tr>'}
 if(isMulti&&m.holdTube){h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">Tubo Retencao</td><td style="padding:5px 8px;border:1px solid #d0d5dd">'+m.holdTube.holdTime+' @ '+m.holdTube.temp+' D='+m.holdTube.diameter+'mm L='+m.holdTube.lengthStr+'</td></tr>'}
-h+='</table>';
+h+='</table></div>';
 
-// === GRAFICO DE EFICIENCIA (NOVO v42.2) ===
-h+='<h2 style="font-size:13px;background:#1a3a5c;color:#fff;padding:6px 10px;margin:0 0 8px">4. Grafico de Eficiencia</h2>';
+// Secao 4 - Grafico de Eficiencia
+h+='<div data-sec="4"><h2 style="font-size:13px;background:#1a3a5c;color:#fff;padding:6px 10px;margin:0 0 8px">4. Grafico de Eficiencia</h2>';
 h+='<div style="margin-bottom:12px">';
-// Barra de efetividade
-h+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">';
-h+='<div style="font-size:11px;font-weight:bold;color:#1a3a5c;width:120px">Efetividade</div>';
-h+='<div style="flex:1;background:#e0e0e0;border-radius:8px;height:24px;overflow:hidden;position:relative">';
-h+='<div style="width:'+eff.toFixed(0)+'%;height:100%;background:'+effColor+';border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;font-size:10px;font-weight:bold;color:#fff">'+eff.toFixed(1)+'%</div>';
-h+='</div></div>';
-// Utilizacao de dP Produto
+h+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div style="font-size:11px;font-weight:bold;color:#1a3a5c;width:120px">Efetividade</div><div style="flex:1;background:#e0e0e0;border-radius:8px;height:24px;overflow:hidden;position:relative"><div style="width:'+eff.toFixed(0)+'%;height:100%;background:'+effColor+';border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;font-size:10px;font-weight:bold;color:#fff">'+eff.toFixed(1)+'%</div></div></div>';
 var dpPutil=Math.min((m.dp1||0)/inp.dpp*100,100);
-var dpPcolor=dpPutil>=80?'#2d9e4a':dpPutil>=50?'#f0a830':'#d94a4a';
-h+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">';
-h+='<div style="font-size:11px;font-weight:bold;color:#1a3a5c;width:120px">dP Produto</div>';
-h+='<div style="flex:1;background:#e0e0e0;border-radius:8px;height:24px;overflow:hidden;position:relative">';
-h+='<div style="width:'+dpPutil.toFixed(0)+'%;height:100%;background:'+dpPcolor+';border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;font-size:10px;font-weight:bold;color:#fff">'+(m.dp1||0).toFixed(1)+'/'+inp.dpp+' kPa</div>';
-h+='</div></div>';
-// Utilizacao de dP Servico
-if(!isMulti){
-var dpSutil=Math.min((m.dp2||0)/inp.dps*100,100);
-var dpScolor=dpSutil>=80?'#2d9e4a':dpSutil>=50?'#f0a830':'#d94a4a';
-h+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">';
-h+='<div style="font-size:11px;font-weight:bold;color:#1a3a5c;width:120px">dP Servico</div>';
-h+='<div style="flex:1;background:#e0e0e0;border-radius:8px;height:24px;overflow:hidden;position:relative">';
-h+='<div style="width:'+dpSutil.toFixed(0)+'%;height:100%;background:'+dpScolor+';border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;font-size:10px;font-weight:bold;color:#fff">'+(m.dp2||0).toFixed(1)+'/'+inp.dps+' kPa</div>';
-h+='</div></div>';
-}
-// Wall Shear
+var dpPcolor=(m.dp1||0)>inp.dpp?'#d94a4a':dpPutil>=70?'#2d9e4a':'#f0a830';
+h+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div style="font-size:11px;font-weight:bold;color:#1a3a5c;width:120px">dP Produto</div><div style="flex:1;background:#e0e0e0;border-radius:8px;height:24px;overflow:hidden;position:relative"><div style="width:'+Math.min(dpPutil,100).toFixed(0)+'%;height:100%;background:'+dpPcolor+';border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;font-size:10px;font-weight:bold;color:#fff">'+(m.dp1||0).toFixed(1)+'/'+inp.dpp+' kPa</div></div></div>';
+if(!isMulti){var dpSutil=Math.min((m.dp2||0)/inp.dps*100,100);var dpScolor=(m.dp2||0)>inp.dps?'#d94a4a':dpSutil>=70?'#2d9e4a':'#f0a830';h+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div style="font-size:11px;font-weight:bold;color:#1a3a5c;width:120px">dP Servico</div><div style="flex:1;background:#e0e0e0;border-radius:8px;height:24px;overflow:hidden;position:relative"><div style="width:'+Math.min(dpSutil,100).toFixed(0)+'%;height:100%;background:'+dpScolor+';border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;font-size:10px;font-weight:bold;color:#fff">'+(m.dp2||0).toFixed(1)+'/'+inp.dps+' kPa</div></div></div>'}
 var tauUtil=Math.min((m.tauP||0)/50*100,100);
-var tauColor=tauUtil>=80?'#2d9e4a':tauUtil>=40?'#f0a830':'#d94a4a';
-h+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">';
-h+='<div style="font-size:11px;font-weight:bold;color:#1a3a5c;width:120px">Wall Shear</div>';
-h+='<div style="flex:1;background:#e0e0e0;border-radius:8px;height:24px;overflow:hidden;position:relative">';
-h+='<div style="width:'+tauUtil.toFixed(0)+'%;height:100%;background:'+tauColor+';border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;font-size:10px;font-weight:bold;color:#fff">'+(m.tauP||0).toFixed(0)+'/50 Pa</div>';
-h+='</div></div>';
-// U vs U limite
+var tauColor=(m.tauP||0)<35?'#d94a4a':tauUtil>=80?'#2d9e4a':'#f0a830';
+h+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div style="font-size:11px;font-weight:bold;color:#1a3a5c;width:120px">Wall Shear</div><div style="flex:1;background:#e0e0e0;border-radius:8px;height:24px;overflow:hidden;position:relative"><div style="width:'+Math.min(tauUtil,100).toFixed(0)+'%;height:100%;background:'+tauColor+';border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;font-size:10px;font-weight:bold;color:#fff">'+(m.tauP||0).toFixed(0)+'/50 Pa</div></div></div>';
 var uRatio=m.rU&&m.rU.kc?Math.min(m.U/m.rU.kc*100,100):0;
 var uColor=uRatio>=80?'#2d9e4a':uRatio>=50?'#f0a830':'#d94a4a';
-h+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">';
-h+='<div style="font-size:11px;font-weight:bold;color:#1a3a5c;width:120px">U/U limpo</div>';
-h+='<div style="flex:1;background:#e0e0e0;border-radius:8px;height:24px;overflow:hidden;position:relative">';
-h+='<div style="width:'+uRatio.toFixed(0)+'%;height:100%;background:'+uColor+';border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;font-size:10px;font-weight:bold;color:#fff">'+uRatio.toFixed(0)+'%</div>';
+h+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div style="font-size:11px;font-weight:bold;color:#1a3a5c;width:120px">U/U limpo</div><div style="flex:1;background:#e0e0e0;border-radius:8px;height:24px;overflow:hidden;position:relative"><div style="width:'+uRatio.toFixed(0)+'%;height:100%;background:'+uColor+';border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;font-size:10px;font-weight:bold;color:#fff">'+uRatio.toFixed(0)+'%</div></div></div>';
 h+='</div></div>';
-h+='</div>';
 
-h+='<div style="margin-top:20px;padding:10px;border-top:1px solid #d0d5dd;font-size:9px;color:#999;text-align:center">AlfaVed PHE v42.2 | Martin+Kumar avg | Nusselt cond | Grafico eficiencia | Validacao c/ fabricante</div>';
+h+='<div style="margin-top:20px;padding:10px;border-top:1px solid #d0d5dd;font-size:9px;color:#999;text-align:center">AlfaVed PHE v42.3 | 26 modelos | Martin+Kumar avg | Validacao c/ fabricante</div>';
 return h}
 
 function showR(m,inp,todos){
 window._lastResult=m;
-// v42.2: Auto-Corrigir SEMPRE visivel apos calculo
 document.getElementById('btnA').style.display='block';
 document.getElementById('ph').style.display='none';document.getElementById('res').style.display='block';document.getElementById('selCard').style.display='block';
 var passInfo=m.passesUsado?' . '+m.passesUsado:'';
 var vaporInfo=m.rU&&m.rU.vapor?' . NUSSELT COND':'';
 var corrInfo=' . Martin+Kumar';
-document.getElementById('selInfo').innerHTML='<div style="display:flex;align-items:center;gap:12px"><div style="font-size:28px">T</div><div><div style="font-size:18px;font-weight:800;color:var(--ae)">'+m.mod+'</div><div style="font-size:11px;color:var(--ce)">'+m.n+' placas . '+m.A.toFixed(2)+' m2'+passInfo+vaporInfo+corrInfo+'</div></div></div>';
+document.getElementById('selInfo').innerHTML='<div style="display:flex;align-items:center;gap:12px">'+LOGO_SVG+'<div><div style="font-size:18px;font-weight:800;color:var(--ae)">'+m.mod+'</div><div style="font-size:11px;color:var(--ce)">'+m.n+' placas . '+m.A.toFixed(2)+' m2'+passInfo+vaporInfo+corrInfo+'</div></div></div>';
 var mr=recommendMaterial(inp.fp,inp.fs,inp.tip,inp.top,inp.tis,inp.tos,inp.gas);
 var gN={NBR:'NBR',EPDM:'EPDM',HNBR:'HNBR',Viton:'Viton'};
 document.getElementById('matRec').innerHTML='<div class="mat-card"><h4>Materiais</h4><div class="mat-row"><div class="mat-lbl">Placa:</div><div class="mat-val"><b>'+MT[mr.plate].n+'</b></div></div><div class="mat-row"><div class="mat-lbl">Gaxeta:</div><div class="mat-val"><b>'+(gN[mr.gasket]||mr.gasket)+'</b></div></div><div class="mat-row" style="flex-direction:column"><div class="mat-lbl">Motivo:</div><div style="font-size:10px;color:var(--ce);white-space:pre-line">'+mr.fullReason+'</div></div></div>';
@@ -429,11 +435,10 @@ setTimeout(function(){drawTempDiagram(inp,m)},50)}
 
 function showMulti(m,inp){
 window._lastResult=m;
-// v42.2: Auto-Corrigir SEMPRE visivel
 document.getElementById('btnA').style.display='block';
 document.getElementById('ph').style.display='none';document.getElementById('res').style.display='block';document.getElementById('selCard').style.display='block';
 var secCount=m.sec4On?'4 Secoes':'3 Secoes';
-document.getElementById('selInfo').innerHTML='<div style="display:flex;align-items:center;gap:12px"><div style="font-size:28px">P</div><div><div style="font-size:16px;font-weight:800;color:var(--ae)">Pasteurizador '+secCount+'</div><div style="font-size:11px;color:var(--ce)">'+m.totalPlates+' placas . '+m.totalArea.toFixed(2)+' m2 . Regen: '+m.regenEff.toFixed(0)+'% . Martin+Kumar</div></div></div>';
+document.getElementById('selInfo').innerHTML='<div style="display:flex;align-items:center;gap:12px">'+LOGO_SVG+'<div><div style="font-size:16px;font-weight:800;color:var(--ae)">Pasteurizador '+secCount+'</div><div style="font-size:11px;color:var(--ce)">'+m.totalPlates+' placas . '+m.totalArea.toFixed(2)+' m2 . Regen: '+m.regenEff.toFixed(0)+'% . Martin+Kumar</div></div></div>';
 var mr=recommendMaterial(inp.fp,document.getElementById('fs_aq').value,inp.tip,inp.top,parseFloat(document.getElementById('t_agua_q').value),parseFloat(document.getElementById('t_agua_g').value),inp.gas);
 var gN={NBR:'NBR',EPDM:'EPDM',HNBR:'HNBR',Viton:'Viton'};
 document.getElementById('matRec').innerHTML='<div class="mat-card"><h4>Materiais</h4><div class="mat-row"><div class="mat-lbl">Placa:</div><div class="mat-val"><b>'+MT[mr.plate].n+'</b></div></div><div class="mat-row"><div class="mat-lbl">Gaxeta:</div><div class="mat-val"><b>'+(gN[mr.gasket]||mr.gasket)+'</b></div></div></div>';
@@ -463,9 +468,24 @@ function drawTempDiagram(inp,m){var c=document.getElementById('tcanvas');if(!c)r
 function drawMultiDiagram(m){var c=document.getElementById('tcanvas');if(!c)return;var ctx=c.getContext('2d');var w=c.offsetWidth,h=c.offsetHeight;c.width=w;c.height=h;ctx.clearRect(0,0,w,h);var t=m.temperaturas;var allT=[t.ti,t.tr,t.tp,t.tf,t.tQout,t.tAqIn,t.tAqOut,t.tGIn,t.tGOut];if(m.sec4On&&t.tPreResf)allT.push(t.tPreResf,t.tAguaAmb);var tMin=Math.min.apply(null,allT)-5,tMax=Math.max.apply(null,allT)+5;var padL=55,padR=15,padT=30,padB=40;var plotW=w-padL-padR,plotH=h-padT-padB;var nSec=m.sec4On?4:3;var secW=plotW/nSec;var xS=function(sec,frac){return padL+sec*secW+frac*secW};var yS=function(T){return padT+(tMax-T)/(tMax-tMin)*plotH};ctx.strokeStyle='#e0e0e0';ctx.lineWidth=1;ctx.font='9px Segoe UI';ctx.fillStyle='#999';for(var tg=Math.ceil(tMin/10)*10;tg<=tMax;tg+=10){var y=yS(tg);ctx.beginPath();ctx.moveTo(padL,y);ctx.lineTo(w-padR,y);ctx.stroke();ctx.textAlign='right';ctx.fillText(tg+'C',padL-4,y+3)}ctx.strokeStyle='#d0d5dd';ctx.lineWidth=2;ctx.setLineDash([4,4]);for(var s=1;s<nSec;s++){var x=padL+s*secW;ctx.beginPath();ctx.moveTo(x,padT);ctx.lineTo(x,h-padB);ctx.stroke()}ctx.setLineDash([]);drawSecCurve(ctx,xS,yS,0,t.tp,t.tQout,t.ti,t.tr,'#cc3300','#0099ff',50);drawSecCurve(ctx,xS,yS,1,t.tAqIn,t.tAqOut,t.tr,t.tp,'#cc3300','#0099ff',50);if(m.sec4On){drawSecCurve(ctx,xS,yS,2,t.tp,t.tPreResf,t.tAguaAmb,t.tAguaAmb+10,'#cc3300','#0099ff',50);drawSecCurve(ctx,xS,yS,3,t.tPreResf,t.tf,t.tGIn,t.tGOut,'#cc3300','#0099ff',50)}else{drawSecCurve(ctx,xS,yS,2,t.tp,t.tf,t.tGIn,t.tGOut,'#cc3300','#0099ff',50)}ctx.font='bold 10px Segoe UI';ctx.textAlign='center';ctx.fillStyle='#9933cc';ctx.fillText('REGEN',padL+secW*0.5,h-15);ctx.fillStyle='#cc3300';ctx.fillText('AQUEC',padL+secW*1.5,h-15);if(m.sec4On){ctx.fillStyle='#0099ff';ctx.fillText('PRE',padL+secW*2.5,h-15);ctx.fillText('RESFR',padL+secW*3.5,h-15)}else{ctx.fillStyle='#0099ff';ctx.fillText('RESFR',padL+secW*2.5,h-15)}ctx.fillStyle='#1a3a5c';ctx.font='bold 11px Segoe UI';ctx.textAlign='left';ctx.fillText('Perfil Composto ('+nSec+' Sec)',padL,padT-6);ctx.fillStyle='#9933cc';ctx.textAlign='center';ctx.font='bold 11px Segoe UI';ctx.fillText('Regen: '+m.regenEff.toFixed(0)+'%',padL+secW*0.5,padT+12)}
 function drawSecCurve(ctx,xS,yS,sec,hIn,hOut,cIn,cOut,hColor,cColor,steps){ctx.strokeStyle=hColor;ctx.lineWidth=2.5;ctx.beginPath();for(var i=0;i<=steps;i++){var f=i/steps;var t=hIn+(hOut-hIn)*f;if(i===0)ctx.moveTo(xS(sec,f),yS(t));else ctx.lineTo(xS(sec,f),yS(t))}ctx.stroke();ctx.strokeStyle=cColor;ctx.lineWidth=2.5;ctx.beginPath();for(var i=0;i<=steps;i++){var f=i/steps;var t=cOut+(cIn-cOut)*f;if(i===0)ctx.moveTo(xS(sec,f),yS(t));else ctx.lineTo(xS(sec,f),yS(t))}ctx.stroke();ctx.fillStyle=hColor;ctx.beginPath();ctx.arc(xS(sec,0),yS(hIn),3,0,7);ctx.fill();ctx.beginPath();ctx.arc(xS(sec,1),yS(hOut),3,0,7);ctx.fill();ctx.fillStyle=cColor;ctx.beginPath();ctx.arc(xS(sec,0),yS(cOut),3,0,7);ctx.fill();ctx.beginPath();ctx.arc(xS(sec,1),yS(cIn),3,0,7);ctx.fill();ctx.font='8px Segoe UI';ctx.fillStyle=hColor;ctx.textAlign='left';ctx.fillText(hIn.toFixed(0)+'C',xS(sec,0)+4,yS(hIn)-5);ctx.textAlign='right';ctx.fillText(hOut.toFixed(0)+'C',xS(sec,1)-4,yS(hOut)-5);ctx.fillStyle=cColor;ctx.textAlign='left';ctx.fillText(cIn.toFixed(0)+'C',xS(sec,0)+4,yS(cIn)+12);ctx.textAlign='right';ctx.fillText(cOut.toFixed(0)+'C',xS(sec,1)-4,yS(cOut)-5)}
 
-// === PRINT/PDF DATASHEET COM GRAFICO EFICIENCIA ===
-function printDatasheet(){var inp=rInp();var m=window._lastResult||{};var ds=genDatasheetHTML(m,inp);var w=window.open('','_blank','width=800,height=900');w.document.write('<html><head><title>AlfaVed</title><style>@page{size:A4;margin:15mm}body{font-family:Segoe UI,Arial,sans-serif;margin:20px;color:#1a3a5c;font-size:11px}h2{font-size:12px;background:#1a3a5c;color:#fff;padding:6px 10px;margin:0 0 8px}table{width:100%;border-collapse:collapse;margin-bottom:12px}td{padding:5px 8px;border:1px solid #d0d5dd;font-size:10px}.val-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700}.val-badge.v2{background:#d4edda;color:#155724}@media print{body{margin:10px}}</style></head><body>');w.document.write(ds);w.document.write('</body></html>');w.document.close();setTimeout(function(){w.print()},300)}
-function downloadPDF(){var inp=rInp();var m=window._lastResult||{};var ds=genDatasheetHTML(m,inp);var w=window.open('','_blank','width=800,height=900');w.document.write('<html><head><title>AlfaVed PDF</title><style>@page{size:A4;margin:15mm}body{font-family:Segoe UI,Arial,sans-serif;margin:0;color:#1a3a5c;font-size:11px}h2{font-size:12px;background:#1a3a5c;color:#fff;padding:6px 10px;margin:0 0 8px}table{width:100%;border-collapse:collapse;margin-bottom:12px}td{padding:5px 8px;border:1px solid #d0d5dd;font-size:10px}.val-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700}.val-badge.v2{background:#d4edda;color:#155724}</style></head><body>');w.document.write(ds);w.document.write('</body></html>');w.document.close();setTimeout(function(){w.print()},300)}
+// v42.3: Print/PDF com logo + secoes visiveis apenas
+function printDatasheet(){
+var inp=rInp();var m=window._lastResult||{};
+var ds=genDatasheetHTML(m,inp);
+// Remover secoes desmarcadas
+var tmp=document.createElement('div');tmp.innerHTML=ds;
+for(var s=1;s<=4;s++){var cb=document.getElementById('ds_s'+s);if(cb&&!cb.checked){var sec=tmp.querySelector('[data-sec="'+s+'"]');if(sec)sec.remove()}}
+var w=window.open('','_blank','width=800,height=900');
+w.document.write('<html><head><title>AlfaVed</title><style>@page{size:A4;margin:15mm}body{font-family:Segoe UI,Arial,sans-serif;margin:20px;color:#1a3a5c;font-size:11px}h2{font-size:12px;background:#1a3a5c;color:#fff;padding:6px 10px;margin:0 0 8px}table{width:100%;border-collapse:collapse;margin-bottom:12px}td{padding:5px 8px;border:1px solid #d0d5dd;font-size:10px}.val-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700}.val-badge.v2{background:#d4edda;color:#155724}.ds-section.hidden{display:none}@media print{body{margin:10px}}</style></head><body>');
+w.document.write(tmp.innerHTML);w.document.write('</body></html>');w.document.close();setTimeout(function(){w.print()},300)}
+function downloadPDF(){
+var inp=rInp();var m=window._lastResult||{};
+var ds=genDatasheetHTML(m,inp);
+var tmp=document.createElement('div');tmp.innerHTML=ds;
+for(var s=1;s<=4;s++){var cb=document.getElementById('ds_s'+s);if(cb&&!cb.checked){var sec=tmp.querySelector('[data-sec="'+s+'"]');if(sec)sec.remove()}}
+var w=window.open('','_blank','width=800,height=900');
+w.document.write('<html><head><title>AlfaVed PDF</title><style>@page{size:A4;margin:15mm}body{font-family:Segoe UI,Arial,sans-serif;margin:0;color:#1a3a5c;font-size:11px}h2{font-size:12px;background:#1a3a5c;color:#fff;padding:6px 10px;margin:0 0 8px}table{width:100%;border-collapse:collapse;margin-bottom:12px}td{padding:5px 8px;border:1px solid #d0d5dd;font-size:10px}.val-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700}.val-badge.v2{background:#d4edda;color:#155724}</style></head><body>');
+w.document.write(tmp.innerHTML);w.document.write('</body></html>');w.document.close();setTimeout(function(){w.print()},300)}
 
 function rInp(){var fs=document.getElementById('fs').value;var pvap=document.getElementById('pvap')?document.getElementById('pvap').value:2;var tis=parseFloat(document.getElementById('tis').value);var tos=parseFloat(document.getElementById('tos').value);return{fp:document.getElementById('fp').value,bp:parseFloat(document.getElementById('bp').value)||0,vp:parseFloat(document.getElementById('vp').value),tip:parseFloat(document.getElementById('tip').value),top:parseFloat(document.getElementById('top').value),dpp:parseFloat(document.getElementById('dpp').value),fs:fs,gas:document.getElementById('gas')?document.getElementById('gas').value:'R717',vs:parseFloat(document.getElementById('vs').value),tis:tis,tos:tos,dps:parseFloat(document.getElementById('dps').value),tpl:document.getElementById('tpl').value,mat:document.getElementById('mat').value,ps:document.getElementById('ps').value,mg:parseFloat(document.getElementById('mg').value),pressure:parseFloat(pvap)}}
 function tgServ(){var fs=document.getElementById('fs').value;document.getElementById('bx_ref').style.display=fs==='refrigerante'?'block':'none';document.getElementById('bx_vapor').style.display=fs==='vapor'?'block':'none';document.getElementById('vapor_note').style.display=fs==='vapor'?'block':'none';if(fs==='vapor'){var pv=document.getElementById('pvap').value;var tsat={2:120,3:134,6:159,10:180}[pv]||120;document.getElementById('tis').value=tsat;document.getElementById('tos').value=tsat;document.getElementById('vs').value=0.5}}
@@ -473,7 +493,7 @@ function apPreset(p){if(p==='pasteur'){setModo('multi');document.getElementById(
 function upRef(){var f=document.getElementById('fp').value;var b=parseFloat(document.getElementById('bp').value)||0;var h='';[0,20,40,60,80,100].forEach(function(t){var p=gP(f,t,b,b);var pr=(p.cp*p.mu)/p.k;h+='<tr><td>'+t+'</td><td>'+p.rho.toFixed(0)+'</td><td>'+p.cp.toFixed(0)+'</td><td>'+(p.mu*1000).toFixed(2)+'</td><td>'+p.k.toFixed(3)+'</td><td>'+pr.toFixed(1)+'</td></tr>'});document.getElementById('ref').innerHTML=h}
 function limpar(){document.getElementById('res').style.display='none';document.getElementById('ph').style.display='block';document.getElementById('btnA').style.display='none';document.getElementById('cCorr').style.display='none'}
 
-// === MODULO DE VALIDACAO — 5 BENCHMARKS PUBLICADOS ===
+// === MODULO DE VALIDACAO — 5 BENCHMARKS ===
 function runValidation(){
 var results=[];var passCount=0;
 var bm1=[{Re:1000,Nu_exp:35,f_exp:1.50},{Re:2000,Nu_exp:62,f_exp:1.05},{Re:3000,Nu_exp:90,f_exp:0.85},{Re:5000,Nu_exp:130,f_exp:0.65},{Re:8000,Nu_exp:180,f_exp:0.50}];
@@ -486,54 +506,19 @@ var bm5=[{Re:500,Nu_exp:25},{Re:2000,Nu_exp:78},{Re:5000,Nu_exp:140},{Re:10000,N
 bm5.forEach(function(d){var Pr=4;var nuK=nKumar(d.Re,Pr,45,1,1);var devNu=(nuK-d.Nu_exp)/d.Nu_exp*100;var pass=Math.abs(devNu)<=10;if(pass)passCount++;results.push({bm:'Kumar original b=45',Re:d.Re,Nu_exp:d.Nu_exp,Nu_calc:nuK,devNu:devNu,f_exp:'N/A',f_calc:'N/A',devF:0,pass:pass})});
 var totalCases=results.length;var accuracy=(passCount/totalCases*100);
 var w=window.open('','_blank','width=900,height=700');
-var h='<html><head><title>AlfaVed - Validacao Benchmarks</title>';
-h+='<style>@page{size:A4;margin:15mm}body{font-family:Segoe UI,Arial,sans-serif;margin:20px;color:#1a3a5c;font-size:11px}';
-h+='h1{font-size:18px;border-bottom:3px solid #1a3a5c;padding-bottom:8px;margin-bottom:15px}';
-h+='h2{font-size:13px;background:#1a3a5c;color:#fff;padding:6px 10px;margin:15px 0 8px}';
-h+='table{width:100%;border-collapse:collapse;margin-bottom:10px}';
-h+='td,th{padding:5px 6px;border:1px solid #d0d5dd;font-size:10px;text-align:center}';
-h+='th{background:#1a3a5c;color:#fff;font-weight:600}';
-h+='.pass{background:#d4edda;color:#155724;font-weight:bold}';
-h+='.fail{background:#f8d7da;color:#721c24;font-weight:bold}';
-h+='.score{text-align:center;padding:20px;margin:15px 0;border-radius:8px}';
-h+='.score.high{background:#d4edda;color:#155724;font-size:24px;font-weight:800}';
-h+='.score.mid{background:#fff3cd;color:#856404;font-size:24px;font-weight:800}';
-h+='.score.low{background:#f8d7da;color:#721c24;font-size:24px;font-weight:800}';
-h+='.ref{font-size:9px;color:#999;margin-top:5px}';
-h+='</style></head><body>';
-h+='<h1>AlfaVed PHE v42.2 - Relatorio de Validacao</h1>';
-h+='<div style="font-size:11px;color:#4a5568;margin-bottom:15px">Data: '+new Date().toLocaleString('pt-BR')+'<br>Correlacoes: Martin(1996)+Kumar(1984) average<br>Condensacao: Nusselt filme x 1.5</div>';
+var h='<html><head><title>AlfaVed - Validacao</title><style>@page{size:A4;margin:15mm}body{font-family:Segoe UI,Arial,sans-serif;margin:20px;color:#1a3a5c;font-size:11px}h1{font-size:18px;border-bottom:3px solid #1a3a5c;padding-bottom:8px;margin-bottom:15px}h2{font-size:13px;background:#1a3a5c;color:#fff;padding:6px 10px;margin:15px 0 8px}table{width:100%;border-collapse:collapse;margin-bottom:10px}td,th{padding:5px 6px;border:1px solid #d0d5dd;font-size:10px;text-align:center}th{background:#1a3a5c;color:#fff;font-weight:600}.pass{background:#d4edda;color:#155724;font-weight:bold}.fail{background:#f8d7da;color:#721c24;font-weight:bold}.score{text-align:center;padding:20px;margin:15px 0;border-radius:8px}.score.high{background:#d4edda;color:#155724;font-size:24px;font-weight:800}.score.mid{background:#fff3cd;color:#856404;font-size:24px;font-weight:800}.score.low{background:#f8d7da;color:#721c24;font-size:24px;font-weight:800}.ref{font-size:9px;color:#999;margin-top:5px}</style></head><body>';
+h+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:15px">'+LOGO_SVG+'<h1 style="border:none;margin:0;padding:0">AlfaVed PHE v42.3 - Validacao</h1></div>';
+h+='<div style="font-size:11px;color:#4a5568;margin-bottom:15px">Data: '+new Date().toLocaleString('pt-BR')+'<br>Correlacoes: Martin(1996)+Kumar(1984) average</div>';
 var scoreClass=accuracy>=80?'high':accuracy>=60?'mid':'low';
 var scoreLabel=accuracy>=80?'APROVADO':accuracy>=60?'ACEITAVEL':'REPROVADO';
-h+='<div class="score '+scoreClass+'">'+accuracy.toFixed(0)+'% dos casos dentro da tolerancia - '+scoreLabel;
-h+='<br><span style="font-size:12px;font-weight:400">'+passCount+' de '+totalCases+' casos validados</span></div>';
-h+='<h2>Resultados Detalhados</h2>';
-h+='<table><thead><tr><th>Benchmark</th><th>Re</th><th>Nu/h Exp</th><th>Nu/h Calc</th><th>Dev Nu%</th><th>f Exp</th><th>f Calc</th><th>Dev f%</th><th>Status</th><th>Obs</th></tr></thead><tbody>';
-results.forEach(function(r){h+='<tr>';h+='<td style="text-align:left">'+r.bm+'</td>';h+='<td>'+(typeof r.Re==='number'?r.Re.toFixed(0):r.Re)+'</td>';h+='<td>'+(typeof r.Nu_exp==='number'?r.Nu_exp.toFixed(1):r.Nu_exp)+'</td>';h+='<td>'+(typeof r.Nu_calc==='number'?r.Nu_calc.toFixed(1):r.Nu_calc)+'</td>';var devNuCls=Math.abs(r.devNu)<=15?'pass':Math.abs(r.devNu)<=25?'':'fail';h+='<td class="'+devNuCls+'">'+r.devNu.toFixed(1)+'%</td>';h+='<td>'+(typeof r.f_exp==='number'?r.f_exp.toFixed(3):r.f_exp)+'</td>';h+='<td>'+(typeof r.f_calc==='number'?r.f_calc.toFixed(3):r.f_calc)+'</td>';var devFCls=Math.abs(r.devF)<=20?'pass':Math.abs(r.devF)<=30?'':'fail';h+='<td class="'+devFCls+'">'+(typeof r.devF==='number'?r.devF.toFixed(1):'0')+'%</td>';h+='<td class="'+(r.pass?'pass':'fail')+'">'+(r.pass?'OK':'X')+'</td>';if(r.extra)h+='<td style="font-size:9px;text-align:left">'+r.extra+'</td>';else h+='<td></td>';h+='</tr>'});
+h+='<div class="score '+scoreClass+'">'+accuracy.toFixed(0)+'% - '+scoreLabel+'<br><span style="font-size:12px;font-weight:400">'+passCount+' de '+totalCases+' casos</span></div>';
+h+='<h2>Resultados</h2><table><thead><tr><th>Benchmark</th><th>Re</th><th>Nu/h Exp</th><th>Nu/h Calc</th><th>Dev%</th><th>f Exp</th><th>f Calc</th><th>Dev%</th><th>Status</th></tr></thead><tbody>';
+results.forEach(function(r){h+='<tr><td style="text-align:left">'+r.bm+'</td><td>'+(typeof r.Re==='number'?r.Re.toFixed(0):r.Re)+'</td><td>'+(typeof r.Nu_exp==='number'?r.Nu_exp.toFixed(1):r.Nu_exp)+'</td><td>'+(typeof r.Nu_calc==='number'?r.Nu_calc.toFixed(1):r.Nu_calc)+'</td><td class="'+(Math.abs(r.devNu)<=15?'pass':Math.abs(r.devNu)<=25?'':'fail')+'">'+r.devNu.toFixed(1)+'%</td><td>'+(typeof r.f_exp==='number'?r.f_exp.toFixed(3):r.f_exp)+'</td><td>'+(typeof r.f_calc==='number'?r.f_calc.toFixed(3):r.f_calc)+'</td><td class="'+(Math.abs(r.devF)<=20?'pass':Math.abs(r.devF)<=30?'':'fail')+'">'+(typeof r.devF==='number'?r.devF.toFixed(1):'0')+'%</td><td class="'+(r.pass?'pass':'fail')+'">'+(r.pass?'OK':'X')+'</td></tr>'});
 h+='</tbody></table>';
-h+='<h2>Referencias Bibliograficas</h2>';
-h+='<div style="font-size:10px;line-height:1.8">';
-h+='<b>[1]</b> Muley & Manglik (1999). "Experimental Study of Turbulent Flow Heat Transfer and Pressure Drop in a PHE With Chevron Plates." J. Heat Transfer, 121(1). 366 citacoes. DOI: 10.1115/1.2825923<br>';
-h+='<b>[2]</b> Gut & Pinto (2003). "Optimal configuration design for plate heat exchangers." Int. J. Heat Mass Transfer, 47(22). 177 citacoes. DOI: 10.1016/j.ijheatmasstransfer.2004.06.002<br>';
-h+='<b>[3]</b> Thonon, Vidil & Marvillet (1995). "Recent Research and Developments in Plate Heat Exchangers." Enhanced Heat Transfer, 2(1-2). 140 citacoes.<br>';
-h+='<b>[4]</b> Kumar (1984). Plate heat exchanger chevron angle correlations. APV/Bell & Gossett technical data.<br>';
-h+='<b>[5]</b> dos Santos et al. (2023). "Why Do Nusselt and Friction Factor Correlations Largely Differ in PHEs?" UFSC. SSRN: ssrn.com/abstract=4563808<br>';
-h+='</div>';
-h+='<h2>Criterios de Aceitacao</h2>';
-h+='<table style="width:100%"><tr><th>Parametro</th><th>Tolerancia</th><th>Justificativa</th></tr>';
-h+='<tr><td>Nusselt (liquido)</td><td>+/-15%</td><td>Divergencia tipica entre correlacoes (UFSC paper)</td></tr>';
-h+='<tr><td>Friction factor</td><td>+/-20%</td><td>Maior dispersao que Nu (UFSC paper)</td></tr>';
-h+='<tr><td>U global</td><td>+/-20%</td><td>Combina erro de h dos dois lados</td></tr>';
-h+='<tr><td>h condensacao</td><td>+/-25%</td><td>Nusselt filme subestima PHE real</td></tr>';
-h+='<tr><td>Kumar vs dados proprios</td><td>+/-10%</td><td>Validacao de implementacao</td></tr>';
-h+='</table>';
-h+='<div style="margin-top:20px;padding:15px;background:#f5f7fa;border-radius:6px;font-size:11px">';
-h+='<b>Conclusao:</b> A precisao global do AlfaVed v42.2 e de aproximadamente <b>'+accuracy.toFixed(0)+'%</b> ';
-h+='contra dados experimentais publicados. ';
-if(accuracy>=80){h+='O software atende ao criterio de validacao para uso em pre-selecao industrial. A recomendacao e manter margem de +/-2 placas e validar com fabricante antes de compra.'}else if(accuracy>=60){h+='O software e aceitavel para pre-selecao, mas requer ajustes em alguns casos. Recomenda-se margem de +/-3 placas.'}else{h+='O software requer calibracao adicional antes de uso produtivo.'}
-h+='</div>';
-h+='<div class="ref">AlfaVed PHE v42.2 | Modulo de Validacao Automatica | Gerado em '+new Date().toLocaleString('pt-BR')+'</div>';
-h+='</body></html>';
+h+='<div style="font-size:10px;line-height:1.8;margin-top:10px"><b>[1]</b> Muley & Manglik (1999). J. Heat Transfer. 366 cit. DOI:10.1115/1.2825923<br><b>[2]</b> Gut & Pinto (2003). Int.J.HeatMassTransfer. 177 cit.<br><b>[3]</b> Thonon et al. (1995). Enhanced Heat Transfer. 140 cit.<br><b>[4]</b> Kumar (1984). APV technical data.<br><b>[5]</b> dos Santos et al. (2023). UFSC. SSRN:4563808</div>';
+h+='<div style="margin-top:15px;padding:10px;background:#f5f7fa;border-radius:6px;font-size:11px"><b>Conclusao:</b> Precisao ~'+accuracy.toFixed(0)+'%. ';
+if(accuracy>=80)h+='Aprovado para pre-selecao. Margem +/-2 placas.';else if(accuracy>=60)h+='Aceitavel. Margem +/-3 placas.';else h+='Requer calibracao.';
+h+='</div><div class="ref">AlfaVed v42.3 | '+new Date().toLocaleString('pt-BR')+'</div></body></html>';
 w.document.write(h);w.document.close()}
 
 window.onload=function(){var h='';BK.forEach(function(m){h+='<tr onclick="selM=\''+m.n+'\';calc()" style="cursor:pointer"><td><b>'+m.n+'</b></td><td>'+m.be+'</td><td>'+m.ap+'</td><td>'+(m.b*2000).toFixed(1)+'</td><td>'+(m.dp*1000)+'</td><td>'+(m.t==='s'?'SW':'G')+'</td></tr>'});document.getElementById('cat').innerHTML=h;upRef()};

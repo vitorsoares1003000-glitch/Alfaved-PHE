@@ -329,7 +329,7 @@ function detectHotCold(inp){
 var tip=inp.tip,top=inp.top,tis=inp.tis,tos=inp.tos,fs=inp.fs;
 var vm=isVapor(fs,tis,tos);
 var pC=tip>top,sC=tis>tos;
-if(!vm&&((pC&&sC)||(!pC&&!sC)))return{error:'Impossivel termodinamico: ambos os lados '+(pC?'resfriando':'aquecindo')};
+if(!vm&&((pC&&sC)||(!pC&&!sC)))return{error:'Impossivel termodinamico: ambos os lados '+(pC?'resfriando':'aquecendo')};
 var hot,cold;
 if(pC&&!vm){hot={in:tip,out:top,fluid:inp.fp,v:inp.vp,b:inp.bp,side:'prod'};cold={in:tis,out:tos,fluid:inp.fs,v:inp.vs,b:0,side:'serv'}}
 else{hot={in:tis,out:tos,fluid:inp.fs,v:inp.vs,b:0,side:'serv'};cold={in:tip,out:top,fluid:inp.fp,v:inp.vp,b:inp.bp,side:'prod'}}

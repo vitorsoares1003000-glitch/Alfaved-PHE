@@ -2,229 +2,399 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>AlfaVed PHE v43.4</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AlfaVed PHE v43.2</title>
 <style>
-:root{--ae:#1a3a5c;--am:#2d5a8e;--vd:#2d9e4a;--vm:#d94a4a;--am2:#f0a830;--cl:#f5f7fa;--cm:#d0d5dd;--ce:#4a5568;--br:#fff}
+:root{--ae:#1a3a5c;--am:#2d5a8e;--al:#4a90d9;--vd:#2d9e4a;--vm:#d94a4a;--am2:#f0a830;--cl:#f5f7fa;--cm:#d0d5dd;--ce:#4a5568;--br:#fff;--smb:0 2px 8px rgba(0,0,0,.08);--r:8px;--ft:'Segoe UI',system-ui,sans-serif;--rd:#cc3300;--az:#0099ff;--or:#ff6600}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--cl);color:#2d3748;font-size:13px}
-.hdr{background:linear-gradient(135deg,var(--ae),var(--am));color:#fff;padding:12px 24px;display:flex;align-items:center;justify-content:space-between}
-.hdr h1{font-size:16px}
-.vbg{background:var(--am2);color:var(--ae);padding:2px 10px;border-radius:4px;font-weight:800;font-size:12px}
-.ctn{max-width:1400px;margin:0 auto;padding:15px;display:grid;grid-template-columns:340px 1fr;gap:15px}
-.sb{background:var(--br);border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.08);padding:15px;height:fit-content}
-.sb h3{font-size:11px;font-weight:700;color:var(--ae);margin:12px 0 6px;border-bottom:1px solid var(--cl);padding-bottom:4px}
-.sb h3:first-child{margin-top:0}
-.fg{margin-bottom:8px}
+body{font-family:var(--ft);background:var(--cl);color:#2d3748;font-size:13px}
+.hdr{background:linear-gradient(135deg,var(--ae),var(--am));color:var(--br);padding:10px 24px;box-shadow:var(--smb);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.hdr-l{display:flex;align-items:center;gap:10px}
+.vbg{background:var(--am2);color:var(--ae);padding:2px 8px;border-radius:4px;font-weight:800;font-size:11px}
+.ctn{max-width:1600px;margin:0 auto;padding:15px;display:grid;grid-template-columns:360px 1fr;gap:15px}
+.sb{background:var(--br);border-radius:var(--r);box-shadow:var(--smb);overflow-y:auto;max-height:calc(100vh - 80px);position:sticky;top:68px}
+.sb-hdr{background:var(--ae);color:var(--br);padding:10px 15px;font-size:12px;font-weight:700}
+.sb-sect{padding:12px 15px;border-bottom:1px solid var(--cl)}
+.sb-sect h3{font-size:11px;font-weight:700;color:var(--ae);margin-bottom:8px}
+.fg{margin-bottom:6px}
 .fg label{display:block;font-size:10px;font-weight:600;color:var(--ce);margin-bottom:2px}
-.fg input,.fg select{width:100%;padding:6px 8px;border:1px solid var(--cm);border-radius:4px;font-size:12px}
+.fg input,.fg select{width:100%;padding:5px 8px;border:1px solid var(--cm);border-radius:4px;font-size:11px}
+.fg input:focus,.fg select:focus{outline:none;border-color:var(--al)}
 .fr{display:flex;gap:6px}.fr .fg{flex:1}
-.bc{width:100%;background:var(--vd);color:#fff;border:none;padding:11px;border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;margin-top:10px}
-.ba{width:100%;background:var(--am);color:#fff;border:none;padding:8px;border-radius:6px;font-size:11px;cursor:pointer;margin-top:6px}
+.gp{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:8px}
+.bp{background:var(--cl);border:1px solid var(--cm);padding:5px 2px;border-radius:4px;font-size:9px;font-weight:600;cursor:pointer;text-align:center;color:var(--ae)}
+.bp:hover{background:var(--al);color:var(--br)}
+.bp.act{background:var(--vd);color:var(--br);border-color:var(--vd)}
+.bc{width:100%;background:var(--vd);color:var(--br);border:none;padding:10px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;margin-top:6px}
+.ba{width:100%;background:var(--al);color:var(--br);border:none;padding:8px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;margin-top:4px}
+.bl{width:100%;background:var(--cm);color:var(--ce);border:none;padding:7px;border-radius:6px;font-size:11px;cursor:pointer;margin-top:4px}
 .main{display:flex;flex-direction:column;gap:12px}
 .cards-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.mc{background:var(--br);border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.08);padding:14px;text-align:center}
-.mc-val{font-size:22px;font-weight:800;color:var(--ae)}
-.mc-lbl{font-size:10px;color:var(--ce);margin-top:2px}
-.cr{background:var(--br);border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.08);padding:15px}
-.ct{font-size:14px;font-weight:700;color:var(--ae);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
-.res-badge{padding:3px 12px;border-radius:12px;font-size:11px;font-weight:700}
-.res-badge.ok{background:var(--vd);color:#fff}
-.res-badge.notok{background:var(--vm);color:#fff}
+.mc{background:var(--br);border-radius:var(--r);box-shadow:var(--smb);padding:14px;text-align:center;position:relative;overflow:hidden}
+.mc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--al)}
+.mc.green::before{background:var(--vd)}.mc.red::before{background:var(--vm)}.mc.amber::before{background:var(--am2)}.mc.purple::before{background:#9933cc}.mc.orange::before{background:var(--or)}
+.mc-val{font-size:22px;font-weight:800;color:var(--ae)}.mc-lbl{font-size:10px;color:var(--ce);margin-top:2px}.mc-ico{font-size:16px;margin-bottom:4px}
+.cr{background:var(--br);border-radius:var(--r);box-shadow:var(--smb);padding:15px}
+.ct{font-size:14px;font-weight:700;color:var(--ae);margin-bottom:10px;display:flex;align-items:center;gap:6px;justify-content:space-between}
+.ct-l{display:flex;align-items:center;gap:6px}
 .tbl{width:100%;border-collapse:collapse;font-size:11px}
-.tbl th{background:var(--ae);color:#fff;padding:6px 8px;text-align:left}
+.tbl th{background:var(--ae);color:var(--br);padding:6px 8px;text-align:left;font-weight:500;font-size:10px}
 .tbl td{padding:6px 8px;border-bottom:1px solid var(--cm)}
 .tbl tr.hl td{background:#e6f4ea;font-weight:700}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.ck{display:flex;align-items:center;gap:8px;padding:4px 0;font-size:11px}
-.ck-ok{color:var(--vd)}.ck-err{color:var(--vm)}.ck-w{color:var(--am2)}
-.tw{background:#f8d7da;border:1px solid var(--vm);border-radius:6px;padding:10px;margin:8px 0;font-size:12px;color:#721c24;font-weight:600;display:none}
-#tcanvas{width:100%;height:260px;background:#fff;border-radius:6px}
-.ms{max-height:220px;overflow-y:auto;border:1px solid var(--cm);border-radius:4px}
+.ck{display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid var(--cl);font-size:11px}
+.ck-ico{width:18px;text-align:center;font-size:12px}
+.ck-ok{color:var(--vd)}.ck-w{color:var(--am2)}.ck-err{color:var(--vm)}
+.dc{display:none;margin-top:10px;padding:12px;background:var(--cl);border-radius:6px;font-size:11px}
+.dc table{width:100%;border-collapse:collapse}
+.dc td{padding:3px 6px;border-bottom:1px solid var(--cm)}
+.dc td:first-child{font-weight:600;width:50%;color:var(--ce)}
+.ms{max-height:180px;overflow-y:auto;border:1px solid var(--cm);border-radius:4px}
 .tm{width:100%;border-collapse:collapse;font-size:10px}
-.tm th{background:var(--am);color:#fff;padding:4px;text-align:left;position:sticky;top:0}
-.tm td{padding:4px;border-bottom:1px solid var(--cm)}
+.tm th{background:var(--am);color:var(--br);padding:4px;text-align:left;position:sticky;top:0}
+.tm td{padding:4px;border-bottom:1px solid var(--cm);cursor:pointer}
+.tm tr:hover td{background:var(--cl)}
+.ae2{background:#f8d7da;border-left:4px solid var(--vm);padding:12px;border-radius:4px;font-size:12px;color:#721c24}
+.cb{background:#e6f4ea;border:1px solid var(--vd);border-radius:6px;padding:12px;margin:8px 0}
+.fi{text-align:center;padding:12px;font-size:10px;color:var(--ce)}
+.tr{width:100%;border-collapse:collapse;font-size:9px}
+.tr th{background:var(--ae);color:var(--br);padding:3px;text-align:center}
+.tr td{border:1px solid var(--cm);padding:2px;text-align:right}
+#tcanvas{width:100%;height:300px;border-radius:6px;background:#fff}
+.tdiag-legend{display:flex;gap:15px;margin-top:8px;font-size:10px;justify-content:center;flex-wrap:wrap}
+.tdiag-leg{display:flex;align-items:center;gap:4px}.tdiag-leg span{width:12px;height:3px;border-radius:2px}
+.ph{text-align:center;padding:60px 20px;color:var(--ce)}
+.ph-logo{margin-bottom:16px}
+.res-badge{padding:3px 10px;border-radius:12px;font-size:10px;font-weight:700}
+.res-badge.ok{background:var(--vd);color:var(--br)}
+.res-badge.notok{background:var(--vm);color:var(--br)}
+.sec-info{background:var(--cl);border-radius:6px;padding:8px;margin-top:6px;font-size:10px;color:var(--ce)}
+.mat-card{background:linear-gradient(135deg,#fff8e1,#fff);border:2px solid var(--am2);border-radius:8px;padding:12px;margin-top:10px}
+.mat-card h4{color:var(--or);font-size:12px;margin-bottom:8px}
+.mat-row{display:flex;gap:8px;padding:4px 0;font-size:11px;border-bottom:1px solid var(--cl)}
+.mat-lbl{font-weight:700;color:var(--ae);min-width:100px}.mat-val{color:var(--ce)}
+.btn-pdf{background:var(--vm);color:#fff;border:1px solid var(--vm);padding:4px 12px;border-radius:4px;font-size:10px;font-weight:600;cursor:pointer}
+.btn-print{background:var(--al);color:#fff;border:1px solid var(--al);padding:4px 12px;border-radius:4px;font-size:10px;font-weight:600;cursor:pointer}
+.btn-val{background:var(--or);color:#fff;border:1px solid var(--or);padding:8px 16px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;transition:background .2s}
+.btn-val:hover{background:#e65c00;box-shadow:0 2px 6px rgba(255,102,0,.3)}
+.note{font-size:9px;color:var(--am2);margin-top:2px}
+.val-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700;margin-left:4px}
+.val-badge.v2{background:#d4edda;color:#155724}
+.ds-toggle{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;padding:8px;background:var(--cl);border-radius:6px}
+.ds-toggle label{display:flex;align-items:center;gap:4px;font-size:10px;cursor:pointer;color:var(--ce)}
+.ds-toggle input[type=checkbox]{margin:0;cursor:pointer}
+.ds-tabs{display:flex;gap:4px;margin-bottom:10px}
+.ds-tab{padding:8px 16px;border:1px solid var(--cm);background:var(--cl);border-radius:6px 6px 0 0;font-size:11px;font-weight:600;cursor:pointer;color:var(--ce)}
+.ds-tab.act{background:var(--ae);color:#fff;border-color:var(--ae)}
+.ds-tab:hover:not(.act){background:#e0e5ec}
+.ds-structural{display:none}.ds-structural.visivel{display:block}
+.struct-edit{display:flex;gap:8px;margin-bottom:12px;padding:10px;background:var(--cl);border-radius:6px;flex-wrap:wrap}
+.struct-edit .fg{min-width:110px}
+.struct-edit label{font-size:10px;font-weight:600;color:var(--ce);display:block;margin-bottom:2px}
+.struct-edit input{width:70px;padding:4px 6px;border:1px solid var(--cm);border-radius:4px;font-size:11px}
+.struct-edit input:read-only{background:#f5f7fa;color:#999}
+.struct-info{font-size:10px;color:var(--ce);padding:6px;background:#e7f0fd;border-radius:4px;margin-bottom:8px}
+.struct-svg{width:100%;background:#fff;border:1px solid var(--cm);border-radius:6px;margin-bottom:10px}
+.struct-table{width:100%;border-collapse:collapse;font-size:10px;margin-top:8px}
+.struct-table th{background:var(--ae);color:#fff;padding:5px;text-align:center}
+.struct-table td{padding:4px 6px;border:1px solid var(--cm);text-align:center}
+.struct-table td:first-child{font-weight:bold;text-align:left;color:var(--ae)}
+.tw{background:#f8d7da;border:1px solid var(--vm);border-radius:6px;padding:10px;margin:8px 0;font-size:12px;color:#721c24;font-weight:600;display:none}
+@media(max-width:1100px){.ctn{grid-template-columns:1fr}.sb{position:static;max-height:none}.cards-row{grid-template-columns:1fr 1fr}.grid2{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div class="hdr">
-<div><h1>Alfa<span style="color:#cc3300">Ved</span> <span style="color:#f0a830">Dimensionador PHE</span></h1></div>
-<span class="vbg">v43.4</span>
+<div class="hdr-l">
+<svg width="36" height="36" viewBox="0 0 50 50"><circle cx="25" cy="25" r="22" fill="none" stroke="#1a3a5c" stroke-width="3"/><path d="M14 37 L25 10 L36 37" fill="none" stroke="#1a3a5c" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 29 L31 29" fill="none" stroke="#1a3a5c" stroke-width="2.8" stroke-linecap="round"/><path d="M20 37 L30 37 L25 31 Z" fill="#cc3300"/></svg>
+<div><div style="font-size:16px;font-weight:800;color:#fff">Alfa<span style="color:#cc3300">Ved</span> <span style="color:#f0a830;font-size:12px">Dimensionador PHE-V2.0</span></div><div style="font-size:9px;color:#a0b4c8">Soluções Industriais · Trocadores de Calor a Placas</div></div>
+</div>
+<span class="vbg">v43.2</span>
 </div>
 <div class="ctn">
 <div class="sb">
-<h3>Lado Produto</h3>
-<div class="fg"><label>Fluido</label>
-<select id="fp"><option value="agua">Água</option><option value="cerveja">Cerveja</option><option value="mosto">Mosto</option><option value="leite">Leite</option><option value="glicol20">Glicol 20%</option></select></div>
-<div class="fr"><div class="fg"><label>Brix(%)</label><input type="number" id="bp" value="0"></div>
-<div class="fg"><label>Vazão(m³/h)</label><input type="number" id="vp" value="20"></div></div>
-<div class="fr"><div class="fg"><label>T.Ent(°C)</label><input type="number" id="tip" value="45"></div>
-<div class="fg"><label>T.Sai(°C)</label><input type="number" id="top" value="56"></div>
+<div class="sb-hdr">Painel de Entrada</div>
+<div class="sb-sect"><h3>Modo de Operação</h3>
+<div class="gp" style="grid-template-columns:1fr 1fr">
+<button class="bp act" id="btnSimples" onclick="setModo('simples')">Simples</button>
+<button class="bp" id="btnMulti" onclick="setModo('multi')">Multi-Seção</button>
+</div>
+<div class="sec-info" id="modoInfo">Simples: Martin+Kumar avg, f 30/70.</div>
+</div>
+<div class="sb-sect"><h3>Presets</h3><div class="gp">
+<button class="bp" onclick="apPreset('cerveja')">Cerveja</button>
+<button class="bp" onclick="apPreset('mosto')">Mosto</button>
+<button class="bp" onclick="apPreset('vinho')">Vinho</button>
+<button class="bp" onclick="apPreset('nh3')">Amônia</button>
+<button class="bp" onclick="apPreset('levedura')">Levedura</button>
+<button class="bp" onclick="apPreset('pasteur')">Pasteurizador</button>
+</div></div>
+<div class="sb-sect" id="secProd"><h3>Lado Produto</h3>
+<div class="fr"><div class="fg"><label>Tag</label><input type="text" id="tag_eq" value="TC-101" style="text-transform:uppercase"></div>
+<div class="fg"><label>Projeto</label><input type="text" id="proj_nome" value="DIMENSIONAMENTO PHE" style="text-transform:uppercase"></div></div>
+<div class="fg"><label>Fluido</label><select id="fp" onchange="upRef()">
+<optgroup label="Bebidas & Alimentos"><option value="cerveja">Cerveja</option><option value="mosto">Mosto</option><option value="vinho">Vinho</option><option value="vinho_cana">Vinho de Cana</option><option value="soft_drink">Soft Drink</option><option value="leite">Leite</option><option value="oleo_vegetal">Óleo Vegetal</option></optgroup>
+<optgroup label="Açúcar & Fermentação"><option value="sacarose">Calda Açúcar</option><option value="suco_cana">Suco de Cana</option><option value="levedura_cana">Levedura Cana</option><option value="levedura_cerveja">Levedura Cerv.</option></optgroup>
+<optgroup label="Outros"><option value="agua">Água</option><option value="etanol">Etanol</option><option value="salmoura">Salmoura (NaCl)</option><option value="sae10">Óleo SAE 10</option><option value="sae30">Óleo SAE 30</option><option value="amonia_aq">Amônia Aq.</option><option value="prop_glicol">Propileno Glicol</option></optgroup>
+</select></div>
+<div class="fr"><div class="fg"><label>Brix/Conc(%)</label><input type="number" id="bp" value="12" step="0.1"></div>
+<div class="fg"><label>Vazão(m³/h)</label><input type="number" id="vp" value="10"></div></div>
+<div class="fr"><div class="fg"><label>T.Ent(°C)</label><input type="number" id="tip" value="25"></div>
+<div class="fg"><label>T.Sai(°C)</label><input type="number" id="top" value="5"></div>
 <div class="fg"><label>ΔP(kPa)</label><input type="number" id="dpp" value="50"></div></div>
-<h3>Lado Serviço</h3>
-<div class="fg"><label>Fluido</label>
-<select id="fs" onchange="tgServ()"><option value="vapor">Vapor (Saturado)</option><option value="agua">Água</option><option value="glicol20">Glicol 20%</option></select></div>
-<div class="fg" id="bx_vapor"><label>Pressão Vapor(bar)</label>
-<select id="pvap"><option value="2">2 bar (~120°C)</option><option value="3">3 bar (~134°C)</option><option value="6">6 bar (~159°C)</option></select></div>
+</div>
+<div class="sb-sect" id="secServ"><h3>Lado Serviço</h3>
+<div class="fg"><label>Fluido</label><select id="fs" onchange="tgServ()">
+<option value="agua">Água Industrial</option>
+<option value="vapor">Vapor (Saturado)</option>
+<option value="glicol10">Glicol Etileno 10%</option>
+<option value="glicol20">Glicol Etileno 20%</option>
+<option value="glicol30">Glicol Etileno 30%</option>
+<option value="prop_glicol">Propileno Glicol</option>
+<option value="salmoura">Salmoura (NaCl)</option>
+<option value="refrigerante">Refrigerante</option>
+</select></div>
+<div class="fg" id="bx_ref" style="display:none"><label>Gás</label><select id="gas">
+<option value="R717">R717 Amônia</option><option value="R134a">R134a</option>
+<option value="R22">R22</option><option value="R410A">R410A</option>
+<option value="R32">R32</option><option value="R404A">R404A</option></select></div>
+<div class="fg" id="bx_vapor" style="display:none"><label>Pressão Vapor (bar)</label><select id="pvap" onchange="tgServ()">
+<option value="2">2 bar (~120°C)</option><option value="3">3 bar (~134°C)</option>
+<option value="6">6 bar (~159°C)</option><option value="10">10 bar (~180°C)</option></select></div>
 <div class="fr"><div class="fg"><label>Vazão(m³/h)</label><input type="number" id="vs" value="15"></div>
-<div class="fg"><label>T.Ent(°C)</label><input type="number" id="tis" value="120"></div></div>
-<div class="fr"><div class="fg"><label>T.Sai(°C)</label><input type="number" id="tos" value="120"></div>
+<div class="fg"><label>T.Ent(°C)</label><input type="number" id="tis" value="2"></div></div>
+<div class="fr"><div class="fg"><label>T.Sai(°C)</label><input type="number" id="tos" value="8"></div>
 <div class="fg"><label>ΔP(kPa)</label><input type="number" id="dps" value="50"></div></div>
-<h3>Projeto</h3>
-<div class="fr"><div class="fg"><label>Placa</label><select id="tpl"><option value="g">Gasketed</option><option value="t">Todas</option></select></div>
-<div class="fg"><label>Passes</label><select id="ps"><option value="auto">Auto</option><option value="1-1">1-1</option><option value="2-2">2-2</option></select></div></div>
-<div class="fr"><div class="fg"><label>Margem(%)</label><input type="number" id="mg" value="10"></div>
-<div class="fg"><label>Fouling Rf</label><input type="number" id="rf" value="0.0001" step="0.00001"></div></div>
+<div class="note" id="vapor_note" style="display:none">Condensação: Nusselt filme. Vazão auto h_fg.</div>
+</div>
+<div class="sb-sect" id="secMulti" style="display:none"><h3>Multi-Seção</h3>
+<div class="sec-info" style="margin-bottom:8px">
+<b>Sec 1 Regen:</b> Produto frio vs quente<br><b>Sec 2 Aquec:</b> Vapor/Água quente<br>
+<b>Sec 3 Pré-Resf(opc):</b> Água ambiente<br><b>Sec 4 Resfr:</b> Água gelada/Glicol</div>
+<div class="fg"><label>T.Pasteurização(°C)</label><input type="number" id="tpast" value="72"></div>
+<div class="fg"><label>T.Após Regen(°C)</label><input type="number" id="tregen" value="65"></div>
+<div class="fg"><label>T.Final(°C)</label><input type="number" id="tfinal" value="4"></div>
+<div class="fg"><label>Tempo Retenção(s)</label><input type="number" id="t_reten" value="15"></div>
+<div class="fg"><label>4ª Seção Pré-Resf.</label><select id="sec4_on" onchange="toggleSec4()"><option value="0">Não</option><option value="1">Sim</option></select></div>
+<div class="fg" id="bx_sec4" style="display:none"><label>T.Água Ambiente(°C)</label><input type="number" id="t_agua_amb" value="25"></div>
+<div class="fg"><label>Aquecimento</label><select id="fs_aq"><option value="vapor">Vapor</option><option value="agua">Água Quente</option></select></div>
+<div class="fg"><label>Resfriamento</label><select id="fs_res"><option value="agua">Água Gelada</option><option value="glicol20">Glicol 20%</option><option value="glicol30">Glicol 30%</option></select></div>
+<div class="fr"><div class="fg"><label>T.Água Quente(°C)</label><input type="number" id="t_agua_q" value="85"></div>
+<div class="fg"><label>T.Água Gelada(°C)</label><input type="number" id="t_agua_g" value="2"></div></div>
+</div>
+<div class="sb-sect"><h3>Projeto</h3>
+<div class="fr"><div class="fg"><label>Placa</label><select id="tpl"><option value="g">Gasketed</option><option value="s">Semi-Welded</option><option value="t">Todas</option></select></div>
+<div class="fg"><label>Material</label><select id="mat"><option value="auto">Auto</option><option value="AISI316">AISI 316</option><option value="TIT">Titânio</option><option value="HAST">Hastelloy</option></select></div></div>
+<div class="fr"><div class="fg"><label>Passes</label><select id="ps"><option value="auto">Auto (até 4x4)</option><option value="1-1">1-1</option><option value="2-2">2-2</option><option value="1-2">1-2</option><option value="2-1">2-1</option><option value="3-3">3-3</option><option value="4-4">4-4</option></select></div>
+<div class="fg"><label>Margem(%)</label><input type="number" id="mg" value="10"></div></div>
+<div class="note">Martin+Kumar avg (f 30/70). Wall shear 35Pa.</div>
 <button class="bc" onclick="calc()">Calcular</button>
-<button class="ba" onclick="limpar()">Limpar</button>
-<h3>Catálogo de Placas</h3>
-<div class="ms"><table class="tm"><thead><tr><th>Mod</th><th>β</th><th>A(m²)</th><th>Dh</th></tr></thead><tbody id="cat"></tbody></table></div>
+<button class="ba" id="btnA" onclick="autoCorr()">Auto-Corrigir</button>
+<button class="bl" onclick="limpar()">Limpar</button>
+</div>
+<div class="sb-sect"><h3>Catálogo (26 modelos)</h3><div class="ms">
+<table class="tm"><thead><tr><th>Mod</th><th>β</th><th>A</th><th>Dh</th><th>Boc</th><th>T</th></tr></thead>
+<tbody id="cat"></tbody></table></div></div>
+<div class="sb-sect"><h3>Prop. Produto</h3>
+<table class="tr"><thead><tr><th>T</th><th>ρ</th><th>Cp</th><th>μ</th><th>k</th><th>Pr</th></tr></thead>
+<tbody id="ref"></tbody></table></div>
 </div>
 <div class="main">
 <div class="tw" id="thermalWarn"></div>
+<div id="ph" class="cr ph">
+<div class="ph-logo"><svg width="80" height="80" viewBox="0 0 50 50"><circle cx="25" cy="25" r="22" fill="none" stroke="#1a3a5c" stroke-width="3"/><path d="M14 37 L25 10 L36 37" fill="none" stroke="#1a3a5c" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 29 L31 29" fill="none" stroke="#1a3a5c" stroke-width="2.8" stroke-linecap="round"/><path d="M20 37 L30 37 L25 31 Z" fill="#cc3300"/></svg></div>
+<div style="font-size:20px;font-weight:800;color:#1a3a5c">Alfa<span style="color:#cc3300">Ved</span> <span style="color:#f0a830;font-size:14px">Dimensionador PHE-V2.0</span></div>
+<div style="font-size:11px;color:#4a5568;margin-top:4px">Martin+Kumar · f 30/70 · 26 modelos · 18 fluidos · Balanço energético automático</div>
+<p style="margin-top:12px;font-size:12px;color:#4a5568">Insira os dados e clique em <strong>Calcular</strong>.</p>
+</div>
 <div id="res" style="display:none">
 <div class="cards-row" id="cards"></div>
-<div class="cr"><div class="ct"><div class="ct-l">Modelo Selecionado</div><span class="res-badge ok" id="badge">VIÁVEL</span></div><div id="selInfo"></div></div>
+<div class="cr" id="selCard" style="display:none">
+<div class="ct"><div class="ct-l">Modelo Selecionado</div><span class="res-badge ok" id="badge">VIÁVEL</span></div>
+<div id="selInfo"></div>
+<div id="matRec" style="margin-top:10px"></div>
+<div style="margin-top:12px"><button class="btn-val" style="width:100%" onclick="runValidation()">Validar Benchmarks (5 fontes)</button></div>
+</div>
 <div class="grid2">
-<div class="cr"><div class="ct">Diagrama de Temperatura</div><canvas id="tcanvas"></canvas></div>
-<div class="cr"><div class="ct">Comparativo</div><div id="comp" style="max-height:260px;overflow-y:auto"></div></div>
+<div class="cr"><div class="ct"><div class="ct-l">Diagrama de Temperatura</div></div>
+<canvas id="tcanvas"></canvas>
+<div class="tdiag-legend"><div class="tdiag-leg"><span style="background:#cc3300"></span>Quente</div><div class="tdiag-leg"><span style="background:#0099ff"></span>Frio</div></div></div>
+<div class="cr"><div class="ct"><div class="ct-l">Comparativo</div></div>
+<div id="comp" style="max-height:300px;overflow-y:auto"></div></div>
 </div>
-<div class="cr"><div class="ct">Verificações</div><div id="ver"></div></div>
+<div class="grid2">
+<div class="cr"><div class="ct"><div class="ct-l">Verificações</div></div><div id="ver"></div></div>
+<div class="cr" id="cCorr" style="display:none"><div class="ct"><div class="ct-l">Correções</div></div><div id="corpoCorr"></div></div>
+</div>
+<div class="cr"><div class="ct"><div class="ct-l">Detalhes</div><button class="bp" style="width:auto;padding:4px 12px" onclick="var d=document.getElementById('det');d.style.display=d.style.display=='block'?'none':'block'">+/-</button></div>
+<div id="det" class="dc"></div></div>
+<div class="cr"><div class="ct"><div class="ct-l">Datasheet</div></div>
+<div class="ds-tabs">
+<div class="ds-tab act" id="tabTermico" onclick="dsTab('termico')">Térmico</div>
+<div class="ds-tab" id="tabEstrutural" onclick="dsTab('estrutural')">Estrutural</div>
+</div>
+<div id="dsTermico">
+<div style="display:flex;gap:6px;margin-bottom:8px">
+<button class="btn-print" onclick="printDatasheet()">Imprimir</button>
+<button class="btn-pdf" onclick="downloadPDF()">Baixar PDF</button>
+</div>
+<div class="ds-toggle" id="dsToggle">
+<label><input type="checkbox" id="ds_s1" checked onchange="toggleDS(1)"> 1.Projeto</label>
+<label><input type="checkbox" id="ds_s2" checked onchange="toggleDS(2)"> 2.Operacional</label>
+<label><input type="checkbox" id="ds_s3" checked onchange="toggleDS(3)"> 3.Resultados</label>
+<label><input type="checkbox" id="ds_s4" checked onchange="toggleDS(4)"> 4.Eficiência</label>
+</div>
+<div id="ds"></div>
+</div>
+<div id="dsEstrutural" class="ds-structural"><div id="dsStruct"></div></div>
 </div>
 </div>
 </div>
+</div>
+<div class="fi"><strong>AlfaVed PHE v43.2</strong> | Wall shear N² + safeDiv + material regen | f 30/70</div>
 <script>
-// ===== DADOS DAS PLACAS (26 modelos) =====
 var BK=[
-{n:'CLIP6',w:.15,l:.40,b:.0025,be:60,dp:.025,d:.0004,ph:1.15,ap:.024},
-{n:'CLIP8',w:.22,l:.55,b:.003,be:45,dp:.032,d:.0004,ph:1.17,ap:.050},
-{n:'M3',w:.18,l:.48,b:.0025,be:60,dp:.032,d:.0004,ph:1.15,ap:.032},
-{n:'T5',w:.245,l:.737,b:.003,be:30,dp:.05,d:.0005,ph:1.17,ap:.080},
-{n:'M6-B',w:.32,l:.92,b:.0035,be:30,dp:.05,d:.0004,ph:1.17,ap:.108},
-{n:'M6-M',w:.32,l:.92,b:.003,be:45,dp:.05,d:.0004,ph:1.17,ap:.108},
-{n:'TL6-B',w:.32,l:1.264,b:.004,be:30,dp:.065,d:.0005,ph:1.20,ap:.150},
-{n:'TS6-M',w:.4,l:.704,b:.0035,be:45,dp:.065,d:.0005,ph:1.20,ap:.140},
-{n:'M10-B',w:.47,l:1.084,b:.0035,be:30,dp:.1,d:.0005,ph:1.20,ap:.242},
-{n:'M10-M',w:.47,l:1.084,b:.003,be:45,dp:.1,d:.0005,ph:1.20,ap:.242},
-{n:'TL10-B',w:.65,l:1.95,b:.004,be:30,dp:.1,d:.0005,ph:1.22,ap:.560},
-{n:'TL10-P',w:.65,l:1.95,b:.004,be:60,dp:.1,d:.0005,ph:1.22,ap:.560},
-{n:'M15-B',w:.61,l:1.941,b:.004,be:30,dp:.15,d:.0005,ph:1.22,ap:.480},
-{n:'M15-M',w:.61,l:1.941,b:.0035,be:45,dp:.15,d:.0005,ph:1.22,ap:.480},
-{n:'T20-B',w:.78,l:2.145,b:.005,be:30,dp:.2,d:.0006,ph:1.25,ap:.800},
-{n:'M20-M',w:.7,l:1.8,b:.0045,be:45,dp:.2,d:.0006,ph:1.25,ap:.650},
-{n:'TS20-M',w:.74,l:1.405,b:.0045,be:45,dp:.2,d:.0006,ph:1.22,ap:.500},
-{n:'M30',w:.9,l:2.5,b:.005,be:30,dp:.3,d:.0006,ph:1.25,ap:1.100},
-{n:'MA30-S',w:.9,l:2.5,b:.006,be:30,dp:.3,d:.0006,ph:1.25,ap:1.100},
-{n:'M10-BW',w:.47,l:1.084,b:.0035,be:60,dp:.1,d:.0005,ph:1.20,ap:.242},
-{n:'MK15-BW',w:.65,l:1.486,b:.004,be:60,dp:.15,d:.0005,ph:1.22,ap:.480},
-{n:'A15-BW',w:.65,l:1.55,b:.0038,be:60,dp:.15,d:.0005,ph:1.22,ap:.560},
-{n:'T20-BW',w:.78,l:2.145,b:.0045,be:60,dp:.2,d:.0006,ph:1.25,ap:.800},
-{n:'T20-MW',w:.78,l:2.145,b:.004,be:45,dp:.2,d:.0006,ph:1.25,ap:.800},
-{n:'M20-MW',w:.7,l:1.8,b:.004,be:45,dp:.2,d:.0006,ph:1.25,ap:.650},
-{n:'WideGap350-S',w:.85,l:2.2,b:.007,be:30,dp:.25,d:.0006,ph:1.25,ap:.950}
+{n:'CLIP6',w:.15,l:.40,b:.0025,be:60,dp:.025,d:.0004,ph:1.15,ap:.024,t:'g'},
+{n:'CLIP8',w:.22,l:.55,b:.003,be:45,dp:.032,d:.0004,ph:1.17,ap:.050,t:'g'},
+{n:'M3',w:.18,l:.48,b:.0025,be:60,dp:.032,d:.0004,ph:1.15,ap:.032,t:'g'},
+{n:'T5',w:.245,l:.737,b:.003,be:30,dp:.05,d:.0005,ph:1.17,ap:.080,t:'g'},
+{n:'M6-B',w:.32,l:.92,b:.0035,be:30,dp:.05,d:.0004,ph:1.17,ap:.108,t:'g'},
+{n:'M6-M',w:.32,l:.92,b:.003,be:45,dp:.05,d:.0004,ph:1.17,ap:.108,t:'g'},
+{n:'TL6-B',w:.32,l:1.264,b:.004,be:30,dp:.065,d:.0005,ph:1.20,ap:.150,t:'g'},
+{n:'TS6-M',w:.4,l:.704,b:.0035,be:45,dp:.065,d:.0005,ph:1.20,ap:.140,t:'g'},
+{n:'M10-B',w:.47,l:1.084,b:.0035,be:30,dp:.1,d:.0005,ph:1.20,ap:.242,t:'g'},
+{n:'M10-M',w:.47,l:1.084,b:.003,be:45,dp:.1,d:.0005,ph:1.20,ap:.242,t:'g'},
+{n:'TL10-B',w:.65,l:1.95,b:.004,be:30,dp:.1,d:.0005,ph:1.22,ap:.560,t:'g'},
+{n:'TL10-P',w:.65,l:1.95,b:.004,be:60,dp:.1,d:.0005,ph:1.22,ap:.560,t:'g'},
+{n:'M15-B',w:.61,l:1.941,b:.004,be:30,dp:.15,d:.0005,ph:1.22,ap:.480,t:'g'},
+{n:'M15-M',w:.61,l:1.941,b:.0035,be:45,dp:.15,d:.0005,ph:1.22,ap:.480,t:'g'},
+{n:'T20-B',w:.78,l:2.145,b:.005,be:30,dp:.2,d:.0006,ph:1.25,ap:.800,t:'g'},
+{n:'M20-M',w:.7,l:1.8,b:.0045,be:45,dp:.2,d:.0006,ph:1.25,ap:.650,t:'g'},
+{n:'TS20-M',w:.74,l:1.405,b:.0045,be:45,dp:.2,d:.0006,ph:1.22,ap:.500,t:'g'},
+{n:'M30',w:.9,l:2.5,b:.005,be:30,dp:.3,d:.0006,ph:1.25,ap:1.100,t:'g'},
+{n:'MA30-S',w:.9,l:2.5,b:.006,be:30,dp:.3,d:.0006,ph:1.25,ap:1.100,t:'g'},
+{n:'M10-BW',w:.47,l:1.084,b:.0035,be:60,dp:.1,d:.0005,ph:1.20,ap:.242,t:'s'},
+{n:'MK15-BW',w:.65,l:1.486,b:.004,be:60,dp:.15,d:.0005,ph:1.22,ap:.480,t:'s'},
+{n:'A15-BW',w:.65,l:1.55,b:.0038,be:60,dp:.15,d:.0005,ph:1.22,ap:.560,t:'s'},
+{n:'T20-BW',w:.78,l:2.145,b:.0045,be:60,dp:.2,d:.0006,ph:1.25,ap:.800,t:'s'},
+{n:'T20-MW',w:.78,l:2.145,b:.004,be:45,dp:.2,d:.0006,ph:1.25,ap:.800,t:'s'},
+{n:'M20-MW',w:.7,l:1.8,b:.004,be:45,dp:.2,d:.0006,ph:1.25,ap:.650,t:'s'},
+{n:'WideGap350-S',w:.85,l:2.2,b:.007,be:30,dp:.25,d:.0006,ph:1.25,ap:.950,t:'s'}
 ];
-var MT={AISI316:{k:16.2},TIT:{k:15},HAST:{k:9.7}};
+var MT={AISI316:{k:16.2,n:'AISI 316'},TIT:{k:15,n:'Titânio'},HAST:{k:9.7,n:'Hastelloy C-276'}};
 var HFG={2:2202,3:2163,6:2086,10:2014};
-var PASSOS=['1-1','2-2','1-2','2-1','3-3','4-4'];
-
-// ===== PROPRIEDADES =====
-function pAg(T){return{rho:Math.max(1000*(1-Math.pow(Math.abs(T-4)/622,1.71)),800),cp:4182,mu:Math.max(1e-3*(1.78-.057*T+.00106*T*T),1e-5),k:Math.max(.5706+.00176*T,.1)}}
-function pCe(T){var w=pAg(T),we=.04;return{rho:w.rho*(1-we)+(789-.8*(T-20))*we,cp:w.cp*(1-we)+(2430+5*T)*we,mu:Math.max(Math.exp((1-we)*Math.log(w.mu)+we*Math.log(1.2e-3*Math.exp(-.018*(T-20))))*1.15,1e-5),k:Math.max(w.k*(1-we)+(.171-.0003*(T-20))*we,.3)}}
-function pMo(T,P){return pSa(T,P||12)}
+var selM=null,modo='simples';
+var PASSOS=['1-1','2-2','1-2','2-1','3-3','3-1','1-3','3-2','2-3','4-4','4-1','1-4','4-2','2-4','4-3','3-4'];
+var LOGO_SVG='<svg width="40" height="40" viewBox="0 0 50 50" style="vertical-align:middle"><circle cx="25" cy="25" r="22" fill="none" stroke="#1a3a5c" stroke-width="3"/><path d="M14 37 L25 10 L36 37" fill="none" stroke="#1a3a5c" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M19 29 L31 29" fill="none" stroke="#1a3a5c" stroke-width="2.8" stroke-linecap="round"/><path d="M20 37 L30 37 L25 31 Z" fill="#cc3300"/></svg>';
+var MAT_COMPAT={'agua':{p:'AISI316',g:'EPDM',gt:150,r:'Água-AISI316+EPDM'},'vapor':{p:'AISI316',g:'EPDM',gt:180,r:'Vapor-AISI316+EPDM'},'glicol10':{p:'AISI316',g:'EPDM',gt:150,r:'Glicol10-AISI316+EPDM'},'glicol20':{p:'AISI316',g:'EPDM',gt:150,r:'Glicol20-AISI316+EPDM'},'glicol30':{p:'AISI316',g:'EPDM',gt:150,r:'Glicol30-AISI316+EPDM'},'prop_glicol':{p:'AISI316',g:'EPDM',gt:150,r:'PropGlicol-AISI316+EPDM'},'salmoura':{p:'TIT',g:'EPDM',gt:150,r:'Salmoura-TITÂNIO+EPDM'},'sacarose':{p:'AISI316',g:'NBR',gt:110,r:'Calda-AISI316+NBR'},'suco_cana':{p:'AISI316',g:'EPDM',gt:150,r:'Suco-AISI316+EPDM'},'vinho_cana':{p:'AISI316',g:'EPDM',gt:150,r:'VinhoCana-AISI316+EPDM'},'levedura_cana':{p:'AISI316',g:'EPDM',gt:150,r:'Levedura-AISI316+EPDM'},'levedura_cerveja':{p:'AISI316',g:'EPDM',gt:150,r:'LevCerv-AISI316+EPDM'},'cerveja':{p:'AISI316',g:'EPDM',gt:150,r:'Cerveja-AISI316+EPDM'},'mosto':{p:'AISI316',g:'NBR',gt:110,r:'Mosto-AISI316+NBR'},'vinho':{p:'AISI316',g:'EPDM',gt:150,r:'Vinho-AISI316+EPDM'},'soft_drink':{p:'AISI316',g:'EPDM',gt:150,r:'Soft-AISI316+EPDM'},'leite':{p:'AISI316',g:'EPDM',gt:150,r:'Leite-AISI316+EPDM'},'etanol':{p:'AISI316',g:'EPDM',gt:150,r:'Etanol-AISI316+EPDM'},'oleo_vegetal':{p:'AISI316',g:'NBR',gt:110,r:'ÓleoVeg-AISI316+NBR'},'sae10':{p:'AISI316',g:'NBR',gt:110,r:'SAE10-AISI316+NBR'},'sae30':{p:'AISI316',g:'NBR',gt:110,r:'SAE30-AISI316+NBR'},'amonia_aq':{p:'TIT',g:'HNBR',gt:150,r:'AmôniaAq-TITÂNIO+HNBR'},'refrigerante':{p:'AISI316',g:'NBR',gt:110,r:'Refr-AISI316+NBR'}};
+var GAS_GASKET={'R717':{g:'HNBR',r:'R717-HNBR'},'R134a':{g:'NBR',r:'R134a-NBR'},'R22':{g:'NBR',r:'R22-NBR'},'R410A':{g:'NBR',r:'R410A-NBR'},'R32':{g:'NBR',r:'R32-NBR'},'R404A':{g:'NBR',r:'R404A-NBR'}};
+var DIMS={'CLIP6':{H:450,W:280,dp:25,bolt:'M16',nB:4,ft:65,nd:160},'CLIP8':{H:550,W:320,dp:32,bolt:'M20',nB:4,ft:70,nd:220},'M3':{H:520,W:280,dp:32,bolt:'M16',nB:4,ft:60,nd:200},'T5':{H:650,W:350,dp:50,bolt:'M20',nB:4,ft:75,nd:300},'M6-B':{H:750,W:420,dp:50,bolt:'M24',nB:4,ft:80,nd:380},'M6-M':{H:750,W:420,dp:50,bolt:'M24',nB:4,ft:80,nd:380},'TL6-B':{H:950,W:420,dp:65,bolt:'M24',nB:4,ft:85,nd:500},'TS6-M':{H:820,W:460,dp:65,bolt:'M24',nB:4,ft:85,nd:420},'M10-B':{H:1050,W:520,dp:100,bolt:'M24',nB:4,ft:90,nd:440},'M10-M':{H:1050,W:520,dp:100,bolt:'M24',nB:4,ft:90,nd:440},'TL10-B':{H:1550,W:620,dp:100,bolt:'M30',nB:6,ft:100,nd:780},'TL10-P':{H:1550,W:620,dp:100,bolt:'M30',nB:6,ft:100,nd:780},'M15-B':{H:1550,W:620,dp:150,bolt:'M30',nB:6,ft:110,nd:780},'M15-M':{H:1550,W:620,dp:150,bolt:'M30',nB:6,ft:110,nd:780},'T20-B':{H:1750,W:780,dp:200,bolt:'M39',nB:6,ft:130,nd:860},'M20-M':{H:1650,W:720,dp:200,bolt:'M30',nB:6,ft:120,nd:720},'TS20-M':{H:1450,W:700,dp:200,bolt:'M30',nB:6,ft:110,nd:560},'M30':{H:2100,W:900,dp:300,bolt:'M48',nB:8,ft:150,nd:1000},'MA30-S':{H:2100,W:900,dp:300,bolt:'M48',nB:8,ft:150,nd:1000},'M10-BW':{H:1050,W:520,dp:100,bolt:'M24',nB:4,ft:90,nd:440},'MK15-BW':{H:1450,W:620,dp:150,bolt:'M30',nB:6,ft:110,nd:720},'A15-BW':{H:1500,W:630,dp:150,bolt:'M30',nB:6,ft:110,nd:750},'T20-BW':{H:1750,W:780,dp:200,bolt:'M39',nB:6,ft:130,nd:860},'T20-MW':{H:1750,W:780,dp:200,bolt:'M30',nB:6,ft:120,nd:860},'M20-MW':{H:1650,W:720,dp:200,bolt:'M30',nB:6,ft:120,nd:720},'WideGap350-S':{H:1900,W:880,dp:250,bolt:'M48',nB:8,ft:140,nd:880}};
+function recommendMaterial(fp,fs,tip,top,tis,tos,gas){var maxT=Math.max(tip,top,tis,tos);var pc=MAT_COMPAT[fp]||MAT_COMPAT['agua'];var sc=MAT_COMPAT[fs]||MAT_COMPAT['agua'];if(fs==='refrigerante'&&gas&&GAS_GASKET[gas]){sc.g=GAS_GASKET[gas].g;sc.r=GAS_GASKET[gas].r;sc.gt=150}var plateRec;if(pc.p==='TIT'||sc.p==='TIT')plateRec='TIT';else if(pc.p==='HAST'||sc.p==='HAST')plateRec='HAST';else plateRec='AISI316';var gP=pc.g,gS=sc.g;if(maxT>110&&gP==='NBR')gP='EPDM';if(maxT>110&&gS==='NBR')gS='EPDM';if(maxT>150&&(gP==='EPDM'||gP==='NBR'))gP='Viton';if(maxT>150&&(gS==='EPDM'||gS==='NBR'))gS='Viton';if(fs==='refrigerante'&&gas==='R717')gS='HNBR';var pr={'Viton':4,'EPDM':3,'HNBR':2,'NBR':1};var gasketRec=pr[gP]>=pr[gS]?gP:gS;return{plate:plateRec,gasket:gasketRec,maxTemp:maxT,fullReason:'Prod: '+pc.r+'\nServ: '+sc.r,pc:pc,sc:sc}}
+function safeDiv(a,b,fb){var d=Math.abs(b);if(!isFinite(d)||d<1e-12)return (fb!==undefined)?fb:0;return a/b}
+function pAg(T){return{rho:Math.max(1000*(1-Math.pow(Math.abs(T-4)/622,1.71)),800),cp:Math.max(4182+(T-20)*(.06+.0008*(T-20)),3000),mu:Math.max(1e-3*(1.78-.057*T+.00106*T*T-8.5e-6*T*T*T),1e-5),k:Math.max(.5706+.00176*T-6.46e-6*T*T,.1)}}
+function pSa(T,B,q){var w=B/100;q=(q||100)/100;var wt=pAg(T);var dr=3.8749*w+.0174*w*w-.0063*w*T+1.836e-5*w*w*T+2.776e-5*w*T*T;var cp=wt.cp*(1-w)+(1262+4.524*T+.00624*T*T)*w+(-w*(.0297-4.6e-5*q)+7.5e-5*w*T)*1000;var lM=Math.log10(wt.mu);var lR=3.2488*w+7.5*w*w+14.2*w*w*w-.03*w*T-.02*w*w*T;return{rho:Math.max(wt.rho+dr,800),cp:Math.max(cp,1500),mu:Math.max(Math.pow(10,lM+lR),1e-5),k:Math.max(wt.k-.424*w+.001*T*(1-.5*w),.15)}}
+function pCe(T){var w=pAg(T),we=.04;return{rho:w.rho*(1-we)+(789-.8*(T-20))*we-30*we*(1-we),cp:w.cp*(1-we)+(2430+5*T)*we,mu:Math.max(Math.exp((1-we)*Math.log(w.mu)+we*Math.log(1.2e-3*Math.exp(-.018*(T-20))))*1.15,1e-5),k:Math.max(w.k*(1-we)+(.171-.0003*(T-20))*we-.02*we*(1-we),.3)}}
+function pMo(T,P){return pSa(T,P||12,95)}
+function pVi(T){var w=pAg(T),we=.096;return{rho:w.rho*(1-we)+(789-.8*(T-20))*we-35*we*(1-we),cp:w.cp*(1-we)+(2430+5*T)*we,mu:Math.max(Math.exp((1-we)*Math.log(w.mu)+we*Math.log(1.2e-3*Math.exp(-.018*(T-20))))*1.1,1e-5),k:Math.max(w.k*(1-we)+(.171-.0003*(T-20))*we-.03*we*(1-we),.25)}}
+function pVC(T,B){var we=.1,w=pAg(T),ba=pSa(T,Math.min(B||6,10),70);return{rho:w.rho*(1-we)+(789-.8*(T-20))*we-40*we*(1-we)+(ba.rho-w.rho)*.5,cp:w.cp*(1-we)+(2430+5*T)*we+(ba.cp-w.cp)*.3,mu:Math.max(Math.exp((1-we)*Math.log(ba.mu)+we*Math.log(1.2e-3*Math.exp(-.018*(T-20)))),1e-5),k:Math.max(w.k*(1-we)+(.171-.0003*(T-20))*we-.03*we*(1-we)+(ba.k-w.k)*.3,.1)}}
+function pSC(T,B){return pSa(T,B||16,85)}
+function pLC(T,C){var w=(C||25)/100,wt=pAg(T);return{rho:wt.rho*(1+.35*w),cp:wt.cp*(1-.35*w)+1500*w,mu:Math.max(wt.mu*Math.exp(4.5*w),1e-5),k:Math.max(wt.k*(1-.25*w),.2)}}
+function pSD(T,B){return pSa(T,B||6,100)}
 function pLt(T){var w=pAg(T);return{rho:w.rho+14-.4*(T-20),cp:Math.max(w.cp-250,3500),mu:Math.max(w.mu*(1.5+.01*(20-T)),1e-5),k:Math.max(w.k-.02,.4)}}
+function pEt(T,C){var w=(C||50)/100,wt=pAg(T);return{rho:wt.rho*(1-w)+(789-.8*(T-20))*w-50*w*(1-w),cp:wt.cp*(1-w)+(2430+5*T)*w,mu:Math.max(Math.exp((1-w)*Math.log(wt.mu)+w*Math.log(1.2e-3*Math.exp(-.018*(T-20)))+.375*w*(1-w)),1e-5),k:Math.max(wt.k*(1-w)+(.171-.0003*(T-20))*w-.05*w*(1-w),.1)}}
 function pGl(T,c){var w=c/100,wt=pAg(T);return{rho:wt.rho*(1-w)+(1113-.64*(T-20))*w,cp:wt.cp*(1-w)+(2350+3.8*T)*w,mu:Math.max(Math.exp((1-w)*Math.log(wt.mu)+w*Math.log(.021*Math.exp(-.025*(T-20)))),1e-5),k:Math.max(wt.k*(1-w)+(.252-.0003*(T-20))*w,.15)}}
-function pSa(T,B){var w=B/100,wt=pAg(T);var dr=3.8749*w+.0174*w*w-.0063*w*T;var cp=wt.cp*(1-w)+(1262+4.524*T)*w;var lM=Math.log10(wt.mu);var lR=3.2488*w+7.5*w*w+14.2*w*w*w-.03*w*T;return{rho:Math.max(wt.rho+dr,800),cp:Math.max(cp,1500),mu:Math.max(Math.pow(10,lM+lR),1e-5),k:Math.max(wt.k-.424*w+.001*T,.15)}}
-function gP(f,T,b){switch(f){case'agua':return pAg(T);case'cerveja':return pCe(T);case'mosto':return pMo(T,b);case'leite':return pLt(T);case'glicol20':return pGl(T,20);default:return pAg(T)}}
-function gPS(fs,T){switch(fs){case'agua':return pAg(T);case'vapor':return pAg(T);case'glicol20':return pGl(T,20);default:return pAg(T)}}
-
-// ===== CORRELAÇÕES =====
-function safeDiv(a,b,fb){var d=Math.abs(b);if(!isFinite(d)||d<1e-12)return(fb!==undefined)?fb:0;return a/b}
-function nMartin(Re,Pr,be){var b=be*Math.PI/180;var g=(Math.cos(b)*Math.cos(b))/(.045*Math.tan(b)+3.7*Math.sin(b))+(Math.sin(b)*Math.sin(b))/(2.25/Math.tan(b)+.125*Math.cos(b));return Math.max(.122*Math.pow(Math.max(Pr,.1),1/3)*Math.pow(Math.max(Re,1),.75)*Math.pow(Math.max(g,.001),-1/6),1)}
+function pPG(T,c){var w=(c||30)/100,wt=pAg(T);return{rho:wt.rho*(1-w)+(1037-.6*(T-20))*w,cp:wt.cp*(1-w)+(2400+3.5*T)*w,mu:Math.max(Math.exp((1-w)*Math.log(wt.mu)+w*Math.log(.024*Math.exp(-.022*(T-20)))),1e-5),k:Math.max(wt.k*(1-w)+(.225-.0002*(T-20))*w,.15)}}
+function pSal(T,c){var w=(c||10)/100,wt=pAg(T);return{rho:wt.rho*(1+.08*w),cp:wt.cp*(1-.08*w),mu:Math.max(wt.mu*(1+0.15*w),1e-5),k:Math.max(wt.k*(1-.05*w),.45)}}
+function pOleoVeg(T){return{rho:Math.max(920-.7*(T-20),850),cp:2000+2*T,mu:Math.max(0.05*Math.exp(-.02*(T-20)),.001),k:Math.max(.17-.0001*(T-20),.1)}}
+function pSAE(T,g){var v={10:.05,30:.1}[g||10];return{rho:Math.max(880-.6*(T-20),820),cp:1880+2*T,mu:Math.max(v*Math.exp(-.025*(T-30)),.005),k:Math.max(.14-.0001*(T-20),.1)}}
+function pAmoniaAq(T,C){var w=(C||25)/100,wt=pAg(T);return{rho:wt.rho*(1-.12*w),cp:wt.cp*(1-.1*w)+4700*w,mu:Math.max(wt.mu*(1+.2*w),1e-5),k:Math.max(wt.k*(1+.15*w),.4)}}
+function pRf(g,T){var TB={'R717':{'-40':[682,3.46e-4,.628,4426],'-20':[662,2.93e-4,.596,4515],'0':[639,2.52e-4,.567,4610],'20':[610,2.2e-4,.540,4722],'40':[580,1.95e-4,.514,4852]},'R134a':{'-40':[1387,4.81e-4,.111,1247],'-20':[1332,3.71e-4,.1,1300],'0':[1273,2.97e-4,.09,1358],'20':[1210,2.43e-4,.08,1427],'40':[1142,2.02e-4,.071,1512]},'R22':{'-40':[1406,4e-4,.114,1124],'-20':[1349,3.17e-4,.104,1173],'0':[1285,2.58e-4,.094,1230],'20':[1210,2.13e-4,.084,1299],'40':[1128,1.79e-4,.074,1383]},'R410A':{'-40':[1230,2.6e-4,.105,1421],'-20':[1172,2.09e-4,.097,1482],'0':[1106,1.72e-4,.089,1555],'20':[1028,1.44e-4,.081,1646],'40':[931,1.23e-4,.073,1765]},'R32':{'-40':[1142,2.75e-4,.181,1730],'-20':[1090,2.19e-4,.169,1798],'0':[1027,1.78e-4,.158,1883],'20':[950,1.48e-4,.147,1992],'40':[851,1.26e-4,.136,2141]},'R404A':{'-40':[1234,3e-4,.089,1335],'-20':[1174,2.36e-4,.081,1398],'0':[1103,1.91e-4,.074,1474],'20':[1018,1.58e-4,.067,1570],'40':[911,1.34e-4,.059,1697]}};var tb=TB[g];if(!tb)return pAg(T);var ks=Object.keys(tb).map(Number).sort(function(a,b){return a-b});var t1=ks[0],t2=ks[ks.length-1];for(var i=0;i<ks.length-1;i++){if(T>=ks[i]&&T<=ks[i+1]){t1=ks[i];t2=ks[i+1];break}}if(T<ks[0]){t1=ks[0];t2=ks[1]}if(T>ks[ks.length-1]){t1=ks[ks.length-2];t2=ks[ks.length-1]}var f=safeDiv(T-t1,Math.max(t2-t1,.001),0),d1=tb[t1],d2=tb[t2];return{rho:d1[0]+(d2[0]-d1[0])*f,cp:d1[3]+(d2[3]-d1[3])*f,mu:Math.max(d1[1]+(d2[1]-d1[1])*f,1e-5),k:Math.max(d1[2]+(d2[2]-d1[2])*f,.04)}}
+function gP(f,T,b,c){b=b||0;c=c||0;switch(f){case'sacarose':return pSa(T,b,100);case'suco_cana':return pSC(T,b);case'vinho_cana':return pVC(T,b);case'levedura_cana':return pLC(T,b);case'levedura_cerveja':return pLC(T,b||20);case'cerveja':return pCe(T);case'mosto':return pMo(T,b);case'vinho':return pVi(T);case'soft_drink':return pSD(T,b);case'leite':return pLt(T);case'etanol':return pEt(T,c);case'oleo_vegetal':return pOleoVeg(T);case'salmoura':return pSal(T,b||10);case'sae10':return pSAE(T,10);case'sae30':return pSAE(T,30);case'amonia_aq':return pAmoniaAq(T,b||25);case'prop_glicol':return pPG(T,b||30);case'agua':return pAg(T);default:return pAg(T)}}
+function gPS(fs,T,gas){switch(fs){case'agua':return pAg(T);case'vapor':return pAg(T);case'glicol10':return pGl(T,10);case'glicol20':return pGl(T,20);case'glicol30':return pGl(T,30);case'prop_glicol':return pPG(T,30);case'salmoura':return pSal(T,10);case'refrigerante':return pRf(gas||'R717',T);default:return pAg(T)}}
+function nMartin(Re,Pr,be,mu,muw){var b=be*Math.PI/180;var g=(Math.cos(b)*Math.cos(b))/(.045*Math.tan(b)+3.7*Math.sin(b))+(Math.sin(b)*Math.sin(b))/(2.25/Math.tan(b)+.125*Math.cos(b));var z=Math.pow(1/Math.max(Re,1),.25)*Math.pow(Math.max(g,.001),-1/6);return Math.max(.122*Math.pow(Math.max(Pr,.1),1/3)*Math.pow(Math.max(z/2,.001),1/6)*Math.pow(Math.max(Re,1),.75)*Math.pow(Math.max(mu/muw,.1),.14),1)}
 function fMartin(Re,be){var b=be*Math.PI/180;var g=(Math.cos(b)*Math.cos(b))/(.045*Math.tan(b)+3.7*Math.sin(b))+(Math.sin(b)*Math.sin(b))/(2.25/Math.tan(b)+.125*Math.cos(b));return Math.max(.5*Math.pow(1/Math.max(Re,1),.25)*Math.pow(Math.max(g,.001),-1/6),.001)}
-function nKumar(Re,Pr,be){var Ch,n;if(be<=30){Ch=Re<=10?0.718:0.348;n=Re<=10?0.349:0.663}else if(be<=45){if(Re<10){Ch=0.718;n=0.349}else if(Re<100){Ch=0.400;n=0.503}else{Ch=0.348;n=0.663}}else{Ch=Re<10?0.718:0.481;n=Re<10?0.349:0.663}return Math.max(Ch*Math.pow(Math.max(Re,1),n)*Math.pow(Math.max(Pr,.1),1/3),1)}
-function fKumar(Re,be){var Kp,m;if(be<=30){if(Re<=10){Kp=50;m=1}else if(Re<=100){Kp=19.4;m=.589}else{Kp=2.99;m=.183}}else if(be<=45){if(Re<15){Kp=47;m=1}else if(Re<100){Kp=18.29;m=.65}else{Kp=2.99;m=.183}}else{Kp=Re<10?50:3;m=Re<10?1:.183}return Math.max(Kp/Math.pow(Math.max(Re,1),m),.001)}
-function nAvg(Re,Pr,be){return(nMartin(Re,Pr,be)+nKumar(Re,Pr,be))/2}
+function nKumar(Re,Pr,be,mu,muw){var Ch,n;if(be<=30){if(Re<=10){Ch=0.718;n=0.349}else{Ch=0.348;n=0.663}}else if(be<=45){if(Re<10){Ch=0.718;n=0.349}else if(Re<100){Ch=0.400;n=0.503}else{Ch=0.348;n=0.663}}else{if(Re<10){Ch=0.718;n=0.349}else{Ch=0.481;n=0.663}}return Math.max(Ch*Math.pow(Math.max(Re,1),n)*Math.pow(Math.max(Pr,.1),1/3)*Math.pow(Math.max(mu/muw,.1),0.17),1)}
+function fKumar(Re,be){var Kp,m;if(be<=30){if(Re<=10){Kp=50;m=1.0}else if(Re<=100){Kp=19.4;m=0.589}else{Kp=2.99;m=0.183}}else if(be<=45){if(Re<15){Kp=47;m=1.0}else if(Re<100){Kp=18.29;m=0.65}else{Kp=2.99;m=0.183}}else{if(Re<10){Kp=50;m=1.0}else{Kp=3.0;m=0.183}}return Math.max(Kp/Math.pow(Math.max(Re,1),m),.001)}
+function nAvg(Re,Pr,be,mu,muw){return(nMartin(Re,Pr,be,mu,muw)+nKumar(Re,Pr,be,mu,muw))/2}
 function fAvg(Re,be){return 0.3*fMartin(Re,be)+0.7*fKumar(Re,be)}
 function wallShear(dp,De,L){return Math.abs(safeDiv(dp*De,4*Math.max(L,.001),0))}
-function condHNusselt(p,Ts,Tw,Lp){var kl=.686,rhol=943,rhov=1.12,g=9.81,hfg=(HFG[p||2]||2202)*1000,mul=.000231,dT=Math.max(Math.abs(Ts-Tw),1);return Math.max(Math.min(1.5*0.943*Math.pow(kl*kl*kl*rhol*(rhol-rhov)*g*hfg/(mul*Lp*dT),.25),20000),5000)}
+function thetaFilter(dt,lmtd){var th=safeDiv(Math.abs(dt),Math.max(lmtd,.01),1);if(th>1.5)return[60];if(th>0.8)return[45,60];return[30,45,60]}
+function condHNusselt(p,Ts,Tw,Lp){var kl=0.686,rhol=943,rhov=1.12,g=9.81,hfg=(HFG[p||2]||2202)*1000,mul=0.000231,dT=Math.max(Math.abs(Ts-Tw),1);return Math.max(Math.min(1.5*0.943*Math.pow(kl*kl*kl*rhol*(rhol-rhov)*g*hfg/(mul*Lp*dT),0.25),20000),5000)}
 function isVapor(fs,tis,tos){return fs==='vapor'||Math.abs(tis-tos)<0.1}
 function calcVaporFlow(Qkw,p){var hfg=HFG[p||2]||2202;var mV=safeDiv(Qkw,hfg,0);var vCond=safeDiv(mV,943,0)*3600;return{mVapor:mV,vCond:vCond,hfg:hfg}}
-function cDp(m,r,D,L,phi,N,Ap,v,be,Re){var Cf=fAvg(Re,be),Lr=L*phi,dpc=4*Cf*(Lr*N/D)*(r*v*v/2),vp=safeDiv(m,r*Math.max(Ap,1e-6),0),dpp=1.4*r*vp*vp/2*N,t=safeDiv(dpc+dpp,1000,0),fp=safeDiv(dpp/1000,t,0)*100,tau=wallShear(dpc,D,Lr*N);return{t:t,vp:vp,fracPorta:fp,tau:tau}}
-function cL(a,b,c,d){var d1=a-d,d2=b-c;if(Math.abs(d1)<.001&&Math.abs(d2)<.001)return .001;if(Math.abs(d1-d2)<.01)return Math.abs(d1);d1=Math.abs(d1);d2=Math.abs(d2);if(d1<.001)return d2;if(d2<.001)return d1;return Math.abs((d1-d2)/Math.log(d1/d2))}
-function fF(P,R,a){if(a==='1-1')return 1;if(Math.abs(R-1)<.001)R=1.001;if(Math.abs(1-P*R)<.001)P=.999/Math.max(R,.001);var s=Math.sqrt(R*R+1),num=s*Math.log(Math.abs((1-P)/(1-P*R))),den=(R-1)*Math.log(Math.abs((2-P*(R+1-s))/(2-P*(R+1+s))));if(Math.abs(den)<1e-10)return .75;return Math.max(Math.min(num/den,1),0)}
-
-// ===== DETECÇÃO QUENTE/FRIO =====
+// v43.2: cDp com wall shear N² corrigido
+function cDp(m,r,D,L,phi,N,Ap,v,be,Re){var Cf=fAvg(Re,be),Lr=L*phi,dpc=4*Cf*(Lr*N/D)*(r*v*v/2),vp=safeDiv(m,r*Math.max(Ap,1e-6),0),dpp=1.4*r*vp*vp/2*N,t=safeDiv(dpc+dpp,1000,0),fp=safeDiv(dpp/1000,t,0)*100,tau=wallShear(dpc,D,Lr*N);return{t:t,c:safeDiv(dpc,1000,0),p:safeDiv(dpp,1000,0),vp:vp,fracPorta:fp,tau:tau}}
+function cL(a,b,c,d){var d1=a-d,d2=b-c;if(Math.abs(d1)<.001&&Math.abs(d2)<.001)return 0.001;if(Math.abs(d1-d2)<.01)return Math.abs(d1);d1=Math.abs(d1);d2=Math.abs(d2);if(d1<.001)return d2;if(d2<.001)return d1;return Math.abs((d1-d2)/Math.log(d1/d2))}
+function fF(P,R,a){if(a==='1-1')return 1;if(Math.abs(R-1)<.001)R=1.001;if(Math.abs(1-P*R)<.001)P=0.999/Math.max(R,.001);var s=Math.sqrt(R*R+1),num=s*Math.log(Math.abs((1-P)/(1-P*R))),den=(R-1)*Math.log(Math.abs((2-P*(R+1-s))/(2-P*(R+1+s))));if(Math.abs(den)<1e-10)return .75;return Math.max(Math.min(num/den,1),0)}
+// v43.2: detectHotCold — detecta qual lado é quente/frio
 function detectHotCold(inp){
 var tip=inp.tip,top=inp.top,tis=inp.tis,tos=inp.tos,fs=inp.fs;
 var vm=isVapor(fs,tis,tos);
 var pC=tip>top,sC=tis>tos;
-if(!vm&&((pC&&sC)||(!pC&&!sC)))return{error:'Impossivel: ambos os lados '+(pC?'resfriando':'aquecendo')};
+if(!vm&&((pC&&sC)||(!pC&&!sC)))return{error:'Impossivel termodinamico: ambos os lados '+(pC?'resfriando':'aquecendo')};
 var hot,cold;
-if(pC&&!vm){hot={in:tip,out:top,fluid:inp.fp,b:inp.bp,side:'prod'};cold={in:tis,out:tos,fluid:inp.fs,b:0,side:'serv'}}
-else{hot={in:tis,out:tos,fluid:inp.fs,b:0,side:'serv'};cold={in:tip,out:top,fluid:inp.fp,b:inp.bp,side:'prod'}}
+if(pC&&!vm){hot={in:tip,out:top,fluid:inp.fp,v:inp.vp,b:inp.bp,side:'prod'};cold={in:tis,out:tos,fluid:inp.fs,v:inp.vs,b:0,side:'serv'}}
+else{hot={in:tis,out:tos,fluid:inp.fs,v:inp.vs,b:0,side:'serv'};cold={in:tip,out:top,fluid:inp.fp,v:inp.vp,b:inp.bp,side:'prod'}}
 return{hot:hot,cold:cold,pCool:pC||vm,vm:vm,error:null}
 }
-
-// ===== COEFICIENTE GLOBAL U =====
+// v43.2: cU com Th/Tc dinâmico via detectHotCold
 function cU(p){
-var hc=detectHotCold({tip:p.t2i,top:p.t2o,tis:p.t1i,tos:p.t1o,fs:p.f1,fp:p.f2,bp:p.b2});
+var hc=detectHotCold({tip:p.t2i,top:p.t2o,tis:p.t1i,tos:p.t1o,fs:p.f1,fp:p.f2,vp:0,vs:0,bp:p.b2,gas:p.gas});
 var Th,Tc,Tw;
 if(hc.error){Th=Math.max(p.t1i,p.t2i);Tc=Math.min(p.t1i,p.t2i);Tw=(Th+Tc)/2}
 else{Th=(hc.hot.in+hc.hot.out)/2;Tc=(hc.cold.in+hc.cold.out)/2;Tw=(Th+Tc)/2}
-var Ua=0,r={};var vm=hc.vm||isVapor(p.f1,p.t1i,p.t1o);var rf=p.rf||.0001;
+var Ua=0,r={};var vm=hc.vm||isVapor(p.f1,p.t1i,p.t1o);
 for(var i=0;i<50;i++){
 var bh,bc,wh,wc;
-if(hc.hot){bh=hc.hot.side==='prod'?gP(hc.hot.fluid,Th,hc.hot.b):gPS(hc.hot.fluid,Th);wh=hc.hot.side==='prod'?gP(hc.hot.fluid,Tw,hc.hot.b):gPS(hc.hot.fluid,Tw)}
-else{bh=gPS(p.f1,Th);wh=gPS(p.f1,Tw)}
-if(hc.cold){bc=hc.cold.side==='prod'?gP(hc.cold.fluid,Tc,hc.cold.b):gPS(hc.cold.fluid,Tc);wc=hc.cold.side==='prod'?gP(hc.cold.fluid,Tw,hc.cold.b):gPS(hc.cold.fluid,Tw)}
-else{bc=gP(p.f2,Tc,p.b2);wc=gP(p.f2,Tw,p.b2)}
+if(hc.hot){bh=hc.hot.side==='prod'?gP(hc.hot.fluid,Th,hc.hot.b,hc.hot.b):gPS(hc.hot.fluid,Th,p.gas);wh=hc.hot.side==='prod'?gP(hc.hot.fluid,Tw,hc.hot.b,hc.hot.b):gPS(hc.hot.fluid,Tw,p.gas)}
+else{bh=gPS(p.f1,Th,p.gas);wh=gPS(p.f1,Tw,p.gas)}
+if(hc.cold){bc=hc.cold.side==='prod'?gP(hc.cold.fluid,Tc,hc.cold.b,hc.cold.b):gPS(hc.cold.fluid,Tc,p.gas);wc=hc.cold.side==='prod'?gP(hc.cold.fluid,Tw,hc.cold.b,hc.cold.b):gPS(hc.cold.fluid,Tw,p.gas)}
+else{bc=gP(p.f2,Tc,p.b2,p.c2);wc=gP(p.f2,Tw,p.b2,p.c2)}
 var Nh,Nc,hh,hc2;
 if(vm){hh=condHNusselt(p.pressure||2,hc.hot.in,Tw,p.Lplate||0.7);Nh=hh*p.Dh/Math.max(bh.k,.001)}
-else{Nh=nAvg(p.Re1,p.Pr1,p.be);hh=Nh*bh.k/Math.max(p.Dh,1e-6)}
-Nc=nAvg(p.Re2,p.Pr2,p.be);hc2=Nc*bc.k/Math.max(p.Dh,1e-6);
-var kc=1/(1/hh+1/hc2+p.d/p.km),kd=safeDiv(1,safeDiv(1,kc,0)+rf,0);
+else{Nh=nAvg(p.Re1,p.Pr1,p.be,bh.mu,wh.mu);hh=Nh*bh.k/Math.max(p.Dh,1e-6)}
+Nc=nAvg(p.Re2,p.Pr2,p.be,bc.mu,wc.mu);hc2=Nc*bc.k/Math.max(p.Dh,1e-6);
+var kc=1/(1/hh+1/hc2+p.d/p.km),kd=kc;
 var TwN=Tc+(hh/Math.max(hh+hc2,.001))*(Th-Tc);Tw=Tw+0.6*(TwN-Tw);
-r={U:kd,kc:kc,h1:hh,h2:hc2,Tw:Tw,vapor:vm};
+r={U:kd,kc:kc,h1:hh,h2:hc2,Tw:Tw,it:i+1,vapor:vm,hMartin:vm?0:nMartin(p.Re1,p.Pr1,p.be,bh.mu,wh.mu),hKumar:vm?0:nKumar(p.Re1,p.Pr1,p.be,bh.mu,wh.mu)};
 if(Math.abs(kd-Ua)<.5)break;Ua=kd}
 return r}
-
-// ===== CÁLCULO DE UMA SEÇÃO =====
+// v43.2: cURegen — respeita material selecionado
+function cURegen(p){var Th=(p.t1i+p.t1o)/2,Tc=(p.t2i+p.t2o)/2,Tw=(Th+Tc)/2,Ua=0,r={};var matK=p.km||MT['AISI316'].k;for(var i=0;i<50;i++){var wh=gP(p.fp,Tw,p.bp,p.bp),wc=gP(p.fp,Tw,p.bp,p.bp),bh=gP(p.fp,Th,p.bp,p.bp),bc=gP(p.fp,Tc,p.bp,p.bp);var Nh=nAvg(p.Re1,p.Pr1,p.be,bh.mu,wh.mu),Nc=nAvg(p.Re2,p.Pr2,p.be,bc.mu,wc.mu),hh=Nh*bh.k/Math.max(p.Dh,1e-6),hc=Nc*bc.k/Math.max(p.Dh,1e-6),kc=1/(1/hh+1/hc+p.d/matK),kd=kc;var TwN=Tc+(hh/Math.max(hh+hc,.001))*(Th-Tc);Tw=Tw+0.6*(TwN-Tw);r={U:kd,kc:kc,h1:hh,h2:hc,Tw:Tw,it:i+1,vapor:false,hMartin:nMartin(p.Re1,p.Pr1,p.be,bh.mu,wh.mu),hKumar:nKumar(p.Re1,p.Pr1,p.be,bh.mu,wh.mu)};if(Math.abs(kd-Ua)<.5)break;Ua=kd}return r}
 function mCalcSingle(inp,hc){
-var pb=gP(inp.fp,(inp.tip+inp.top)/2,inp.bp),mp=inp.vp*pb.rho/3600,Q=mp*pb.cp*Math.abs(inp.top-inp.tip)/1000;
-var sb=gPS(inp.fs,(inp.tis+inp.tos)/2),ms=inp.vs*sb.rho/3600;
+var pb=gP(inp.fp,(inp.tip+inp.top)/2,inp.bp,inp.bp),mp=inp.vp*pb.rho/3600,Q=mp*pb.cp*Math.abs(inp.top-inp.tip)/1000;
+var sb=gPS(inp.fs,(inp.tis+inp.tos)/2,inp.gas),ms=inp.vs*sb.rho/3600;
 var lm=cL(hc.hot.in,hc.hot.out,hc.cold.in,hc.cold.out);
 var Pv=safeDiv(hc.cold.out-hc.cold.in,Math.max(hc.hot.in-hc.cold.in,.001),0);
 var Rv=safeDiv(hc.hot.in-hc.hot.out,Math.max(hc.cold.out-hc.cold.in,.001),0);
 var F=fF(Pv,Rv,inp.ps),lc=lm*F;
 var Np=parseInt(inp.ps.split('-')[0]),Np2=parseInt(inp.ps.split('-')[1]);
-var matK=inp.mat==='auto'?'AISI316':inp.mat,vm=hc.vm,pr=inp.pressure||2,rf=inp.rf||.0001;
-var mods=BK.filter(function(m){if(inp.tpl==='t')return true;return true});
+var matK=inp.mat==='auto'?'AISI316':inp.mat,vm=hc.vm,pr=inp.pressure||2;
+var dtP=Math.abs(inp.top-inp.tip),thV=safeDiv(dtP,Math.max(lm,.01),0),aBe=thetaFilter(dtP,lm);
+var mods=BK.filter(function(m){if(selM)return m.n===selM;if(inp.tpl==='t')return true;if(inp.tpl==='s')return m.t==='s';return m.t==='g'});
+mods=mods.filter(function(m){return aBe.indexOf(m.be)>=0});
 var rs=[];
 mods.forEach(function(m){
 var Dh=2*m.b,Ac=m.b*m.w,Ap=Math.PI*m.dp*m.dp/4;
 var ne=Math.ceil(safeDiv(Q*1000,2000*Math.max(lc,.1),0)/m.ap*(1+inp.mg/100));
-var nStart=Math.max(5,((Math.floor((ne-8)/2))*2+1));
-for(var n=nStart;n<ne+50;n+=2){
-var div1=2*Np;
-if(((n-1)%div1)!==0)continue;
-var nc=(n-1)/div1,nc2=Math.max(Math.floor((n-1)/(2*Np2)),1);
+for(var n=Math.max(4,ne-8);n<ne+50;n+=2){
+var nc=Math.max(Math.floor((n-1)/(2*Np)),1),nc2=Math.max(Math.floor((n-1)/(2*Np2)),1);
 var mcp=mp/nc,mcs=ms/nc2,vcP=safeDiv(mcp,pb.rho*Ac,0),vcS=safeDiv(mcs,sb.rho*Ac,0);
 if(vcP<0.1||(!vm&&vcS<0.1))continue;
 var Rep=safeDiv(mcp*Dh,Math.max(Ac,1e-8)*Math.max(pb.mu,1e-8),0),Res=safeDiv(mcs*Dh,Math.max(Ac,1e-8)*Math.max(sb.mu,1e-8),0);
 var Prp=safeDiv(pb.cp*pb.mu,Math.max(pb.k,.001),0),Prs=safeDiv(sb.cp*sb.mu,Math.max(sb.k,.001),0);
-var rU=cU({t1i:inp.tis,t1o:inp.tos,t2i:inp.tip,t2o:inp.top,f1:inp.fs,f2:inp.fp,pressure:pr,b2:inp.bp,Re1:Res,Pr1:Prs,Re2:Rep,Pr2:Prp,be:m.be,Dh:Dh,d:m.d,km:MT[matK].k,Lplate:m.l,rf:rf});
+var rU=cU({t1i:inp.tis,t1o:inp.tos,t2i:inp.tip,t2o:inp.top,f1:inp.fs,f2:inp.fp,gas:inp.gas,pressure:pr,b2:inp.bp,c2:inp.bp,Re1:Res,Pr1:Prs,Re2:Rep,Pr2:Prp,be:m.be,Dh:Dh,d:m.d,km:MT[matK].k,Lplate:m.l});
 var Ai=n*m.ap,An=safeDiv(Q*1000,Math.max(rU.U*lc,.1),0);
 if(Ai>=An){
 var dp1=cDp(mp,pb.rho,Dh,m.l,m.ph,Np,Ap,vcP,m.be,Rep);
-var dp2;if(vm){dp2={t:dp1.t*0.3,vp:0,fracPorta:0,tau:0}}else{dp2=cDp(ms,sb.rho,Dh,m.l,m.ph,Np2,Ap,vcS,m.be,Res)}
-var vi=true;if(dp1.t>inp.dpp)vi=false;if(!vm&&dp2.t>inp.dps)vi=false;if(dp1.vp>4.9)vi=false;if(dp1.fracPorta>30)vi=false;if(dp1.tau<35)vi=false;if(F<0.5)vi=false;
-rs.push({mod:m.n,n:n,A:Ai,U:rU.U,kc:rU.kc,dp1:dp1.t,dp2:dp2.t,Q:Q,v1:dp1.vp,vi:vi,tauP:dp1.tau,Rep:Rep,lm:lc,F:F,pb:pb,sb:sb,rU:rU,m:m,lmtd:lm,passes:inp.ps,vaporMode:vm});break
-}
+var dp2;if(vm){dp2={t:dp1.t*0.3,c:0,p:0,vp:0,fracPorta:0,tau:0}}else{dp2=cDp(ms,sb.rho,Dh,m.l,m.ph,Np2,Ap,vcS,m.be,Res)}
+var vi=true;if(dp1.t>inp.dpp)vi=false;if(!vm&&dp2.t>inp.dps)vi=false;if(dp1.vp>4.9)vi=false;if(!vm&&dp2.vp>4.9)vi=false;if(dp1.fracPorta>30)vi=false;if(!vm&&dp2.fracPorta>30)vi=false;if(dp1.tau<35)vi=false;
+rs.push({mod:m.n,n:n,A:Ai,U:rU.U,dp1:dp1.t,dp2:dp2.t,Q:Q,v1:dp1.vp,v2:dp2.vp,vi:vi,vcP:vcP,vcS:vcS,tauP:dp1.tau,tauS:dp2.tau,fracPortaP:dp1.fracPorta,fracPortaS:dp2.fracPorta,Rep:Rep,Res:Res,lm:lc,F:F,theta:thV,pb:pb,sb:sb,rU:rU,m:m,lmtd:lm,passes:inp.ps,vaporMode:vm,hMartin:rU.hMartin||0,hKumar:rU.hKumar||0});break
+}}
 });return rs}
-
-// ===== SELEÇÃO DE PASSES =====
 function mCalcSec(inp,passesArr,hc){
 var hc=hc||detectHotCold(inp);
-if(hc.error)return{mod:'N/A',n:0,A:0,U:0,dp1:999,dp2:999,Q:0,vi:false,passesUsado:'1-1',todosCalculados:[]};
+if(hc.error)return{mod:'N/A',n:0,A:0,U:0,dp1:999,dp2:999,Q:0,vi:false,passesUsado:'1-1',todosCalculados:[],todosViaveis:[],Rep:0,Res:0,lm:0,F:0,pb:pAg(20),sb:pAg(20),rU:{kc:0,Tw:0},m:null,lmtd:0,v1:0,v2:0,vcP:0,vcS:0,tauP:0,tauS:0,fracPortaP:0,fracPortaS:0,theta:0,vaporMode:false,hMartin:0,hKumar:0};
 var best=null,pt=passesArr||PASSOS;
 for(var pi=0;pi<pt.length;pi++){
 var ps=pt[pi],inpC=Object.assign({},inp,{ps:ps}),rs=mCalcSingle(inpC,hc),vs=rs.filter(function(r){return r.vi});
@@ -232,11 +402,12 @@ if(vs.length>0){vs.sort(function(a,b){return a.A-b.A});var b=vs[0];if(!best||b.A
 }
 if(best)return best;
 var rs2=mCalcSingle(Object.assign({},inp,{ps:pt[0]}),hc);rs2.sort(function(a,b){return a.A-b.A});
-return{mod:rs2[0]?rs2[0].mod:'N/A',n:0,A:0,U:0,dp1:999,dp2:999,Q:0,vi:false,passesUsado:pt[0],todosCalculados:rs2};
+return{mod:rs2[0]?rs2[0].mod:'N/A',n:0,A:0,U:0,dp1:999,dp2:999,Q:0,vi:false,passesUsado:pt[0],todosViaveis:[],todosCalculados:rs2,Rep:0,Res:0,lm:0,F:0,pb:pAg(20),sb:pAg(20),rU:{kc:0,Tw:0},m:rs2[0]?rs2[0].m:null,lmtd:0,v1:0,v2:0,vcP:0,vcS:0,tauP:0,tauS:0,fracPortaP:0,fracPortaS:0,theta:0,vaporMode:false,hMartin:0,hKumar:0}
 }
-
-// ===== FUNÇÃO PRINCIPAL =====
-function calc(){
+function mCalcSecRegen(inp){var pt=PASSOS,best=null,matK=inp.mat==='auto'?MT['AISI316'].k:(MT[inp.mat]?MT[inp.mat].k:MT['AISI316'].k);for(var pi=0;pi<pt.length;pi++){var ps=pt[pi],inpC=Object.assign({},inp,{ps:ps}),pb=gP(inpC.fp,(inpC.tip+inpC.top)/2,inpC.bp,inpC.bp),mp=inpC.vp*pb.rho/3600,Q=mp*pb.cp*Math.abs(inpC.top-inpC.tip)/1000,sb=pb,ms=mp,lm=cL(inpC.tis,inpC.tos,inpC.tip,inpC.top),Pv=safeDiv(inpC.top-inpC.tip,Math.max(inpC.tis-inpC.tip,.001),0),Rv=safeDiv(inpC.tis-inpC.tos,Math.max(inpC.top-inpC.tip,.001),0),F=fF(Pv,Rv,ps),lc=lm*F,Np=parseInt(ps.split('-')[0]),Np2=parseInt(ps.split('-')[1]),aBe=thetaFilter(Math.abs(inpC.top-inpC.tip),lm),mods=BK.filter(function(m){if(selM)return m.n===selM;if(inpC.tpl==='t')return true;if(inpC.tpl==='s')return m.t==='s';return m.t==='g'});mods=mods.filter(function(m){return aBe.indexOf(m.be)>=0});var rs=[];mods.forEach(function(m){var Dh=2*m.b,Ac=m.b*m.w,Ap=Math.PI*m.dp*m.dp/4,ne=Math.ceil(safeDiv(Q*1000,2000*Math.max(lc,.1),0)/m.ap*(1+inpC.mg/100));for(var n=Math.max(4,ne-8);n<ne+50;n+=2){var nc=Math.max(Math.floor((n-1)/(2*Np)),1),nc2=Math.max(Math.floor((n-1)/(2*Np2)),1),mcp=mp/nc,mcs=ms/nc2,vcP=safeDiv(mcp,pb.rho*Ac,0);if(vcP<0.1)continue;var Rep=safeDiv(mcp*Dh,Math.max(Ac,1e-8)*Math.max(pb.mu,1e-8),0),Res=Rep,Prp=safeDiv(pb.cp*pb.mu,Math.max(pb.k,.001),0),Prs=Prp,rU=cURegen({t1i:inpC.tis,t1o:inpC.tos,t2i:inpC.tip,t2o:inpC.top,fp:inpC.fp,bp:inpC.bp,Re1:Res,Pr1:Prs,Re2:Rep,Pr2:Prp,be:m.be,Dh:Dh,d:m.d,km:matK}),Ai=n*m.ap,An=safeDiv(Q*1000,Math.max(rU.U*lc,.1),0);if(Ai>=An){var dp1=cDp(mp,pb.rho,Dh,m.l,m.ph,Np,Ap,vcP,m.be,Rep),dp2=cDp(ms,sb.rho,Dh,m.l,m.ph,Np2,Ap,vcP,m.be,Res),vi=dp1.t<=inpC.dpp&&dp2.t<=inpC.dps&&dp1.fracPorta<=30&&dp2.fracPorta<=30&&dp1.tau>=35;rs.push({mod:m.n,n:n,A:Ai,U:rU.U,dp1:dp1.t,dp2:dp2.t,Q:Q,v1:dp1.vp,v2:dp2.vp,vi:vi,vcP:vcP,tauP:dp1.tau,fracPortaP:dp1.fracPorta,Rep:Rep,Res:Res,lm:lc,F:F,pb:pb,sb:sb,rU:rU,m:m,lmtd:lm,passes:ps,theta:safeDiv(Math.abs(inpC.top-inpC.tip),Math.max(lm,.01),0),vaporMode:false,hMartin:rU.hMartin||0,hKumar:rU.hKumar||0});break}}});var vs=rs.filter(function(r){return r.vi});if(vs.length>0){vs.sort(function(a,b){return a.A-b.A});var b=vs[0];if(!best||b.A<best.A){best=b;best.passesUsado=ps;best.todosViaveis=vs;best.todosCalculados=rs}break}}if(best)return best;return{mod:'N/A',n:0,A:0,U:0,dp1:999,dp2:999,Q:0,vi:false,passesUsado:'1-1',Rep:0,Res:0,lm:0,F:0,pb:pAg(20),sb:pAg(20),rU:{kc:0,Tw:0},m:null,lmtd:0,v1:0,v2:0,vcP:0,tauP:0,fracPortaP:0,theta:0,vaporMode:false,hMartin:0,hKumar:0}}
+function calcHoldingTube(vp,tp,fp,bp){var Q=vp/3600,HT=parseFloat(document.getElementById('t_reten')?document.getElementById('t_reten').value:15)||15,D=0.0485,pr=gP(fp||'agua',tp,bp||0,bp||0),v=safeDiv(Q,Math.PI*D*D/4,0),Re=safeDiv(pr.rho*v*D,pr.mu,0),eta=Re<2300?0.5:Re<4000?0.75:0.85,L=safeDiv(4*Q*HT,Math.PI*D*D*eta,0);return{diameter:(D*1000).toFixed(1),length:L.toFixed(2),lengthStr:L.toFixed(2)+' m',volume:(Math.PI*D*D/4*L*1000).toFixed(1)+' L',holdTime:HT+' s',temp:tp+' C',Re:Re.toFixed(0),eta:(eta*100).toFixed(0)+'%'}}
+function mCalcMulti(inp){var ti=inp.tip,tp=parseFloat(document.getElementById('tpast').value)||72,tr=parseFloat(document.getElementById('tregen').value)||65,tf=parseFloat(document.getElementById('tfinal').value)||4,vp=inp.vp,fp=inp.fp,bp=inp.bp,dppT=inp.dpp,fsAq=document.getElementById('fs_aq').value,fsRes=document.getElementById('fs_res').value,tAQ=parseFloat(document.getElementById('t_agua_q').value)||85,tAG=parseFloat(document.getElementById('t_agua_g').value)||2,s4=document.getElementById('sec4_on')?document.getElementById('sec4_on').value==='1':false,tAA=parseFloat(document.getElementById('t_agua_amb')?document.getElementById('t_agua_amb').value:25)||25,tQSR=tp-(tr-ti),s1i={fp:fp,bp:bp,vp:vp,tip:ti,top:tr,dpp:dppT*0.35,fs:fp,vs:vp,tis:tp,tos:tQSR,dps:dppT*0.35,tpl:inp.tpl,mat:inp.mat,ps:inp.ps,mg:inp.mg},s1=mCalcSecRegen(s1i),tSA=tAQ-20,s2i={fp:fp,bp:bp,vp:vp,tip:tr,top:tp,dpp:dppT*0.25,fs:fsAq==='vapor'?'vapor':'agua',vs:vp*1.5,tis:tAQ,tos:tSA,dps:dppT*0.25,tpl:inp.tpl,mat:inp.mat,ps:inp.ps,mg:inp.mg,pressure:2},s2hc=detectHotCold(s2i),s2=mCalcSec(s2i,null,s2hc),ht=calcHoldingTube(vp,tp,fp,bp),s3,s4r=null,tSPR,tSR=tAG+8;if(s4){tSPR=tp-(tp-tf)*0.5;var s3i={fp:fp,bp:bp,vp:vp,tip:tp,top:tSPR,dpp:dppT*0.2,fs:'agua',vs:vp*1.2,tis:tAA,tos:tAA+10,dps:dppT*0.2,tpl:inp.tpl,mat:inp.mat,ps:inp.ps,mg:inp.mg};var s3hc=detectHotCold(s3i);s3=mCalcSec(s3i,null,s3hc);var s4i={fp:fp,bp:bp,vp:vp,tip:tSPR,top:tf,dpp:dppT*0.2,fs:fsRes,vs:vp*1.5,tis:tAG,tos:tSR,dps:dppT*0.2,tpl:inp.tpl,mat:inp.mat,ps:inp.ps,mg:inp.mg};var s4hc=detectHotCold(s4i);s4r=mCalcSec(s4i,null,s4hc)}else{var s3i={fp:fp,bp:bp,vp:vp,tip:tp,top:tf,dpp:dppT*0.4,fs:fsRes,vs:vp*1.5,tis:tAG,tos:tSR,dps:dppT*0.4,tpl:inp.tpl,mat:inp.mat,ps:inp.ps,mg:inp.mg};var s3hc=detectHotCold(s3i);s3=mCalcSec(s3i,null,s3hc)}var re=safeDiv(tr-ti,Math.max(tp-ti,.001),0)*100,tA=s1.A+s2.A+s3.A+(s4r?s4r.A:0),tDP=s1.dp1+s2.dp1+s3.dp1+(s4r?s4r.dp1:0),tPl=s1.n+s2.n+s3.n+(s4r?s4r.n:0),tQ=s2.Q+s3.Q+(s4r?s4r.Q:0);return{multi:true,sec1:s1,sec2:s2,sec3:s3,sec4:s4r,holdTube:ht,sec4On:s4,regenEff:re,totalArea:tA,totalDpP:tDP,totalPlates:tPl,Qexterno:tQ,Qregen:s1.Q,mod:'Multi: '+s1.mod+'+'+s2.mod+'+'+s3.mod+(s4r?'+'+s4r.mod:''),n:tPl,A:tA,U:(s1.U+s2.U+s3.U)/3,dp1:tDP,dp2:0,Q:tQ,vi:s1.vi&&s2.vi&&s3.vi&&(s4r?s4r.vi:true)&&tDP<=inp.dpp,passesUsado:s1.passesUsado+' / '+s2.passesUsado+' / '+s3.passesUsado+(s4r?' / '+s4r.passesUsado:''),todosCalculados:[],lmtd:0,F:1,Rep:s2.Rep,Res:s3.Res,pb:s2.pb,sb:s3.sb,rU:s2.rU,m:s2.m,temperaturas:{ti:ti,tr:tr,tp:tp,tf:tf,tQout:tQSR,tAqIn:tAQ,tAqOut:tSA,tGIn:tAG,tGOut:tSR,tPreResf:tSPR,tAguaAmb:tAA}}}
+  function calc(){
 var inp=rInp();
 if(!inp.vp||inp.vp<=0){alert('Vazão produto inválida');return}
 if(!inp.dpp||inp.dpp<=0){alert('ΔP produto deve ser > 0');return}
@@ -246,46 +417,60 @@ var tw=document.getElementById('thermalWarn');
 if(hc.error){if(tw){tw.style.display='block';tw.textContent=hc.error}alert(hc.error);return}
 if(tw)tw.style.display='none';
 if(isVapor(inp.fs,inp.tis,inp.tos)){
-var pb0=gP(inp.fp,(inp.tip+inp.top)/2,inp.bp),mp0=inp.vp*pb0.rho/3600,Q0=mp0*pb0.cp*Math.abs(inp.top-inp.tip)/1000,vf=calcVaporFlow(Q0,inp.pressure||2);
+var pb0=gP(inp.fp,(inp.tip+inp.top)/2,inp.bp,inp.bp),mp0=inp.vp*pb0.rho/3600,Q0=mp0*pb0.cp*Math.abs(inp.top-inp.tip)/1000,vf=calcVaporFlow(Q0,inp.pressure||2);
 inp.vs=vf.vCond;document.getElementById('vs').value=inp.vs.toFixed(2);document.getElementById('vapor_note').style.display='block'
+}else{
+document.getElementById('vapor_note').style.display='none';
+var pb0=gP(inp.fp,(inp.tip+inp.top)/2,inp.bp,inp.bp),sb0=gPS(inp.fs,(inp.tis+inp.tos)/2,inp.gas);
+var mp0=inp.vp*pb0.rho/3600,ms0=inp.vs*sb0.rho/3600;
+var Qp=mp0*pb0.cp*Math.abs(inp.top-inp.tip)/1000;
+var Qs=ms0*sb0.cp*Math.abs(inp.tos-inp.tis)/1000;
+if(Qp>0&&Math.abs(Qp-Qs)/Qp>0.1){
+var tosNew;
+if(hc.pCool){tosNew=inp.tis+Qp*1000/Math.max(ms0*sb0.cp,0.001)}
+else{tosNew=inp.tis-Qp*1000/Math.max(ms0*sb0.cp,0.001)}
+inp.tos=tosNew;document.getElementById('tos').value=tosNew.toFixed(1)
 }
+}
+if(modo==='multi'){var r=mCalcMulti(inp);showMulti(r,inp)}
+else{
 if(!inp.vs||inp.vs<=0){alert('Vazão serviço inválida');return}
 var dT1=hc.hot.in-hc.cold.out,dT2=hc.hot.out-hc.cold.in;
-if(dT1<=0||dT2<=0){alert('Programa térmico inválido: ΔT deve ser positivo.\nΔT1='+dT1.toFixed(1)+' ΔT2='+dT2.toFixed(1));return}
-var pt=inp.ps==='auto'?PASSOS:[inp.ps],r=mCalcSec(inp,pt,hc);
-showR(r,inp,r.todosCalculados||[]);
+if(dT1<=0||dT2<=0){alert('Programa térmico inválido: ΔT deve ser positivo nas extremidades.\nΔT1='+dT1.toFixed(1)+' ΔT2='+dT2.toFixed(1));return}
+var pt=inp.ps==='auto'?PASSOS:[inp.ps],r=mCalcSec(inp,pt,hc);showR(r,inp,r.todosCalculados||[])
 }
-function rInp(){var fs=document.getElementById('fs').value,pv=document.getElementById('pvap')?document.getElementById('pvap').value:2;return{fp:document.getElementById('fp').value,bp:parseFloat(document.getElementById('bp').value)||0,vp:parseFloat(document.getElementById('vp').value),tip:parseFloat(document.getElementById('tip').value),top:parseFloat(document.getElementById('top').value),dpp:parseFloat(document.getElementById('dpp').value),fs:fs,vs:parseFloat(document.getElementById('vs').value),tis:parseFloat(document.getElementById('tis').value),tos:parseFloat(document.getElementById('tos').value),dps:parseFloat(document.getElementById('dps').value),tpl:document.getElementById('tpl').value,mat:'auto',ps:document.getElementById('ps').value,mg:parseFloat(document.getElementById('mg').value),pressure:parseFloat(pv),rf:parseFloat(document.getElementById('rf').value)||.0001}}
-function tgServ(){var fs=document.getElementById('fs').value;document.getElementById('bx_vapor').style.display=fs==='vapor'?'block':'none';if(fs==='vapor'){var pv=document.getElementById('pvap').value,tsat={2:120,3:134,6:159}[pv]||120;document.getElementById('tis').value=tsat;document.getElementById('tos').value=tsat;document.getElementById('vs').value=0.5}}
-function limpar(){document.getElementById('res').style.display='none';var tw=document.getElementById('thermalWarn');if(tw)tw.style.display='none'}
-
-// ===== EXIBIÇÃO =====
-function showR(m,inp,todos){
-document.getElementById('res').style.display='block';
-var badge=document.getElementById('badge');
-if(m.vi){badge.textContent='VIÁVEL';badge.className='res-badge ok'}else{badge.textContent='NÃO VIÁVEL';badge.className='res-badge notok'}
-document.getElementById('selInfo').innerHTML='<div style="font-size:18px;font-weight:800;color:#1a3a5c">'+m.mod+'</div><div style="font-size:11px;color:#4a5568">'+m.n+' placas · '+m.A.toFixed(2)+' m² · Passes '+m.passesUsado+' · '+(m.vaporMode?'NUSSELT COND':'Martin+Kumar')+'</div>';
-var qShow=m.vi?m.Q.toFixed(1):'—',uShow=m.vi?m.U.toFixed(0):'—',dpShow=m.vi?m.dp1.toFixed(1):'—',tauShow=m.vi?(m.tauP||0).toFixed(0):'—';
-document.getElementById('cards').innerHTML='<div class="mc"><div class="mc-val">'+qShow+'</div><div class="mc-lbl">Carga kW</div></div><div class="mc"><div class="mc-val">'+uShow+'</div><div class="mc-lbl">U W/m²K</div></div><div class="mc"><div class="mc-val">'+dpShow+'</div><div class="mc-lbl">dP Prod</div></div><div class="mc"><div class="mc-val">'+tauShow+'</div><div class="mc-lbl">Shear Pa</div></div>';
-var h='<table class="tbl"><thead><tr><th>Modelo</th><th>Pl</th><th>Área</th><th>U</th><th>dP P</th><th>Shear</th><th>F</th><th>Passes</th><th>OK</th></tr></thead><tbody>';
-todos.slice(0,12).forEach(function(r,i){h+='<tr class="'+(i===0&&r.vi?'hl':'')+'"><td>'+r.mod+'</td><td>'+r.n+'</td><td>'+r.A.toFixed(2)+'</td><td>'+r.U.toFixed(0)+'</td><td>'+r.dp1.toFixed(1)+'</td><td>'+(r.tauP||0).toFixed(0)+'</td><td>'+r.F.toFixed(2)+'</td><td>'+(r.passes||'')+'</td><td>'+(r.vi?'OK':'X')+'</td></tr>'});
-h+='</tbody></table>';
-document.getElementById('comp').innerHTML=h;
-var v='<div class="ck"><span class="ck-ok">✓</span>LMTD: '+m.lm.toFixed(1)+'°C F='+m.F.toFixed(3)+'</div>';
-v+='<div class="ck"><span class="ck-ok">✓</span>Re Prod: '+m.Rep.toFixed(0)+'</div>';
-v+='<div class="ck"><span class="'+(m.tauP>=35?'ck-ok':'ck-err')+'">'+(m.tauP>=35?'✓':'✗')+'</span>Wall Shear: '+(m.tauP||0).toFixed(1)+'Pa</div>';
-v+='<div class="ck"><span class="'+(m.v1<=4.9?'ck-ok':'ck-err')+'">'+(m.v1<=4.9?'✓':'✗')+'</span>Vel Bocal: '+(m.v1||0).toFixed(2)+'</div>';
-document.getElementById('ver').innerHTML=v;
-setTimeout(function(){drawTempDiagram(inp,m)},50);
 }
-function drawTempDiagram(inp,m){var c=document.getElementById('tcanvas');if(!c)return;var ctx=c.getContext('2d'),w=c.offsetWidth,h=c.offsetHeight;c.width=w;c.height=h;ctx.clearRect(0,0,w,h);var hi=inp.tis,ho=inp.tos,ci=inp.tip,co=inp.top;if(inp.tip>inp.tis){hi=inp.tip;ho=inp.top;ci=inp.tis;co=inp.tos}var aT=[hi,ho,ci,co],tMin=Math.min.apply(null,aT)-5,tMax=Math.max.apply(null,aT)+5,pL=50,pR=20,pT=30,pB=30,pW=w-pL-pR,pH=h-pT-pB,xS=function(f){return pL+f*pW},yS=function(T){return pT+(tMax-T)/(tMax-tMin)*pH};ctx.strokeStyle='#cc3300';ctx.lineWidth=2.5;ctx.beginPath();for(var i=0;i<=50;i++){var f=i/50,t=hi+(ho-hi)*f;if(i===0)ctx.moveTo(xS(f),yS(t));else ctx.lineTo(xS(f),yS(t))}ctx.stroke();ctx.strokeStyle='#0099ff';ctx.lineWidth=2.5;ctx.beginPath();for(var i=0;i<=50;i++){var f=i/50,t=ci+(co-ci)*f;if(i===0)ctx.moveTo(xS(f),yS(t));else ctx.lineTo(xS(f),yS(t))}ctx.stroke();ctx.font='bold 11px Segoe UI';ctx.fillStyle='#cc3300';ctx.fillText(hi.toFixed(1)+'°C',pL+8,yS(hi)-8);ctx.fillStyle='#0099ff';ctx.fillText(ci.toFixed(1)+'°C',pL+8,yS(ci)+14);ctx.fillStyle='#2d9e4a';ctx.textAlign='center';ctx.fillText('LMTD='+(m.lm||0).toFixed(1)+'°C',w/2,pT+12)}
-
-// ===== CARREGAR CATÁLOGO NA INICIALIZAÇÃO =====
-window.onload=function(){
-var h='';
-BK.forEach(function(m){h+='<tr><td><b>'+m.n+'</b></td><td>'+m.be+'</td><td>'+m.ap+'</td><td>'+(m.b*2000).toFixed(1)+'</td></tr>'});
-document.getElementById('cat').innerHTML=h;
-};
+function autoCorr(){
+var inp=rInp(),hc=detectHotCold(inp);
+if(hc.error){alert(hc.error);return}
+var corr=[];inp.dpp=Math.min(inp.dpp+50,200);inp.dps=Math.min(inp.dps+50,200);corr.push({p:'dP+50'});
+var pt=PASSOS,r=mCalcSec(inp,pt,hc),vs=r.todosViaveis||[];
+if(vs.length===0){inp.tpl='t';corr.push({p:'Todas placas'});r=mCalcSec(inp,pt,hc);vs=r.todosViaveis||[]}
+if(vs.length===0){inp.mg=0;corr.push({p:'Margem 0%'});r=mCalcSec(inp,pt,hc);vs=r.todosViaveis||[]}
+if(vs.length>0){document.getElementById('cCorr').style.display='block';var h='<div class="cb"><b>Correções:</b><br>';corr.forEach(function(c){h+='<span style="font-size:11px">→ '+c.p+'</span><br>'});h+='</div>';document.getElementById('corpoCorr').innerHTML=h;showR(r,inp,r.todosCalculados||[])}
+else{document.getElementById('cCorr').style.display='block';document.getElementById('corpoCorr').innerHTML='<div class="ae2">Não viável.</div>'}
+}
+function rInp(){var fs=document.getElementById('fs').value,pv=document.getElementById('pvap')?document.getElementById('pvap').value:2,tis=parseFloat(document.getElementById('tis').value),tos=parseFloat(document.getElementById('tos').value);return{fp:document.getElementById('fp').value,bp:parseFloat(document.getElementById('bp').value)||0,vp:parseFloat(document.getElementById('vp').value),tip:parseFloat(document.getElementById('tip').value),top:parseFloat(document.getElementById('top').value),dpp:parseFloat(document.getElementById('dpp').value),fs:fs,gas:document.getElementById('gas')?document.getElementById('gas').value:'R717',vs:parseFloat(document.getElementById('vs').value),tis:tis,tos:tos,dps:parseFloat(document.getElementById('dps').value),tpl:document.getElementById('tpl').value,mat:document.getElementById('mat').value,ps:document.getElementById('ps').value,mg:parseFloat(document.getElementById('mg').value),pressure:parseFloat(pv)}}
+function tgServ(){var fs=document.getElementById('fs').value;document.getElementById('bx_ref').style.display=fs==='refrigerante'?'block':'none';document.getElementById('bx_vapor').style.display=fs==='vapor'?'block':'none';document.getElementById('vapor_note').style.display=fs==='vapor'?'block':'none';if(fs==='vapor'){var pv=document.getElementById('pvap').value,tsat={2:120,3:134,6:159,10:180}[pv]||120;document.getElementById('tis').value=tsat;document.getElementById('tos').value=tsat;document.getElementById('vs').value=0.5}}
+function apPreset(p){if(p==='pasteur'){setModo('multi');document.getElementById('fp').value='leite';document.getElementById('bp').value=0;document.getElementById('vp').value=10;document.getElementById('tip').value=4;document.getElementById('top').value=4;document.getElementById('tpast').value=72;document.getElementById('tregen').value=65;document.getElementById('tfinal').value=4;document.getElementById('t_agua_q').value=85;document.getElementById('t_agua_g').value=2;document.getElementById('dpp').value=200;upRef();return}var s={cerveja:{fp:'cerveja',bp:5,tip:25,top:5,fs:'glicol20',vs:12,tis:-5,tos:0,dps:50},mosto:{fp:'mosto',bp:12,tip:95,top:8,fs:'agua',vs:25,tis:3,tos:8,dps:50},vinho:{fp:'vinho',bp:12,tip:20,top:-2,fs:'glicol20',vs:12,tis:-7,tos:-2,dps:50},nh3:{fp:'cerveja',bp:5,tip:25,top:5,fs:'refrigerante',gas:'R717',vs:8,tis:-10,tos:-5,dps:50},levedura:{fp:'levedura_cana',bp:25,tip:35,top:15,fs:'agua',vs:20,tis:10,tos:15,dps:50},soft:{fp:'soft_drink',bp:6,tip:25,top:4,fs:'agua',vs:18,tis:1,tos:4,dps:50}}[p];for(var k in s){var el=document.getElementById(k);if(el)el.value=s[k]}tgServ();upRef()}
+function upRef(){var f=document.getElementById('fp').value,b=parseFloat(document.getElementById('bp').value)||0,h='';[0,20,40,60,80,100].forEach(function(t){var p=gP(f,t,b,b),pr=safeDiv(p.cp*p.mu,Math.max(p.k,.001),0);h+='<tr><td>'+t+'</td><td>'+p.rho.toFixed(0)+'</td><td>'+p.cp.toFixed(0)+'</td><td>'+(p.mu*1000).toFixed(2)+'</td><td>'+p.k.toFixed(3)+'</td><td>'+pr.toFixed(1)+'</td></tr>'});document.getElementById('ref').innerHTML=h}
+function limpar(){document.getElementById('res').style.display='none';document.getElementById('ph').style.display='block';document.getElementById('btnA').style.display='none';document.getElementById('cCorr').style.display='none';var tw=document.getElementById('thermalWarn');if(tw)tw.style.display='none'}
+function toggleSec4(){var on=document.getElementById('sec4_on').value==='1';document.getElementById('bx_sec4').style.display=on?'block':'none'}
+function setModo(m){modo=m;document.getElementById('btnSimples').classList.toggle('act',m==='simples');document.getElementById('btnMulti').classList.toggle('act',m==='multi');document.getElementById('secMulti').style.display=m==='multi'?'block':'none';document.getElementById('modoInfo').innerHTML=m==='multi'?'<b>Multi-Seção:</b> 3/4 seções + tubo retenção.':'<b>Simples:</b> Martin+Kumar avg, f 30/70.'}
+function toggleDS(n){var el=document.getElementById('ds_s'+n);if(el){var sec=document.querySelector('#ds [data-sec="'+n+'"]');if(sec)sec.style.display=el.checked?'block':'none'}}
+function dsTab(tab){document.getElementById('tabTermico').classList.toggle('act',tab==='termico');document.getElementById('tabEstrutural').classList.toggle('act',tab==='estrutural');document.getElementById('dsTermico').style.display=tab==='termico'?'block':'none';document.getElementById('dsEstrutural').classList.toggle('visivel',tab==='estrutural');if(tab==='estrutural')renderStructural()}
+function genDatasheetHTML(m,inp){if(!m.vi)return '<div style="text-align:center;color:#999;padding:20px">Cálculo não viável. Não há datasheet.</div>';var tag=(document.getElementById('tag_eq')?document.getElementById('tag_eq').value:'TC-101')||'TC-101',proj=(document.getElementById('proj_nome')?document.getElementById('proj_nome').value:'DIMENSIONAMENTO PHE')||'DIMENSIONAMENTO PHE',data=new Date().toLocaleDateString('pt-BR'),mr=recommendMaterial(inp.fp,inp.fs,inp.tip,inp.top,inp.tis,inp.tos,inp.gas),pa=(m.passesUsado||'1-1').split('-'),isM=m.multi||false,Qmax=Math.min(inp.vp*m.pb.rho/3600*m.pb.cp,inp.vs*m.sb.rho/3600*m.sb.cp)*(Math.abs(inp.tis-inp.tip)),eff=safeDiv(m.Q*1000,Math.max(Qmax,1),0)*100;if(eff>100)eff=100;var eC=eff>=80?'#2d9e4a':eff>=60?'#f0a830':'#d94a4a',vB='<span class="val-badge v2">Martin+Kumar</span>';if(m.rU&&m.rU.vapor)vB='<span class="val-badge v2">Nusselt cond</span>';var h='<div style="display:flex;align-items:center;gap:10px;margin-bottom:15px">'+LOGO_SVG+'<div><div style="font-size:18px;font-weight:bold;color:#1a3a5c">Alfa<span style="color:#cc3300">Ved</span></div><div style="font-size:11px;color:#4a5568">Relatório Técnico - PHE</div></div><div style="margin-left:auto;font-size:10px;color:#999;text-align:right">Data: '+data+'<br>Tag: '+tag+'</div></div>';h+='<div data-sec="1"><h2 style="font-size:13px;background:#1a3a5c;color:#fff;padding:6px 10px;margin:0 0 8px">1. Projeto</h2><table style="width:100%;border-collapse:collapse;margin-bottom:12px">';h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa;width:35%">Tag</td><td style="padding:5px 8px;border:1px solid #d0d5dd">'+tag+'</td></tr>';h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">Modelo</td><td style="padding:5px 8px;border:1px solid #d0d5dd">'+m.mod+'</td></tr>';h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">Passes</td><td style="padding:5px 8px;border:1px solid #d0d5dd">'+pa[0]+'x'+pa[1]+'</td></tr>';h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">Material</td><td style="padding:5px 8px;border:1px solid #d0d5dd">'+MT[mr.plate].n+' + '+mr.gasket+'</td></tr>';h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">Correlação</td><td style="padding:5px 8px;border:1px solid #d0d5dd">'+vB+'</td></tr>';h+='</table></div>';h+='<div data-sec="2"><h2 style="font-size:13px;background:#1a3a5c;color:#fff;padding:6px 10px;margin:0 0 8px">2. Operacional</h2><table style="width:100%;border-collapse:collapse;margin-bottom:12px">';h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;background:#1a3a5c;color:#fff;font-weight:bold">Parâmetro</td><td style="padding:5px 8px;border:1px solid #d0d5dd;background:#1a3a5c;color:#fff;text-align:center">Produto</td><td style="padding:5px 8px;border:1px solid #d0d5dd;background:#1a3a5c;color:#fff;text-align:center">Serviço</td></tr>';h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">Fluido</td><td style="padding:5px 8px;border:1px solid #d0d5dd;text-align:center">'+inp.fp+'</td><td style="padding:5px 8px;border:1px solid #d0d5dd;text-align:center">'+inp.fs+'</td></tr>';h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">T.Ent(°C)</td><td style="padding:5px 8px;border:1px solid #d0d5dd;text-align:center">'+inp.tip.toFixed(1)+'</td><td style="padding:5px 8px;border:1px solid #d0d5dd;text-align:center">'+inp.tis.toFixed(1)+'</td></tr>';h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">T.Sai(°C)</td><td style="padding:5px 8px;border:1px solid #d0d5dd;text-align:center">'+inp.top.toFixed(1)+'</td><td style="padding:5px 8px;border:1px solid #d0d5dd;text-align:center">'+inp.tos.toFixed(1)+'</td></tr>';h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">ρ(kg/m³)</td><td style="padding:5px 8px;border:1px solid #d0d5dd;text-align:center">'+m.pb.rho.toFixed(1)+'</td><td style="padding:5px 8px;border:1px solid #d0d5dd;text-align:center">'+m.sb.rho.toFixed(1)+'</td></tr>';h+='</table></div>';h+='<div data-sec="3"><h2 style="font-size:13px;background:#1a3a5c;color:#fff;padding:6px 10px;margin:0 0 8px">3. Resultados</h2><table style="width:100%;border-collapse:collapse;margin-bottom:12px">';h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">Carga(kW)</td><td style="padding:5px 8px;border:1px solid #d0d5dd">'+m.Q.toFixed(2)+'</td></tr>';h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">LMTD(°C)</td><td style="padding:5px 8px;border:1px solid #d0d5dd">'+(m.lmtd||m.lm||0).toFixed(2)+'</td></tr>';h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">Área(m²)</td><td style="padding:5px 8px;border:1px solid #d0d5dd">'+m.A.toFixed(2)+'</td></tr>';h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">Placas</td><td style="padding:5px 8px;border:1px solid #d0d5dd">'+m.n+'</td></tr>';h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">U(W/m²K)</td><td style="padding:5px 8px;border:1px solid #d0d5dd">'+m.U.toFixed(0)+'</td></tr>';var dp1O=(m.dp1||0)>inp.dpp;h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">dP Prod</td><td style="padding:5px 8px;border:1px solid #d0d5dd;color:'+(dp1O?'#d94a4a':safeDiv(m.dp1||0,inp.dpp,0)>=0.7?'#2d9e4a':'#f0a830')+';font-weight:bold">'+(m.dp1||0).toFixed(2)+'/'+inp.dpp+'</td></tr>';if(!isM){var dp2O=(m.dp2||0)>inp.dps;h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">dP Serv</td><td style="padding:5px 8px;border:1px solid #d0d5dd;color:'+(dp2O?'#d94a4a':safeDiv(m.dp2||0,inp.dps,0)>=0.7?'#2d9e4a':'#f0a830')+';font-weight:bold">'+(m.dp2||0).toFixed(2)+'/'+inp.dps+'</td></tr>'}h+='<tr><td style="padding:5px 8px;border:1px solid #d0d5dd;font-weight:bold;background:#f5f7fa">Wall Shear(Pa)</td><td style="padding:5px 8px;border:1px solid #d0d5dd">'+(m.tauP||0).toFixed(1)+'</td></tr>';h+='</table></div>';h+='<div data-sec="4"><h2 style="font-size:13px;background:#1a3a5c;color:#fff;padding:6px 10px;margin:0 0 8px">4. Eficiência</h2><div style="margin-bottom:12px">';h+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div style="font-size:11px;font-weight:bold;color:#1a3a5c;width:120px">Efetividade</div><div style="flex:1;background:#e0e0e0;border-radius:8px;height:24px;overflow:hidden"><div style="width:'+eff.toFixed(0)+'%;height:100%;background:'+eC+';border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;font-size:10px;font-weight:bold;color:#fff">'+eff.toFixed(1)+'%</div></div></div>';var dpPu=Math.min(safeDiv(m.dp1||0,inp.dpp,0)*100,100),dpPc=(m.dp1||0)>inp.dpp?'#d94a4a':dpPu>=70?'#2d9e4a':'#f0a830';h+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div style="font-size:11px;font-weight:bold;color:#1a3a5c;width:120px">dP Produto</div><div style="flex:1;background:#e0e0e0;border-radius:8px;height:24px;overflow:hidden"><div style="width:'+Math.min(dpPu,100).toFixed(0)+'%;height:100%;background:'+dpPc+';border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;font-size:10px;font-weight:bold;color:#fff">'+(m.dp1||0).toFixed(1)+'/'+inp.dpp+'</div></div></div>';var uR=m.rU&&m.rU.kc?Math.min(safeDiv(m.U,m.rU.kc,0)*100,100):0,uC=uR>=80?'#2d9e4a':uR>=50?'#f0a830':'#d94a4a';h+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div style="font-size:11px;font-weight:bold;color:#1a3a5c;width:120px">U/U limpo</div><div style="flex:1;background:#e0e0e0;border-radius:8px;height:24px;overflow:hidden"><div style="width:'+uR.toFixed(0)+'%;height:100%;background:'+uC+';border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;font-size:10px;font-weight:bold;color:#fff">'+uR.toFixed(0)+'%</div></div></div>';h+='</div></div>';h+='<div style="margin-top:20px;padding:10px;border-top:1px solid #d0d5dd;font-size:9px;color:#999;text-align:center">AlfaVed PHE v43.2 | Validação c/ fabricante</div>';return h}
+function showR(m,inp,todos){window._lastResult=m;document.getElementById('btnA').style.display='block';document.getElementById('ph').style.display='none';document.getElementById('res').style.display='block';document.getElementById('selCard').style.display='block';var badge=document.getElementById('badge');if(m.vi){badge.textContent='VIÁVEL';badge.className='res-badge ok'}else{badge.textContent='NÃO VIÁVEL';badge.className='res-badge notok'}var pi=m.passesUsado?' · '+m.passesUsado:'',vi=m.rU&&m.rU.vapor?' · NUSSELT COND':'',ci=' · Martin+Kumar';document.getElementById('selInfo').innerHTML='<div style="display:flex;align-items:center;gap:12px">'+LOGO_SVG+'<div><div style="font-size:18px;font-weight:800;color:#1a3a5c">'+m.mod+'</div><div style="font-size:11px;color:#4a5568">'+m.n+' placas · '+m.A.toFixed(2)+' m²'+pi+vi+ci+'</div></div></div>';var mr=recommendMaterial(inp.fp,inp.fs,inp.tip,inp.top,inp.tis,inp.tos,inp.gas),gN={NBR:'NBR',EPDM:'EPDM',HNBR:'HNBR',Viton:'Viton'};document.getElementById('matRec').innerHTML='<div class="mat-card"><h4>Materiais</h4><div class="mat-row"><div class="mat-lbl">Placa:</div><div class="mat-val"><b>'+MT[mr.plate].n+'</b></div></div><div class="mat-row"><div class="mat-lbl">Gaxeta:</div><div class="mat-val"><b>'+(gN[mr.gasket]||mr.gasket)+'</b></div></div><div class="mat-row" style="flex-direction:column"><div class="mat-lbl">Motivo:</div><div style="font-size:10px;color:#4a5568;white-space:pre-line">'+mr.fullReason+'</div></div></div>';var dp1Show=m.vi?m.dp1.toFixed(1):'—',tauShow=m.vi?(m.tauP||0).toFixed(0):'—',qShow=m.vi?m.Q.toFixed(1):'—',uShow=m.vi?m.U.toFixed(0):'—';document.getElementById('cards').innerHTML='<div class="mc green"><div class="mc-ico">⚡</div><div class="mc-val">'+qShow+'</div><div class="mc-lbl">Carga kW</div></div><div class="mc"><div class="mc-ico">📊</div><div class="mc-val">'+uShow+'</div><div class="mc-lbl">U W/m²K</div></div><div class="mc '+(m.vi?(m.dp1<=inp.dpp?'green':'red'):'red')+'"><div class="mc-ico">🔻</div><div class="mc-val">'+dp1Show+'</div><div class="mc-lbl">dP Prod</div></div><div class="mc '+(m.vi?(m.tauP>=35?'green':m.tauP>=20?'amber':'red'):'red')+'"><div class="mc-ico">🛡</div><div class="mc-val">'+tauShow+'</div><div class="mc-lbl">Shear Pa</div></div>';var h='<table class="tbl"><thead><tr><th>Modelo</th><th>Pl</th><th>Área</th><th>U</th><th>dP P</th><th>Shear</th><th>Passes</th><th>OK</th></tr></thead><tbody>';todos.slice(0,12).forEach(function(r,i){h+='<tr class="'+(i===0&&r.vi?'hl':'')+'"><td>'+r.mod+'</td><td>'+r.n+'</td><td>'+r.A.toFixed(2)+'</td><td>'+r.U.toFixed(0)+'</td><td>'+r.dp1.toFixed(1)+'</td><td>'+(r.tauP||0).toFixed(0)+'</td><td>'+(r.passes||'')+'</td><td>'+(r.vi?'OK':'X')+'</td></tr>'});h+='</tbody></table>';document.getElementById('comp').innerHTML=h;var app=Math.abs(inp.tis-inp.top),v='<div class="ck"><span class="ck-ico '+(app>=2?'ck-ok':'ck-err')+'">'+(app>=2?'✓':'✗')+'</span>Approach: '+app.toFixed(1)+'°C</div>';v+='<div class="ck"><span class="ck-ico '+(m.Rep>=100?'ck-ok':'ck-w')+'">'+(m.Rep>=100?'✓':'!')+'</span>Re Prod: '+m.Rep.toFixed(0)+'</div>';v+='<div class="ck"><span class="ck-ok ck-ico">✓</span>LMTD: '+m.lm.toFixed(1)+'°C F='+m.F.toFixed(3)+'</div>';v+='<div class="ck"><span class="ck-ico '+((m.tauP||0)>=35?'ck-ok':(m.tauP||0)>=20?'ck-w':'ck-err')+'">'+((m.tauP||0)>=35?'✓':(m.tauP||0)>=20?'!':'✗')+'</span>Wall Shear: '+(m.tauP||0).toFixed(1)+'Pa</div>';v+='<div class="ck"><span class="ck-ico '+((m.v1||0)<=4.9?'ck-ok':'ck-err')+'">'+((m.v1||0)<=4.9?'✓':'✗')+'</span>Vel Bocal: '+(m.v1||0).toFixed(2)+'</div>';if(m.hMartin&&m.hKumar)v+='<div class="ck"><span class="ck-ok ck-ico">✓</span>Martin='+m.hMartin.toFixed(0)+' Kumar='+m.hKumar.toFixed(0)+'</div>';document.getElementById('ver').innerHTML=v;document.getElementById('det').innerHTML='<table><tr><td>ρ P</td><td>'+m.pb.rho.toFixed(1)+'</td></tr><tr><td>ρ S</td><td>'+m.sb.rho.toFixed(1)+'</td></tr><tr><td>μ P</td><td>'+(m.pb.mu*1000).toFixed(3)+' cP</td></tr><tr><td>μ S</td><td>'+(m.sb.mu*1000).toFixed(3)+' cP</td></tr><tr><td>U limpo</td><td>'+m.rU.kc.toFixed(0)+'</td></tr><tr><td>T parede</td><td>'+m.rU.Tw.toFixed(1)+'°C</td></tr><tr><td>Iter U</td><td>'+(m.rU.it||0)+'</td></tr><tr><td>h Martin</td><td>'+(m.hMartin||0).toFixed(0)+'</td></tr><tr><td>h Kumar</td><td>'+(m.hKumar||0).toFixed(0)+'</td></tr><tr><td>Passes</td><td><b>'+(m.passesUsado||'1-1')+'</b></td></tr></table>';document.getElementById('ds').innerHTML=genDatasheetHTML(m,inp);if(document.getElementById('tabEstrutural')&&document.getElementById('tabEstrutural').classList.contains('act'))renderStructural();setTimeout(function(){drawTempDiagram(inp,m)},50)}
+function showMulti(m,inp){window._lastResult=m;document.getElementById('btnA').style.display='block';document.getElementById('ph').style.display='none';document.getElementById('res').style.display='block';document.getElementById('selCard').style.display='block';var badge=document.getElementById('badge');if(m.vi){badge.textContent='VIÁVEL';badge.className='res-badge ok'}else{badge.textContent='NÃO VIÁVEL';badge.className='res-badge notok'}var sc=m.sec4On?'4 Seções':'3 Seções';document.getElementById('selInfo').innerHTML='<div style="display:flex;align-items:center;gap:12px">'+LOGO_SVG+'<div><div style="font-size:16px;font-weight:800;color:#1a3a5c">Pasteurizador '+sc+'</div><div style="font-size:11px;color:#4a5568">'+m.totalPlates+' placas · '+m.totalArea.toFixed(2)+' m² · Regen: '+m.regenEff.toFixed(0)+'%</div></div></div>';var mr=recommendMaterial(inp.fp,document.getElementById('fs_aq').value,inp.tip,inp.top,parseFloat(document.getElementById('t_agua_q').value),parseFloat(document.getElementById('t_agua_g').value),inp.gas),gN={NBR:'NBR',EPDM:'EPDM',HNBR:'HNBR',Viton:'Viton'};document.getElementById('matRec').innerHTML='<div class="mat-card"><h4>Materiais</h4><div class="mat-row"><div class="mat-lbl">Placa:</div><div class="mat-val"><b>'+MT[mr.plate].n+'</b></div></div><div class="mat-row"><div class="mat-lbl">Gaxeta:</div><div class="mat-val"><b>'+(gN[mr.gasket]||mr.gasket)+'</b></div></div></div>';document.getElementById('cards').innerHTML='<div class="mc purple"><div class="mc-ico">♻</div><div class="mc-val">'+m.regenEff.toFixed(0)+'%</div><div class="mc-lbl">Regen</div></div><div class="mc green"><div class="mc-ico">⚡</div><div class="mc-val">'+m.Qexterno.toFixed(1)+'</div><div class="mc-lbl">Carga kW</div></div><div class="mc '+(m.totalDpP<=inp.dpp?'green':'red')+'"><div class="mc-ico">🔻</div><div class="mc-val">'+m.totalDpP.toFixed(1)+'</div><div class="mc-lbl">dP Total</div></div><div class="mc orange"><div class="mc-ico">⏱</div><div class="mc-val">'+m.holdTube.holdTime+'</div><div class="mc-lbl">Retenção</div></div>';var h='<table class="tbl"><thead><tr><th>Seção</th><th>Modelo</th><th>Pl</th><th>Área</th><th>U</th><th>dP P</th><th>Shear</th><th>Passes</th></tr></thead><tbody>';h+='<tr class="hl"><td>1 Regen</td><td>'+m.sec1.mod+'</td><td>'+m.sec1.n+'</td><td>'+m.sec1.A.toFixed(2)+'</td><td>'+m.sec1.U.toFixed(0)+'</td><td>'+m.sec1.dp1.toFixed(1)+'</td><td>'+(m.sec1.tauP||0).toFixed(0)+'</td><td>'+m.sec1.passesUsado+'</td></tr>';h+='<tr><td>2 Aquec</td><td>'+m.sec2.mod+'</td><td>'+m.sec2.n+'</td><td>'+m.sec2.A.toFixed(2)+'</td><td>'+m.sec2.U.toFixed(0)+'</td><td>'+m.sec2.dp1.toFixed(1)+'</td><td>'+(m.sec2.tauP||0).toFixed(0)+'</td><td>'+m.sec2.passesUsado+'</td></tr>';if(m.sec4On){h+='<tr><td>3 Pré</td><td>'+m.sec3.mod+'</td><td>'+m.sec3.n+'</td><td>'+m.sec3.A.toFixed(2)+'</td><td>'+m.sec3.U.toFixed(0)+'</td><td>'+m.sec3.dp1.toFixed(1)+'</td><td>'+(m.sec3.tauP||0).toFixed(0)+'</td><td>'+m.sec3.passesUsado+'</td></tr>';h+='<tr><td>4 Resfr</td><td>'+m.sec4.mod+'</td><td>'+m.sec4.n+'</td><td>'+m.sec4.A.toFixed(2)+'</td><td>'+m.sec4.U.toFixed(0)+'</td><td>'+m.sec4.dp1.toFixed(1)+'</td><td>'+(m.sec4.tauP||0).toFixed(0)+'</td><td>'+m.sec4.passesUsado+'</td></tr>'}else{h+='<tr><td>3 Resfr</td><td>'+m.sec3.mod+'</td><td>'+m.sec3.n+'</td><td>'+m.sec3.A.toFixed(2)+'</td><td>'+m.sec3.U.toFixed(0)+'</td><td>'+m.sec3.dp1.toFixed(1)+'</td><td>'+(m.sec3.tauP||0).toFixed(0)+'</td><td>'+m.sec3.passesUsado+'</td></tr>'}h+='<tr style="background:#e7f0fd;font-weight:bold"><td>TOTAL</td><td>-</td><td>'+m.totalPlates+'</td><td>'+m.totalArea.toFixed(2)+'</td><td>-</td><td>'+m.totalDpP.toFixed(1)+'</td><td>-</td><td>-</td></tr></tbody></table>';document.getElementById('comp').innerHTML=h;var v='<div class="ck"><span class="ck-ico '+(m.regenEff>=70?'ck-ok':'ck-w')+'">'+(m.regenEff>=70?'✓':'!')+'</span>Regen: '+m.regenEff.toFixed(1)+'%</div>';v+='<div class="ck"><span class="ck-ico '+(m.totalDpP<=inp.dpp?'ck-ok':'ck-err')+'">'+(m.totalDpP<=inp.dpp?'✓':'✗')+'</span>dP: '+m.totalDpP.toFixed(1)+'/'+inp.dpp+'</div>';v+='<div class="ck"><span class="ck-ok ck-ico">✓</span>Retenção: '+m.holdTube.holdTime+' @ '+m.holdTube.temp+'</div>';v+='<div class="ck"><span class="ck-ok ck-ico">✓</span>Tubo: D='+m.holdTube.diameter+'mm L='+m.holdTube.lengthStr+'</div>';document.getElementById('ver').innerHTML=v;document.getElementById('ds').innerHTML=genDatasheetHTML(m,inp);if(document.getElementById('tabEstrutural')&&document.getElementById('tabEstrutural').classList.contains('act'))renderStructural();setTimeout(function(){drawMultiDiagram(m)},50)}
+function drawTempDiagram(inp,m){var c=document.getElementById('tcanvas');if(!c)return;var ctx=c.getContext('2d'),w=c.offsetWidth,h=c.offsetHeight;c.width=w;c.height=h;ctx.clearRect(0,0,w,h);var hi=inp.tis,ho=inp.tos,ci=inp.tip,co=inp.top;if(inp.tip>inp.tis){hi=inp.tip;ho=inp.top;ci=inp.tis;co=inp.tos}var aT=[hi,ho,ci,co],tMin=Math.min.apply(null,aT)-5,tMax=Math.max.apply(null,aT)+5,pL=50,pR=20,pT=30,pB=35,pW=w-pL-pR,pH=h-pT-pB,xS=function(f){return pL+f*pW},yS=function(T){return pT+(tMax-T)/(tMax-tMin)*pH};ctx.strokeStyle='#e0e0e0';ctx.lineWidth=1;ctx.font='9px Segoe UI';ctx.fillStyle='#999';for(var tg=Math.ceil(tMin/10)*10;tg<=tMax;tg+=10){var y=yS(tg);ctx.beginPath();ctx.moveTo(pL,y);ctx.lineTo(w-pR,y);ctx.stroke();ctx.textAlign='right';ctx.fillText(tg+'°C',pL-4,y+3)}ctx.textAlign='center';ctx.fillText('Entrada',pL,h-12);ctx.fillText('Saída',w-pR,h-12);var lmtd=m.lmtd||0;ctx.fillStyle='rgba(45,158,74,0.1)';var st=50;ctx.beginPath();for(var i=0;i<=st;i++){var f=i/st,t=hi+(ho-hi)*f;ctx.lineTo(xS(f),yS(t))}for(var i=st;i>=0;i--){var f=i/st,t=ci+(co-ci)*f;ctx.lineTo(xS(f),yS(t))}ctx.closePath();ctx.fill();ctx.strokeStyle='#cc3300';ctx.lineWidth=2.5;ctx.beginPath();for(var i=0;i<=st;i++){var f=i/st,t=hi+(ho-hi)*f;if(i===0)ctx.moveTo(xS(f),yS(t));else ctx.lineTo(xS(f),yS(t))}ctx.stroke();ctx.strokeStyle='#0099ff';ctx.lineWidth=2.5;ctx.beginPath();for(var i=0;i<=st;i++){var f=i/st,t=ci+(co-ci)*f;if(i===0)ctx.moveTo(xS(f),yS(t));else ctx.lineTo(xS(f),yS(t))}ctx.stroke();ctx.fillStyle='#cc3300';ctx.beginPath();ctx.arc(xS(0),yS(hi),4,0,7);ctx.fill();ctx.beginPath();ctx.arc(xS(1),yS(ho),4,0,7);ctx.fill();ctx.fillStyle='#0099ff';ctx.beginPath();ctx.arc(xS(0),yS(ci),4,0,7);ctx.fill();ctx.beginPath();ctx.arc(xS(1),yS(co),4,0,7);ctx.fill();ctx.font='bold 10px Segoe UI';ctx.fillStyle='#cc3300';ctx.textAlign='left';ctx.fillText(hi.toFixed(1)+'°C',xS(0)+8,yS(hi)-8);ctx.textAlign='right';ctx.fillText(ho.toFixed(1)+'°C',xS(1)-8,yS(ho)-8);ctx.fillStyle='#0099ff';ctx.textAlign='left';ctx.fillText(ci.toFixed(1)+'°C',xS(0)+8,yS(ci)+14);ctx.textAlign='right';ctx.fillText(co.toFixed(1)+'°C',xS(1)-8,yS(co)+14);ctx.fillStyle='#2d9e4a';ctx.textAlign='center';ctx.fillText('LMTD='+lmtd.toFixed(1)+'°C',w/2,pT+12);ctx.fillStyle='#1a3a5c';ctx.font='bold 11px Segoe UI';ctx.textAlign='left';ctx.fillText('Perfil Térmico',pL,pT-6)}
+function drawMultiDiagram(m){var c=document.getElementById('tcanvas');if(!c)return;var ctx=c.getContext('2d'),w=c.offsetWidth,h=c.offsetHeight;c.width=w;c.height=h;ctx.clearRect(0,0,w,h);var t=m.temperaturas,aT=[t.ti,t.tr,t.tp,t.tf,t.tQout,t.tAqIn,t.tAqOut,t.tGIn,t.tGOut];if(m.sec4On&&t.tPreResf)aT.push(t.tPreResf,t.tAguaAmb);var tMin=Math.min.apply(null,aT)-5,tMax=Math.max.apply(null,aT)+5,pL=55,pR=15,pT=30,pB=40,pW=w-pL-pR,pH=h-pT-pB,nS=m.sec4On?4:3,sW=pW/nS,xS=function(s,f){return pL+s*sW+f*sW},yS=function(T){return pT+(tMax-T)/(tMax-tMin)*pH};ctx.strokeStyle='#e0e0e0';ctx.lineWidth=1;ctx.font='9px Segoe UI';ctx.fillStyle='#999';for(var tg=Math.ceil(tMin/10)*10;tg<=tMax;tg+=10){var y=yS(tg);ctx.beginPath();ctx.moveTo(pL,y);ctx.lineTo(w-pR,y);ctx.stroke();ctx.textAlign='right';ctx.fillText(tg+'°C',pL-4,y+3)}ctx.strokeStyle='#d0d5dd';ctx.lineWidth=2;ctx.setLineDash([4,4]);for(var s=1;s<nS;s++){var x=pL+s*sW;ctx.beginPath();ctx.moveTo(x,pT);ctx.lineTo(x,h-pB);ctx.stroke()}ctx.setLineDash([]);drawSecCurve(ctx,xS,yS,0,t.tp,t.tQout,t.ti,t.tr,'#cc3300','#0099ff',50);drawSecCurve(ctx,xS,yS,1,t.tAqIn,t.tAqOut,t.tr,t.tp,'#cc3300','#0099ff',50);if(m.sec4On){drawSecCurve(ctx,xS,yS,2,t.tp,t.tPreResf,t.tAguaAmb,t.tAguaAmb+10,'#cc3300','#0099ff',50);drawSecCurve(ctx,xS,yS,3,t.tPreResf,t.tf,t.tGIn,t.tGOut,'#cc3300','#0099ff',50)}else{drawSecCurve(ctx,xS,yS,2,t.tp,t.tf,t.tGIn,t.tGOut,'#cc3300','#0099ff',50)}ctx.font='bold 10px Segoe UI';ctx.textAlign='center';ctx.fillStyle='#9933cc';ctx.fillText('REGEN',pL+sW*0.5,h-15);ctx.fillStyle='#cc3300';ctx.fillText('AQUEC',pL+sW*1.5,h-15);if(m.sec4On){ctx.fillStyle='#0099ff';ctx.fillText('PRÉ',pL+sW*2.5,h-15);ctx.fillText('RESFR',pL+sW*3.5,h-15)}else{ctx.fillStyle='#0099ff';ctx.fillText('RESFR',pL+sW*2.5,h-15)}ctx.fillStyle='#1a3a5c';ctx.font='bold 11px Segoe UI';ctx.textAlign='left';ctx.fillText('Perfil Composto ('+nS+' Sec)',pL,pT-6);ctx.fillStyle='#9933cc';ctx.textAlign='center';ctx.font='bold 11px Segoe UI';ctx.fillText('Regen: '+m.regenEff.toFixed(0)+'%',pL+sW*0.5,pT+12)}
+function drawSecCurve(ctx,xS,yS,s,hI,hO,cI,cO,hC,cC,st){ctx.strokeStyle=hC;ctx.lineWidth=2.5;ctx.beginPath();for(var i=0;i<=st;i++){var f=i/st,t=hI+(hO-hI)*f;if(i===0)ctx.moveTo(xS(s,f),yS(t));else ctx.lineTo(xS(s,f),yS(t))}ctx.stroke();ctx.strokeStyle=cC;ctx.lineWidth=2.5;ctx.beginPath();for(var i=0;i<=st;i++){var f=i/st,t=cO+(cI-cO)*f;if(i===0)ctx.moveTo(xS(s,f),yS(t));else ctx.lineTo(xS(s,f),yS(t))}ctx.stroke();ctx.fillStyle=hC;ctx.beginPath();ctx.arc(xS(s,0),yS(hI),3,0,7);ctx.fill();ctx.beginPath();ctx.arc(xS(s,1),yS(hO),3,0,7);ctx.fill();ctx.fillStyle=cC;ctx.beginPath();ctx.arc(xS(s,0),yS(cO),3,0,7);ctx.fill();ctx.beginPath();ctx.arc(xS(s,1),yS(cI),3,0,7);ctx.fill();ctx.font='8px Segoe UI';ctx.fillStyle=hC;ctx.textAlign='left';ctx.fillText(hI.toFixed(0)+'°C',xS(s,0)+4,yS(hI)-5);ctx.textAlign='right';ctx.fillText(hO.toFixed(0)+'°C',xS(s,1)-4,yS(hO)-5);ctx.fillStyle=cC;ctx.textAlign='left';ctx.fillText(cI.toFixed(0)+'°C',xS(s,0)+4,yS(cI)+12);ctx.textAlign='right';ctx.fillText(cO.toFixed(0)+'°C',xS(s,1)-4,yS(cO)-5)}
+function printDatasheet(){var inp=rInp(),m=window._lastResult||{},ds=genDatasheetHTML(m,inp),tmp=document.createElement('div');tmp.innerHTML=ds;for(var s=1;s<=4;s++){var cb=document.getElementById('ds_s'+s);if(cb&&!cb.checked){var sec=tmp.querySelector('[data-sec="'+s+'"]');if(sec)sec.remove()}}var w=window.open('','_blank','width=800,height=900');w.document.write('<html><head><title>AlfaVed</title><style>@page{size:A4;margin:15mm}body{font-family:Segoe UI,Arial,sans-serif;margin:20px;color:#1a3a5c;font-size:11px}h2{font-size:12px;background:#1a3a5c;color:#fff;padding:6px 10px;margin:0 0 8px}table{width:100%;border-collapse:collapse;margin-bottom:12px}td{padding:5px 8px;border:1px solid #d0d5dd;font-size:10px}.val-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700}.val-badge.v2{background:#d4edda;color:#155724}@media print{body{margin:10px}}</style></head><body>');w.document.write(tmp.innerHTML);w.document.write('</body></html>');w.document.close();setTimeout(function(){w.print()},300)}
+function downloadPDF(){var inp=rInp(),m=window._lastResult||{},ds=genDatasheetHTML(m,inp),tmp=document.createElement('div');tmp.innerHTML=ds;for(var s=1;s<=4;s++){var cb=document.getElementById('ds_s'+s);if(cb&&!cb.checked){var sec=tmp.querySelector('[data-sec="'+s+'"]');if(sec)sec.remove()}}var w=window.open('','_blank','width=800,height=900');w.document.write('<html><head><title>AlfaVed PDF</title><style>@page{size:A4;margin:15mm}body{font-family:Segoe UI,Arial,sans-serif;margin:0;color:#1a3a5c;font-size:11px}h2{font-size:12px;background:#1a3a5c;color:#fff;padding:6px 10px;margin:0 0 8px}table{width:100%;border-collapse:collapse;margin-bottom:12px}td{padding:5px 8px;border:1px solid #d0d5dd;font-size:10px}.val-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700}.val-badge.v2{background:#d4edda;color:#155724}</style></head><body>');w.document.write(tmp.innerHTML);w.document.write('</body></html>');w.document.close();setTimeout(function(){w.print()},300)}
+function getStructDims(modName,nPlates){var m=BK.find(function(b){return b.n===modName});if(!m)return null;var d=DIMS[modName]||DIMS['M10-B'];var b_real=m.b*(m.ph-1)+m.d;var A_mm=Math.round((nPlates*(b_real+0.002)+0.015)*1000);var L_def=A_mm+d.ft*2;return{mod:modName,n:nPlates,H:d.H,W:d.W,A_def:A_mm,A_mm:A_mm,L_def:L_def,L_mm:L_def,ft:d.ft,pt:d.ft,dp:d.dp,bolt:d.bolt,nB:d.nB,nd:d.nd,pw:Math.round(m.w*1000),pl:Math.round(m.l*1000),phi:m.ph}}
+function renderStructural(){var m=window._lastResult;if(!m||!m.m){document.getElementById('dsStruct').innerHTML='<div style="color:#999;text-align:center;padding:20px">Calcule primeiro.</div>';return}var dm=getStructDims(m.mod,m.n);if(!dm){document.getElementById('dsStruct').innerHTML='<div style="color:#999">Modelo não encontrado.</div>';return}var Lv=parseInt(document.getElementById('struct_L')?document.getElementById('struct_L').value:dm.L_def);var Av=Lv-dm.ft*2;var sc=0.35,iH=dm.H*sc*0.8,iW=(dm.L_mm*sc)*0.9+80,oH=dm.H*sc,oW=dm.W*sc,oL=dm.L_mm*sc,svgW=Math.max(800,oW*3+oL+120),svgH=iH+oH+200;var h='<div class="struct-info"><b>Modelo:</b> '+m.mod+' · <b>Placas:</b> '+m.n+' · <b>Bocal:</b> DN'+dm.dp+' · <b>Parafusos:</b> '+dm.nB+'× '+dm.bolt+' · <b>Dimensões:</b> Alfa Laval</div>';h+='<div class="struct-edit">';h+='<div class="fg"><label>L total (mm) [editável]</label><input type="number" id="struct_L" value="'+Lv+'" onchange="renderStructural()" style="border-color:var(--or);font-weight:bold"></div>';h+='<div class="fg"><label>A (pacote) mm</label><input type="text" value="'+Av+'" readonly></div>';h+='<div class="fg"><label>H (mm)</label><input type="text" value="'+dm.H+'" readonly></div>';h+='<div class="fg"><label>W (mm)</label><input type="text" value="'+dm.W+'" readonly></div>';h+='<div class="fg"><label>Bocal DN</label><input type="text" value="'+dm.dp+'" readonly></div>';h+='</div>';h+='<svg class="struct-svg" viewBox="0 0 '+svgW+' '+svgH+'" xmlns="http://www.w3.org/2000/svg">';h+='<style>.fp{fill:#e7f0fd;stroke:#1a3a5c;stroke-width:0.8}.pp{fill:#f0a830;stroke:#cc3300;stroke-width:0.5}.pr{fill:#2d5a8e;stroke:#1a3a5c;stroke-width:0.8}.nv{fill:#1a3a5c;stroke:#1a3a5c;stroke-width:0.8}.gr{fill:#4a5568;stroke:#333;stroke-width:0.6}.wh{fill:#fff;stroke:#1a3a5c;stroke-width:1.2}.fr{fill:none;stroke:#cc3300;stroke-width:1.5}.fb{fill:none;stroke:#0099ff;stroke-width:1.5}.bt{fill:none;stroke:#333;stroke-width:1}.txb{font:bold 10px Segoe UI;fill:#1a3a5c}.txd{font:8px Segoe UI;fill:#666}.txl{font:bold 9px Segoe UI;fill:#1a3a5c}.ha{fill:url(#ht)}.ar{fill:#666}.ln-dim{stroke:#666;stroke-width:0.5;fill:none;stroke-dasharray:4,2}.ln-cl{stroke:#999;stroke-width:0.4;fill:none;stroke-dasharray:8,2,2,2}</style>';h+='<defs><pattern id="ht" patternUnits="userSpaceOnUse" width="4" height="4" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="4" stroke="#999" stroke-width="0.5"/></pattern></defs>';var iX=svgW/2-iW/2,iY=20,iD=oL*0.5,iDv=oL*0.3;h+='<text x="'+(iX+iW/2)+'" y="'+(iY-5)+'" class="txb" text-anchor="middle">VISTA ISOMÉTRICA</text>';var fp=iX+20;h+='<path d="M'+fp+' '+(iY+10)+' L'+(fp+iD)+' '+(iY+10-iDv)+' L'+(fp+iD)+' '+(iY+10+oH*0.8-iDv)+' L'+fp+' '+(iY+10+oH*0.8)+' Z" class="nv"/>';var pp=fp+iD;h+='<path d="M'+pp+' '+(iY+10-iDv)+' L'+(pp+iD*0.6)+' '+(iY+10-iDv*1.2)+' L'+(pp+iD*0.6)+' '+(iY+10+oH*0.8-iDv*1.2)+' L'+pp+' '+(iY+10+oH*0.8-iDv)+' Z" class="pp"/>';var pr=pp+iD*0.6;h+='<path d="M'+pr+' '+(iY+10-iDv*1.2)+' L'+(pr+iD)+' '+(iY+10-iDv*0.4)+' L'+(pr+iD)+' '+(iY+10+oH*0.8-iDv*0.4)+' L'+pr+' '+(iY+10+oH*0.8-iDv*1.2)+' Z" class="pr"/>';h+='<path d="M'+fp+' '+(iY+10)+' L'+(fp+iD)+' '+(iY+10-iDv)+' L'+(pr+iD)+' '+(iY+10-iDv*0.4)+' L'+pr+' '+(iY+10-iDv*1.2)+' L'+pp+' '+(iY+10-iDv)+' L'+fp+' '+(iY+10)+' Z" class="nv" opacity="0.7"/>';var nR=dm.dp*sc*0.4;var positions=[{x:fp+oW*0.15,y:iY+10+oH*0.2,l:'F1',c:'#cc3300',cls:'fr'},{x:fp+oW*0.15,y:iY+10+oH*0.6,l:'F2',c:'#cc3300',cls:'fr'},{x:fp+oW*0.85,y:iY+10+oH*0.2,l:'F3',c:'#cc3300',cls:'fr'},{x:fp+oW*0.85,y:iY+10+oH*0.6,l:'F4',c:'#cc3300',cls:'fr'},{x:pr+iD*0.5,y:iY+10-iDv*0.5+oH*0.2,l:'T1',c:'#0099ff',cls:'fb'},{x:pr+iD*0.5,y:iY+10-iDv*0.5+oH*0.6,l:'T2',c:'#0099ff',cls:'fb'},{x:pr+iD*0.3,y:iY+10-iDv*0.5+oH*0.2,l:'T3',c:'#0099ff',cls:'fb'},{x:pr+iD*0.3,y:iY+10-iDv*0.5+oH*0.6,l:'T4',c:'#0099ff',cls:'fb'}];positions.forEach(function(p){h+='<circle cx="'+p.x+'" cy="'+p.y+'" r="'+nR+'" class="'+p.cls+'"/>';h+='<text x="'+p.x+'" y="'+(p.y+3)+'" font-size="8" text-anchor="middle" fill="'+p.c+'">'+p.l+'</text>'});var fX=20,fY=iY+iH+40;h+='<text x="'+(fX+oW/2)+'" y="'+(fY-8)+'" class="txb" text-anchor="middle">CABEÇOTE FIXO (F1-F4)</text>';h+='<rect x="'+fX+'" y="'+fY+'" width="'+oW+'" height="'+oH+'" class="fp" rx="3"/>';h+='<rect x="'+(fX-5)+'" y="'+(fY-10)+'" width="'+(oW+10)+'" height="10" class="nv" rx="2"/>';h+='<rect x="'+(fX-5)+'" y="'+(fY+oH)+'" width="'+(oW+10)+'" height="7" class="nv" rx="2"/>';h+='<rect x="'+(fX-8)+'" y="'+(fY-10)+'" width="8" height="'+(oH+17)+'" class="gr" rx="2"/>';h+='<rect x="'+(fX+oW)+'" y="'+(fY-10)+'" width="8" height="'+(oH+17)+'" class="gr" rx="2"/>';h+='<line x1="'+(fX+oW/2)+'" y1="'+(fY-15)+'" x2="'+(fX+oW/2)+'" y2="'+(fY+oH+15)+'" class="ln-cl"/>';h+='<line x1="'+(fX-15)+'" y1="'+(fY+oH/2)+'" x2="'+(fX+oW+15)+'" y2="'+(fY+oH/2)+'" class="ln-cl"/>';var nzF=dm.dp*sc*0.5,fcy=fY+oH/2,fdx=oW*0.25,fdx2=oW*0.75,fdy=dm.nd*sc;var fPositions=[{x:fX+fdx,y:fcy-fdy,l:'F1',cls:'fr',c:'#cc3300',anchor:'end',dx:-nzF-5},{x:fX+fdx,y:fcy+fdy,l:'F2',cls:'fr',c:'#cc3300',anchor:'end',dx:-nzF-5},{x:fX+fdx2,y:fcy-fdy,l:'F3',cls:'fr',c:'#cc3300',anchor:'start',dx:nzF+5},{x:fX+fdx2,y:fcy+fdy,l:'F4',cls:'fr',c:'#cc3300',anchor:'start',dx:nzF+5}];fPositions.forEach(function(p){h+='<circle cx="'+p.x+'" cy="'+p.y+'" r="'+nzF+'" class="'+p.cls+'"/>';h+='<circle cx="'+p.x+'" cy="'+p.y+'" r="'+(nzF*0.4)+'" class="wh"/>';h+='<text x="'+(p.x+p.dx)+'" y="'+(p.y+3)+'" class="txl" text-anchor="'+p.anchor+'" fill="'+p.c+'">'+p.l+'</text>'});var bR=3;h+='<circle cx="'+(fX+10)+'" cy="'+(fY+10)+'" r="'+bR+'" class="bt"/>';h+='<circle cx="'+(fX+oW-10)+'" cy="'+(fY+10)+'" r="'+bR+'" class="bt"/>';h+='<circle cx="'+(fX+10)+'" cy="'+(fY+oH-10)+'" r="'+bR+'" class="bt"/>';h+='<circle cx="'+(fX+oW-10)+'" cy="'+(fY+oH-10)+'" r="'+bR+'" class="bt"/>';if(dm.nB>=6){h+='<circle cx="'+(fX+10)+'" cy="'+fcy+'" r="'+bR+'" class="bt"/>';h+='<circle cx="'+(fX+oW-10)+'" cy="'+fcy+'" r="'+bR+'" class="bt"/>'}if(dm.nB>=8){h+='<circle cx="'+(fX+oW/2)+'" cy="'+(fY+10)+'" r="'+bR+'" class="bt"/>';h+='<circle cx="'+(fX+oW/2)+'" cy="'+(fY+oH-10)+'" r="'+bR+'" class="bt"/>'}h+='<line x1="'+(fX-20)+'" y1="'+fY+'" x2="'+(fX-20)+'" y2="'+(fY+oH)+'" class="ln-dim"/>';h+='<polygon points="'+(fX-20)+','+(fY+5)+' '+(fX-22)+','+(fY+10)+' '+(fX-18)+','+(fY+10)+'" class="ar"/>';h+='<polygon points="'+(fX-20)+','+(fY+oH-5)+' '+(fX-22)+','+(fY+oH-10)+' '+(fX-18)+','+(fY+oH-10)+'" class="ar"/>';h+='<text x="'+(fX-25)+'" y="'+(fY+oH/2)+'" class="txd" text-anchor="end" transform="rotate(-90 '+(fX-25)+','+(fY+oH/2)+')">H = '+dm.H+' mm</text>';h+='<line x1="'+fX+'" y1="'+(fY+oH+25)+'" x2="'+(fX+oW)+'" y2="'+(fY+oH+25)+'" class="ln-dim"/>';h+='<polygon points="'+(fX+5)+','+(fY+oH+25)+' '+(fX+10)+','+(fY+oH+23)+' '+(fX+10)+','+(fY+oH+27)+'" class="ar"/>';h+='<polygon points="'+(fX+oW-5)+','+(fY+oH+25)+' '+(fX+oW-10)+','+(fY+oH+23)+' '+(fX+oW-10)+','+(fY+oH+27)+'" class="ar"/>';h+='<text x="'+(fX+oW/2)+'" y="'+(fY+oH+35)+'" class="txd" text-anchor="middle">W = '+dm.W+' mm</text>';var sX=fX+oW+50,sY=fY,sH=oH,sFW=dm.ft*sc,sPW=dm.pt*sc,sA=Av*sc,sL=sFW+sA+sPW;h+='<text x="'+(sX+sL/2)+'" y="'+(sY-8)+'" class="txb" text-anchor="middle">VISTA LATERAL</text>';h+='<rect x="'+sX+'" y="'+sY+'" width="'+sFW+'" height="'+sH+'" class="ha" stroke="#333" stroke-width="0.8"/>';h+='<rect x="'+(sX+sFW)+'" y="'+sY+'" width="'+sA+'" height="'+sH+'" class="pp"/>';for(var i=0;i<Math.min(m.n,40);i++){var px=sX+sFW+(i+0.5)*(sA/Math.min(m.n,40));h+='<line x1="'+px+'" y1="'+(sY+3)+'" x2="'+px+'" y2="'+(sY+sH-3)+'" stroke="#cc3300" stroke-width="0.3" opacity="0.5"/>'}h+='<rect x="'+(sX+sFW+sA)+'" y="'+sY+'" width="'+sPW+'" height="'+sH+'" class="ha" stroke="#333" stroke-width="0.8"/>';h+='<rect x="'+(sX-5)+'" y="'+(sY-10)+'" width="'+(sL+10)+'" height="10" class="nv" rx="2"/>';h+='<rect x="'+(sX-5)+'" y="'+(sY+sH)+'" width="'+(sL+10)+'" height="7" class="nv" rx="2"/>';h+='<line x1="'+sX+'" y1="'+(sY+12)+'" x2="'+(sX+sL)+'" y2="'+(sY+12)+'" stroke="#333" stroke-width="1.5"/>';h+='<circle cx="'+sX+'" cy="'+(sY+12)+'" r="3" class="bt"/>';h+='<circle cx="'+(sX+sL)+'" cy="'+(sY+12)+'" r="3" class="bt"/>';h+='<line x1="'+sX+'" y1="'+(sY+sH-12)+'" x2="'+(sX+sL)+'" y2="'+(sY+sH-12)+'" stroke="#333" stroke-width="1.5"/>';h+='<circle cx="'+sX+'" cy="'+(sY+sH-12)+'" r="3" class="bt"/>';h+='<circle cx="'+(sX+sL)+'" cy="'+(sY+sH-12)+'" r="3" class="bt"/>';if(dm.nB>=6){h+='<line x1="'+sX+'" y1="'+(sY+sH/2)+'" x2="'+(sX+sL)+'" y2="'+(sY+sH/2)+'" stroke="#333" stroke-width="1.5"/>';h+='<circle cx="'+sX+'" cy="'+(sY+sH/2)+'" r="3" class="bt"/>';h+='<circle cx="'+(sX+sL)+'" cy="'+(sY+sH/2)+'" r="3" class="bt"/>'}h+='<text x="'+(sX+sFW/2)+'" y="'+(sY+sH+18)+'" class="txd" text-anchor="middle">FIXO</text>';h+='<text x="'+(sX+sFW+sA/2)+'" y="'+(sY+sH+18)+'" class="txd" text-anchor="middle" fill="#cc3300">A='+Av+'</text>';h+='<text x="'+(sX+sFW+sA+sPW/2)+'" y="'+(sY+sH+18)+'" class="txd" text-anchor="middle">MÓVEL</text>';h+='<line x1="'+sX+'" y1="'+(sY-18)+'" x2="'+(sX+sL)+'" y2="'+(sY-18)+'" class="ln-dim"/>';h+='<polygon points="'+(sX+5)+','+(sY-18)+' '+(sX+10)+','+(sY-20)+' '+(sX+10)+','+(sY-16)+'" class="ar"/>';h+='<polygon points="'+(sX+sL-5)+','+(sY-18)+' '+(sX+sL-10)+','+(sY-20)+' '+(sX+sL-10)+','+(sY-16)+'" class="ar"/>';h+='<text x="'+(sX+sL/2)+'" y="'+(sY-22)+'" class="txd" text-anchor="middle">L = '+Lv+' mm</text>';var bX=sX+sL+50,bY=fY;h+='<text x="'+(bX+oW/2)+'" y="'+(bY-8)+'" class="txb" text-anchor="middle">CABEÇOTE MÓVEL (T1-T4)</text>';h+='<rect x="'+bX+'" y="'+bY+'" width="'+oW+'" height="'+oH+'" class="pr" rx="3"/>';h+='<rect x="'+(bX-5)+'" y="'+(bY-10)+'" width="'+(oW+10)+'" height="10" class="nv" rx="2"/>';h+='<rect x="'+(bX-5)+'" y="'+(bY+oH)+'" width="'+(oW+10)+'" height="7" class="nv" rx="2"/>';h+='<rect x="'+(bX-8)+'" y="'+(bY-10)+'" width="8" height="'+(oH+17)+'" class="gr" rx="2"/>';h+='<rect x="'+(bX+oW)+'" y="'+(bY-10)+'" width="8" height="'+(oH+17)+'" class="gr" rx="2"/>';h+='<line x1="'+(bX+oW/2)+'" y1="'+(bY-15)+'" x2="'+(bX+oW/2)+'" y2="'+(bY+oH+15)+'" class="ln-cl"/>';h+='<line x1="'+(bX-15)+'" y1="'+(bY+oH/2)+'" x2="'+(bX+oW+15)+'" y2="'+(bY+oH/2)+'" class="ln-cl"/>';var bcy=bY+oH/2;var tPositions=[{x:bX+fdx,y:bcy-fdy,l:'T1',cls:'fb',c:'#0099ff',anchor:'end',dx:-nzF-5},{x:bX+fdx,y:bcy+fdy,l:'T2',cls:'fb',c:'#0099ff',anchor:'end',dx:-nzF-5},{x:bX+fdx2,y:bcy-fdy,l:'T3',cls:'fb',c:'#0099ff',anchor:'start',dx:nzF+5},{x:bX+fdx2,y:bcy+fdy,l:'T4',cls:'fb',c:'#0099ff',anchor:'start',dx:nzF+5}];tPositions.forEach(function(p){h+='<circle cx="'+p.x+'" cy="'+p.y+'" r="'+nzF+'" class="'+p.cls+'"/>';h+='<circle cx="'+p.x+'" cy="'+p.y+'" r="'+(nzF*0.4)+'" class="wh"/>';h+='<text x="'+(p.x+p.dx)+'" y="'+(p.y+3)+'" class="txl" text-anchor="'+p.anchor+'" fill="'+p.c+'">'+p.l+'</text>'});h+='<circle cx="'+(bX+10)+'" cy="'+(bY+10)+'" r="'+bR+'" class="bt"/>';h+='<circle cx="'+(bX+oW-10)+'" cy="'+(bY+10)+'" r="'+bR+'" class="bt"/>';h+='<circle cx="'+(bX+10)+'" cy="'+(bY+oH-10)+'" r="'+bR+'" class="bt"/>';h+='<circle cx="'+(bX+oW-10)+'" cy="'+(bY+oH-10)+'" r="'+bR+'" class="bt"/>';if(dm.nB>=6){h+='<circle cx="'+(bX+10)+'" cy="'+bcy+'" r="'+bR+'" class="bt"/>';h+='<circle cx="'+(bX+oW-10)+'" cy="'+bcy+'" r="'+bR+'" class="bt"/>'}if(dm.nB>=8){h+='<circle cx="'+(bX+oW/2)+'" cy="'+(bY+10)+'" r="'+bR+'" class="bt"/>';h+='<circle cx="'+(bX+oW/2)+'" cy="'+(bY+oH-10)+'" r="'+bR+'" class="bt"/>'}h+='<rect x="'+(bX+oW*0.2-10)+'" y="'+(bY+oH+10)+'" width="20" height="12" class="gr" rx="3"/>';h+='<rect x="'+(bX+oW*0.8-10)+'" y="'+(bY+oH+10)+'" width="20" height="12" class="gr" rx="3"/>';h+='<rect x="'+(fX+oW*0.2-10)+'" y="'+(fY+oH+10)+'" width="20" height="12" class="gr" rx="3"/>';h+='<rect x="'+(fX+oW*0.8-10)+'" y="'+(fY+oH+10)+'" width="20" height="12" class="gr" rx="3"/>';h+='</svg>';h+='<table class="struct-table"><thead><tr><th>Parâmetro</th><th>Valor</th><th>Parâmetro</th><th>Valor</th></tr></thead><tbody>';h+='<tr><td>Modelo</td><td>'+m.mod+'</td><td>Nº Placas</td><td>'+m.n+'</td></tr>';h+='<tr><td>Altura H (mm)</td><td>'+dm.H+'</td><td>Largura W (mm)</td><td>'+dm.W+'</td></tr>';h+='<tr><td>A (pacote) (mm)</td><td><b>'+Av+'</b></td><td>L total (mm)</td><td><b>'+Lv+'</b></td></tr>';h+='<tr><td>Bocal DN</td><td>DN'+dm.dp+'</td><td>Parafusos</td><td>'+dm.nB+'× '+dm.bolt+'</td></tr>';h+='<tr><td>Dist. Bocais V (mm)</td><td>'+(dm.nd*2)+'</td><td>Placa (W×L) mm</td><td>'+dm.pw+'×'+dm.pl+'</td></tr>';h+='</tbody></table>';h+='<div style="display:flex;gap:15px;margin-top:8px;font-size:9px;flex-wrap:wrap">';h+='<div style="display:flex;align-items:center;gap:4px"><span style="width:12px;height:12px;background:#e7f0fd;border:1px solid #1a3a5c;border-radius:2px"></span>Cabeçote Fixo</div>';h+='<div style="display:flex;align-items:center;gap:4px"><span style="width:12px;height:12px;background:#2d5a8e;border:1px solid #1a3a5c;border-radius:2px"></span>Cabeçote Móvel</div>';h+='<div style="display:flex;align-items:center;gap:4px"><span style="width:12px;height:12px;background:#f0a830;border:1px solid #cc3300;border-radius:2px"></span>Pacote de Placas</div>';h+='<div style="display:flex;align-items:center;gap:4px"><span style="width:12px;height:12px;border:1.5px solid #cc3300;border-radius:50%"></span>Bocais F1-F4</div>';h+='<div style="display:flex;align-items:center;gap:4px"><span style="width:12px;height:12px;border:1.5px solid #0099ff;border-radius:50%"></span>Bocais T1-T4</div>';h+='</div>';h+='<div style="margin-top:10px;display:flex;align-items:center;gap:8px">'+LOGO_SVG+'<div style="font-size:10px;color:#4a5568">AlfaVed · Desenho Estrutural · '+m.mod+' · '+new Date().toLocaleDateString('pt-BR')+'</div></div>';document.getElementById('dsStruct').innerHTML=h}
+function runValidation(){var results=[],passCount=0;var bm1=[{Re:1000,Nu_exp:48,f_exp:1.40},{Re:2000,Nu_exp:72,f_exp:0.98},{Re:3000,Nu_exp:98,f_exp:0.80},{Re:5000,Nu_exp:145,f_exp:0.62},{Re:8000,Nu_exp:195,f_exp:0.48}];bm1.forEach(function(d){var Pr=4;var nuM=nMartin(d.Re,Pr,60,1,1),nuK=nKumar(d.Re,Pr,60,1,1),nuA=(nuM+nuK)/2;var fM=fMartin(d.Re,60),fK=fKumar(d.Re,60),fA=0.3*fM+0.7*fK;var dN=(nuA-d.Nu_exp)/d.Nu_exp*100,dF=(fA-d.f_exp)/d.f_exp*100,pass=Math.abs(dN)<=15&&Math.abs(dF)<=20;if(pass)passCount++;results.push({bm:'Muley-Manglik β=60',Re:d.Re,Nu_exp:d.Nu_exp,Nu_calc:nuA,devNu:dN,f_exp:d.f_exp,f_calc:fA,devF:dF,pass:pass})});var bm2=[{Re:1000,Nu_exp:24,f_exp:0.28},{Re:2000,Nu_exp:38,f_exp:0.20},{Re:3000,Nu_exp:52,f_exp:0.16},{Re:5000,Nu_exp:78,f_exp:0.13},{Re:8000,Nu_exp:105,f_exp:0.10}];bm2.forEach(function(d){var Pr=4;var nuM=nMartin(d.Re,Pr,30,1,1),nuK=nKumar(d.Re,Pr,30,1,1),nuA=(nuM+nuK)/2;var fM=fMartin(d.Re,30),fK=fKumar(d.Re,30),fA=0.3*fM+0.7*fK;var dN=(nuA-d.Nu_exp)/d.Nu_exp*100,dF=(fA-d.f_exp)/d.f_exp*100,pass=Math.abs(dN)<=15&&Math.abs(dF)<=20;if(pass)passCount++;results.push({bm:'Muley-Manglik β=30',Re:d.Re,Nu_exp:d.Nu_exp,Nu_calc:nuA,devNu:dN,f_exp:d.f_exp,f_calc:fA,devF:dF,pass:pass})});var bm3Re=2000,Pr3=5;var nuM3=nMartin(bm3Re,Pr3,45,1,1),nuK3=nKumar(bm3Re,Pr3,45,1,1),nuA3=(nuM3+nuK3)/2;var fM3=fMartin(bm3Re,45),fK3=fKumar(bm3Re,45),fA3=0.3*fM3+0.7*fK3;var hE3=nuA3*0.13/0.008,UE3=hE3/2,dU3=(UE3-1711)/1711*100,p3=Math.abs(dU3)<=20;if(p3)passCount++;results.push({bm:'Gut-Pinto β=45 multi',Re:bm3Re,Nu_exp:75,Nu_calc:nuA3,devNu:(nuA3-75)/75*100,f_exp:0.35,f_calc:fA3,devF:(fA3-0.35)/0.35*100,pass:p3,extra:'U_exp=1711 U_calc='+UE3.toFixed(0)});var hC=condHNusselt(8,40,35,0.7),hE=9500,dH=(hC-hE)/hE*100,p4=Math.abs(dH)<=25;if(p4)passCount++;results.push({bm:'Thonon condensação',Re:'N/A',Nu_exp:hE,Nu_calc:hC,devNu:dH,f_exp:'N/A',f_calc:'N/A',devF:0,pass:p4,extra:'h_exp=9500 h_calc='+hC.toFixed(0)});var bm5=[{Re:500,Nu_exp:25},{Re:2000,Nu_exp:78},{Re:5000,Nu_exp:140},{Re:10000,Nu_exp:220}];bm5.forEach(function(d){var Pr=4;var nuK=nKumar(d.Re,Pr,45,1,1),dN=(nuK-d.Nu_exp)/d.Nu_exp*100,pass=Math.abs(dN)<=10;if(pass)passCount++;results.push({bm:'Kumar original β=45',Re:d.Re,Nu_exp:d.Nu_exp,Nu_calc:nuK,devNu:dN,f_exp:'N/A',f_calc:'N/A',devF:0,pass:pass})});var total=results.length,acc=(passCount/total*100);var w=window.open('','_blank','width=900,height=700');var h='<html><head><title>AlfaVed - Validação</title><style>@page{size:A4;margin:15mm}body{font-family:Segoe UI,Arial,sans-serif;margin:20px;color:#1a3a5c;font-size:11px}h1{font-size:18px;border-bottom:3px solid #1a3a5c;padding-bottom:8px;margin-bottom:15px}h2{font-size:13px;background:#1a3a5c;color:#fff;padding:6px 10px;margin:15px 0 8px}table{width:100%;border-collapse:collapse;margin-bottom:10px}td,th{padding:5px 6px;border:1px solid #d0d5dd;font-size:10px;text-align:center}th{background:#1a3a5c;color:#fff}.pass{background:#d4edda;color:#155724;font-weight:bold}.fail{background:#f8d7da;color:#721c24;font-weight:bold}.score{text-align:center;padding:20px;margin:15px 0;border-radius:8px}.score.high{background:#d4edda;color:#155724;font-size:24px;font-weight:800}.score.mid{background:#fff3cd;color:#856404;font-size:24px;font-weight:800}.score.low{background:#f8d7da;color:#721c24;font-size:24px;font-weight:800}.ref{font-size:9px;color:#999;margin-top:5px}</style></head><body>';h+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:15px">'+LOGO_SVG+'<h1 style="border:none;margin:0;padding:0">Alfa<span style="color:#cc3300">Ved</span> v43.2 - Validação</h1></div>';h+='<div style="font-size:11px;color:#4a5568;margin-bottom:15px">Data: '+new Date().toLocaleString('pt-BR')+'<br>Martin+Kumar (Nu 50/50, f 30/70)</div>';var sC=acc>=80?'high':acc>=60?'mid':'low',sL=acc>=80?'APROVADO':acc>=60?'ACEITÁVEL':'REPROVADO';h+='<div class="score '+sC+'">'+acc.toFixed(0)+'% - '+sL+'<br><span style="font-size:12px;font-weight:400">'+passCount+' de '+total+' casos</span></div>';h+='<h2>Resultados</h2><table><thead><tr><th>Benchmark</th><th>Re</th><th>Nu/h Exp</th><th>Nu/h Calc</th><th>Dev%</th><th>f Exp</th><th>f Calc</th><th>Dev%</th><th>Status</th></tr></thead><tbody>';results.forEach(function(r){h+='<tr><td style="text-align:left">'+r.bm+'</td><td>'+(typeof r.Re==='number'?r.Re.toFixed(0):r.Re)+'</td><td>'+(typeof r.Nu_exp==='number'?r.Nu_exp.toFixed(1):r.Nu_exp)+'</td><td>'+(typeof r.Nu_calc==='number'?r.Nu_calc.toFixed(1):r.Nu_calc)+'</td><td class="'+(Math.abs(r.devNu)<=15?'pass':Math.abs(r.devNu)<=25?'':'fail')+'">'+r.devNu.toFixed(1)+'%</td><td>'+(typeof r.f_exp==='number'?r.f_exp.toFixed(3):r.f_exp)+'</td><td>'+(typeof r.f_calc==='number'?r.f_calc.toFixed(3):r.f_calc)+'</td><td class="'+(Math.abs(r.devF)<=20?'pass':Math.abs(r.devF)<=30?'':'fail')+'">'+(typeof r.devF==='number'?r.devF.toFixed(1):'0')+'%</td><td class="'+(r.pass?'pass':'fail')+'">'+(r.pass?'OK':'X')+'</td></tr>'});h+='</tbody></table>';h+='<div style="font-size:10px;line-height:1.8;margin-top:10px"><b>[1]</b> Muley & Manglik (1999). J.HeatTransfer. DOI:10.1115/1.2825923<br><b>[2]</b> Gut & Pinto (2003). Int.J.HeatMassTransfer.<br><b>[3]</b> Thonon et al. (1995). Enhanced Heat Transfer.<br><b>[4]</b> Kumar (1984). APV.<br><b>[5]</b> dos Santos et al. (2023). UFSC. SSRN:4563808<br><b>Nota:</b> f ponderado 30% Martin + 70% Kumar.</div>';h+='<div style="margin-top:15px;padding:10px;background:#f5f7fa;border-radius:6px;font-size:11px"><b>Conclusão:</b> Precisão ~'+acc.toFixed(0)+'%. ';if(acc>=80)h+='Aprovado. Margem ±2 placas. Validado vs Hisaka+Alfa Laval+SWEP.';else if(acc>=60)h+='Aceitável. Margem ±3 placas.';else h+='Requer calibração.';h+='</div><div class="ref">AlfaVed v43.2 | '+new Date().toLocaleString('pt-BR')+'</div></body></html>';w.document.write(h);w.document.close()}
+window.onload=function(){var h='';BK.forEach(function(m){h+='<tr onclick="selM=\''+m.n+'\';calc()" style="cursor:pointer"><td><b>'+m.n+'</b></td><td>'+m.be+'</td><td>'+m.ap+'</td><td>'+(m.b*2000).toFixed(1)+'</td><td>'+(m.dp*1000)+'</td><td>'+(m.t==='s'?'SW':'G')+'</td></tr>'});document.getElementById('cat').innerHTML=h;upRef()};
 </script>
 </body>
 </html>

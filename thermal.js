@@ -1,7 +1,7 @@
 // ============================================================
-// AlfaVed PHE v47 — MOTOR DE CÁLCULO + WIZARD MULTI-SEÇÃO
-// FIX v47: wCalcMulti escolhe UM modelo que atende as 3 seções
-// (auto percorre todas as placas; resfriamento sempre calcula)
+// AlfaVed PHE v48 — MOTOR DE CÁLCULO + WIZARD MULTI-SEÇÃO
+// FIX v48: cDp — termo de porta multiplicado por PASSES (Np),
+// não por placas (N). Corrige dP absurdo (1008 → dezenas kPa).
 // ============================================================
 
 // ---------- DETECÇÃO QUENTE/FRIO ----------
@@ -70,13 +70,14 @@ function cU(p){
   return r;
 }
 
-// ---------- QUEDA DE PRESSÃO ----------
-function cDp(m, r, D, L, phi, N, Ap, v, be, Re){
+// ---------- QUEDA DE PRESSÃO (FIX v48: porta × passes, não × placas) ----------
+function cDp(m, r, D, L, phi, N, Ap, v, be, Re, Np){
   var Cf = fAvg(Re, be);
   var Lr = L * phi;
-  var dpc = 4 * Cf * (Lr * N / D) * (r * v * v / 2);
-  var vp = safeDiv(m, r * Math.max(Ap, 1e-6), 0);
-  var dpp = 1.4 * r * vp * vp / 2 * N;
+  var dpc = 4 * Cf * (Lr * N / D) * (r * v * v / 2);   // perda nos canais (× placas)
+  var vp = safeDiv(m, r * Math.max(Ap, 1e-6), 0);       // vel. no bocal
+  var npass = Np || 1;                                   // nº de passagens
+  var dpp = 1.4 * r * vp * vp / 2 * npass;               // FIX: porta × PASSES
   var t = safeDiv(dpc + dpp, 1000, 0);
   var fp = safeDiv(dpp / 1000, t, 0) * 100;
   var tau = wallShear(dpc, D, Lr * N);
@@ -138,10 +139,10 @@ function mCalcSingle(inp, hc, forceModel){
       var Ai = n * m.ap;
       var An = safeDiv(Q * 1000, Math.max(rU.U * lc, 0.1), 0);
       if (Ai >= An) {
-        var dp1 = cDp(mp, pb.rho, Dh, m.l, m.ph, Np, Ap, vcP, m.be, Rep);
+        var dp1 = cDp(mp, pb.rho, Dh, m.l, m.ph, Np, Ap, vcP, m.be, Rep, Np);
         var dp2;
         if (vm) { dp2 = { t: dp1.t * 0.3, vp: 0, fracPorta: 0, tau: 0 }; }
-        else    { dp2 = cDp(ms, sb.rho, Dh, m.l, m.ph, Np2, Ap, vcS, m.be, Res); }
+        else    { dp2 = cDp(ms, sb.rho, Dh, m.l, m.ph, Np2, Ap, vcS, m.be, Res, Np2); }
         var vi = true;
         if (dp1.t > inp.dpp) vi = false;
         if (!vm && dp2.t > inp.dps) vi = false;
@@ -275,8 +276,8 @@ function mCalcSecRegen(inp, forceModel){
         var Ai = n * m.ap;
         var An = safeDiv(Q * 1000, Math.max(rU.U * lc, 0.1), 0);
         if (Ai >= An) {
-          var dp1 = cDp(mp, pb.rho, Dh, m.l, m.ph, Np, Ap, vcP, m.be, Rep);
-          var dp2 = cDp(ms, sb.rho, Dh, m.l, m.ph, Np2, Ap, vcP, m.be, Res);
+          var dp1 = cDp(mp, pb.rho, Dh, m.l, m.ph, Np, Ap, vcP, m.be, Rep, Np);
+          var dp2 = cDp(ms, sb.rho, Dh, m.l, m.ph, Np2, Ap, vcP, m.be, Res, Np2);
           var vi = dp1.t <= inpC.dpp && dp2.t <= inpC.dps && dp1.fracPorta <= 30 && dp2.fracPorta <= 30 && dp1.tau >= 35;
           rs.push({ mod: m.n, n: n, A: Ai, U: rU.U, kc: rU.kc, dp1: dp1.t, dp2: dp2.t, Q: Q, v1: dp1.vp, v2: dp2.vp, vi: vi, vcP: vcP, tauP: dp1.tau, fracPortaP: dp1.fracPorta, Rep: Rep, Res: Res, lm: lc, F: F, pb: pb, sb: sb, rU: rU, m: m, lmtd: lm, passes: ps, vaporMode: false });
         }
@@ -315,7 +316,6 @@ function calcHoldingTube(vp, tp, fp, bp){
 // WIZARD MULTI-SEÇÃO — UM MODELO PARA TODAS AS SEÇÕES
 // ============================================================
 
-// Calcula as 3 seções com UM modelo. modelo=null → auto (percorre todas)
 function wCalcMulti(inp, modelo){
   var tp = parseFloat(document.getElementById('tpast').value) || 72;
   var tr = parseFloat(document.getElementById('tregen').value) || 38;
@@ -327,10 +327,9 @@ function wCalcMulti(inp, modelo){
   var tsat = { 2: 120, 3: 134, 6: 159, 10: 180 }[pv] || 120;
   var tAG = parseFloat(document.getElementById('t_agua_g').value) || 0;
 
-  var tQSR = tp - (tr - ti);   // saída lado quente da regen
-  var tSR = tAG + 8;           // saída água de resfriamento
+  var tQSR = tp - (tr - ti);
+  var tSR = tAG + 8;
 
-  // Seções (produto sempre no lado 1)
   var s1i = { fp: inp.fp, bp: inp.bp, vp: inp.vp, tip: ti, top: tp, dpp: inp.dpp * 0.4,
               fs: 'vapor', vs: inp.vp * 1.5, tis: tsat, tos: tsat, dps: inp.dpp * 0.4,
               tpl: inp.tpl, mat: inp.mat, ps: inp.ps, mg: inp.mg, pressure: pv, rf: inp.rf };
@@ -344,7 +343,6 @@ function wCalcMulti(inp, modelo){
   var s1hc = detectHotCold(s1i);
   var s3hc = detectHotCold(s3i);
 
-  // Candidatos: um modelo específico OU todas as placas (auto)
   var candidatos;
   if (modelo) {
     candidatos = PLATES.filter(function(m){ return m.n === modelo; });

@@ -1,7 +1,7 @@
 // ============================================================
 // AlfaVed PHE v48 — MOTOR DE CÁLCULO + WIZARD MULTI-SEÇÃO
-// FIX v48: cDp — termo de porta multiplicado por PASSES (Np),
-// não por placas (N). Corrige dP absurdo (1008 → dezenas kPa).
+// FIX v48: cDp — termo de porta × PASSES (não × placas)
+//          wCalcMulti — UM modelo para as 3 seções
 // ============================================================
 
 // ---------- DETECÇÃO QUENTE/FRIO ----------
@@ -70,14 +70,14 @@ function cU(p){
   return r;
 }
 
-// ---------- QUEDA DE PRESSÃO (FIX v48: porta × passes, não × placas) ----------
+// ---------- QUEDA DE PRESSÃO (FIX v48: porta × passes) ----------
 function cDp(m, r, D, L, phi, N, Ap, v, be, Re, Np){
   var Cf = fAvg(Re, be);
   var Lr = L * phi;
-  var dpc = 4 * Cf * (Lr * N / D) * (r * v * v / 2);   // perda nos canais (× placas)
-  var vp = safeDiv(m, r * Math.max(Ap, 1e-6), 0);       // vel. no bocal
-  var npass = Np || 1;                                   // nº de passagens
-  var dpp = 1.4 * r * vp * vp / 2 * npass;               // FIX: porta × PASSES
+  var dpc = 4 * Cf * (Lr * N / D) * (r * v * v / 2);
+  var vp = safeDiv(m, r * Math.max(Ap, 1e-6), 0);
+  var npass = Np || 1;
+  var dpp = 1.4 * r * vp * vp / 2 * npass;   // FIX: porta × PASSES
   var t = safeDiv(dpc + dpp, 1000, 0);
   var fp = safeDiv(dpp / 1000, t, 0) * 100;
   var tau = wallShear(dpc, D, Lr * N);
@@ -165,7 +165,7 @@ function mCalcSingle(inp, hc, forceModel){
   return rs;
 }
 
-// ---------- SELEÇÃO DE PASSES (escolhe menor dP viável) ----------
+// ---------- SELEÇÃO DE PASSES (menor dP viável) ----------
 function mCalcSec(inp, passesArr, hc, forceModel){
   var hc = hc || detectHotCold(inp);
   if (hc.error) {

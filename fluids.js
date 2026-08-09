@@ -213,7 +213,7 @@ function pRefrigerante(g, T){
   };
 }
 
-// ================= DISPATCHER PRODUTO (18) =================
+// ================= DISPATCHER PRODUTO (16) =================
 // gProd(f, T, brix) → {rho, cp, mu, k}
 function gProd(f, T, brix){
   switch(f){
@@ -233,8 +233,6 @@ function gProd(f, T, brix){
     case 'salmoura':        return pSalmoura(T, brix);
     case 'sae10':           return pSAE10(T);
     case 'sae30':           return pSAE30(T);
-    case 'amonia_aq':       return pAmoniaAq(T, brix);
-    case 'prop_glicol':     return pPropGlicol(T, brix);
     default:                return pAgua(T);
   }
 }

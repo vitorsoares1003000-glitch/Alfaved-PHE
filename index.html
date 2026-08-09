@@ -34,19 +34,34 @@
 
     <div class="sb-sect">
       <h3>Lado Produto</h3>
-      <div class="fg"><label>Fluido</label>
-        <select id="fp">
-          <option value="agua">Água</option>
-          <option value="cerveja">Cerveja</option>
-          <option value="mosto">Mosto</option>
-          <option value="vinho">Vinho</option>
-          <option value="leite">Leite</option>
-          <option value="salmoura">Salmoura</option>
-          <option value="glicol20">Glicol 20%</option>
-          <option value="glicol30">Glicol 30%</option>
-          <option value="prop_glicol">Propileno Glicol</option>
-        </select>
-      </div>
+   <div class="fg"><label>Fluido</label>
+  <select id="fp">
+    <optgroup label="Bebidas & Alimentos">
+      <option value="cerveja">Cerveja</option>
+      <option value="mosto">Mosto</option>
+      <option value="vinho">Vinho</option>
+      <option value="vinho_cana">Vinho de Cana</option>
+      <option value="soft_drink">Soft Drink</option>
+      <option value="leite">Leite</option>
+      <option value="oleo_vegetal">Óleo Vegetal</option>
+    </optgroup>
+    <optgroup label="Açúcar & Fermentação">
+      <option value="sacarose">Calda de Açúcar</option>
+      <option value="suco_cana">Suco de Cana</option>
+      <option value="levedura_cana">Levedura Cana</option>
+      <option value="levedura_cerveja">Levedura Cerv.</option>
+    </optgroup>
+    <optgroup label="Outros">
+      <option value="agua">Água</option>
+      <option value="etanol">Etanol</option>
+      <option value="salmoura">Salmoura (NaCl)</option>
+      <option value="sae10">Óleo SAE 10</option>
+      <option value="sae30">Óleo SAE 30</option>
+      <option value="amonia_aq">Amônia Aq.</option>
+      <option value="prop_glicol">Propileno Glicol</option>
+    </optgroup>
+  </select>
+</div>
       <div class="fr">
         <div class="fg"><label>Brix(%)</label><input type="number" id="bp" value="0" step="0.1"></div>
         <div class="fg"><label>Vazão(m³/h)</label><input type="number" id="vp" value="20"></div>

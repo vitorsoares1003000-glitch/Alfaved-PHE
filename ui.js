@@ -1,14 +1,12 @@
 // ============================================================
-// AlfaVed PHE v46 — CAMADA DE INTERFACE (UI)
-// Wizard Multi-Seção com MODELO ÚNICO GLOBAL:
-// - seletor de modelo visível em todas as etapas
-// - mudar o modelo recalcula TODAS as seções
+// AlfaVed PHE v47 — CAMADA DE INTERFACE (UI)
+// Wizard Multi-Seção com UM modelo para todas as seções
 // ============================================================
 
 var ui = {};
 
-// ---------- ESTADO DO WIZARD (modelo único global) ----------
-ui.multi = { step: 1, modelo: 'auto', r1: null, r2: null, r3: null };
+// ---------- ESTADO DO WIZARD ----------
+ui.multi = { step: 1, modelo: 'auto', res: null };
 
 // ---------- LEITURA DOS CAMPOS ----------
 ui.readInput = function(){
@@ -47,7 +45,7 @@ ui.setModo = function(m){
   if (sm) sm.style.display = m === 'multi' ? 'block' : 'none';
   if (mi) mi.innerHTML = m === 'multi' ? '<b>Multi-Seção:</b> Wizard 3 etapas · modelo único global.'
                                         : '<b>Simples:</b> Martin+Kumar avg, f 30/70.';
-  if (m === 'multi') ui.multi = { step: 1, modelo: 'auto', r1: null, r2: null, r3: null };
+  if (m === 'multi') ui.multi = { step: 1, modelo: 'auto', res: null };
 };
 ui.modo = 'simples';
 
@@ -93,11 +91,11 @@ ui.calc = function(){
 };
 
 // ============================================================
-// WIZARD MULTI-SEÇÃO — MODELO ÚNICO GLOBAL
+// WIZARD MULTI-SEÇÃO
 // ============================================================
 
 ui.modelOptions = function(sel){
-  var h = '<option value="auto">Auto (melhor modelo)</option>';
+  var h = '<option value="auto">Auto (melhor modelo único)</option>';
   PLATES.forEach(function(m){
     var s = (sel && sel === m.n) ? ' selected' : '';
     h += '<option value="' + m.n + '"' + s + '>' + m.n + ' (β' + m.be + ' · ' + m.ap + ' m²)</option>';
@@ -105,21 +103,18 @@ ui.modelOptions = function(sel){
   return h;
 };
 
-// Recalcula TODAS as seções com o modelo global atual
+// Calcula tudo com o modelo global atual
 ui.recalcAll = function(){
   try {
     var inp = ui.readInput();
     if (!inp.vp || inp.vp <= 0) { alert('Vazão produto inválida'); return; }
     var modelo = ui.multi.modelo === 'auto' ? null : ui.multi.modelo;
-    ui.multi.r1 = wCalcPasteurizacao(inp, modelo);
-    ui.multi.r2 = wCalcRegen(inp, modelo);
-    ui.multi.r3 = wCalcResf(inp, modelo);
+    ui.multi.res = wCalcMulti(inp, modelo);
     ui.wizardPanel();
     ui.showResumo();
   } catch (e) { alert('Erro: ' + e.message); }
 };
 
-// Quando o usuário muda o modelo global
 ui.onModeloChange = function(){
   ui.multi.modelo = document.getElementById('selModeloGlobal').value;
   ui.recalcAll();
@@ -144,12 +139,11 @@ ui.wizardPanel = function(){
     h += '<div style="flex:1;text-align:center;padding:6px;border-radius:6px;font-size:12px;font-weight:700;' + at + '">' + nomes[i-1] + done + '</div>';
   }
   h += '</div>';
-  // Seletor de modelo GLOBAL (visível em todas as etapas)
   h += '<div style="margin-bottom:10px;padding:8px;background:#e7f0fd;border:1px solid #b8d0ea;border-radius:6px">' +
        '<b>Modelo do equipamento (único para todas as seções):</b> ' +
        '<select id="selModeloGlobal" onchange="ui.onModeloChange()" style="margin-left:6px;padding:4px;min-width:200px">' +
        ui.modelOptions(ui.multi.modelo === 'auto' ? null : ui.multi.modelo) + '</select>' +
-       '<button onclick="ui.recalcAll()" style="margin-left:8px;padding:5px 12px;background:#1a3a5c;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:700">Recalcular Tudo</button>' +
+       '<button onclick="ui.recalcAll()" style="margin-left:8px;padding:5px 12px;background:#1a3a5c;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:700">Calcular</button>' +
        '</div>';
   h += '<div id="wizBody" style="font-size:13px;color:#334"></div>';
   p.innerHTML = h;
@@ -159,9 +153,9 @@ ui.wizardPanel = function(){
 ui.wizardBody = function(){
   var b = document.getElementById('wizBody');
   if (!b) return;
-  var s = ui.multi.step, m = ui.multi;
+  var s = ui.multi.step, res = ui.multi.res;
   var nomes = ['Pasteurização', 'Regeneração', 'Resfriamento'];
-  var r = m['r' + s];
+  var r = res ? res['r' + s] : null;
   var info = r ? 'Modelo: <b>' + r.mod + '</b> · ' + r.n + ' placas · ' + r.A.toFixed(2) + ' m² · dP ' + r.dp1.toFixed(1) + ' kPa · ' + (r.vi ? '<span style="color:#2d9e4a;font-weight:700">VIÁVEL</span>' : '<span style="color:#cc3300;font-weight:700">NÃO VIÁVEL</span>') : 'não calculado';
   b.innerHTML = '<div style="margin-bottom:8px"><b>Etapa ' + s + ' — ' + nomes[s-1] + ':</b></div>' +
                 '<div style="color:#1a3a5c;font-size:12px">' + info + '</div>' +
@@ -176,22 +170,18 @@ ui.wizardBody = function(){
 
 ui.wNav = function(d){ ui.multi.step += d; ui.wizardPanel(); };
 
-// Resumo final com o MESMO modelo nas 3 seções
 ui.showResumo = function(){
-  var m = ui.multi;
-  if (!m.r1 || !m.r2 || !m.r3) { alert('Calcule primeiro'); return; }
-  var r1 = m.r1, r2 = m.r2, r3 = m.r3;
-  var tA = r1.A + r2.A + r3.A;
-  var tPl = r1.n + r2.n + r3.n;
-  var tDP = r1.dp1 + r2.dp1 + r3.dp1;
-  var tQ = r1.Q + r2.Q + r3.Q;
-  var vi = r1.vi && r2.vi && r3.vi && tDP <= ui.readInput().dpp;
+  var res = ui.multi.res;
+  if (!res) { alert('Calcule primeiro'); return; }
+  var r1 = res.r1, r2 = res.r2, r3 = res.r3;
+  var tA = res.totalArea, tPl = res.totalPlates, tDP = res.totalDpP, tQ = res.Qexterno;
+  var vi = res.vi;
   var badge = document.getElementById('badge');
   if (vi) { badge.textContent = 'VIÁVEL'; badge.className = 'res-badge ok'; }
   else    { badge.textContent = 'NÃO VIÁVEL'; badge.className = 'res-badge notok'; }
   document.getElementById('selInfo').innerHTML =
     '<div style="font-size:16px;font-weight:800;color:#1a3a5c">Pasteurizador — Resumo Final (3 Seções)</div>' +
-    '<div style="font-size:11px;color:#4a5568">Modelo único: <b>' + r1.mod + '</b> · ' + tPl + ' placas · ' + tA.toFixed(2) + ' m² · dP total ' + tDP.toFixed(1) + ' kPa</div>';
+    '<div style="font-size:11px;color:#4a5568">Modelo único: <b>' + res.mod + '</b> · ' + tPl + ' placas · ' + tA.toFixed(2) + ' m² · dP total ' + tDP.toFixed(1) + ' kPa · Regen ' + res.regenEff.toFixed(0) + '%</div>';
   document.getElementById('cards').innerHTML =
     '<div class="mc"><div class="mc-val">' + tQ.toFixed(1) + '</div><div class="mc-lbl">Carga kW</div></div>' +
     '<div class="mc"><div class="mc-val">' + tA.toFixed(2) + '</div><div class="mc-lbl">Área m²</div></div>' +
@@ -205,7 +195,7 @@ ui.showResumo = function(){
   document.getElementById('comp').innerHTML = h;
   var v = '<div class="ck"><span class="' + (vi ? 'ck-ok' : 'ck-err') + '">' + (vi ? '✓' : '✗') + '</span>Status: ' + (vi ? 'VIÁVEL' : 'NÃO VIÁVEL') + '</div>';
   v += '<div class="ck"><span class="' + (tDP <= ui.readInput().dpp ? 'ck-ok' : 'ck-err') + '">' + (tDP <= ui.readInput().dpp ? '✓' : '✗') + '</span>dP Total: ' + tDP.toFixed(1) + '/' + ui.readInput().dpp + ' kPa</div>';
-  v += '<div class="ck"><span class="' + (r1.mod === r2.mod && r2.mod === r3.mod ? 'ck-ok' : 'ck-err') + '">' + (r1.mod === r2.mod && r2.mod === r3.mod ? '✓' : '✗') + '</span>Modelo único: ' + r1.mod + ' em todas as seções</div>';
+  v += '<div class="ck"><span class="' + (r1.mod === r2.mod && r2.mod === r3.mod ? 'ck-ok' : 'ck-err') + '">' + (r1.mod === r2.mod && r2.mod === r3.mod ? '✓' : '✗') + '</span>Modelo único: ' + res.mod + ' em todas as seções</div>';
   document.getElementById('ver').innerHTML = v;
 };
 
@@ -225,7 +215,7 @@ ui.limpar = function(){
   var ph = document.getElementById('ph');
   if (res) res.style.display = 'none';
   if (ph) ph.style.display = 'block';
-  ui.multi = { step: 1, modelo: 'auto', r1: null, r2: null, r3: null };
+  ui.multi = { step: 1, modelo: 'auto', res: null };
   var wp = document.getElementById('wizardPanel');
   if (wp) wp.remove();
 };

@@ -1,7 +1,7 @@
 // ============================================================
-// AlfaVed PHE v45.1 — MOTOR DE CÁLCULO + WIZARD MULTI-SEÇÃO
-// FIX v45.1: mCalcSingle SEMPRE gera candidato real; mCalcSec
-// nunca retorna 999 (sempre o melhor modelo real).
+// AlfaVed PHE v45.2 — MOTOR DE CÁLCULO + WIZARD MULTI-SEÇÃO
+// FIX v45.2: Etapa 1 (Pasteurização) usa VAPOR real quando
+// aquecimento por vapor; fallback nunca retorna 999.
 // ============================================================
 
 // ---------- DETECÇÃO QUENTE/FRIO ----------
@@ -160,10 +160,9 @@ function mCalcSingle(inp, hc, forceModel){
           lmtd: lm, passes: inp.ps, vaporMode: vm
         });
         pushed = true;
-        break;  // primeiro n que satisfaz área para este modelo
+        break;
       }
     }
-    // FIX v45.1: se nenhum n satisfez a área, ainda assim gera candidato
     if (!pushed) {
       var n0 = Math.max(4, ne);
       var nc0 = Math.max(Math.floor((n0 - 1) / (2 * Np)), 1);
@@ -227,7 +226,6 @@ function mCalcSec(inp, passesArr, hc, forceModel){
     }
   }
   if (best) return best;
-  // FIX v45.1: sempre retorna o melhor modelo real (menor dP), nunca 999
   var rs2 = mCalcSingle(Object.assign({}, inp, { ps: pt[0] }), hc, forceModel);
   rs2.sort(function(a, b){ return (a.dp1 - b.dp1); });
   var fb = rs2[0];
@@ -366,19 +364,32 @@ function calcHoldingTube(vp, tp, fp, bp){
 // WIZARD MULTI-SEÇÃO — CÁLCULO DE CADA ETAPA
 // ============================================================
 
-// ETAPA 1: PASTEURIZAÇÃO (Aquecimento) — produto + vapor
+// ETAPA 1: PASTEURIZAÇÃO (Aquecimento) — produto + VAPOR real
 function wCalcPasteurizacao(inp){
   var tp = parseFloat(document.getElementById('tpast').value) || 72;
-  var tAQ = parseFloat(document.getElementById('t_agua_q').value) || 85;
   var fsAq = document.getElementById('fs_aq').value;
-  var tSA = tAQ - 20;
-  var si = {
-    fp: inp.fp, bp: inp.bp, vp: inp.vp,
-    tip: inp.tip, top: tp, dpp: inp.dpp * 0.4,
-    fs: fsAq === 'vapor' ? 'vapor' : 'agua', vs: inp.vp * 1.5,
-    tis: tAQ, tos: tSA, dps: inp.dpp * 0.4,
-    tpl: inp.tpl, mat: inp.mat, ps: inp.ps, mg: inp.mg, pressure: 2, rf: inp.rf
-  };
+  var pv = parseInt(document.getElementById('pvap').value) || 2;
+  var tsat = { 2: 120, 3: 134, 6: 159, 10: 180 }[pv] || 120;
+  var si;
+  if (fsAq === 'vapor') {
+    // Aquecimento por VAPOR: serviço = vapor saturado a tsat
+    si = {
+      fp: inp.fp, bp: inp.bp, vp: inp.vp,
+      tip: inp.tip, top: tp, dpp: inp.dpp * 0.4,
+      fs: 'vapor', vs: inp.vp * 1.5, tis: tsat, tos: tsat, dps: inp.dpp * 0.4,
+      tpl: inp.tpl, mat: inp.mat, ps: inp.ps, mg: inp.mg, pressure: pv, rf: inp.rf
+    };
+  } else {
+    // Aquecimento por ÁGUA QUENTE
+    var tAQ = parseFloat(document.getElementById('t_agua_q').value) || 85;
+    var tSA = tAQ - 20;
+    si = {
+      fp: inp.fp, bp: inp.bp, vp: inp.vp,
+      tip: inp.tip, top: tp, dpp: inp.dpp * 0.4,
+      fs: 'agua', vs: inp.vp * 1.5, tis: tAQ, tos: tSA, dps: inp.dpp * 0.4,
+      tpl: inp.tpl, mat: inp.mat, ps: inp.ps, mg: inp.mg, pressure: pv, rf: inp.rf
+    };
+  }
   var hc = detectHotCold(si);
   var r = mCalcSec(si, null, hc, null);
   r.tipo = 'pasteurizacao';

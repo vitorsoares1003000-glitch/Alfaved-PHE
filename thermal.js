@@ -1,6 +1,6 @@
 // ============================================================
-// AlfaVed PHE v44.4 — MOTOR DE CÁLCULO (funções puras)
-// FIX v44.4: Multi-Seção usa UM ÚNICO modelo de placa em todas as seções
+// AlfaVed PHE v44.5 — MOTOR DE CÁLCULO (funções puras)
+// FIX v44.5: Multi-Seção — remove filtro de ângulo que esvaziava candidatos
 // (pasteurizador = um equipamento, mesma placa em todas as seções)
 // ============================================================
 
@@ -84,7 +84,6 @@ function cDp(m, r, D, L, phi, N, Ap, v, be, Re){
 }
 
 // ---------- CÁLCULO DE UMA SEÇÃO (com modelo forçado opcional) ----------
-// forceModel: se definido, usa SOMENTE esse modelo de placa
 function mCalcSingle(inp, hc, forceModel){
   var pb = gProd(inp.fp, (inp.tip + inp.top) / 2, inp.bp);
   var mp = inp.vp * pb.rho / 3600;
@@ -298,7 +297,6 @@ function mCalcSecRegen(inp, forceModel){
     }
   }
   if (best) return best;
-  // fallback: menor dP
   var rs2 = mCalcSingle(Object.assign({}, inp, { ps: pt[0] }), detectHotCold(inp), forceModel);
   rs2.sort(function(a, b){ return (a.dp1 - b.dp1); });
   var fb = rs2[0];
@@ -332,15 +330,12 @@ function mCalcMulti(inp){
   var tAG = parseFloat(document.getElementById('t_agua_g').value) || 2;
   var s4 = document.getElementById('sec4_on') ? document.getElementById('sec4_on').value === '1' : false;
   var tAA = parseFloat(document.getElementById('t_agua_amb') ? document.getElementById('t_agua_amb').value : 25) || 25;
-
   var fRegen = 0.40, fAq = 0.30, fRes = 0.30;
 
-  // Perfis de temperatura das seções
   var tQSR = tp - (tr - ti);
   var tSA = tAQ - 20;
   var tSR = tAG + 8;
 
-  // Definição das 3 seções (regen usa produto vs produto)
   var s1i = { fp: fp, bp: bp, vp: vp, tip: ti, top: tr, dpp: dppT * fRegen, fs: fp, vs: vp, tis: tp, tos: tQSR, dps: dppT * fRegen, tpl: inp.tpl, mat: inp.mat, ps: inp.ps, mg: inp.mg };
   var s2i = { fp: fp, bp: bp, vp: vp, tip: tr, top: tp, dpp: dppT * fAq, fs: fsAq === 'vapor' ? 'vapor' : 'agua', vs: vp * 1.5, tis: tAQ, tos: tSA, dps: dppT * fAq, tpl: inp.tpl, mat: inp.mat, ps: inp.ps, mg: inp.mg, pressure: 2 };
   var s3i = { fp: fp, bp: bp, vp: vp, tip: tp, top: tf, dpp: dppT * fRes, fs: fsRes, vs: vp * 1.5, tis: tAG, tos: tSR, dps: dppT * fRes, tpl: inp.tpl, mat: inp.mat, ps: inp.ps, mg: inp.mg };
@@ -348,39 +343,30 @@ function mCalcMulti(inp){
   var s2hc = detectHotCold(s2i);
   var s3hc = detectHotCold(s3i);
 
-  // Filtra modelos candidatos (mesmo tipo/ângulo para TODAS as seções)
-  var aBe1 = thetaFilter(Math.abs(tr - ti), cL(tp, tQSR, ti, tr));
-  var aBe2 = thetaFilter(Math.abs(tp - tr), cL(tAQ, tSA, tr, tp));
-  var aBe3 = thetaFilter(Math.abs(tf - tp), cL(tAG, tSR, tp, tf));
+  // FIX v44.5: candidatos = TODAS as placas do tipo (SEM filtro de ângulo)
+  // Um único modelo deve servir todas as seções; o ângulo é definido pelo cálculo
   var candidatos = PLATES.filter(function(m){
     if (inp.tpl === 't') return true;
     if (inp.tpl === 's') return m.t === 's';
     return m.t === 'g';
-  }).filter(function(m){
-    return aBe1.indexOf(m.be) >= 0 && aBe2.indexOf(m.be) >= 0 && aBe3.indexOf(m.be) >= 0;
   });
 
   var melhor = null;
   candidatos.forEach(function(placa){
-    // Calcula TODAS as seções com ESTE modelo de placa
     var s1 = mCalcSecRegen(s1i, placa.n);
     var s2 = mCalcSec(s2i, null, s2hc, placa.n);
     var s3 = mCalcSec(s3i, null, s3hc, placa.n);
-
     var dpTotal = s1.dp1 + s2.dp1 + s3.dp1;
     var ok = s1.vi && s2.vi && s3.vi && dpTotal <= dppT;
     var area = s1.A + s2.A + s3.A;
-
     if (ok && (!melhor || area < melhor.area)) {
       melhor = { placa: placa, s1: s1, s2: s2, s3: s3, dpTotal: dpTotal, area: area, ok: true };
     }
-    // Se nenhum viável ainda, guarda o de menor dP como fallback
     if (!melhor && (!melhor || dpTotal < melhor.dpTotal)) {
       melhor = { placa: placa, s1: s1, s2: s2, s3: s3, dpTotal: dpTotal, area: area, ok: false };
     }
   });
 
-  // Se nenhum modelo viável, usa o fallback de menor dP
   if (!melhor) {
     melhor = { placa: null, s1: mCalcSecRegen(s1i), s2: mCalcSec(s2i, null, s2hc), s3: mCalcSec(s3i, null, s3hc), dpTotal: 0, area: 0, ok: false };
     melhor.dpTotal = melhor.s1.dp1 + melhor.s2.dp1 + melhor.s3.dp1;

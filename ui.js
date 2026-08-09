@@ -1,13 +1,14 @@
 // ============================================================
-// AlfaVed PHE v45 — CAMADA DE INTERFACE (UI)
-// Wizard Multi-Seção: Etapa 1 → 2 → 3, modelo base reutilizado,
-// com seleção manual se não atender.
+// AlfaVed PHE v46 — CAMADA DE INTERFACE (UI)
+// Wizard Multi-Seção com MODELO ÚNICO GLOBAL:
+// - seletor de modelo visível em todas as etapas
+// - mudar o modelo recalcula TODAS as seções
 // ============================================================
 
 var ui = {};
 
-// ---------- ESTADO DO WIZARD ----------
-ui.multi = { step: 1, baseModel: null, r1: null, r2: null, r3: null, manual2: null, manual3: null };
+// ---------- ESTADO DO WIZARD (modelo único global) ----------
+ui.multi = { step: 1, modelo: 'auto', r1: null, r2: null, r3: null };
 
 // ---------- LEITURA DOS CAMPOS ----------
 ui.readInput = function(){
@@ -44,9 +45,9 @@ ui.setModo = function(m){
   if (b1) b1.classList.toggle('act', m === 'simples');
   if (b2) b2.classList.toggle('act', m === 'multi');
   if (sm) sm.style.display = m === 'multi' ? 'block' : 'none';
-  if (mi) mi.innerHTML = m === 'multi' ? '<b>Multi-Seção:</b> Wizard 3 etapas (Pasteurização → Regen → Resfr).'
+  if (mi) mi.innerHTML = m === 'multi' ? '<b>Multi-Seção:</b> Wizard 3 etapas · modelo único global.'
                                         : '<b>Simples:</b> Martin+Kumar avg, f 30/70.';
-  if (m === 'multi') ui.multi.step = 1;
+  if (m === 'multi') ui.multi = { step: 1, modelo: 'auto', r1: null, r2: null, r3: null };
 };
 ui.modo = 'simples';
 
@@ -92,8 +93,37 @@ ui.calc = function(){
 };
 
 // ============================================================
-// WIZARD MULTI-SEÇÃO
+// WIZARD MULTI-SEÇÃO — MODELO ÚNICO GLOBAL
 // ============================================================
+
+ui.modelOptions = function(sel){
+  var h = '<option value="auto">Auto (melhor modelo)</option>';
+  PLATES.forEach(function(m){
+    var s = (sel && sel === m.n) ? ' selected' : '';
+    h += '<option value="' + m.n + '"' + s + '>' + m.n + ' (β' + m.be + ' · ' + m.ap + ' m²)</option>';
+  });
+  return h;
+};
+
+// Recalcula TODAS as seções com o modelo global atual
+ui.recalcAll = function(){
+  try {
+    var inp = ui.readInput();
+    if (!inp.vp || inp.vp <= 0) { alert('Vazão produto inválida'); return; }
+    var modelo = ui.multi.modelo === 'auto' ? null : ui.multi.modelo;
+    ui.multi.r1 = wCalcPasteurizacao(inp, modelo);
+    ui.multi.r2 = wCalcRegen(inp, modelo);
+    ui.multi.r3 = wCalcResf(inp, modelo);
+    ui.wizardPanel();
+    ui.showResumo();
+  } catch (e) { alert('Erro: ' + e.message); }
+};
+
+// Quando o usuário muda o modelo global
+ui.onModeloChange = function(){
+  ui.multi.modelo = document.getElementById('selModeloGlobal').value;
+  ui.recalcAll();
+};
 
 ui.wizardPanel = function(){
   var res = document.getElementById('res');
@@ -113,7 +143,15 @@ ui.wizardPanel = function(){
     var done = (i < s) ? ' ✓' : '';
     h += '<div style="flex:1;text-align:center;padding:6px;border-radius:6px;font-size:12px;font-weight:700;' + at + '">' + nomes[i-1] + done + '</div>';
   }
-  h += '</div><div id="wizBody" style="font-size:13px;color:#334"></div>';
+  h += '</div>';
+  // Seletor de modelo GLOBAL (visível em todas as etapas)
+  h += '<div style="margin-bottom:10px;padding:8px;background:#e7f0fd;border:1px solid #b8d0ea;border-radius:6px">' +
+       '<b>Modelo do equipamento (único para todas as seções):</b> ' +
+       '<select id="selModeloGlobal" onchange="ui.onModeloChange()" style="margin-left:6px;padding:4px;min-width:200px">' +
+       ui.modelOptions(ui.multi.modelo === 'auto' ? null : ui.multi.modelo) + '</select>' +
+       '<button onclick="ui.recalcAll()" style="margin-left:8px;padding:5px 12px;background:#1a3a5c;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:700">Recalcular Tudo</button>' +
+       '</div>';
+  h += '<div id="wizBody" style="font-size:13px;color:#334"></div>';
   p.innerHTML = h;
   ui.wizardBody();
 };
@@ -122,135 +160,38 @@ ui.wizardBody = function(){
   var b = document.getElementById('wizBody');
   if (!b) return;
   var s = ui.multi.step, m = ui.multi;
-  if (s === 1) {
-    b.innerHTML =
-      '<div style="margin-bottom:8px"><b>Etapa 1 — Pasteurização:</b> produto (T.Ent/Sai) + vapor.</div>' +
-      '<div style="color:#1a3a5c;font-size:12px">Produto: ' + (m.r1 ? m.r1.mod + ' · ' + m.r1.n + ' placas · ' + m.r1.A.toFixed(2) + ' m² · ' + (m.r1.vi ? 'VIÁVEL' : 'NÃO VIÁVEL') : 'não calculado') + '</div>' +
-      '<button onclick="ui.wCalc1()" style="margin-top:8px;padding:6px 14px;background:#2d9e4a;color:#fff;border:none;border-radius:6px;font-weight:700;cursor:pointer">Calcular Etapa 1</button>';
-  } else if (s === 2) {
-    var r2 = m.r2;
-    var manualHtml = '';
-    if (r2 && r2.manual) {
-      manualHtml = '<div style="margin-top:8px;padding:8px;background:#fff3cd;border:1px solid #e0c200;border-radius:6px">' +
-        '<b>Modelo base (' + m.baseModel + ') não atende a Regeneração.</b> Selecione manualmente:' +
-        '<select id="selModel2" style="margin:6px 0;padding:4px;width:100%">' + ui.modelOptions() + '</select>' +
-        '<button onclick="ui.wCalc2(true)" style="padding:5px 12px;background:#1a3a5c;color:#fff;border:none;border-radius:6px;cursor:pointer">Calcular com modelo escolhido</button></div>';
-    }
-    b.innerHTML =
-      '<div style="margin-bottom:8px"><b>Etapa 2 — Regeneração:</b> produto quente vs produto frio. Modelo base: <b>' + (m.baseModel || '—') + '</b></div>' +
-      '<div style="color:#1a3a5c;font-size:12px">' + (r2 ? 'Modelo: ' + r2.mod + ' · ' + r2.n + ' placas · dP ' + r2.dp1.toFixed(1) + ' kPa · ' + (r2.vi ? 'VIÁVEL' : 'NÃO VIÁVEL') : 'não calculado') + '</div>' +
-      manualHtml +
-      '<button onclick="ui.wCalc2(false)" style="margin-top:8px;padding:6px 14px;background:#2d9e4a;color:#fff;border:none;border-radius:6px;font-weight:700;cursor:pointer">Calcular Etapa 2</button>';
-  } else if (s === 3) {
-    var r3 = m.r3;
-    var manualHtml = '';
-    if (r3 && r3.manual) {
-      manualHtml = '<div style="margin-top:8px;padding:8px;background:#fff3cd;border:1px solid #e0c200;border-radius:6px">' +
-        '<b>Modelo base (' + m.baseModel + ') não atende o Resfriamento.</b> Selecione manualmente:' +
-        '<select id="selModel3" style="margin:6px 0;padding:4px;width:100%">' + ui.modelOptions() + '</select>' +
-        '<button onclick="ui.wCalc3(true)" style="padding:5px 12px;background:#1a3a5c;color:#fff;border:none;border-radius:6px;cursor:pointer">Calcular com modelo escolhido</button></div>';
-    }
-    b.innerHTML =
-      '<div style="margin-bottom:8px"><b>Etapa 3 — Resfriamento:</b> produto + água gelada. Modelo base: <b>' + (m.baseModel || '—') + '</b></div>' +
-      '<div style="color:#1a3a5c;font-size:12px">' + (r3 ? 'Modelo: ' + r3.mod + ' · ' + r3.n + ' placas · dP ' + r3.dp1.toFixed(1) + ' kPa · ' + (r3.vi ? 'VIÁVEL' : 'NÃO VIÁVEL') : 'não calculado') + '</div>' +
-      manualHtml +
-      '<button onclick="ui.wCalc3(false)" style="margin-top:8px;padding:6px 14px;background:#2d9e4a;color:#fff;border:none;border-radius:6px;font-weight:700;cursor:pointer">Calcular Etapa 3</button>';
-  }
+  var nomes = ['Pasteurização', 'Regeneração', 'Resfriamento'];
+  var r = m['r' + s];
+  var info = r ? 'Modelo: <b>' + r.mod + '</b> · ' + r.n + ' placas · ' + r.A.toFixed(2) + ' m² · dP ' + r.dp1.toFixed(1) + ' kPa · ' + (r.vi ? '<span style="color:#2d9e4a;font-weight:700">VIÁVEL</span>' : '<span style="color:#cc3300;font-weight:700">NÃO VIÁVEL</span>') : 'não calculado';
+  b.innerHTML = '<div style="margin-bottom:8px"><b>Etapa ' + s + ' — ' + nomes[s-1] + ':</b></div>' +
+                '<div style="color:#1a3a5c;font-size:12px">' + info + '</div>' +
+                '<button onclick="ui.recalcAll()" style="margin-top:8px;padding:6px 14px;background:#2d9e4a;color:#fff;border:none;border-radius:6px;font-weight:700;cursor:pointer">Calcular</button>';
   var nav = '<div style="margin-top:12px;display:flex;gap:8px">';
   if (s > 1) nav += '<button onclick="ui.wNav(-1)" style="padding:5px 12px;background:#e2e8f0;border:none;border-radius:6px;cursor:pointer">← Voltar</button>';
-  if (s < 3 && m['r' + s]) nav += '<button onclick="ui.wNav(1)" style="padding:5px 12px;background:#1a3a5c;color:#fff;border:none;border-radius:6px;cursor:pointer">Avançar →</button>';
+  if (s < 3) nav += '<button onclick="ui.wNav(1)" style="padding:5px 12px;background:#1a3a5c;color:#fff;border:none;border-radius:6px;cursor:pointer">Avançar →</button>';
   if (s === 3) nav += '<button onclick="ui.wResumo()" style="padding:5px 12px;background:#2d9e4a;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:700">Ver Resumo Final</button>';
   nav += '</div>';
   b.innerHTML += nav;
 };
 
-ui.modelOptions = function(){
-  var h = '';
-  PLATES.forEach(function(m){ h += '<option value="' + m.n + '">' + m.n + ' (β' + m.be + ' · ' + m.ap + ' m²)</option>'; });
-  return h;
-};
-
 ui.wNav = function(d){ ui.multi.step += d; ui.wizardPanel(); };
 
-ui.wCalc1 = function(){
-  try {
-    var inp = ui.readInput();
-    if (!inp.vp || inp.vp <= 0) { alert('Vazão produto inválida'); return; }
-    var r = wCalcPasteurizacao(inp);
-    ui.multi.r1 = r;
-    ui.multi.baseModel = r.mod;
-    ui.wizardPanel();
-    ui.showMultiSection(r, 'Etapa 1 — Pasteurização');
-  } catch (e) { alert('Erro: ' + e.message); }
-};
-
-ui.wCalc2 = function(manual){
-  try {
-    var inp = ui.readInput();
-    var forced = manual ? document.getElementById('selModel2').value : null;
-    var r = wCalcRegen(inp, ui.multi.baseModel, forced);
-    ui.multi.r2 = r;
-    ui.multi.manual2 = manual ? forced : null;
-    ui.wizardPanel();
-    ui.showMultiSection(r, 'Etapa 2 — Regeneração');
-  } catch (e) { alert('Erro: ' + e.message); }
-};
-
-ui.wCalc3 = function(manual){
-  try {
-    var inp = ui.readInput();
-    var forced = manual ? document.getElementById('selModel3').value : null;
-    var r = wCalcResf(inp, ui.multi.baseModel, forced);
-    ui.multi.r3 = r;
-    ui.multi.manual3 = manual ? forced : null;
-    ui.wizardPanel();
-    ui.showMultiSection(r, 'Etapa 3 — Resfriamento');
-  } catch (e) { alert('Erro: ' + e.message); }
-};
-
-ui.showMultiSection = function(r, titulo){
-  var ph = document.getElementById('ph');
-  var res = document.getElementById('res');
-  if (ph) ph.style.display = 'none';
-  if (res) res.style.display = 'block';
-  var badge = document.getElementById('badge');
-  if (r.vi) { badge.textContent = 'VIÁVEL'; badge.className = 'res-badge ok'; }
-  else      { badge.textContent = 'NÃO VIÁVEL'; badge.className = 'res-badge notok'; }
-  document.getElementById('selInfo').innerHTML =
-    '<div style="font-size:16px;font-weight:800;color:#1a3a5c">' + titulo + '</div>' +
-    '<div style="font-size:11px;color:#4a5568">' + r.mod + ' · ' + r.n + ' placas · ' + r.A.toFixed(2) + ' m² · Passes ' + r.passesUsado + '</div>';
-  document.getElementById('cards').innerHTML =
-    '<div class="mc"><div class="mc-val">' + r.Q.toFixed(1) + '</div><div class="mc-lbl">Carga kW</div></div>' +
-    '<div class="mc"><div class="mc-val">' + r.U.toFixed(0) + '</div><div class="mc-lbl">U W/m²K</div></div>' +
-    '<div class="mc"><div class="mc-val">' + r.dp1.toFixed(1) + '</div><div class="mc-lbl">dP Prod</div></div>' +
-    '<div class="mc"><div class="mc-val">' + (r.tauP || 0).toFixed(0) + '</div><div class="mc-lbl">Shear Pa</div></div>';
-  var h = '<table class="tbl"><thead><tr><th>Modelo</th><th>Pl</th><th>Área</th><th>U</th><th>dP P</th><th>Shear</th><th>Passes</th><th>OK</th></tr></thead><tbody>';
-  (r.todosCalculados || []).slice(0, 10).forEach(function(x){
-    h += '<tr><td>' + x.mod + '</td><td>' + x.n + '</td><td>' + x.A.toFixed(2) + '</td><td>' + x.U.toFixed(0) + '</td><td>' + x.dp1.toFixed(1) + '</td><td>' + (x.tauP||0).toFixed(0) + '</td><td>' + (x.passes||'') + '</td><td>' + (x.vi ? 'OK' : 'X') + '</td></tr>';
-  });
-  h += '</tbody></table>';
-  document.getElementById('comp').innerHTML = h;
-  var v = '<div class="ck"><span class="ck-ok">✓</span>LMTD: ' + r.lm.toFixed(1) + '°C F=' + r.F.toFixed(3) + '</div>';
-  v += '<div class="ck"><span class="' + (r.dp1 <= ui.readInput().dpp ? 'ck-ok' : 'ck-err') + '">' + (r.dp1 <= ui.readInput().dpp ? '✓' : '✗') + '</span>dP: ' + r.dp1.toFixed(1) + ' kPa</div>';
-  v += '<div class="ck"><span class="' + ((r.tauP||0) >= 35 ? 'ck-ok' : 'ck-err') + '">' + ((r.tauP||0) >= 35 ? '✓' : '✗') + '</span>Shear: ' + (r.tauP||0).toFixed(1) + ' Pa</div>';
-  document.getElementById('ver').innerHTML = v;
-};
-
-ui.wResumo = function(){
+// Resumo final com o MESMO modelo nas 3 seções
+ui.showResumo = function(){
   var m = ui.multi;
-  if (!m.r1 || !m.r2 || !m.r3) { alert('Calcule as 3 etapas primeiro'); return; }
+  if (!m.r1 || !m.r2 || !m.r3) { alert('Calcule primeiro'); return; }
   var r1 = m.r1, r2 = m.r2, r3 = m.r3;
   var tA = r1.A + r2.A + r3.A;
   var tPl = r1.n + r2.n + r3.n;
   var tDP = r1.dp1 + r2.dp1 + r3.dp1;
   var tQ = r1.Q + r2.Q + r3.Q;
-  var vi = r1.vi && r2.vi && r3.vi;
+  var vi = r1.vi && r2.vi && r3.vi && tDP <= ui.readInput().dpp;
   var badge = document.getElementById('badge');
   if (vi) { badge.textContent = 'VIÁVEL'; badge.className = 'res-badge ok'; }
   else    { badge.textContent = 'NÃO VIÁVEL'; badge.className = 'res-badge notok'; }
   document.getElementById('selInfo').innerHTML =
     '<div style="font-size:16px;font-weight:800;color:#1a3a5c">Pasteurizador — Resumo Final (3 Seções)</div>' +
-    '<div style="font-size:11px;color:#4a5568">' + tPl + ' placas · ' + tA.toFixed(2) + ' m² · dP total ' + tDP.toFixed(1) + ' kPa</div>';
+    '<div style="font-size:11px;color:#4a5568">Modelo único: <b>' + r1.mod + '</b> · ' + tPl + ' placas · ' + tA.toFixed(2) + ' m² · dP total ' + tDP.toFixed(1) + ' kPa</div>';
   document.getElementById('cards').innerHTML =
     '<div class="mc"><div class="mc-val">' + tQ.toFixed(1) + '</div><div class="mc-lbl">Carga kW</div></div>' +
     '<div class="mc"><div class="mc-val">' + tA.toFixed(2) + '</div><div class="mc-lbl">Área m²</div></div>' +
@@ -264,8 +205,11 @@ ui.wResumo = function(){
   document.getElementById('comp').innerHTML = h;
   var v = '<div class="ck"><span class="' + (vi ? 'ck-ok' : 'ck-err') + '">' + (vi ? '✓' : '✗') + '</span>Status: ' + (vi ? 'VIÁVEL' : 'NÃO VIÁVEL') + '</div>';
   v += '<div class="ck"><span class="' + (tDP <= ui.readInput().dpp ? 'ck-ok' : 'ck-err') + '">' + (tDP <= ui.readInput().dpp ? '✓' : '✗') + '</span>dP Total: ' + tDP.toFixed(1) + '/' + ui.readInput().dpp + ' kPa</div>';
+  v += '<div class="ck"><span class="' + (r1.mod === r2.mod && r2.mod === r3.mod ? 'ck-ok' : 'ck-err') + '">' + (r1.mod === r2.mod && r2.mod === r3.mod ? '✓' : '✗') + '</span>Modelo único: ' + r1.mod + ' em todas as seções</div>';
   document.getElementById('ver').innerHTML = v;
 };
+
+ui.wResumo = function(){ ui.showResumo(); };
 
 ui.wizard = function(){
   var ph = document.getElementById('ph');
@@ -281,7 +225,7 @@ ui.limpar = function(){
   var ph = document.getElementById('ph');
   if (res) res.style.display = 'none';
   if (ph) ph.style.display = 'block';
-  ui.multi = { step: 1, baseModel: null, r1: null, r2: null, r3: null, manual2: null, manual3: null };
+  ui.multi = { step: 1, modelo: 'auto', r1: null, r2: null, r3: null };
   var wp = document.getElementById('wizardPanel');
   if (wp) wp.remove();
 };

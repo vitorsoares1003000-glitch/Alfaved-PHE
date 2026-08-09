@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AlfaVed PHE v44</title>
+<title>AlfaVed PHE v45</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -15,14 +15,12 @@
       <div class="hdr-s">Soluções Industriais · Trocadores de Calor a Placas</div>
     </div>
   </div>
-  <span class="vbg">v44</span>
+  <span class="vbg">v45</span>
 </header>
-
 <div class="ctn">
   <!-- ===== SIDEBAR ===== -->
   <aside class="sb">
     <div class="sb-hdr">Painel de Entrada</div>
-
     <div class="sb-sect">
       <h3>Modo de Operação</h3>
       <div class="gp2">
@@ -31,47 +29,44 @@
       </div>
       <div class="sec-info" id="modoInfo">Simples: Martin+Kumar avg, f 30/70.</div>
     </div>
-
     <div class="sb-sect">
       <h3>Lado Produto</h3>
-   <div class="fg"><label>Fluido</label>
-<div class="fg"><label>Fluido</label>
-  <select id="fp">
-    <optgroup label="Bebidas & Alimentos">
-      <option value="cerveja">Cerveja</option>
-      <option value="mosto">Mosto</option>
-      <option value="vinho">Vinho</option>
-      <option value="vinho_cana">Vinho de Cana</option>
-      <option value="soft_drink">Soft Drink</option>
-      <option value="leite">Leite</option>
-      <option value="oleo_vegetal">Óleo Vegetal</option>
-    </optgroup>
-    <optgroup label="Açúcar & Fermentação">
-      <option value="sacarose">Calda de Açúcar</option>
-      <option value="suco_cana">Suco de Cana</option>
-      <option value="levedura_cana">Levedura Cana</option>
-      <option value="levedura_cerveja">Levedura Cerv.</option>
-    </optgroup>
-    <optgroup label="Outros">
-      <option value="agua">Água</option>
-      <option value="etanol">Etanol</option>
-      <option value="salmoura">Salmoura (NaCl)</option>
-      <option value="sae10">Óleo SAE 10</option>
-      <option value="sae30">Óleo SAE 30</option>
-    </optgroup>
-  </select>
-</div>
+      <div class="fg"><label>Fluido</label>
+        <select id="fp">
+          <optgroup label="Bebidas & Alimentos">
+            <option value="cerveja">Cerveja</option>
+            <option value="mosto">Mosto</option>
+            <option value="vinho">Vinho</option>
+            <option value="vinho_cana">Vinho de Cana</option>
+            <option value="soft_drink">Soft Drink</option>
+            <option value="leite">Leite</option>
+            <option value="oleo_vegetal">Óleo Vegetal</option>
+          </optgroup>
+          <optgroup label="Açúcar & Fermentação">
+            <option value="sacarose">Calda de Açúcar</option>
+            <option value="suco_cana">Suco de Cana</option>
+            <option value="levedura_cana">Levedura Cana</option>
+            <option value="levedura_cerveja">Levedura Cerv.</option>
+          </optgroup>
+          <optgroup label="Outros">
+            <option value="agua">Água</option>
+            <option value="etanol">Etanol</option>
+            <option value="salmoura">Salmoura (NaCl)</option>
+            <option value="sae10">Óleo SAE 10</option>
+            <option value="sae30">Óleo SAE 30</option>
+          </optgroup>
+        </select>
+      </div>
       <div class="fr">
         <div class="fg"><label>Brix(%)</label><input type="number" id="bp" value="0" step="0.1"></div>
         <div class="fg"><label>Vazão(m³/h)</label><input type="number" id="vp" value="20"></div>
       </div>
       <div class="fr">
-        <div class="fg"><label>T.Ent(°C)</label><input type="number" id="tip" value="45"></div>
-        <div class="fg"><label>T.Sai(°C)</label><input type="number" id="top" value="56"></div>
+        <div class="fg"><label>T.Ent(°C)</label><input type="number" id="tip" value="30"></div>
+        <div class="fg"><label>T.Sai(°C)</label><input type="number" id="top" value="80"></div>
       </div>
       <div class="fg"><label>ΔP máx(kPa)</label><input type="number" id="dpp" value="50"></div>
     </div>
-
     <div class="sb-sect">
       <h3>Lado Serviço</h3>
       <div class="fg"><label>Fluido</label>
@@ -102,11 +97,10 @@
       </div>
       <div class="note" id="vapor_note">Condensação: Nusselt filme. Vazão auto h_fg.</div>
     </div>
-
     <div class="sb-sect" id="secMulti" style="display:none">
       <h3>Multi-Seção (Pasteurizador)</h3>
-      <div class="fg"><label>T.Pasteurização(°C)</label><input type="number" id="tpast" value="72"></div>
-      <div class="fg"><label>T.Após Regen(°C)</label><input type="number" id="tregen" value="65"></div>
+      <div class="fg"><label>T.Pasteurização(°C)</label><input type="number" id="tpast" value="80"></div>
+      <div class="fg"><label>T.Após Regen(°C)</label><input type="number" id="tregen" value="38"></div>
       <div class="fg"><label>T.Final(°C)</label><input type="number" id="tfinal" value="4"></div>
       <div class="fg"><label>Tempo Retenção(s)</label><input type="number" id="t_reten" value="15"></div>
       <div class="fg"><label>Aquecimento</label>
@@ -117,10 +111,9 @@
       </div>
       <div class="fr">
         <div class="fg"><label>T.Água Quente(°C)</label><input type="number" id="t_agua_q" value="85"></div>
-        <div class="fg"><label>T.Água Gelada(°C)</label><input type="number" id="t_agua_g" value="2"></div>
+        <div class="fg"><label>T.Água Gelada(°C)</label><input type="number" id="t_agua_g" value="0"></div>
       </div>
     </div>
-
     <div class="sb-sect">
       <h3>Projeto</h3>
       <div class="fr">
@@ -141,7 +134,6 @@
       <button class="bc" id="btnCalc">Calcular</button>
       <button class="bl" id="btnLimpar">Limpar</button>
     </div>
-
     <div class="sb-sect">
       <h3>Catálogo de Placas</h3>
       <div class="ms">
@@ -152,26 +144,21 @@
       </div>
     </div>
   </aside>
-
   <!-- ===== MAIN ===== -->
   <main class="main">
     <div class="tw" id="thermalWarn" style="display:none"></div>
-
     <div id="ph" class="cr ph">
       <div class="ph-logo">A</div>
       <div class="ph-t">Alfa<span class="red">Ved</span> <span class="org">Dimensionador PHE</span></div>
       <div class="ph-s">Martin+Kumar · f 30/70 · 26 modelos · 18 fluidos</div>
       <p>Insira os dados e clique em <strong>Calcular</strong>.</p>
     </div>
-
     <div id="res" style="display:none">
       <div class="cards-row" id="cards"></div>
-
       <div class="cr">
         <div class="ct"><span>Modelo Selecionado</span><span class="res-badge ok" id="badge">VIÁVEL</span></div>
         <div id="selInfo"></div>
       </div>
-
       <div class="grid2">
         <div class="cr">
           <div class="ct">Diagrama de Temperatura</div>
@@ -182,7 +169,6 @@
           <div id="comp" class="ms"></div>
         </div>
       </div>
-
       <div class="cr">
         <div class="ct">Verificações</div>
         <div id="ver"></div>
@@ -190,9 +176,7 @@
     </div>
   </main>
 </div>
-
-<div class="fi"><strong>AlfaVed PHE v44</strong> | Arquitetura modular · f 30/70</div>
-
+<div class="fi"><strong>AlfaVed PHE v45</strong> | Arquitetura modular · f 30/70</div>
 <script src="fluids.js"></script>
 <script src="plates.js"></script>
 <script src="correlations.js"></script>

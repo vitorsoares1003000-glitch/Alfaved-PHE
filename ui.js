@@ -95,7 +95,6 @@ ui.calc = function(){
 // WIZARD MULTI-SEÇÃO
 // ============================================================
 
-// Injeta o painel do wizard no container de resultados
 ui.wizardPanel = function(){
   var res = document.getElementById('res');
   if (!res) return;
@@ -114,8 +113,7 @@ ui.wizardPanel = function(){
     var done = (i < s) ? ' ✓' : '';
     h += '<div style="flex:1;text-align:center;padding:6px;border-radius:6px;font-size:12px;font-weight:700;' + at + '">' + nomes[i-1] + done + '</div>';
   }
-  h += '</div>';
-  h += '<div id="wizBody" style="font-size:13px;color:#334"></div>';
+  h += '</div><div id="wizBody" style="font-size:13px;color:#334"></div>';
   p.innerHTML = h;
   ui.wizardBody();
 };
@@ -126,8 +124,8 @@ ui.wizardBody = function(){
   var s = ui.multi.step, m = ui.multi;
   if (s === 1) {
     b.innerHTML =
-      '<div style="margin-bottom:8px"><b>Etapa 1 — Pasteurização:</b> informe o produto (T.Ent/Sai) e o vapor.</div>' +
-      '<div style="color:#1a3a5c;font-size:12px">Produto: ' + (m.r1 ? m.r1.mod + ' · ' + m.r1.n + ' placas · ' + m.r1.A.toFixed(2) + ' m²' : 'não calculado') + '</div>' +
+      '<div style="margin-bottom:8px"><b>Etapa 1 — Pasteurização:</b> produto (T.Ent/Sai) + vapor.</div>' +
+      '<div style="color:#1a3a5c;font-size:12px">Produto: ' + (m.r1 ? m.r1.mod + ' · ' + m.r1.n + ' placas · ' + m.r1.A.toFixed(2) + ' m² · ' + (m.r1.vi ? 'VIÁVEL' : 'NÃO VIÁVEL') : 'não calculado') + '</div>' +
       '<button onclick="ui.wCalc1()" style="margin-top:8px;padding:6px 14px;background:#2d9e4a;color:#fff;border:none;border-radius:6px;font-weight:700;cursor:pointer">Calcular Etapa 1</button>';
   } else if (s === 2) {
     var r2 = m.r2;
@@ -158,7 +156,6 @@ ui.wizardBody = function(){
       manualHtml +
       '<button onclick="ui.wCalc3(false)" style="margin-top:8px;padding:6px 14px;background:#2d9e4a;color:#fff;border:none;border-radius:6px;font-weight:700;cursor:pointer">Calcular Etapa 3</button>';
   }
-  // Navegação
   var nav = '<div style="margin-top:12px;display:flex;gap:8px">';
   if (s > 1) nav += '<button onclick="ui.wNav(-1)" style="padding:5px 12px;background:#e2e8f0;border:none;border-radius:6px;cursor:pointer">← Voltar</button>';
   if (s < 3 && m['r' + s]) nav += '<button onclick="ui.wNav(1)" style="padding:5px 12px;background:#1a3a5c;color:#fff;border:none;border-radius:6px;cursor:pointer">Avançar →</button>';
@@ -173,10 +170,7 @@ ui.modelOptions = function(){
   return h;
 };
 
-ui.wNav = function(d){
-  ui.multi.step += d;
-  ui.wizardPanel();
-};
+ui.wNav = function(d){ ui.multi.step += d; ui.wizardPanel(); };
 
 ui.wCalc1 = function(){
   try {
@@ -184,7 +178,7 @@ ui.wCalc1 = function(){
     if (!inp.vp || inp.vp <= 0) { alert('Vazão produto inválida'); return; }
     var r = wCalcPasteurizacao(inp);
     ui.multi.r1 = r;
-    ui.multi.baseModel = r.mod; // modelo base = escolhido na Etapa 1
+    ui.multi.baseModel = r.mod;
     ui.wizardPanel();
     ui.showMultiSection(r, 'Etapa 1 — Pasteurização');
   } catch (e) { alert('Erro: ' + e.message); }
@@ -214,7 +208,6 @@ ui.wCalc3 = function(manual){
   } catch (e) { alert('Erro: ' + e.message); }
 };
 
-// Exibe resultado de uma etapa no painel principal
 ui.showMultiSection = function(r, titulo){
   var ph = document.getElementById('ph');
   var res = document.getElementById('res');
@@ -238,12 +231,11 @@ ui.showMultiSection = function(r, titulo){
   h += '</tbody></table>';
   document.getElementById('comp').innerHTML = h;
   var v = '<div class="ck"><span class="ck-ok">✓</span>LMTD: ' + r.lm.toFixed(1) + '°C F=' + r.F.toFixed(3) + '</div>';
-  v += '<div class="ck"><span class="' + (r.dp1 <= (ui.readInput().dpp) ? 'ck-ok' : 'ck-err') + '">' + (r.dp1 <= (ui.readInput().dpp) ? '✓' : '✗') + '</span>dP: ' + r.dp1.toFixed(1) + ' kPa</div>';
+  v += '<div class="ck"><span class="' + (r.dp1 <= ui.readInput().dpp ? 'ck-ok' : 'ck-err') + '">' + (r.dp1 <= ui.readInput().dpp ? '✓' : '✗') + '</span>dP: ' + r.dp1.toFixed(1) + ' kPa</div>';
   v += '<div class="ck"><span class="' + ((r.tauP||0) >= 35 ? 'ck-ok' : 'ck-err') + '">' + ((r.tauP||0) >= 35 ? '✓' : '✗') + '</span>Shear: ' + (r.tauP||0).toFixed(1) + ' Pa</div>';
   document.getElementById('ver').innerHTML = v;
 };
 
-// Resumo final das 3 etapas
 ui.wResumo = function(){
   var m = ui.multi;
   if (!m.r1 || !m.r2 || !m.r3) { alert('Calcule as 3 etapas primeiro'); return; }
@@ -275,9 +267,7 @@ ui.wResumo = function(){
   document.getElementById('ver').innerHTML = v;
 };
 
-// ---------- WIZARD ENTRY ----------
 ui.wizard = function(){
-  // Injeta o painel do wizard e mostra a Etapa 1
   var ph = document.getElementById('ph');
   var res = document.getElementById('res');
   if (ph) ph.style.display = 'none';

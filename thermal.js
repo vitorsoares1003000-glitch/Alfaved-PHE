@@ -1,7 +1,7 @@
 // ============================================================
-// AlfaVed PHE v45 — MOTOR DE CÁLCULO (funções puras)
-// Wizard Multi-Seção: modelo base da Etapa 1 reutilizado nas demais,
-// com seleção manual se não atender.
+// AlfaVed PHE v45 — MOTOR DE CÁLCULO + WIZARD MULTI-SEÇÃO
+// Modelo base da Etapa 1 reutilizado nas demais;
+// se não atender, abre seleção manual.
 // ============================================================
 
 // ---------- DETECÇÃO QUENTE/FRIO ----------
@@ -318,7 +318,6 @@ function calcHoldingTube(vp, tp, fp, bp){
 // ============================================================
 
 // ETAPA 1: PASTEURIZAÇÃO (Aquecimento) — produto + vapor
-// Retorna melhor modelo (auto) → vira modelo base
 function wCalcPasteurizacao(inp){
   var tp = parseFloat(document.getElementById('tpast').value) || 72;
   var tAQ = parseFloat(document.getElementById('t_agua_q').value) || 85;
@@ -332,17 +331,16 @@ function wCalcPasteurizacao(inp){
     tpl: inp.tpl, mat: inp.mat, ps: inp.ps, mg: inp.mg, pressure: 2, rf: inp.rf
   };
   var hc = detectHotCold(si);
-  var r = mCalcSec(si, null, hc, null); // auto modelo
+  var r = mCalcSec(si, null, hc, null);
   r.tipo = 'pasteurizacao';
   r.ti = inp.tip; r.to = tp;
   return r;
 }
 
-// ETAPA 2: REGENERAÇÃO — produto quente vs produto frio
-// Usa modelo base; se não viável, retorna flag manual=true
+// ETAPA 2: REGENERAÇÃO — produto quente vs produto frio (mesmo fluido)
 function wCalcRegen(inp, baseModel, forcedModel){
   var tp = parseFloat(document.getElementById('tpast').value) || 72;
-  var tr = parseFloat(document.getElementById('tregen').value) || 65;
+  var tr = parseFloat(document.getElementById('tregen').value) || 38;
   var ti = inp.tip;
   var tQSR = tp - (tr - ti); // saída do lado quente da regen
   var si = {
@@ -356,16 +354,15 @@ function wCalcRegen(inp, baseModel, forcedModel){
   r.tipo = 'regen';
   r.ti = ti; r.to = tr;
   r.usouModelo = modelo;
-  r.manual = !r.vi; // se não viável → precisa seleção manual
+  r.manual = !r.vi;
   return r;
 }
 
 // ETAPA 3: RESFRIAMENTO — produto + água gelada
-// Usa modelo base; se não viável, retorna flag manual=true
 function wCalcResf(inp, baseModel, forcedModel){
-  var tr = parseFloat(document.getElementById('tregen').value) || 65;
+  var tr = parseFloat(document.getElementById('tregen').value) || 38;
   var tf = parseFloat(document.getElementById('tfinal').value) || 4;
-  var tAG = parseFloat(document.getElementById('t_agua_g').value) || 2;
+  var tAG = parseFloat(document.getElementById('t_agua_g').value) || 0;
   var fsRes = document.getElementById('fs_res').value;
   var tSR = tAG + 8;
   var si = {

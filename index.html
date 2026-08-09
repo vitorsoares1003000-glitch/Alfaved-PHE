@@ -326,7 +326,7 @@ function wCalcMulti(inp,modelo){
     var tPl=s1.n+s2.n+s3.n;
     var ok=s1.vi&&s2.vi&&s3.vi&&tDP<=dpp;
     if(ok&&(!melhor||tPl<melhor.tPl)){melhor={placa:placa.n,s1:s1,s2:s2,s3:s3,tDP:tDP,tPl:tPl,ok:true};}
-    else if(!melhor&&tDP<melhor.tDP){melhor={placa:placa.n,s1:s1,s2:s2,s3:s3,tDP:tDP,tPl:tPl,ok:false};}
+    else if(!melhor||tDP<melhor.tDP){melhor={placa:placa.n,s1:s1,s2:s2,s3:s3,tDP:tDP,tPl:tPl,ok:false};}
   });
   if(!melhor){melhor={placa:'N/A',s1:mCalcSec(s1i,null,s1hc,null),s2:mCalcSec(s2i,null,s2hc,null),s3:mCalcSec(s3i,null,s3hc,null),tDP:0,tPl:0,ok:false};
     melhor.tDP=melhor.s1.dp1+melhor.s2.dp1+melhor.s3.dp1;melhor.tPl=melhor.s1.n+melhor.s2.n+melhor.s3.n;}

@@ -1,5 +1,6 @@
 // ============================================================
-// AlfaVed PHE v47 — CAMADA DE INTERFACE (UI)
+// AlfaVed PHE v48.1 — CAMADA DE INTERFACE (UI)
+// FIX v48.1: adiciona ui.showResult (faltava no modo Simples)
 // Wizard Multi-Seção com UM modelo para todas as seções
 // ============================================================
 
@@ -88,6 +89,37 @@ ui.calc = function(){
     var r = mCalcSec(inp, pt, hc);
     ui.showResult(r, inp, r.todosCalculados || []);
   } catch (e) { alert('Erro no cálculo: ' + e.message); }
+};
+
+// ============================================================
+// EXIBIÇÃO DE RESULTADO (modo SIMPLES) — FIX v48.1
+// ============================================================
+ui.showResult = function(r, inp, todos){
+  var ph = document.getElementById('ph');
+  var res = document.getElementById('res');
+  if (ph) ph.style.display = 'none';
+  if (res) res.style.display = 'block';
+  var badge = document.getElementById('badge');
+  if (r.vi) { badge.textContent = 'VIÁVEL'; badge.className = 'res-badge ok'; }
+  else      { badge.textContent = 'NÃO VIÁVEL'; badge.className = 'res-badge notok'; }
+  document.getElementById('selInfo').innerHTML =
+    '<div style="font-size:16px;font-weight:800;color:#1a3a5c">' + r.mod + '</div>' +
+    '<div style="font-size:11px;color:#4a5568">' + r.n + ' placas · ' + r.A.toFixed(2) + ' m² · Passes ' + r.passesUsado + '</div>';
+  document.getElementById('cards').innerHTML =
+    '<div class="mc"><div class="mc-val">' + r.Q.toFixed(1) + '</div><div class="mc-lbl">Carga kW</div></div>' +
+    '<div class="mc"><div class="mc-val">' + r.U.toFixed(0) + '</div><div class="mc-lbl">U W/m²K</div></div>' +
+    '<div class="mc"><div class="mc-val">' + r.dp1.toFixed(1) + '</div><div class="mc-lbl">dP Prod</div></div>' +
+    '<div class="mc"><div class="mc-val">' + (r.tauP || 0).toFixed(0) + '</div><div class="mc-lbl">Shear Pa</div></div>';
+  var h = '<table class="tbl"><thead><tr><th>Modelo</th><th>Pl</th><th>Área</th><th>U</th><th>dP P</th><th>Shear</th><th>Passes</th><th>OK</th></tr></thead><tbody>';
+  (todos || []).slice(0, 10).forEach(function(x){
+    h += '<tr><td>' + x.mod + '</td><td>' + x.n + '</td><td>' + x.A.toFixed(2) + '</td><td>' + x.U.toFixed(0) + '</td><td>' + x.dp1.toFixed(1) + '</td><td>' + (x.tauP||0).toFixed(0) + '</td><td>' + (x.passes||'') + '</td><td>' + (x.vi ? 'OK' : 'X') + '</td></tr>';
+  });
+  h += '</tbody></table>';
+  document.getElementById('comp').innerHTML = h;
+  var v = '<div class="ck"><span class="ck-ok">✓</span>LMTD: ' + r.lm.toFixed(1) + '°C F=' + r.F.toFixed(3) + '</div>';
+  v += '<div class="ck"><span class="' + (r.dp1 <= inp.dpp ? 'ck-ok' : 'ck-err') + '">' + (r.dp1 <= inp.dpp ? '✓' : '✗') + '</span>dP: ' + r.dp1.toFixed(1) + '/' + inp.dpp + ' kPa</div>';
+  v += '<div class="ck"><span class="' + ((r.tauP||0) >= 35 ? 'ck-ok' : 'ck-err') + '">' + ((r.tauP||0) >= 35 ? '✓' : '✗') + '</span>Shear: ' + (r.tauP||0).toFixed(1) + ' Pa</div>';
+  document.getElementById('ver').innerHTML = v;
 };
 
 // ============================================================

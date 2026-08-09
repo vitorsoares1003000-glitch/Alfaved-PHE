@@ -1,7 +1,7 @@
 // ============================================================
-// AlfaVed PHE v44.2 — MOTOR DE CÁLCULO (funções puras)
-// Inclui: Simples + Multi-Seção (Pasteurizador)
-// FIX v44.2: remove referência a 'hc' no fallback de mCalcSecRegen
+// AlfaVed PHE v44.4 — MOTOR DE CÁLCULO (funções puras)
+// FIX v44.4: Multi-Seção usa UM ÚNICO modelo de placa em todas as seções
+// (pasteurizador = um equipamento, mesma placa em todas as seções)
 // ============================================================
 
 // ---------- DETECÇÃO QUENTE/FRIO ----------
@@ -83,8 +83,9 @@ function cDp(m, r, D, L, phi, N, Ap, v, be, Re){
   return { t: t, vp: vp, fracPorta: fp, tau: tau };
 }
 
-// ---------- CÁLCULO DE UMA SEÇÃO (seleção de placas) ----------
-function mCalcSingle(inp, hc){
+// ---------- CÁLCULO DE UMA SEÇÃO (com modelo forçado opcional) ----------
+// forceModel: se definido, usa SOMENTE esse modelo de placa
+function mCalcSingle(inp, hc, forceModel){
   var pb = gProd(inp.fp, (inp.tip + inp.top) / 2, inp.bp);
   var mp = inp.vp * pb.rho / 3600;
   var Q = mp * pb.cp * Math.abs(inp.top - inp.tip) / 1000;
@@ -101,12 +102,17 @@ function mCalcSingle(inp, hc){
   var vm = hc.vm, pr = inp.pressure || 2, rf = inp.rf || 0.0001;
   var dtP = Math.abs(inp.top - inp.tip);
   var aBe = thetaFilter(dtP, lm);
-  var mods = PLATES.filter(function(m){
-    if (inp.tpl === 't') return true;
-    if (inp.tpl === 's') return m.t === 's';
-    return m.t === 'g';
-  });
-  mods = mods.filter(function(m){ return aBe.indexOf(m.be) >= 0; });
+  var mods;
+  if (forceModel) {
+    mods = PLATES.filter(function(m){ return m.n === forceModel; });
+  } else {
+    mods = PLATES.filter(function(m){
+      if (inp.tpl === 't') return true;
+      if (inp.tpl === 's') return m.t === 's';
+      return m.t === 'g';
+    });
+    mods = mods.filter(function(m){ return aBe.indexOf(m.be) >= 0; });
+  }
   var rs = [];
   mods.forEach(function(m){
     var Dh = 2 * m.b;
@@ -160,8 +166,8 @@ function mCalcSingle(inp, hc){
   return rs;
 }
 
-// ---------- SELEÇÃO DE PASSES ----------
-function mCalcSec(inp, passesArr, hc){
+// ---------- SELEÇÃO DE PASSES (com modelo forçado opcional) ----------
+function mCalcSec(inp, passesArr, hc, forceModel){
   var hc = hc || detectHotCold(inp);
   if (hc.error) {
     return { mod: 'N/A', n: 0, A: 0, U: 0, dp1: 999, dp2: 999, Q: 0, vi: false,
@@ -173,7 +179,7 @@ function mCalcSec(inp, passesArr, hc){
   for (var pi = 0; pi < pt.length; pi++) {
     var ps = pt[pi];
     var inpC = Object.assign({}, inp, { ps: ps });
-    var rs = mCalcSingle(inpC, hc);
+    var rs = mCalcSingle(inpC, hc, forceModel);
     var vs = rs.filter(function(r){ return r.vi; });
     if (vs.length > 0) {
       vs.sort(function(a, b){ return a.A - b.A; });
@@ -188,9 +194,8 @@ function mCalcSec(inp, passesArr, hc){
     }
   }
   if (best) return best;
-  // FIX v44.1: fallback retorna o MELHOR modelo real (menor área), não 999
-  var rs2 = mCalcSingle(Object.assign({}, inp, { ps: pt[0] }), hc);
-  rs2.sort(function(a, b){ return a.A - b.A; });
+  var rs2 = mCalcSingle(Object.assign({}, inp, { ps: pt[0] }), hc, forceModel);
+  rs2.sort(function(a, b){ return (a.dp1 - b.dp1); });
   var fb = rs2[0];
   if (fb) {
     fb.vi = false;
@@ -206,7 +211,7 @@ function mCalcSec(inp, passesArr, hc){
 }
 
 // ============================================================
-// MULTI-SEÇÃO (PASTEURIZADOR)
+// MULTI-SEÇÃO (PASTEURIZADOR) — UM ÚNICO MODELO DE PLACA
 // ============================================================
 
 // ---------- U para REGENERAÇÃO (mesmo fluido ambos lados) ----------
@@ -231,9 +236,8 @@ function cURegen(p){
   return r;
 }
 
-// ---------- SEÇÃO DE REGENERAÇÃO ----------
-// FIX v44.2: fallback SEM referência a 'hc' (variável inexistente aqui)
-function mCalcSecRegen(inp){
+// ---------- SEÇÃO DE REGENERAÇÃO (com modelo forçado) ----------
+function mCalcSecRegen(inp, forceModel){
   var pt = PASSOS, best = null;
   var matK = inp.mat === 'auto' ? MATERIALS.AISI316.k : (MATERIALS[inp.mat] ? MATERIALS[inp.mat].k : MATERIALS.AISI316.k);
   for (var pi = 0; pi < pt.length; pi++) {
@@ -248,12 +252,17 @@ function mCalcSecRegen(inp){
     var F = fF(Pv, Rv, ps), lc = lm * F;
     var Np = parseInt(ps.split('-')[0]), Np2 = parseInt(ps.split('-')[1]);
     var aBe = thetaFilter(Math.abs(inpC.top - inpC.tip), lm);
-    var mods = PLATES.filter(function(m){
-      if (inpC.tpl === 't') return true;
-      if (inpC.tpl === 's') return m.t === 's';
-      return m.t === 'g';
-    });
-    mods = mods.filter(function(m){ return aBe.indexOf(m.be) >= 0; });
+    var mods;
+    if (forceModel) {
+      mods = PLATES.filter(function(m){ return m.n === forceModel; });
+    } else {
+      mods = PLATES.filter(function(m){
+        if (inpC.tpl === 't') return true;
+        if (inpC.tpl === 's') return m.t === 's';
+        return m.t === 'g';
+      });
+      mods = mods.filter(function(m){ return aBe.indexOf(m.be) >= 0; });
+    }
     var rs = [];
     mods.forEach(function(m){
       var Dh = 2 * m.b, Ac = m.b * m.w, Ap = Math.PI * m.dp * m.dp / 4;
@@ -289,40 +298,11 @@ function mCalcSecRegen(inp){
     }
   }
   if (best) return best;
-  // FIX v44.2: fallback retorna o MELHOR modelo real (sem referência a hc)
-  var rs2b = [];
-  (function(){
-    var pb = gProd(inp.fp, (inp.tip + inp.top) / 2, inp.bp);
-    var mp = inp.vp * pb.rho / 3600;
-    var Q = mp * pb.cp * Math.abs(inp.top - inp.tip) / 1000;
-    var lm = cL(inp.tis, inp.tos, inp.tip, inp.top);
-    var Np = parseInt(pt[0].split('-')[0]), Np2 = parseInt(pt[0].split('-')[1]);
-    var aBe = thetaFilter(Math.abs(inp.top - inp.tip), lm);
-    var mods = PLATES.filter(function(m){ return aBe.indexOf(m.be) >= 0; });
-    mods.forEach(function(m){
-      var Dh = 2 * m.b, Ac = m.b * m.w, Ap = Math.PI * m.dp * m.dp / 4;
-      var ne = Math.ceil(safeDiv(Q * 1000, 2000 * Math.max(lm, 0.1), 0) / m.ap * (1 + inp.mg / 100));
-      for (var n = Math.max(4, ne - 8); n < ne + 50; n += 2) {
-        var nc = Math.max(Math.floor((n - 1) / (2 * Np)), 1);
-        var mcp = mp / nc;
-        var vcP = safeDiv(mcp, pb.rho * Ac, 0);
-        if (vcP < 0.1) continue;
-        var Rep = safeDiv(mcp * Dh, Math.max(Ac, 1e-8) * Math.max(pb.mu, 1e-8), 0);
-        var Prp = safeDiv(pb.cp * pb.mu, Math.max(pb.k, 0.001), 0);
-        var rU = cURegen({ t1i: inp.tis, t1o: inp.tos, t2i: inp.tip, t2o: inp.top, fp: inp.fp, bp: inp.bp, Re1: Rep, Pr1: Prp, Re2: Rep, Pr2: Prp, be: m.be, Dh: Dh, d: m.d, km: matK });
-        var Ai = n * m.ap;
-        var An = safeDiv(Q * 1000, Math.max(rU.U * lm, 0.1), 0);
-        if (Ai >= An) {
-          var dp1 = cDp(mp, pb.rho, Dh, m.l, m.ph, Np, Ap, vcP, m.be, Rep);
-          rs2b.push({ mod: m.n, n: n, A: Ai, U: rU.U, dp1: dp1.t, dp2: dp1.t, Q: Q, vi: false, v1: dp1.vp, v2: dp1.vp, tauP: dp1.tau, fracPortaP: dp1.fracPorta, Rep: Rep, Res: Rep, lm: lm, F: 1, pb: pb, sb: pb, rU: rU, m: m, lmtd: lm, passes: pt[0], vaporMode: false });
-          break;
-        }
-      }
-    });
-  })();
-  rs2b.sort(function(a, b){ return a.A - b.A; });
-  var fb = rs2b[0];
-  if (fb) { fb.vi = false; fb.passesUsado = pt[0]; fb.todosCalculados = rs2b; fb.todosViaveis = []; return fb; }
+  // fallback: menor dP
+  var rs2 = mCalcSingle(Object.assign({}, inp, { ps: pt[0] }), detectHotCold(inp), forceModel);
+  rs2.sort(function(a, b){ return (a.dp1 - b.dp1); });
+  var fb = rs2[0];
+  if (fb) { fb.vi = false; fb.passesUsado = pt[0]; fb.todosCalculados = rs2; fb.todosViaveis = []; return fb; }
   return { mod: 'N/A', n: 0, A: 0, U: 0, dp1: 999, dp2: 999, Q: 0, vi: false, passesUsado: '1-1', Rep: 0, Res: 0, lm: 0, F: 0, pb: gProd('agua', 20, 0), sb: gProd('agua', 20, 0), rU: { kc: 0, Tw: 0 }, m: null, lmtd: 0, v1: 0, tauP: 0, vaporMode: false };
 }
 
@@ -339,7 +319,7 @@ function calcHoldingTube(vp, tp, fp, bp){
   return { diameter: (D * 1000).toFixed(1), length: L.toFixed(2), lengthStr: L.toFixed(2) + ' m', volume: (Math.PI * D * D / 4 * L * 1000).toFixed(1) + ' L', holdTime: HT + ' s', temp: tp + ' C', Re: Re.toFixed(0), eta: (eta * 100).toFixed(0) + '%' };
 }
 
-// ---------- CÁLCULO MULTI-SEÇÃO COMPLETO ----------
+// ---------- CÁLCULO MULTI-SEÇÃO (UM ÚNICO MODELO DE PLACA) ----------
 function mCalcMulti(inp){
   var ti = inp.tip;
   var tp = parseFloat(document.getElementById('tpast').value) || 72;
@@ -353,53 +333,76 @@ function mCalcMulti(inp){
   var s4 = document.getElementById('sec4_on') ? document.getElementById('sec4_on').value === '1' : false;
   var tAA = parseFloat(document.getElementById('t_agua_amb') ? document.getElementById('t_agua_amb').value : 25) || 25;
 
-  // FIX v44.1: alocação de ΔP mais realista (soma ~100%)
   var fRegen = 0.40, fAq = 0.30, fRes = 0.30;
 
-  // Sec 1: Regeneração (produto frio vs quente)
+  // Perfis de temperatura das seções
   var tQSR = tp - (tr - ti);
-  var s1i = { fp: fp, bp: bp, vp: vp, tip: ti, top: tr, dpp: dppT * fRegen, fs: fp, vs: vp, tis: tp, tos: tQSR, dps: dppT * fRegen, tpl: inp.tpl, mat: inp.mat, ps: inp.ps, mg: inp.mg };
-  var s1 = mCalcSecRegen(s1i);
-
-  // Sec 2: Aquecimento (vapor/água quente)
   var tSA = tAQ - 20;
+  var tSR = tAG + 8;
+
+  // Definição das 3 seções (regen usa produto vs produto)
+  var s1i = { fp: fp, bp: bp, vp: vp, tip: ti, top: tr, dpp: dppT * fRegen, fs: fp, vs: vp, tis: tp, tos: tQSR, dps: dppT * fRegen, tpl: inp.tpl, mat: inp.mat, ps: inp.ps, mg: inp.mg };
   var s2i = { fp: fp, bp: bp, vp: vp, tip: tr, top: tp, dpp: dppT * fAq, fs: fsAq === 'vapor' ? 'vapor' : 'agua', vs: vp * 1.5, tis: tAQ, tos: tSA, dps: dppT * fAq, tpl: inp.tpl, mat: inp.mat, ps: inp.ps, mg: inp.mg, pressure: 2 };
+  var s3i = { fp: fp, bp: bp, vp: vp, tip: tp, top: tf, dpp: dppT * fRes, fs: fsRes, vs: vp * 1.5, tis: tAG, tos: tSR, dps: dppT * fRes, tpl: inp.tpl, mat: inp.mat, ps: inp.ps, mg: inp.mg };
+
   var s2hc = detectHotCold(s2i);
-  var s2 = mCalcSec(s2i, null, s2hc);
+  var s3hc = detectHotCold(s3i);
 
-  // Tubo de retenção
-  var ht = calcHoldingTube(vp, tp, fp, bp);
+  // Filtra modelos candidatos (mesmo tipo/ângulo para TODAS as seções)
+  var aBe1 = thetaFilter(Math.abs(tr - ti), cL(tp, tQSR, ti, tr));
+  var aBe2 = thetaFilter(Math.abs(tp - tr), cL(tAQ, tSA, tr, tp));
+  var aBe3 = thetaFilter(Math.abs(tf - tp), cL(tAG, tSR, tp, tf));
+  var candidatos = PLATES.filter(function(m){
+    if (inp.tpl === 't') return true;
+    if (inp.tpl === 's') return m.t === 's';
+    return m.t === 'g';
+  }).filter(function(m){
+    return aBe1.indexOf(m.be) >= 0 && aBe2.indexOf(m.be) >= 0 && aBe3.indexOf(m.be) >= 0;
+  });
 
-  // Sec 3: Resfriamento
-  var s3, s4r = null, tSPR, tSR = tAG + 8;
-  if (s4) {
-    tSPR = tp - (tp - tf) * 0.5;
-    var s3i = { fp: fp, bp: bp, vp: vp, tip: tp, top: tSPR, dpp: dppT * 0.2, fs: 'agua', vs: vp * 1.2, tis: tAA, tos: tAA + 10, dps: dppT * 0.2, tpl: inp.tpl, mat: inp.mat, ps: inp.ps, mg: inp.mg };
-    var s3hc = detectHotCold(s3i);
-    s3 = mCalcSec(s3i, null, s3hc);
-    var s4i = { fp: fp, bp: bp, vp: vp, tip: tSPR, top: tf, dpp: dppT * 0.2, fs: fsRes, vs: vp * 1.5, tis: tAG, tos: tSR, dps: dppT * 0.2, tpl: inp.tpl, mat: inp.mat, ps: inp.ps, mg: inp.mg };
-    var s4hc = detectHotCold(s4i);
-    s4r = mCalcSec(s4i, null, s4hc);
-  } else {
-    var s3i = { fp: fp, bp: bp, vp: vp, tip: tp, top: tf, dpp: dppT * fRes, fs: fsRes, vs: vp * 1.5, tis: tAG, tos: tSR, dps: dppT * fRes, tpl: inp.tpl, mat: inp.mat, ps: inp.ps, mg: inp.mg };
-    var s3hc = detectHotCold(s3i);
-    s3 = mCalcSec(s3i, null, s3hc);
+  var melhor = null;
+  candidatos.forEach(function(placa){
+    // Calcula TODAS as seções com ESTE modelo de placa
+    var s1 = mCalcSecRegen(s1i, placa.n);
+    var s2 = mCalcSec(s2i, null, s2hc, placa.n);
+    var s3 = mCalcSec(s3i, null, s3hc, placa.n);
+
+    var dpTotal = s1.dp1 + s2.dp1 + s3.dp1;
+    var ok = s1.vi && s2.vi && s3.vi && dpTotal <= dppT;
+    var area = s1.A + s2.A + s3.A;
+
+    if (ok && (!melhor || area < melhor.area)) {
+      melhor = { placa: placa, s1: s1, s2: s2, s3: s3, dpTotal: dpTotal, area: area, ok: true };
+    }
+    // Se nenhum viável ainda, guarda o de menor dP como fallback
+    if (!melhor && (!melhor || dpTotal < melhor.dpTotal)) {
+      melhor = { placa: placa, s1: s1, s2: s2, s3: s3, dpTotal: dpTotal, area: area, ok: false };
+    }
+  });
+
+  // Se nenhum modelo viável, usa o fallback de menor dP
+  if (!melhor) {
+    melhor = { placa: null, s1: mCalcSecRegen(s1i), s2: mCalcSec(s2i, null, s2hc), s3: mCalcSec(s3i, null, s3hc), dpTotal: 0, area: 0, ok: false };
+    melhor.dpTotal = melhor.s1.dp1 + melhor.s2.dp1 + melhor.s3.dp1;
+    melhor.area = melhor.s1.A + melhor.s2.A + melhor.s3.A;
   }
 
+  var s1 = melhor.s1, s2 = melhor.s2, s3 = melhor.s3;
+  var ht = calcHoldingTube(vp, tp, fp, bp);
   var re = safeDiv(tr - ti, Math.max(tp - ti, 0.001), 0) * 100;
-  var tA = s1.A + s2.A + s3.A + (s4r ? s4r.A : 0);
-  var tDP = s1.dp1 + s2.dp1 + s3.dp1 + (s4r ? s4r.dp1 : 0);
-  var tPl = s1.n + s2.n + s3.n + (s4r ? s4r.n : 0);
-  var tQ = s2.Q + s3.Q + (s4r ? s4r.Q : 0);
+  var tA = s1.A + s2.A + s3.A;
+  var tDP = s1.dp1 + s2.dp1 + s3.dp1;
+  var tPl = s1.n + s2.n + s3.n;
+  var tQ = s2.Q + s3.Q;
 
   return {
-    multi: true, sec1: s1, sec2: s2, sec3: s3, sec4: s4r, holdTube: ht, sec4On: s4,
+    multi: true, sec1: s1, sec2: s2, sec3: s3, sec4: null, holdTube: ht, sec4On: false,
     regenEff: re, totalArea: tA, totalDpP: tDP, totalPlates: tPl, Qexterno: tQ, Qregen: s1.Q,
-    mod: 'Multi: ' + s1.mod + '+' + s2.mod + '+' + s3.mod + (s4r ? '+' + s4r.mod : ''),
+    mod: 'Multi: ' + s1.mod + '+' + s2.mod + '+' + s3.mod,
     n: tPl, A: tA, U: (s1.U + s2.U + s3.U) / 3, dp1: tDP, dp2: 0, Q: tQ,
-    vi: s1.vi && s2.vi && s3.vi && (s4r ? s4r.vi : true) && tDP <= inp.dpp,
-    passesUsado: s1.passesUsado + ' / ' + s2.passesUsado + ' / ' + s3.passesUsado + (s4r ? ' / ' + s4r.passesUsado : ''),
+    vi: melhor.ok,
+    passesUsado: s1.passesUsado + ' / ' + s2.passesUsado + ' / ' + s3.passesUsado,
     todosCalculados: [], lmtd: 0, F: 1, Rep: s2.Rep, Res: s3.Res, pb: s2.pb, sb: s3.sb, rU: s2.rU, m: s2.m,
-    temperaturas: { ti: ti, tr: tr, tp: tp, tf: tf, tQout: tQSR, tAqIn: tAQ, tAqOut: tSA, tGIn: tAG, tGOut: tSR, tPreResf: tSPR, tAguaAmb: tAA }
+    temperaturas: { ti: ti, tr: tr, tp: tp, tf: tf, tQout: tQSR, tAqIn: tAQ, tAqOut: tSA, tGIn: tAG, tGOut: tSR, tPreResf: null, tAguaAmb: tAA }
   };
 }

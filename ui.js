@@ -1,6 +1,6 @@
 // ============================================================
-// AlfaVed PHE v48.1 — CAMADA DE INTERFACE (UI)
-// FIX v48.1: adiciona ui.showResult (faltava no modo Simples)
+// AlfaVed PHE v48.2 — CAMADA DE INTERFACE (UI)
+// FIX v48.2: ui.showResult DEFINIDA + fallback defensivo no calc()
 // Wizard Multi-Seção com UM modelo para todas as seções
 // ============================================================
 
@@ -66,33 +66,8 @@ ui.tgServ = function(){
   }
 };
 
-// ---------- CÁLCULO (Simples) ----------
-ui.calc = function(){
-  try {
-    if (ui.modo === 'multi') { ui.wizard(); return; }
-    var inp = ui.readInput();
-    if (!inp.vp || inp.vp <= 0) { alert('Vazão produto inválida'); return; }
-    var hc = detectHotCold(inp);
-    if (hc.error) { alert(hc.error); return; }
-    if (isVapor(inp.fs, inp.tis, inp.tos)) {
-      var pb0 = gProd(inp.fp, (inp.tip + inp.top) / 2, inp.bp);
-      var mp0 = inp.vp * pb0.rho / 3600;
-      var Q0 = mp0 * pb0.cp * Math.abs(inp.top - inp.tip) / 1000;
-      var vf = calcVaporFlow(Q0, inp.pressure || 2);
-      inp.vs = vf.vCond;
-      document.getElementById('vs').value = inp.vs.toFixed(2);
-    }
-    if (!inp.vs || inp.vs <= 0) { alert('Vazão serviço inválida'); return; }
-    var dT1 = hc.hot.in - hc.cold.out, dT2 = hc.hot.out - hc.cold.in;
-    if (dT1 <= 0 || dT2 <= 0) { alert('Programa térmico inválido: ΔT deve ser positivo.'); return; }
-    var pt = inp.ps === 'auto' ? PASSOS : [inp.ps];
-    var r = mCalcSec(inp, pt, hc);
-    ui.showResult(r, inp, r.todosCalculados || []);
-  } catch (e) { alert('Erro no cálculo: ' + e.message); }
-};
-
 // ============================================================
-// EXIBIÇÃO DE RESULTADO (modo SIMPLES) — FIX v48.1
+// EXIBIÇÃO DE RESULTADO (modo SIMPLES) — FIX v48.2
 // ============================================================
 ui.showResult = function(r, inp, todos){
   var ph = document.getElementById('ph');
@@ -120,6 +95,36 @@ ui.showResult = function(r, inp, todos){
   v += '<div class="ck"><span class="' + (r.dp1 <= inp.dpp ? 'ck-ok' : 'ck-err') + '">' + (r.dp1 <= inp.dpp ? '✓' : '✗') + '</span>dP: ' + r.dp1.toFixed(1) + '/' + inp.dpp + ' kPa</div>';
   v += '<div class="ck"><span class="' + ((r.tauP||0) >= 35 ? 'ck-ok' : 'ck-err') + '">' + ((r.tauP||0) >= 35 ? '✓' : '✗') + '</span>Shear: ' + (r.tauP||0).toFixed(1) + ' Pa</div>';
   document.getElementById('ver').innerHTML = v;
+};
+
+// ---------- CÁLCULO (Simples) — FIX v48.2: fallback defensivo ----------
+ui.calc = function(){
+  try {
+    if (ui.modo === 'multi') { ui.wizard(); return; }
+    var inp = ui.readInput();
+    if (!inp.vp || inp.vp <= 0) { alert('Vazão produto inválida'); return; }
+    var hc = detectHotCold(inp);
+    if (hc.error) { alert(hc.error); return; }
+    if (isVapor(inp.fs, inp.tis, inp.tos)) {
+      var pb0 = gProd(inp.fp, (inp.tip + inp.top) / 2, inp.bp);
+      var mp0 = inp.vp * pb0.rho / 3600;
+      var Q0 = mp0 * pb0.cp * Math.abs(inp.top - inp.tip) / 1000;
+      var vf = calcVaporFlow(Q0, inp.pressure || 2);
+      inp.vs = vf.vCond;
+      document.getElementById('vs').value = inp.vs.toFixed(2);
+    }
+    if (!inp.vs || inp.vs <= 0) { alert('Vazão serviço inválida'); return; }
+    var dT1 = hc.hot.in - hc.cold.out, dT2 = hc.hot.out - hc.cold.in;
+    if (dT1 <= 0 || dT2 <= 0) { alert('Programa térmico inválido: ΔT deve ser positivo.'); return; }
+    var pt = inp.ps === 'auto' ? PASSOS : [inp.ps];
+    var r = mCalcSec(inp, pt, hc);
+    // FIX v48.2: garante que showResult exista antes de chamar
+    if (typeof ui.showResult === 'function') {
+      ui.showResult(r, inp, r.todosCalculados || []);
+    } else {
+      alert('Erro interno: ui.showResult não definido. Recarregue a página (Ctrl+Shift+R).');
+    }
+  } catch (e) { alert('Erro no cálculo: ' + e.message); }
 };
 
 // ============================================================

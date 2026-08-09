@@ -1,24 +1,25 @@
 // ============================================================
-// AlfaVed PHE v44 — PROPRIEDADES DOS FLUIDOS (BANCO COMPLETO)
+// AlfaVed PHE v48 — PROPRIEDADES DOS FLUIDOS (BANCO COMPLETO)
 // LADO PRODUTO: 18 fluidos | LADO SERVIÇO: 8 fluidos
 // Cada função retorna {rho, cp, mu, k} na temperatura T (°C)
+// FIX v48: viscosidade da água usa equação de Vogel (0-150°C)
 // ============================================================
-
 // ================= LADO PRODUTO (18 fluidos) =================
-
 // ---------- 1. ÁGUA ----------
 function pAgua(T){
   var rho = 1000 * (1 - Math.pow(Math.abs(T - 4) / 622, 1.71));
   rho = Math.max(rho, 800);
   var cp = 4182 + (T - 20) * (0.06 + 0.0008 * (T - 20));
   cp = Math.max(cp, 3000);
-  var mu = 1e-3 * (1.78 - 0.057 * T + 0.00106 * T * T - 8.5e-6 * T * T * T);
+  // FIX v48: equação de Vogel (válida 0-150°C) — substitui polinômio que
+  // ficava negativo acima de ~75°C. 20°C→0.00100, 80°C→0.00035,
+  // 100°C→0.00028, 120°C→0.00023.
+  var mu = 2.414e-5 * Math.pow(10, 247.8 / (T + 273.15 - 140));
   mu = Math.max(mu, 1e-5);
   var k = 0.5706 + 0.00176 * T - 6.46e-6 * T * T;
   k = Math.max(k, 0.1);
   return { rho: rho, cp: cp, mu: mu, k: k };
 }
-
 // ---------- 2. SOLUÇÃO DE SACAROSE (calda de açúcar) ----------
 function pSacarose(T, B){
   var w = (B || 0) / 100;
@@ -34,10 +35,8 @@ function pSacarose(T, B){
     k: Math.max(wt.k - 0.424 * w + 0.001 * T, 0.15)
   };
 }
-
 // ---------- 3. SUCO DE CANA ----------
 function pSucoCana(T, B){ return pSacarose(T, B || 16); }
-
 // ---------- 4. VINHO DE CANA ----------
 function pVinhoCana(T, B){
   var we = 0.1, w = pAgua(T), ba = pSacarose(T, Math.min(B || 6, 10));
@@ -48,7 +47,6 @@ function pVinhoCana(T, B){
     k: Math.max(w.k * (1 - we) + (0.171 - 0.0003 * (T - 20)) * we + (ba.k - w.k) * 0.3, 0.1)
   };
 }
-
 // ---------- 5. LEVEDURA DE CANA ----------
 function pLeveduraCana(T, C){
   var w = (C || 25) / 100, wt = pAgua(T);
@@ -59,10 +57,8 @@ function pLeveduraCana(T, C){
     k: Math.max(wt.k * (1 - 0.25 * w), 0.2)
   };
 }
-
 // ---------- 6. LEVEDURA DE CERVEJA ----------
 function pLeveduraCerveja(T, C){ return pLeveduraCana(T, C || 20); }
-
 // ---------- 7. CERVEJA ----------
 function pCerveja(T){
   var w = pAgua(T), we = 0.04;
@@ -73,10 +69,8 @@ function pCerveja(T){
     k: Math.max(w.k * (1 - we) + (0.171 - 0.0003 * (T - 20)) * we, 0.3)
   };
 }
-
 // ---------- 8. MOSTO ----------
 function pMosto(T, B){ return pSacarose(T, B || 12); }
-
 // ---------- 9. VINHO ----------
 function pVinho(T){
   var w = pAgua(T), we = 0.096;
@@ -87,10 +81,8 @@ function pVinho(T){
     k: Math.max(w.k * (1 - we) + (0.171 - 0.0003 * (T - 20)) * we, 0.25)
   };
 }
-
 // ---------- 10. SOFT DRINK ----------
 function pSoftDrink(T, B){ return pSacarose(T, B || 6); }
-
 // ---------- 11. LEITE ----------
 function pLeite(T){
   var w = pAgua(T);
@@ -101,7 +93,6 @@ function pLeite(T){
     k: Math.max(w.k - 0.02, 0.4)
   };
 }
-
 // ---------- 12. ETANOL ----------
 function pEtanol(T, C){
   var w = (C || 50) / 100, wt = pAgua(T);
@@ -112,7 +103,6 @@ function pEtanol(T, C){
     k: Math.max(wt.k * (1 - w) + (0.171 - 0.0003 * (T - 20)) * w - 0.05 * w * (1 - w), 0.1)
   };
 }
-
 // ---------- 13. ÓLEO VEGETAL ----------
 function pOleoVegetal(T){
   return {
@@ -122,7 +112,6 @@ function pOleoVegetal(T){
     k: Math.max(0.17 - 0.0001 * (T - 20), 0.1)
   };
 }
-
 // ---------- 14. SALMOURA (NaCl) ----------
 function pSalmoura(T, c){
   var w = (c || 10) / 100, wt = pAgua(T);
@@ -133,13 +122,10 @@ function pSalmoura(T, c){
     k: Math.max(wt.k * (1 - 0.05 * w), 0.45)
   };
 }
-
 // ---------- 15. ÓLEO SAE 10 ----------
 function pSAE10(T){ return pSAE(T, 10); }
-
 // ---------- 16. ÓLEO SAE 30 ----------
 function pSAE30(T){ return pSAE(T, 30); }
-
 function pSAE(T, g){
   var v = { 10: 0.05, 30: 0.1 }[g || 10];
   return {
@@ -149,7 +135,6 @@ function pSAE(T, g){
     k: Math.max(0.14 - 0.0001 * (T - 20), 0.1)
   };
 }
-
 // ---------- 17. AMÔNIA AQUOSA ----------
 function pAmoniaAq(T, C){
   var w = (C || 25) / 100, wt = pAgua(T);
@@ -160,7 +145,6 @@ function pAmoniaAq(T, C){
     k: Math.max(wt.k * (1 + 0.15 * w), 0.4)
   };
 }
-
 // ---------- 18. PROPILENO GLICOL ----------
 function pPropGlicol(T, c){
   var w = (c || 30) / 100, wt = pAgua(T);
@@ -171,9 +155,7 @@ function pPropGlicol(T, c){
     k: Math.max(wt.k * (1 - w) + (0.225 - 0.0002 * (T - 20)) * w, 0.15)
   };
 }
-
 // ================= LADO SERVIÇO (8 fluidos) =================
-
 // ---------- GLICOL ETILENO (10/20/30%) ----------
 function pGlicol(T, c){
   var w = (c || 20) / 100, wt = pAgua(T);
@@ -184,7 +166,6 @@ function pGlicol(T, c){
     k: Math.max(wt.k * (1 - w) + (0.252 - 0.0003 * (T - 20)) * w, 0.15)
   };
 }
-
 // ---------- REFRIGERANTE (R717, R134a, R22, R410A, R32, R404A) ----------
 function pRefrigerante(g, T){
   var TB = {
@@ -212,7 +193,6 @@ function pRefrigerante(g, T){
     k: Math.max(d1[2] + (d2[2] - d1[2]) * f, 0.04)
   };
 }
-
 // ================= DISPATCHER PRODUTO (16) =================
 // gProd(f, T, brix) → {rho, cp, mu, k}
 function gProd(f, T, brix){
@@ -236,7 +216,6 @@ function gProd(f, T, brix){
     default:                return pAgua(T);
   }
 }
-
 // ================= DISPATCHER SERVIÇO (8) =================
 // gServ(fs, T, gas) → {rho, cp, mu, k}
 function gServ(fs, T, gas){

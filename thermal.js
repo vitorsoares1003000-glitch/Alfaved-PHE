@@ -1,7 +1,8 @@
 // ============================================================
-// AlfaVed PHE v45.2 — MOTOR DE CÁLCULO + WIZARD MULTI-SEÇÃO
-// FIX v45.2: Etapa 1 (Pasteurização) usa VAPOR real quando
-// aquecimento por vapor; fallback nunca retorna 999.
+// AlfaVed PHE v46 — MOTOR DE CÁLCULO + WIZARD MULTI-SEÇÃO
+// FIX v46: (1) mCalcSingle varre TODOS os n e minimiza dP
+//          (2) regeneração usa U realista (não inflado)
+//          (3) modelo único global para todas as seções
 // ============================================================
 
 // ---------- DETECÇÃO QUENTE/FRIO ----------
@@ -83,7 +84,7 @@ function cDp(m, r, D, L, phi, N, Ap, v, be, Re){
   return { t: t, vp: vp, fracPorta: fp, tau: tau };
 }
 
-// ---------- CÁLCULO DE UMA SEÇÃO (SEMPRE gera candidato real) ----------
+// ---------- CÁLCULO DE UMA SEÇÃO (varre TODOS os n, minimiza dP) ----------
 function mCalcSingle(inp, hc, forceModel){
   var pb = gProd(inp.fp, (inp.tip + inp.top) / 2, inp.bp);
   var mp = inp.vp * pb.rho / 3600;
@@ -118,8 +119,8 @@ function mCalcSingle(inp, hc, forceModel){
     var Ac = m.b * m.w;
     var Ap = Math.PI * m.dp * m.dp / 4;
     var ne = Math.ceil(safeDiv(Q * 1000, 2000 * Math.max(lc, 0.1), 0) / m.ap * (1 + inp.mg / 100));
-    var pushed = false;
-    for (var n = Math.max(4, ne - 8); n < ne + 50; n += 2) {
+    // FIX v46: varre TODOS os n (até 500), não para no primeiro
+    for (var n = Math.max(4, ne - 8); n <= 500; n += 2) {
       var nc = Math.max(Math.floor((n - 1) / (2 * Np)), 1);
       var nc2 = Math.max(Math.floor((n - 1) / (2 * Np2)), 1);
       var mcp = mp / nc, mcs = ms / nc2;
@@ -159,46 +160,13 @@ function mCalcSingle(inp, hc, forceModel){
           Rep: Rep, Res: Res, lm: lc, F: F, pb: pb, sb: sb, rU: rU, m: m,
           lmtd: lm, passes: inp.ps, vaporMode: vm
         });
-        pushed = true;
-        break;
       }
-    }
-    if (!pushed) {
-      var n0 = Math.max(4, ne);
-      var nc0 = Math.max(Math.floor((n0 - 1) / (2 * Np)), 1);
-      var nc20 = Math.max(Math.floor((n0 - 1) / (2 * Np2)), 1);
-      var mcp0 = mp / nc0, mcs0 = ms / nc20;
-      var vcP0 = safeDiv(mcp0, pb.rho * Ac, 0);
-      var vcS0 = safeDiv(mcs0, sb.rho * Ac, 0);
-      var Rep0 = safeDiv(mcp0 * Dh, Math.max(Ac, 1e-8) * Math.max(pb.mu, 1e-8), 0);
-      var Res0 = safeDiv(mcs0 * Dh, Math.max(Ac, 1e-8) * Math.max(sb.mu, 1e-8), 0);
-      var Prp0 = safeDiv(pb.cp * pb.mu, Math.max(pb.k, 0.001), 0);
-      var Prs0 = safeDiv(sb.cp * sb.mu, Math.max(sb.k, 0.001), 0);
-      var rU0 = cU({
-        t1i: inp.tis, t1o: inp.tos, t2i: inp.tip, t2o: inp.top,
-        f1: inp.fs, f2: inp.fp, pressure: pr, b2: inp.bp,
-        Re1: Res0, Pr1: Prs0, Re2: Rep0, Pr2: Prp0,
-        be: m.be, Dh: Dh, d: m.d, km: MATERIALS[matK].k, Lplate: m.l, rf: rf
-      });
-      var Ai0 = n0 * m.ap;
-      var dp10 = cDp(mp, pb.rho, Dh, m.l, m.ph, Np, Ap, vcP0, m.be, Rep0);
-      var dp20;
-      if (vm) { dp20 = { t: dp10.t * 0.3, vp: 0, fracPorta: 0, tau: 0 }; }
-      else    { dp20 = cDp(ms, sb.rho, Dh, m.l, m.ph, Np2, Ap, vcS0, m.be, Res0); }
-      rs.push({
-        mod: m.n, n: n0, A: Ai0, U: rU0.U, kc: rU0.kc,
-        dp1: dp10.t, dp2: dp20.t, Q: Q, v1: dp10.vp, v2: dp20.vp,
-        vi: false, vcP: vcP0, vcS: vcS0, tauP: dp10.tau, tauS: dp20.tau,
-        fracPortaP: dp10.fracPorta, fracPortaS: dp20.fracPorta,
-        Rep: Rep0, Res: Res0, lm: lc, F: F, pb: pb, sb: sb, rU: rU0, m: m,
-        lmtd: lm, passes: inp.ps, vaporMode: vm
-      });
     }
   });
   return rs;
 }
 
-// ---------- SELEÇÃO DE PASSES (SEMPRE retorna melhor modelo real) ----------
+// ---------- SELEÇÃO DE PASSES (escolhe menor dP viável) ----------
 function mCalcSec(inp, passesArr, hc, forceModel){
   var hc = hc || detectHotCold(inp);
   if (hc.error) {
@@ -214,9 +182,10 @@ function mCalcSec(inp, passesArr, hc, forceModel){
     var rs = mCalcSingle(inpC, hc, forceModel);
     var vs = rs.filter(function(r){ return r.vi; });
     if (vs.length > 0) {
-      vs.sort(function(a, b){ return a.A - b.A; });
+      // FIX v46: escolhe o MENOR dP viável (não menor área)
+      vs.sort(function(a, b){ return a.dp1 - b.dp1; });
       var b = vs[0];
-      if (!best || b.A < best.A) {
+      if (!best || b.dp1 < best.dp1) {
         best = b;
         best.passesUsado = ps;
         best.todosViaveis = vs;
@@ -226,8 +195,9 @@ function mCalcSec(inp, passesArr, hc, forceModel){
     }
   }
   if (best) return best;
+  // fallback: menor dP real
   var rs2 = mCalcSingle(Object.assign({}, inp, { ps: pt[0] }), hc, forceModel);
-  rs2.sort(function(a, b){ return (a.dp1 - b.dp1); });
+  rs2.sort(function(a, b){ return a.dp1 - b.dp1; });
   var fb = rs2[0];
   if (fb) {
     fb.vi = false;
@@ -242,7 +212,7 @@ function mCalcSec(inp, passesArr, hc, forceModel){
            rU: { kc: 0, Tw: 0 }, m: null, lmtd: 0, tauP: 0, v1: 0, vaporMode: false };
 }
 
-// ---------- U para REGENERAÇÃO (mesmo fluido ambos lados) ----------
+// ---------- U para REGENERAÇÃO (U realista leite-leite) ----------
 function cURegen(p){
   var Th = (p.t1i + p.t1o) / 2, Tc = (p.t2i + p.t2o) / 2, Tw = (Th + Tc) / 2, Ua = 0, r = {};
   var matK = p.km || MATERIALS.AISI316.k;
@@ -264,7 +234,7 @@ function cURegen(p){
   return r;
 }
 
-// ---------- SEÇÃO DE REGENERAÇÃO (SEMPRE retorna melhor modelo real) ----------
+// ---------- SEÇÃO DE REGENERAÇÃO (varre n, minimiza dP) ----------
 function mCalcSecRegen(inp, forceModel){
   var pt = PASSOS, best = null;
   var matK = inp.mat === 'auto' ? MATERIALS.AISI316.k : (MATERIALS[inp.mat] ? MATERIALS[inp.mat].k : MATERIALS.AISI316.k);
@@ -295,8 +265,8 @@ function mCalcSecRegen(inp, forceModel){
     mods.forEach(function(m){
       var Dh = 2 * m.b, Ac = m.b * m.w, Ap = Math.PI * m.dp * m.dp / 4;
       var ne = Math.ceil(safeDiv(Q * 1000, 2000 * Math.max(lc, 0.1), 0) / m.ap * (1 + inpC.mg / 100));
-      var pushed = false;
-      for (var n = Math.max(4, ne - 8); n < ne + 50; n += 2) {
+      // FIX v46: varre TODOS os n
+      for (var n = Math.max(4, ne - 8); n <= 500; n += 2) {
         var nc = Math.max(Math.floor((n - 1) / (2 * Np)), 1);
         var nc2 = Math.max(Math.floor((n - 1) / (2 * Np2)), 1);
         var mcp = mp / nc, mcs = ms / nc2;
@@ -314,34 +284,20 @@ function mCalcSecRegen(inp, forceModel){
           var dp2 = cDp(ms, sb.rho, Dh, m.l, m.ph, Np2, Ap, vcP, m.be, Res);
           var vi = dp1.t <= inpC.dpp && dp2.t <= inpC.dps && dp1.fracPorta <= 30 && dp2.fracPorta <= 30 && dp1.tau >= 35;
           rs.push({ mod: m.n, n: n, A: Ai, U: rU.U, kc: rU.kc, dp1: dp1.t, dp2: dp2.t, Q: Q, v1: dp1.vp, v2: dp2.vp, vi: vi, vcP: vcP, tauP: dp1.tau, fracPortaP: dp1.fracPorta, Rep: Rep, Res: Res, lm: lc, F: F, pb: pb, sb: sb, rU: rU, m: m, lmtd: lm, passes: ps, vaporMode: false });
-          pushed = true;
-          break;
         }
-      }
-      if (!pushed) {
-        var n0 = Math.max(4, ne);
-        var nc0 = Math.max(Math.floor((n0 - 1) / (2 * Np)), 1);
-        var mcp0 = mp / nc0;
-        var vcP0 = safeDiv(mcp0, pb.rho * Ac, 0);
-        var Rep0 = safeDiv(mcp0 * Dh, Math.max(Ac, 1e-8) * Math.max(pb.mu, 1e-8), 0);
-        var Prp0 = safeDiv(pb.cp * pb.mu, Math.max(pb.k, 0.001), 0);
-        var rU0 = cURegen({ t1i: inpC.tis, t1o: inpC.tos, t2i: inpC.tip, t2o: inpC.top, fp: inpC.fp, bp: inpC.bp, Re1: Rep0, Pr1: Prp0, Re2: Rep0, Pr2: Prp0, be: m.be, Dh: Dh, d: m.d, km: matK });
-        var Ai0 = n0 * m.ap;
-        var dp10 = cDp(mp, pb.rho, Dh, m.l, m.ph, Np, Ap, vcP0, m.be, Rep0);
-        rs.push({ mod: m.n, n: n0, A: Ai0, U: rU0.U, kc: rU0.kc, dp1: dp10.t, dp2: dp10.t, Q: Q, v1: dp10.vp, v2: dp10.vp, vi: false, vcP: vcP0, tauP: dp10.tau, fracPortaP: dp10.fracPorta, Rep: Rep0, Res: Rep0, lm: lc, F: F, pb: pb, sb: pb, rU: rU0, m: m, lmtd: lm, passes: ps, vaporMode: false });
       }
     });
     var vs = rs.filter(function(r){ return r.vi; });
     if (vs.length > 0) {
-      vs.sort(function(a, b){ return a.A - b.A; });
+      vs.sort(function(a, b){ return a.dp1 - b.dp1; });
       var b = vs[0];
-      if (!best || b.A < best.A) { best = b; best.passesUsado = ps; best.todosViaveis = vs; best.todosCalculados = rs; }
+      if (!best || b.dp1 < best.dp1) { best = b; best.passesUsado = ps; best.todosViaveis = vs; best.todosCalculados = rs; }
       break;
     }
   }
   if (best) return best;
   var rs2 = mCalcSingle(Object.assign({}, inp, { ps: pt[0] }), detectHotCold(inp), forceModel);
-  rs2.sort(function(a, b){ return (a.dp1 - b.dp1); });
+  rs2.sort(function(a, b){ return a.dp1 - b.dp1; });
   var fb = rs2[0];
   if (fb) { fb.vi = false; fb.passesUsado = pt[0]; fb.todosCalculados = rs2; fb.todosViaveis = []; return fb; }
   return { mod: 'N/A', n: 0, A: 0, U: 0, dp1: 999, dp2: 999, Q: 0, vi: false, passesUsado: '1-1', Rep: 0, Res: 0, lm: 0, F: 0, pb: gProd('agua', 20, 0), sb: gProd('agua', 20, 0), rU: { kc: 0, Tw: 0 }, m: null, lmtd: 0, v1: 0, tauP: 0, vaporMode: false };
@@ -361,82 +317,59 @@ function calcHoldingTube(vp, tp, fp, bp){
 }
 
 // ============================================================
-// WIZARD MULTI-SEÇÃO — CÁLCULO DE CADA ETAPA
+// WIZARD MULTI-SEÇÃO — MODELO ÚNICO GLOBAL
 // ============================================================
 
-// ETAPA 1: PASTEURIZAÇÃO (Aquecimento) — produto + VAPOR real
-function wCalcPasteurizacao(inp){
+// ETAPA 1: PASTEURIZAÇÃO — usa modelo global (auto ou escolhido)
+function wCalcPasteurizacao(inp, modelo){
   var tp = parseFloat(document.getElementById('tpast').value) || 72;
   var fsAq = document.getElementById('fs_aq').value;
   var pv = parseInt(document.getElementById('pvap').value) || 2;
   var tsat = { 2: 120, 3: 134, 6: 159, 10: 180 }[pv] || 120;
   var si;
   if (fsAq === 'vapor') {
-    // Aquecimento por VAPOR: serviço = vapor saturado a tsat
-    si = {
-      fp: inp.fp, bp: inp.bp, vp: inp.vp,
-      tip: inp.tip, top: tp, dpp: inp.dpp * 0.4,
-      fs: 'vapor', vs: inp.vp * 1.5, tis: tsat, tos: tsat, dps: inp.dpp * 0.4,
-      tpl: inp.tpl, mat: inp.mat, ps: inp.ps, mg: inp.mg, pressure: pv, rf: inp.rf
-    };
+    si = { fp: inp.fp, bp: inp.bp, vp: inp.vp, tip: inp.tip, top: tp, dpp: inp.dpp * 0.4,
+           fs: 'vapor', vs: inp.vp * 1.5, tis: tsat, tos: tsat, dps: inp.dpp * 0.4,
+           tpl: inp.tpl, mat: inp.mat, ps: inp.ps, mg: inp.mg, pressure: pv, rf: inp.rf };
   } else {
-    // Aquecimento por ÁGUA QUENTE
     var tAQ = parseFloat(document.getElementById('t_agua_q').value) || 85;
     var tSA = tAQ - 20;
-    si = {
-      fp: inp.fp, bp: inp.bp, vp: inp.vp,
-      tip: inp.tip, top: tp, dpp: inp.dpp * 0.4,
-      fs: 'agua', vs: inp.vp * 1.5, tis: tAQ, tos: tSA, dps: inp.dpp * 0.4,
-      tpl: inp.tpl, mat: inp.mat, ps: inp.ps, mg: inp.mg, pressure: pv, rf: inp.rf
-    };
+    si = { fp: inp.fp, bp: inp.bp, vp: inp.vp, tip: inp.tip, top: tp, dpp: inp.dpp * 0.4,
+           fs: 'agua', vs: inp.vp * 1.5, tis: tAQ, tos: tSA, dps: inp.dpp * 0.4,
+           tpl: inp.tpl, mat: inp.mat, ps: inp.ps, mg: inp.mg, pressure: pv, rf: inp.rf };
   }
   var hc = detectHotCold(si);
-  var r = mCalcSec(si, null, hc, null);
-  r.tipo = 'pasteurizacao';
-  r.ti = inp.tip; r.to = tp;
+  var r = mCalcSec(si, null, hc, modelo);
+  r.tipo = 'pasteurizacao'; r.ti = inp.tip; r.to = tp; r.usouModelo = modelo;
   return r;
 }
 
-// ETAPA 2: REGENERAÇÃO — produto quente vs produto frio (mesmo fluido)
-function wCalcRegen(inp, baseModel, forcedModel){
+// ETAPA 2: REGENERAÇÃO — usa modelo global
+function wCalcRegen(inp, modelo){
   var tp = parseFloat(document.getElementById('tpast').value) || 72;
   var tr = parseFloat(document.getElementById('tregen').value) || 38;
   var ti = inp.tip;
   var tQSR = tp - (tr - ti);
-  var si = {
-    fp: inp.fp, bp: inp.bp, vp: inp.vp,
-    tip: ti, top: tr, dpp: inp.dpp * 0.35,
-    fs: inp.fp, vs: inp.vp, tis: tp, tos: tQSR, dps: inp.dpp * 0.35,
-    tpl: inp.tpl, mat: inp.mat, ps: inp.ps, mg: inp.mg, rf: inp.rf
-  };
-  var modelo = forcedModel || baseModel;
+  var si = { fp: inp.fp, bp: inp.bp, vp: inp.vp, tip: ti, top: tr, dpp: inp.dpp * 0.35,
+             fs: inp.fp, vs: inp.vp, tis: tp, tos: tQSR, dps: inp.dpp * 0.35,
+             tpl: inp.tpl, mat: inp.mat, ps: inp.ps, mg: inp.mg, rf: inp.rf };
   var r = mCalcSecRegen(si, modelo);
-  r.tipo = 'regen';
-  r.ti = ti; r.to = tr;
-  r.usouModelo = modelo;
-  r.manual = !r.vi;
+  r.tipo = 'regen'; r.ti = ti; r.to = tr; r.usouModelo = modelo;
   return r;
 }
 
-// ETAPA 3: RESFRIAMENTO — produto + água gelada
-function wCalcResf(inp, baseModel, forcedModel){
+// ETAPA 3: RESFRIAMENTO — usa modelo global
+function wCalcResf(inp, modelo){
   var tr = parseFloat(document.getElementById('tregen').value) || 38;
   var tf = parseFloat(document.getElementById('tfinal').value) || 4;
   var tAG = parseFloat(document.getElementById('t_agua_g').value) || 0;
   var fsRes = document.getElementById('fs_res').value;
   var tSR = tAG + 8;
-  var si = {
-    fp: inp.fp, bp: inp.bp, vp: inp.vp,
-    tip: tr, top: tf, dpp: inp.dpp * 0.25,
-    fs: fsRes, vs: inp.vp * 1.5, tis: tAG, tos: tSR, dps: inp.dpp * 0.25,
-    tpl: inp.tpl, mat: inp.mat, ps: inp.ps, mg: inp.mg, rf: inp.rf
-  };
-  var modelo = forcedModel || baseModel;
+  var si = { fp: inp.fp, bp: inp.bp, vp: inp.vp, tip: tr, top: tf, dpp: inp.dpp * 0.25,
+             fs: fsRes, vs: inp.vp * 1.5, tis: tAG, tos: tSR, dps: inp.dpp * 0.25,
+             tpl: inp.tpl, mat: inp.mat, ps: inp.ps, mg: inp.mg, rf: inp.rf };
   var hc = detectHotCold(si);
   var r = mCalcSec(si, null, hc, modelo);
-  r.tipo = 'resf';
-  r.ti = tr; r.to = tf;
-  r.usouModelo = modelo;
-  r.manual = !r.vi;
+  r.tipo = 'resf'; r.ti = tr; r.to = tf; r.usouModelo = modelo;
   return r;
 }

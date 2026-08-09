@@ -1,7 +1,7 @@
 // ============================================================
-// AlfaVed PHE v44 — MOTOR DE CÁLCULO (funções puras)
+// AlfaVed PHE v44.2 — MOTOR DE CÁLCULO (funções puras)
 // Inclui: Simples + Multi-Seção (Pasteurizador)
-// FIX v44.1: fallback retorna melhor modelo real (não 999)
+// FIX v44.2: remove referência a 'hc' no fallback de mCalcSecRegen
 // ============================================================
 
 // ---------- DETECÇÃO QUENTE/FRIO ----------
@@ -232,6 +232,7 @@ function cURegen(p){
 }
 
 // ---------- SEÇÃO DE REGENERAÇÃO ----------
+// FIX v44.2: fallback SEM referência a 'hc' (variável inexistente aqui)
 function mCalcSecRegen(inp){
   var pt = PASSOS, best = null;
   var matK = inp.mat === 'auto' ? MATERIALS.AISI316.k : (MATERIALS[inp.mat] ? MATERIALS[inp.mat].k : MATERIALS.AISI316.k);
@@ -288,8 +289,7 @@ function mCalcSecRegen(inp){
     }
   }
   if (best) return best;
-  // FIX v44.1: fallback retorna o MELHOR modelo real
-  var rs2 = mCalcSingle(Object.assign({}, inp, { ps: pt[0] }), hc);
+  // FIX v44.2: fallback retorna o MELHOR modelo real (sem referência a hc)
   var rs2b = [];
   (function(){
     var pb = gProd(inp.fp, (inp.tip + inp.top) / 2, inp.bp);

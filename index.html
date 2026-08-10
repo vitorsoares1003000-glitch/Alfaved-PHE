@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AlfaVed Dimensionador PHE v67</title>
+<title>AlfaVed Dimensionador PHE v68</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:Segoe UI,Arial,sans-serif;background:#f4f6f8;color:#222}
@@ -76,7 +76,17 @@ body{font-family:Segoe UI,Arial,sans-serif;background:#f4f6f8;color:#222}
 .ds-footer{margin-top:40px;border-top:1px solid #e2e8f0;padding-top:10px;font-size:9px;color:#94a3b8;display:flex;justify-content:space-between}
 .ds-sign{display:flex;justify-content:space-between;margin-top:50px}
 .sign-box{width:30%;border-top:1px solid #333;text-align:center;padding-top:5px;font-size:10px}
-@media print{body *{visibility:hidden}#datasheet-view,#datasheet-view *{visibility:visible}#datasheet-view{position:absolute;left:0;top:0;padding:0;background:#fff}.ds-page{box-shadow:none;margin:0;width:100%}}
+@media print{
+  @page{size:A4;margin:0}
+  body{background:#fff}
+  body *{visibility:hidden}
+  #datasheet-view,#datasheet-view *{visibility:visible}
+  #datasheet-view{position:absolute;left:0;top:0;width:100%;padding:0;margin:0;background:#fff;display:block}
+  #datasheet-view .bc{visibility:hidden}
+  .ds-page{width:100%;min-height:auto;box-shadow:none;margin:0;padding:12mm}
+  #ds-chart{width:100% !important;height:200px !important}
+  .ds-sign,.ds-footer{display:flex !important}
+}
 @media(max-width:900px){.ctn{flex-direction:column}.sb{width:100%;min-width:0}.grid2{grid-template-columns:1fr}}
 </style>
 </head>
@@ -89,7 +99,7 @@ body{font-family:Segoe UI,Arial,sans-serif;background:#f4f6f8;color:#222}
       <div class="hdr-s">Solucoes Industriais · Trocadores de Calor a Placas</div>
     </div>
   </div>
-  <span class="vbg">v67</span>
+  <span class="vbg">v68</span>
 </header>
 <nav class="nav-tabs">
   <button class="tab-btn active" onclick="ui.switchTab('calc')">Termico</button>
@@ -182,6 +192,11 @@ body{font-family:Segoe UI,Arial,sans-serif;background:#f4f6f8;color:#222}
     </div>
     <div class="sb-sect">
       <h3>Projeto</h3>
+      <div class="fg"><label>Modelo (pre-selecao)</label>
+        <select id="selModeloPre">
+          <option value="auto" selected>Auto (otimizar)</option>
+        </select>
+      </div>
       <div class="fr">
         <div class="fg"><label>Placa</label>
           <select id="tpl"><option value="g" selected>Gasketed</option><option value="s">Semi-Welded</option><option value="t">Todas</option></select>
@@ -286,12 +301,14 @@ body{font-family:Segoe UI,Arial,sans-serif;background:#f4f6f8;color:#222}
         <li>Calculo validado conforme base de dados AlfaVed (5 equipamentos de referencia).</li>
       </ul>
       <div class="ds-sign"><div class="sign-box">Engenharia AlfaVed</div><div class="sign-box">Controle de Qualidade</div><div class="sign-box">Data de Aprovacao</div></div>
-      <div class="ds-footer"><div>AlfaVed Solucoes Industriais Ltda.</div><div>www.alfaved.com.br · v67</div><div>Pagina 1 de 1</div></div>
+      <div class="ds-footer"><div>AlfaVed Solucoes Industriais Ltda.</div><div>www.alfaved.com.br · v68</div><div>Pagina 1 de 1</div></div>
     </div>
-    <div style="text-align:center;margin-top:20px"><button class="bc" style="width:200px" onclick="window.print()">Imprimir / Salvar PDF</button></div>
+    <div style="text-align:center;margin-top:20px;display:flex;gap:10px;justify-content:center">
+      <button class="bc" style="width:220px" onclick="window.print()">Imprimir / Salvar PDF</button>
+    </div>
   </div>
 </div>
-<div class="fi"><strong>AlfaVed PHE v67</strong> | Calculo congelado · Base completa de fluidos · Diagrama Simples + Multi · Datasheet integrado</div>
+<div class="fi"><strong>AlfaVed PHE v68</strong> | Calculo congelado · Base completa de fluidos · Diagrama Simples + Multi · Datasheet integrado</div>
 <script>
 function pAgua(T){
   var rho=1000*(1-Math.pow(Math.abs(T-4)/622,1.71));rho=Math.max(rho,800);
@@ -419,6 +436,8 @@ ui.selectModel=function(mod){
   try{
     var inp=ui.readInput();
     if(!inp.vp||inp.vp<=0){alert('Vazao produto invalida');return;}
+    var pre=document.getElementById('selModeloPre');
+    if(pre)pre.value=mod;
     if(ui.modo==='multi'){
       ui.multi.modelo=mod;
       var sg=document.getElementById('selModeloGlobal');
@@ -435,15 +454,17 @@ ui.selectModel=function(mod){
     ui.switchTab('ds');
   }catch(e){alert('Erro: '+e.message);}
 };
-ui.calc=function(){try{if(ui.modo==='multi'){ui.wizard();return;}var inp=ui.readInput();if(!inp.vp||inp.vp<=0){alert('Vazao produto invalida');return;}var hc=detectHotCold(inp);if(hc.error){alert(hc.error);return;}if(isVapor(inp.fs,inp.tis,inp.tos)){var pb0=gProd(inp.fp,(inp.tip+inp.top)/2,inp.bp);var mp0=inp.vp*pb0.rho/3600;var Q0=mp0*pb0.cp*Math.abs(inp.top-inp.tip)/1000;var vf=calcVaporFlow(Q0,inp.pressure||2);inp.vs=vf.vCond;document.getElementById('vs').value=inp.vs.toFixed(2);}if(!inp.vs||inp.vs<=0){alert('Vazao servico invalida');return;}var dT1=hc.hot.in-hc.cold.out,dT2=hc.hot.out-hc.cold.in;if(dT1<=0||dT2<=0){alert('Programa termico invalido: dT deve ser positivo.');return;}var pt=inp.ps==='auto'?PASSOS:[inp.ps];var r=mCalcSec(inp,pt,hc);ui.showResult(r,inp,r.todosCalculados||[]);}catch(e){alert('Erro no calculo: '+e.message);}};
+ui.calc=function(){try{if(ui.modo==='multi'){ui.wizard();return;}var inp=ui.readInput();if(!inp.vp||inp.vp<=0){alert('Vazao produto invalida');return;}var hc=detectHotCold(inp);if(hc.error){alert(hc.error);return;}if(isVapor(inp.fs,inp.tis,inp.tos)){var pb0=gProd(inp.fp,(inp.tip+inp.top)/2,inp.bp);var mp0=inp.vp*pb0.rho/3600;var Q0=mp0*pb0.cp*Math.abs(inp.top-inp.tip)/1000;var vf=calcVaporFlow(Q0,inp.pressure||2);inp.vs=vf.vCond;document.getElementById('vs').value=inp.vs.toFixed(2);}if(!inp.vs||inp.vs<=0){alert('Vazao servico invalida');return;}var dT1=hc.hot.in-hc.cold.out,dT2=hc.hot.out-hc.cold.in;if(dT1<=0||dT2<=0){alert('Programa termico invalido: dT deve ser positivo.');return;}var pt=inp.ps==='auto'?PASSOS:[inp.ps];var pre=document.getElementById('selModeloPre');var force=pre&&pre.value!=='auto'?pre.value:null;var r=mCalcSec(inp,pt,hc,force);ui.showResult(r,inp,r.todosCalculados||[]);}catch(e){alert('Erro no calculo: '+e.message);}};
 ui.modelOptions=function(sel){var h='<option value="auto">Auto (melhor modelo unico)</option>';PLATES.forEach(function(m){var s=(sel&&sel===m.n)?' selected':'';h+='<option value="'+m.n+'"'+s+'>'+m.n+' (beta'+m.be+' · '+m.ap+' m2)</option>';});return h;};
-ui.recalcAll=function(){try{var inp=ui.readInput();if(!inp.vp||inp.vp<=0){alert('Vazao produto invalida');return;}var modelo=ui.multi.modelo==='auto'?null:ui.multi.modelo;ui.multi.res=wCalcMulti(inp,modelo);ui.lastResult=ui.multi.res;ui.wizardPanel();ui.showResumo();}catch(e){alert('Erro: '+e.message);}};
+ui.recalcAll=function(){try{var inp=ui.readInput();if(!inp.vp||inp.vp<=0){alert('Vazao produto invalida');return;}var modelo=ui.multi.modelo==='auto'?null:ui.multi.modelo;var pre=document.getElementById('selModeloPre');if(pre&&pre.value!=='auto')modelo=pre.value;ui.multi.res=wCalcMulti(inp,modelo);ui.lastResult=ui.multi.res;ui.wizardPanel();ui.showResumo();}catch(e){alert('Erro: '+e.message);}};
 ui.onModeloChange=function(){ui.multi.modelo=document.getElementById('selModeloGlobal').value;ui.recalcAll();};
 ui.autoDp=function(){
   try{
     var inp=ui.readInput();
     if(!inp.vp||inp.vp<=0){alert('Vazao produto invalida');return;}
     var modelo=ui.multi.modelo==='auto'?null:ui.multi.modelo;
+    var pre=document.getElementById('selModeloPre');
+    if(pre&&pre.value!=='auto')modelo=pre.value;
     var melhor=null,achou=false,dpUsado=0;
     for(var dp=20;dp<=80;dp+=1){
       var inpC=Object.assign({},inp,{dpp:dp});
@@ -488,6 +509,8 @@ ui.onDsModelChange=function(){
   ui.multi.modelo=sel.value;
   var sg=document.getElementById('selModeloGlobal');
   if(sg)sg.value=sel.value;
+  var pre=document.getElementById('selModeloPre');
+  if(pre)pre.value=sel.value;
 };
 ui.recalcFromDs=function(){
   try{
@@ -496,6 +519,8 @@ ui.recalcFromDs=function(){
     var mod=sel.value;
     var inp=ui.readInput();
     if(!inp.vp||inp.vp<=0){alert('Vazao produto invalida');return;}
+    var pre=document.getElementById('selModeloPre');
+    if(pre)pre.value=mod;
     if(ui.modo==='multi'){
       ui.multi.modelo=mod;
       ui.multi.res=wCalcMulti(inp,mod);
@@ -677,7 +702,13 @@ ui.showResumo=function(){var res=ui.multi.res;if(!res){alert('Calcule primeiro')
 ui.wResumo=function(){ui.showResumo();};
 ui.wizard=function(){var ph=document.getElementById('ph'),res=document.getElementById('res');if(ph)ph.style.display='none';if(res)res.style.display='block';ui.wizardPanel();};
 ui.limpar=function(){var res=document.getElementById('res'),ph=document.getElementById('ph');if(res)res.style.display='none';if(ph)ph.style.display='block';ui.multi={step:1,modelo:'auto',res:null};var wp=document.getElementById('wizardPanel');if(wp)wp.remove();};
-document.addEventListener('DOMContentLoaded',function(){try{var h='';PLATES.forEach(function(m){h+='<tr><td><b>'+m.n+'</b></td><td>'+m.be+'</td><td>'+m.ap+'</td><td>'+(m.b*2000).toFixed(1)+'</td></tr>';});document.getElementById('cat').innerHTML=h;document.getElementById('btnCalc').addEventListener('click',ui.calc);document.getElementById('btnLimpar').addEventListener('click',ui.limpar);var bAuto=document.getElementById('btnAutoDp');if(bAuto)bAuto.addEventListener('click',ui.autoDp);ui.setModo('simples');ui.tgServ();}catch(e){alert('Erro na inicializacao: '+e.message);}});
+document.addEventListener('DOMContentLoaded',function(){try{var h='';PLATES.forEach(function(m){h+='<tr><td><b>'+m.n+'</b></td><td>'+m.be+'</td><td>'+m.ap+'</td><td>'+(m.b*2000).toFixed(1)+'</td></tr>';});document.getElementById('cat').innerHTML=h;
+var selPre=document.getElementById('selModeloPre');
+if(selPre){var hp='';
+  PLATES.forEach(function(m){hp+='<option value="'+m.n+'">'+m.n+' (beta'+m.be+' · '+m.ap+' m2)</option>';});
+  selPre.insertAdjacentHTML('beforeend',hp);
+}
+document.getElementById('btnCalc').addEventListener('click',ui.calc);document.getElementById('btnLimpar').addEventListener('click',ui.limpar);var bAuto=document.getElementById('btnAutoDp');if(bAuto)bAuto.addEventListener('click',ui.autoDp);ui.setModo('simples');ui.tgServ();}catch(e){alert('Erro na inicializacao: '+e.message);}});
 </script>
 </body>
 </html>

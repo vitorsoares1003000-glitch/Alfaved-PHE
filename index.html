@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AlfaVed Dimensionador PHE v68</title>
+<title>AlfaVed Dimensionador PHE v69</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:Segoe UI,Arial,sans-serif;background:#f4f6f8;color:#222}
@@ -99,7 +99,7 @@ body{font-family:Segoe UI,Arial,sans-serif;background:#f4f6f8;color:#222}
       <div class="hdr-s">Solucoes Industriais · Trocadores de Calor a Placas</div>
     </div>
   </div>
-  <span class="vbg">v68</span>
+  <span class="vbg">v69</span>
 </header>
 <nav class="nav-tabs">
   <button class="tab-btn active" onclick="ui.switchTab('calc')">Termico</button>
@@ -301,14 +301,15 @@ body{font-family:Segoe UI,Arial,sans-serif;background:#f4f6f8;color:#222}
         <li>Calculo validado conforme base de dados AlfaVed (5 equipamentos de referencia).</li>
       </ul>
       <div class="ds-sign"><div class="sign-box">Engenharia AlfaVed</div><div class="sign-box">Controle de Qualidade</div><div class="sign-box">Data de Aprovacao</div></div>
-      <div class="ds-footer"><div>AlfaVed Solucoes Industriais Ltda.</div><div>www.alfaved.com.br · v68</div><div>Pagina 1 de 1</div></div>
+      <div class="ds-footer"><div>AlfaVed Solucoes Industriais Ltda.</div><div>www.alfaved.com.br · v69</div><div>Pagina 1 de 1</div></div>
     </div>
-    <div style="text-align:center;margin-top:20px;display:flex;gap:10px;justify-content:center">
-      <button class="bc" style="width:220px" onclick="window.print()">Imprimir / Salvar PDF</button>
+    <div style="text-align:center;margin-top:20px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <button class="bc" style="width:200px" onclick="window.print()">Imprimir</button>
+      <button class="bc" style="width:200px;background:#1a3a5c" onclick="ui.savePdf()">Salvar em PDF</button>
     </div>
   </div>
 </div>
-<div class="fi"><strong>AlfaVed PHE v68</strong> | Calculo congelado · Base completa de fluidos · Diagrama Simples + Multi · Datasheet integrado</div>
+<div class="fi"><strong>AlfaVed PHE v69</strong> | Calculo congelado · Base completa de fluidos · Diagrama Simples + Multi · Datasheet integrado</div>
 <script>
 function pAgua(T){
   var rho=1000*(1-Math.pow(Math.abs(T-4)/622,1.71));rho=Math.max(rho,800);
@@ -702,6 +703,14 @@ ui.showResumo=function(){var res=ui.multi.res;if(!res){alert('Calcule primeiro')
 ui.wResumo=function(){ui.showResumo();};
 ui.wizard=function(){var ph=document.getElementById('ph'),res=document.getElementById('res');if(ph)ph.style.display='none';if(res)res.style.display='block';ui.wizardPanel();};
 ui.limpar=function(){var res=document.getElementById('res'),ph=document.getElementById('ph');if(res)res.style.display='none';if(ph)ph.style.display='block';ui.multi={step:1,modelo:'auto',res:null};var wp=document.getElementById('wizardPanel');if(wp)wp.remove();};
+ui.savePdf=function(){
+  try{
+    ui.switchTab('ds');
+    setTimeout(function(){
+      window.print();
+    }, 300);
+  }catch(e){alert('Erro ao salvar PDF: '+e.message);}
+};
 document.addEventListener('DOMContentLoaded',function(){try{var h='';PLATES.forEach(function(m){h+='<tr><td><b>'+m.n+'</b></td><td>'+m.be+'</td><td>'+m.ap+'</td><td>'+(m.b*2000).toFixed(1)+'</td></tr>';});document.getElementById('cat').innerHTML=h;
 var selPre=document.getElementById('selModeloPre');
 if(selPre){var hp='';

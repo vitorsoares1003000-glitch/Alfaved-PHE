@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AlfaVed Dimensionador PHE</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Segoe UI,Arial,sans-serif;background:#f4f6f8;color:#222}
+.hdr{background:#1a3a5c;color:#fff;padding:10px 20px;display:flex;justify-content:space-between;align-items:center}
+.hdr-l{display:flex;gap:12px;align-items:center}
+.red{color:#cc3300}.org{color:#f0a830}
+.hdr-t{font-size:18px;font-weight:700}.hdr-s{font-size:11px;opacity:.8}
+.nav-tabs{background:#e2e8f0;display:flex;padding:0 20px;border-bottom:1px solid #cbd5e0}
+.tab-btn{padding:12px 24px;border:none;background:none;cursor:pointer;font-weight:600;color:#64748b;border-bottom:3px solid transparent;transition:.2s}
+.tab-btn.active{color:#1a3a5c;border-bottom-color:#1a3a5c;background:rgba(255,255,255,.5)}
+.ctn{display:flex;min-height:calc(100vh - 110px)}
+.sb{width:360px;min-width:360px;background:#fff;border-right:1px solid #dde3ea;overflow-y:auto}
+.sb-hdr{background:#1a3a5c;color:#fff;padding:10px 14px;font-weight:700}
+.sb-sect{padding:12px 14px;border-bottom:1px solid #e8ecf1}
+.sb-sect h3{font-size:12px;color:#1a3a5c;margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em}
+.fg{margin-bottom:8px}
+.fg label{display:block;font-size:11px;color:#4a5568;margin-bottom:2px}
+.fg input,.fg select{width:100%;padding:6px 8px;border:1px solid #cbd5e0;border-radius:5px;font-size:13px}
+.fg input[readonly]{background:#eef1f5;color:#4a5568;font-weight:700}
+.fr{display:flex;gap:8px}.fr .fg{flex:1}
+.gp2{display:flex;gap:6px}
+.bp{flex:1;padding:7px;border:1px solid #cbd5e0;border-radius:6px;background:#f1f5f9;cursor:pointer;font-size:12px;font-weight:600}
+.bp.act{background:#2d9e4a;color:#fff;border-color:#2d9e4a}
+.ang-btn{flex:1;padding:7px;border:1px solid #cbd5e0;border-radius:6px;background:#f1f5f9;cursor:pointer;font-size:12px;font-weight:700;color:#1a3a5c}
+.ang-btn.active{background:#1a3a5c;color:#fff;border-color:#1a3a5c}
+.sec-info{font-size:11px;color:#6b7280;margin-top:6px}
+.note{font-size:10px;color:#8a6d1a;background:#fff8dc;border:1px solid #f0e0a0;padding:4px 6px;border-radius:4px}
+.note-warn{font-size:10px;color:#8a1a1a;background:#fee2e2;border:1px solid #f0a0a0;padding:4px 6px;border-radius:4px}
+.bc{width:100%;padding:10px;background:#2d9e4a;color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;margin-top:6px}
+.bl{width:100%;padding:10px;background:#e2e8f0;color:#334;border:1px solid #cbd5e0;border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;margin-top:6px}
+.ba{width:100%;padding:10px;background:#1a3a5c;color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;margin-top:6px}
+.ms{max-height:280px;overflow:auto}
+.tm{width:100%;border-collapse:collapse;font-size:11px}
+.tm th,.tm td{border:1px solid #e2e8f0;padding:4px 6px;text-align:center}
+.tm th{background:#1a3a5c;color:#fff}
+.main{flex:1;padding:20px;overflow-y:auto}
+.cr{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:14px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.ph{text-align:center;padding:60px 20px;color:#4a5568}
+.ph-logo{width:70px;height:70px;border-radius:50%;background:#1a3a5c;color:#fff;font-size:36px;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.ph-t{font-size:22px;font-weight:700;color:#1a3a5c}
+.ph-s{font-size:12px;color:#6b7280;margin:6px 0 14px}
+.cards-row{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.mc{flex:1;min-width:130px;background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:12px;text-align:center}
+.mc-val{font-size:20px;font-weight:800;color:#1a3a5c}
+.mc-lbl{font-size:11px;color:#6b7280;margin-top:2px}
+.ct{display:flex;justify-content:space-between;align-items:center;font-weight:700;color:#1a3a5c;font-size:14px;margin-bottom:10px}
+.res-badge{padding:3px 12px;border-radius:12px;font-size:12px;font-weight:700}
+.res-badge.ok{background:#d1fae5;color:#065f46}
+.res-badge.notok{background:#fee2e2;color:#991b1b}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.tbl{width:100%;border-collapse:collapse;font-size:12px}
+.tbl th{background:#1a3a5c;color:#fff;padding:6px;text-align:center;font-size:11px}
+.tbl td{border:1px solid #e2e8f0;padding:6px;text-align:center}
+.tbl tr.hl{background:#e7f0fd}
+.tbl tbody tr{cursor:pointer}
+.tbl tbody tr:hover{background:#f0f6ff}
+.ck{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:13px;border-bottom:1px solid #f1f5f9}
+.ck-ok{color:#2d9e4a;font-weight:800}
+.ck-err{color:#cc3300;font-weight:800}
+.fi{background:#1a3a5c;color:#cfd8e3;text-align:center;padding:8px;font-size:11px}
+.editable{border:none;border-bottom:1px dashed #1a3a5c;background:transparent;font-weight:700;color:#1a3a5c;padding:2px 4px;font-size:inherit}
+.editable:focus{outline:none;border-bottom:2px solid #1a3a5c;background:#f0f6ff}
+.ds-title-edit{font-size:18px;font-weight:800;color:#1a3a5c;line-height:1.2}
+#datasheet-view{background:#525659;padding:30px 20px;display:none;flex-direction:column;align-items:center}
+.ds-page{width:210mm;min-height:297mm;background:#fff;padding:14mm 16mm;box-shadow:0 0 15px rgba(0,0,0,.3);position:relative;color:#1a1a1a;margin:0 auto}
+.ds-hdr{border-bottom:2px solid #1a3a5c;padding-bottom:8px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center}
+.ds-ref{font-size:10px;color:#666;text-align:right}
+.ds-sect-title{background:#f1f5f9;padding:3px 8px;font-size:11px;font-weight:800;color:#1a3a5c;margin:10px 0 6px;border-left:4px solid #1a3a5c}
+.ds-table{width:100%;border-collapse:collapse;margin-bottom:8px;font-size:10px}
+.ds-table th{background:#f8fafc;text-align:left;padding:4px 6px;border:1px solid #e2e8f0;color:#475569;font-size:10px}
+.ds-table td{padding:4px 6px;border:1px solid #e2e8f0}
+.ds-footer{margin-top:30px;border-top:1px solid #e2e8f0;padding-top:8px;font-size:8px;color:#94a3b8;display:flex;justify-content:space-between}
+.ds-sign{display:flex;justify-content:space-between;margin-top:36px}
+.sign-box{width:30%;border-top:1px solid #333;text-align:center;padding-top:4px;font-size:9px}
+.ds-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px;width:100%}
+.ds-actions .bc{width:240px;padding:10px;font-size:14px;font-weight:700;border-radius:6px;margin-top:0}
+#diag{background:#0f172a;color:#e2e8f0;border:1px solid #1e293b;border-radius:8px;padding:12px;margin-bottom:14px;font-family:'Consolas','Menlo',monospace;font-size:11px;max-height:320px;overflow:auto;display:none}
+#diag h3{color:#38bdf8;font-size:12px;margin-bottom:8px;font-family:Segoe UI,Arial}
+#diag .dline{margin:1px 0;line-height:1.4;white-space:pre-wrap;word-break:break-word}
+#diag .d-ok{color:#4ade80}
+#diag .d-err{color:#f87171}
+#diag .d-warn{color:#fbbf24}
+#diag .d-info{color:#94a3b8}
+.diag-bar{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.diag-bar button{padding:4px 10px;border:none;border-radius:4px;cursor:pointer;font-size:11px;font-weight:700}
+#btnDiagToggle{background:#38bdf8;color:#0f172a}
+#btnDiagClear{background:#475569;color:#e2e8f0}
+#diagCount{font-size:11px;color:#94a3b8}
+@media print{
+  @page{size:A4 portrait;margin:0}
+  html,body{width:210mm;height:297mm;background:#fff}
+  body *{visibility:hidden}
+  #datasheet-view,#datasheet-view *{visibility:visible}
+  #datasheet-view{position:absolute;left:0;top:0;width:210mm;height:297mm;padding:0;margin:0;background:#fff;display:block;overflow:hidden}
+  #datasheet-view .bc,.ds-actions{visibility:hidden;display:none}
+  .ds-page{width:210mm;height:297mm;min-height:297mm;box-shadow:none;margin:0;padding:12mm 14mm;overflow:hidden}
+  #ds-chart{width:100% !important;height:170px !important}
+  .ds-sign,.ds-footer{display:flex !important}
+}
+@media(max-width:900px){.ctn{flex-direction:column}.sb{width:100%;min-width:0}.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <div class="hdr-l">
+    <img src="logo.png" alt="AlfaVed" style="width:38px;height:38px;border-radius:50%;object-fit:cover">
+    <div>
+      <div class="hdr-t">Alfa<span class="red">Ved</span> <span class="org">Dimensionador PHE</span></div>
+      <div class="hdr-s">Solucoes Industriais · Trocadores de Calor a Placas</div>
+    </div>
+  </div>
+  <div style="font-size:11px;opacity:.8" id="appVersion"></div>
+</header>
+<nav class="nav-tabs">
+  <button class="tab-btn active" onclick="ui.switchTab('calc')">Termico</button>
+  <button class="tab-btn" onclick="ui.switchTab('ds')">Datasheet</button>
+</nav>
+<div class="ctn">
+  <aside class="sb">
+    <div class="sb-hdr">Painel de Entrada</div>
+    <div class="sb-sect">
+      <h3>Modo de Operacao</h3>
+      <div class="gp2">
+        <button class="bp act" id="btnSimples" onclick="ui.setModo('simples')">Simples</button>
+        <button class="bp" id="btnMulti" onclick="ui.setModo('multi')">Multi-Secao</button>
+      </div>
+      <div class="sec-info" id="modoInfo">Simples: Martin+Kumar avg, f 30/70.</div>
+    </div>
+    <div class="sb-sect">
+      <h3>Geometria da Placa</h3>
+      <div class="gp2">
+        <button class="ang-btn active" id="btnAngAuto" onclick="ui.setAngulo('auto')">Auto</button>
+        <button class="ang-btn" id="btnAngH" onclick="ui.setAngulo('H')">H 45°</button>
+        <button class="ang-btn" id="btnAngL" onclick="ui.setAngulo('L')">L 67°</button>
+      </div>
+      <div class="sec-info">Cada placa e testada em H 45° e L 67°.</div>
+    </div>
+    <div class="sb-sect">
+      <h3>Produto</h3>
+      <div class="fg"><label>Fluido</label>
+        <select id="fp" onchange="ui.prefillBrix()">
+          <optgroup label="Bebidas e Alimentos">
+            <option value="cerveja">Cerveja</option><option value="mosto">Mosto</option>
+            <option value="vinho">Vinho</option><option value="vinho_cana">Vinho de Cana</option>
+            <option value="soft_drink">Soft Drink</option><option value="leite">Leite</option>
+            <option value="oleo_vegetal">Oleo Vegetal</option>
+          </optgroup>
+          <optgroup label="Acucar e Fermentacao">
+            <option value="sacarose">Calda de Acucar</option><option value="suco_cana">Suco de Cana</option>
+            <option value="levedura_cana">Levedura Cana</option><option value="levedura_cerveja">Levedura Cerv.</option>
+          </optgroup>
+          <optgroup label="Oleos e Hidraulicos">
+            <option value="sae10">Oleo SAE 10</option><option value="sae30">Oleo SAE 30</option>
+            <option value="hydrodrive32" selected>Hydro Drive NS32</option>
+          </optgroup>
+          <optgroup label="Outros">
+            <option value="agua">Agua</option><option value="etanol">Etanol</option>
+            <option value="salmoura">Salmoura (NaCl)</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="fr">
+        <div class="fg"><label>Brix(%)</label><input type="number" id="bp" value="0" step="0.1"></div>
+        <div class="fg"><label>Vazao(m3/h)</label><input type="number" id="vp" value="1"></div>
+      </div>
+      <div class="fr">
+        <div class="fg"><label>T.Ent(C)</label><input type="number" id="tip" value="40"></div>
+        <div class="fg"><label>T.Sai(C)</label><input type="number" id="top" value="32"></div>
+      </div>
+      <div class="fg"><label>dP max(kPa) [0-80]</label><input type="number" id="dpp" value="50" min="0" max="80"></div>
+      <div class="fg"><label>Tipo de fluido (wall shear)</label>
+        <select id="wsTipo" onchange="ui.tgWsTipo()">
+          <option value="auto" selected>Auto (por fluido)</option>
+          <option value="limpo">Limpo (desconsiderar wall shear)</option>
+          <option value="incrustante">Incrustante (50 Pa)</option>
+          <option value="custom">Personalizado</option>
+        </select>
+      </div>
+      <div class="fg" id="wsCustomBox" style="display:none">
+        <label>Wall shear minimo (Pa)</label>
+        <input type="number" id="wsCustom" value="50" min="0" step="1">
+      </div>
+      <div class="note">Auto: oleos SAE e Hydro Drive sao limpos por padrao.</div>
+    </div>
+    <div class="sb-sect">
+      <h3>Servico (refrigeracao)</h3>
+      <div class="fg"><label>Fluido</label>
+        <select id="fs" onchange="ui.tgServ()">
+          <option value="vapor">Vapor (Saturado)</option><option value="agua" selected>Agua</option>
+          <option value="glicol20">Glicol 20%</option><option value="glicol30">Glicol 30%</option>
+          <option value="salmoura">Salmoura</option><option value="refrigerante">Refrigerante</option>
+          <option value="ammonia">Amônia (R-717)</option><option value="r134a">R-134a</option><option value="r410a">R-410A</option>
+        </select>
+      </div>
+      <div class="fg" id="bx_vapor" style="display:none">
+        <label>Pressao Vapor(bar)</label>
+        <select id="pvap" onchange="ui.tgServ()">
+          <option value="2">2 bar (~120C)</option>
+          <option value="3" selected>3 bar (~134C)</option>
+          <option value="6">6 bar (~159C)</option>
+          <option value="10">10 bar (~180C)</option>
+        </select>
+      </div>
+      <div class="fr">
+        <div class="fg"><label>T.Ent(C)</label><input type="number" id="tis" value="30"></div>
+        <div class="fg"><label>T.Sai calc.(C)</label><input type="number" id="tos" value="0" readonly title="Calculada automaticamente (vazao de agua >= vazao do produto)"></div>
+      </div>
+      <div class="fr">
+        <div class="fg"><label>Vazao calc.(m3/h)</label><input type="number" id="vs" value="0" readonly></div>
+        <div class="fg"><label>dP max(kPa)</label><input type="number" id="dps" value="50"></div>
+      </div>
+      <div class="note" id="vapor_note" style="display:none">Vapor: condensacao por calor latente (Nusselt). T.Sai = Tsat.</div>
+      <div class="note" id="refr_note" style="display:none">Refrigerante: mudanca de fase.</div>
+      <div class="note">Resfriamento: vazao de agua calculada para ser >= vazao do produto (LMTD maior, area menor).</div>
+      <div class="note" style="margin-top:4px">Baixo Re: piso de Nusselt aplicado (placas chevron mantem transferencia em laminar).</div>
+    </div>
+    <div class="sb-sect">
+      <h3>Modo 2 Condicoes</h3>
+      <div class="fg" style="display:flex;align-items:center;gap:8px">
+        <label style="margin:0">Equipamento opera em 2 condicoes:</label>
+        <input type="checkbox" id="dualChk" onchange="ui.toggleDual()" style="width:auto">
+      </div>
+      <div id="secDual" style="display:none;margin-top:8px">
+        <div class="fg"><label>Produto (Cond. 2)</label><select id="fp2" onchange="ui.prefillBrix2()"></select></div>
+        <div class="fr">
+          <div class="fg"><label>Brix2(%)</label><input type="number" id="bp2" value="0" step="0.1"></div>
+          <div class="fg"><label>Vazao2(m3/h)</label><input type="number" id="vp2" value="15.2"></div>
+        </div>
+        <div class="fr">
+          <div class="fg"><label>T.Ent2(C)</label><input type="number" id="tip2" value="122"></div>
+          <div class="fg"><label>T.Sai2(C)</label><input type="number" id="top2" value="40"></div>
+        </div>
+        <div class="fr">
+          <div class="fg"><label>dP max2(kPa)</label><input type="number" id="dpp2" value="50" min="0" max="80"></div>
+          <div class="fg"><label>dP serv2(kPa)</label><input type="number" id="dps2" value="50"></div>
+        </div>
+        <div class="fg"><label>Servico (Cond. 2)</label><select id="fs2" onchange="ui.tgServ2()"></select></div>
+        <div class="fg" id="bx_vapor2" style="display:none">
+          <label>Pressao Vapor2(bar)</label>
+          <select id="pvap2">
+            <option value="2">2 bar (~120C)</option>
+            <option value="3" selected>3 bar (~134C)</option>
+            <option value="6">6 bar (~159C)</option>
+            <option value="10">10 bar (~180C)</option>
+          </select>
+        </div>
+        <div class="fr">
+          <div class="fg"><label>T.Ent serv2(C)</label><input type="number" id="tis2" value="30"></div>
+          <div class="fg"><label>T.Sai serv2 (0=auto)</label><input type="number" id="tos2" value="0" title="Deixe 0 para calcular automaticamente."></div>
+        </div>
+        <div class="fr">
+          <div class="fg"><label>Vazao serv2 calc.</label><input type="number" id="vs2" value="0" readonly></div>
+          <div class="fg"><label></label><input type="text" style="visibility:hidden"></div>
+        </div>
+        <div class="note">C2: balanco automatico respeitando a fisica e a eficiencia (vazao servico >= produto).</div>
+      </div>
+    </div>
+    <div class="sb-sect" id="secMulti" style="display:none">
+      <h3>Multi-Secao (Pasteurizador)</h3>
+      <div class="fg"><label>T.Pasteurizacao(C)</label><input type="number" id="tpast" value="0"></div>
+      <div class="fg"><label>T.Apos Regen(C)</label><input type="number" id="tregen" value="0"></div>
+      <div class="fg"><label>T.Final(C)</label><input type="number" id="tfinal" value="0"></div>
+      <div class="fg"><label>Tempo Retencao(s)</label><input type="number" id="t_reten" value="0"></div>
+      <div class="fg"><label>Aquecimento</label>
+        <select id="fs_aq"><option value="vapor" selected>Vapor</option><option value="agua">Agua Quente</option></select>
+      </div>
+      <div class="fg"><label>Resfriamento</label>
+        <select id="fs_res"><option value="agua" selected>Agua Gelada</option><option value="glicol20">Glicol 20%</option></select>
+      </div>
+      <div class="fr">
+        <div class="fg"><label>T.Agua Ambiente(C)</label><input type="number" id="t_agua_q" value="0"></div>
+        <div class="fg"><label>T.Agua Gelada(C)</label><input type="number" id="t_agua_g" value="0"></div>
+      </div>
+      <div class="note">Ordem: Aquecimento, Regeneracao/Pre-Resfriamento, Resfriamento. Cada secao otimiza seu proprio passe. Total de placas = soma das secoes.</div>
+    </div>
+    <div class="sb-sect">
+      <h3>Projeto</h3>
+      <div class="fg"><label>Modelo (pre-selecao)</label>
+        <select id="selModeloPre"><option value="auto" selected>Auto (otimizar)</option></select>
+      </div>
+      <div class="fr">
+        <div class="fg"><label>Placa</label>
+          <select id="tpl"><option value="g" selected>Gasketed</option><option value="s">Semi-Welded</option><option value="t">Todas</option></select>
+        </div>
+        <div class="fg"><label>Material</label>
+          <select id="mat"><option value="auto" selected>Auto</option><option value="AISI316">AISI 316</option><option value="TIT">Titanio</option></select>
+        </div>
+      </div>
+      <div class="fr">
+        <div class="fg"><label>Passes</label>
+          <select id="ps">
+            <option value="auto" selected>Auto (otimizar)</option>
+            <option value="1-1">1-1</option><option value="2-2">2-2</option><option value="1-2">1-2</option>
+            <option value="2-1">2-1</option><option value="3-3">3-3</option><option value="3-1">3-1</option>
+            <option value="1-3">1-3</option><option value="3-2">3-2</option><option value="2-3">2-3</option>
+            <option value="4-4">4-4</option><option value="4-1">4-1</option><option value="1-4">1-4</option>
+            <option value="4-2">4-2</option><option value="2-4">2-4</option><option value="4-3">4-3</option>
+            <option value="3-4">3-4</option>
+          </select>
+        </div>
+        <div class="fg"><label>Margem(%)</label><input type="number" id="mg" value="0"></div>
+      </div>
+      <div class="fg"><label>Fouling Rf(m2K/W)</label><input type="number" id="rf" value="0.0001" step="0.00001"></div>
+      <div class="fg"><label>Margem de Fouling(%)</label><input type="number" id="mgf" value="10" min="0" title="Piso recomendado pela API-662: 10%"></div>
+      <button class="bc" id="btnCalc">Calcular</button>
+      <button class="ba" id="btnAutoDp">Auto dP (0-80)</button>
+      <button class="bl" id="btnLimpar">Limpar</button>
+    </div>
+    <div class="sb-sect">
+      <h3>Catalogo de Placas</h3>
+      <div class="ms">
+        <table class="tm"><thead><tr><th>Mod</th><th>Ang</th><th>A(m2)</th><th>Dh</th><th>DN</th></tr></thead><tbody id="cat"></tbody></table>
+      </div>
+    </div>
+  </aside>
+  <main class="main" id="calc-view">
+    <div id="ph" class="cr ph">
+      <div class="ph-logo">A</div>
+      <div class="ph-t">Alfa<span class="red">Ved</span> <span class="org">Dimensionador PHE</span></div>
+      <div class="ph-s">Martin+Kumar · 24 modelos · Wall shear configuravel · Baixo Re corrigido · Hydro Drive NS32</div>
+      <p>Preencha Produto e Servico e clique em <strong>Calcular</strong> ou <strong>Auto dP</strong>.</p>
+    </div>
+    <div id="res" style="display:none">
+      <div class="cards-row" id="cards"></div>
+      <div class="cr">
+        <div class="ct"><span>Modelo Selecionado</span><span class="res-badge ok" id="badge">VIAVEL</span></div>
+        <div id="selInfo"></div>
+      </div>
+      <div class="grid2">
+        <div class="cr"><div class="ct">Diagrama de Temperatura</div><canvas id="tcanvas" width="560" height="300"></canvas></div>
+        <div class="cr"><div class="ct">Comparativo</div><div id="comp" class="ms"></div></div>
+      </div>
+      <div class="cr"><div class="ct">Verificacoes</div><div id="ver"></div></div>
+    </div>
+    <div id="diag">
+      <div class="diag-bar">
+        <h3 style="margin:0;flex:1">Log de Diagnostico</h3>
+        <span id="diagCount">0 entradas</span>
+        <button id="btnDiagToggle" onclick="diag.toggle()">Ocultar</button>
+        <button id="btnDiagClear" onclick="diag.clear()">Limpar</button>
+      </div>
+      <div id="diagBody"></div>
+    </div>
+  </main>
+  <div id="datasheet-view">
+    <div class="ds-page" id="printable-ds">
+      <div class="ds-hdr">
+        <div style="display:flex;gap:12px;align-items:center">
+          <img src="logo.png" style="width:50px;height:50px;border-radius:50%;object-fit:cover" alt="AlfaVed">
+          <div>
+            <div class="ds-title-edit">ALFAVED - PHE</div>
+            <div style="font-size:12px;font-weight:700;color:#1a3a5c">PLATES EXCHANGER</div>
+          </div>
+        </div>
+        <div class="ds-ref">Ref: AV-REL-001 · Rev 1.6<br>Data: <span id="ds-date">---</span></div>
+      </div>
+      <div id="ds-model-bar" style="display:flex;gap:8px;align-items:center;margin:10px 0;padding:6px 8px;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:6px">
+        <label style="font-size:11px;font-weight:700;color:#1a3a5c;white-space:nowrap">Selecionar Equipamento:</label>
+        <select id="ds-model-select" class="editable" style="flex:1;font-size:12px" onchange="ui.onDsModelChange()"></select>
+        <button type="button" onclick="ui.recalcFromDs()" style="padding:5px 12px;background:#2d9e4a;color:#fff;border:none;border-radius:6px;font-weight:700;cursor:pointer">Recalcular</button>
+      </div>
+      <div class="ds-sect-title">1. DADOS DE PROCESSO — PRODUTO × SERVICO (LADO A LADO)</div>
+      <table class="ds-table" id="ds-proc-single" style="display:none">
+        <thead><tr><th style="width:18%">Parâmetro</th><th>C1 Produto</th><th>C1 Serviço</th><th>C2 Produto</th><th>C2 Serviço</th></tr></thead>
+        <tbody>
+          <tr><th>Fluido</th><td id="ds-p-name">---</td><td id="ds-s1-name">---</td><td id="ds2-p-name">---</td><td id="ds2-s-name">---</td></tr>
+          <tr><th>Vazão (m³/h)</th><td id="ds-p-flow">---</td><td id="ds-s1-flow">---</td><td id="ds2-p-flow">---</td><td id="ds2-s-flow">---</td></tr>
+          <tr><th>T. Entrada (°C)</th><td id="ds-p-ti">---</td><td id="ds-s1-ti">---</td><td id="ds2-p-ti">---</td><td id="ds2-s-ti">---</td></tr>
+          <tr><th>T. Saída (°C)</th><td id="ds-p-to">---</td><td id="ds-s1-to">---</td><td id="ds2-p-to">---</td><td id="ds2-s-to">---</td></tr>
+          <tr><th>Densidade (kg/m³)</th><td id="ds-p-rho">---</td><td id="ds-s1-rho">---</td><td id="ds2-p-rho">---</td><td id="ds2-s-rho">---</td></tr>
+          <tr><th>Calor esp. (J/kg·K)</th><td id="ds-p-cp">---</td><td id="ds-s1-cp">---</td><td id="ds2-p-cp">---</td><td id="ds2-s-cp">---</td></tr>
+          <tr><th>Viscosidade (mPa·s)</th><td id="ds-p-mu">---</td><td id="ds-s1-mu">---</td><td id="ds2-p-mu">---</td><td id="ds2-s-mu">---</td></tr>
+          <tr><th>Cond. térmica (W/m·K)</th><td id="ds-p-k">---</td><td id="ds-s1-k">---</td><td id="ds2-p-k">---</td><td id="ds2-s-k">---</td></tr>
+          <tr><th>dP (kPa)</th><td id="ds-p-dp">---</td><td id="ds-s1-dp">---</td><td id="ds2-p-dp">---</td><td id="ds2-s-dp">---</td></tr>
+          <tr><th>Carga (kW)</th><td id="ds-p-q">---</td><td id="ds-s1-q">---</td><td id="ds2-p-q">---</td><td id="ds2-s-q">---</td></tr>
+          <tr><th>Consumo vapor (t/h)</th><td>—</td><td id="ds-s1-vapor">---</td><td>—</td><td id="ds2-s-vapor">---</td></tr>
+        </tbody>
+      </table>
+      <div id="ds-proc-multi" style="display:none"></div>
+      <div class="ds-sect-title">2. DADOS DO EQUIPAMENTO (catalogo)</div>
+      <table class="ds-table">
+        <tr><th>Estrutura H:</th><td id="ds-frame-h">---</td><th>Estrutura W:</th><td id="ds-frame-w">---</td></tr>
+        <tr><th>Dist. portas (D):</th><td id="ds-port-d">---</td><th>Dist. portas (C):</th><td id="ds-port-c">---</td></tr>
+        <tr><th>Canal livre:</th><td id="ds-gap">---</td><th>Bocal fixo:</th><td id="ds-dn-fixed">---</td></tr>
+      </table>
+      <div class="ds-sect-title">3. DESEMPENHO GLOBAL</div>
+      <div class="cards-row">
+        <div class="mc"><div class="mc-val" id="ds-q">0</div><div class="mc-lbl">Carga (kW)</div></div>
+        <div class="mc"><div class="mc-val" id="ds-a">0</div><div class="mc-lbl">Area (m2)</div></div>
+        <div class="mc"><input type="number" id="ds-pl" class="editable" value="0" min="2" step="2" style="width:90px;text-align:center;font-size:20px" onchange="ui.recalcFromDs()"><div class="mc-lbl">Placas totais</div></div>
+        <div class="mc"><div class="mc-val" id="ds-dp">0</div><div class="mc-lbl">dP (kPa)</div></div>
+      </div>
+      <div class="ds-sect-title">DIAGRAMA DE TEMPERATURA</div>
+      <canvas id="ds-chart" width="700" height="260" style="width:100%;height:220px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;margin-bottom:8px"></canvas>
+      <div class="ds-sect-title">4. RESUMO POR CONDICAO</div>
+      <table class="ds-table"><thead><tr><th>Condicao</th><th>Passes</th><th>Placas</th><th>Area (m2)</th><th>U (W/m2K)</th><th>dP (kPa)</th><th>Vapor (t/h)</th></tr></thead><tbody id="ds-body"></tbody></table>
+      <div class="ds-sect-title">5. VERIFICACOES DE ENGENHARIA</div>
+      <ul style="font-size:9px;padding-left:18px;line-height:1.5">
+        <li>Status de viabilidade termica: <strong>APROVADO</strong></li>
+        <li>Mesmo equipamento atende as 2 condicoes: <strong>SIM</strong></li>
+        <li>Perda de carga dentro dos limites: <strong>SIM</strong></li>
+        <li>Velocidade no canal dentro dos limites: <strong>SIM</strong></li>
+        <li>Piso de Nusselt para baixo Re aplicado: <strong>SIM</strong></li>
+        <li>Configuracao da placa: <strong id="ds-plate-class-check">---</strong></li>
+      </ul>
+      <div class="ds-sect-title">6. DETALHAMENTO POR SECAO (Pasteurizador)</div>
+      <table class="ds-table" id="ds-sec-table" style="display:none">
+        <thead><tr><th>Seção</th><th>Serviço</th><th>Passes</th><th>Vazão serv. (m³/h)</th><th>T. serv. ent. (°C)</th><th>T. serv. sai. (°C)</th><th>Carga (kW)</th><th>Placas</th><th>Área (m²)</th><th>U (W/m²K)</th><th>dP prod/serv (kPa)</th><th>Vapor (t/h)</th></tr></thead>
+        <tbody id="ds-sec-body"></tbody>
+      </table>
+      <div class="ds-sign"><div class="sign-box">Engenharia AlfaVed</div><div class="sign-box">Controle de Qualidade</div><div class="sign-box">Data de Aprovacao</div></div>
+      <div class="ds-footer"><div>AlfaVed Solucoes Industriais Ltda.</div><div id="ds-footer-ver">AlfaVed PHE</div><div>Pagina 1 de 1</div></div>
+    </div>
+    <div class="ds-actions">
+      <button class="bc" onclick="window.print()">Imprimir</button>
+      <button class="bc" style="background:#1a3a5c" onclick="ui.savePdf()">Salvar em PDF</button>
+      <button class="bc" style="background:#1a3a5c" onclick="ui.saveDatasheet()">Salvar Datasheet</button>
+    </div>
+  </div>
+</div>
+<div class="fi"><strong>AlfaVed PHE</strong> | 24 modelos · Wall shear configuravel · Baixo Re corrigido · Hydro Drive NS32</div>
+<script>
+var STORAGE_VERSION='2.0';
+var diag={log:[],enabled:true};
+diag.add=function(msg,cls){cls=cls||'d-info';diag.log.push({msg:msg,cls:cls});var body=document.getElementById('diagBody');if(body){var d=document.createElement('div');d.className='dline '+cls;d.textContent=msg;body.appendChild(d);body.scrollTop=body.scrollHeight;}var c=document.getElementById('diagCount');if(c)c.textContent=diag.log.length+' entradas';var el=document.getElementById('diag');if(el&&diag.enabled)el.style.display='block';};
+diag.clear=function(){diag.log=[];var body=document.getElementById('diagBody');if(body)body.innerHTML='';var c=document.getElementById('diagCount');if(c)c.textContent='0 entradas';};
+diag.toggle=function(){diag.enabled=!diag.enabled;var el=document.getElementById('diag');var btn=document.getElementById('btnDiagToggle');if(!diag.enabled){el.style.display='none';btn.textContent='Mostrar';}else{el.style.display='block';btn.textContent='Ocultar';}};
+var LIM_PLACAS=400, LIM_VEL_BOCAL=4.9, LIM_VEL_CANAL_MIN=0.03, LIM_VEL_CANAL_MAX=1.0;
+var ANGULOS_PLACA=[45,67];
+var REFR_EFFICIENCY={ammonia:0.85,refrigerante:0.85,r134a:0.90,r410a:0.88};
+var APPROACH_MIN=5;
+var NU_MIN=20;
+var AGUA_FLOW_FACTOR=1.2;
+var _REGEN=null;
+var WALL_SHEAR_PRODUTO_INCRUSTANTE=50;
+var WALL_SHEAR_FLUIDO_LIMPO=0;
+var WALL_SHEAR_VAPOR_LIMPO=0;
+var SERV_COLORS={vapor:'#f59e0b',agua:'#3b82f6',glicol20:'#06b6d4',glicol30:'#0891b2',salmoura:'#0ea5e9',refrigerante:'#8b5cf6',ammonia:'#8b5cf6',r134a:'#a855f7',r410a:'#d946ef'};
+function isFluidoIncrustante(fp){return ['leite','cerveja','mosto','vinho','vinho_cana','soft_drink','sacarose','suco_cana','levedura_cana','levedura_cerveja','oleo_vegetal'].indexOf(fp)>=0;}
+function wallShearProduto(fp,isVapor){var el=document.getElementById('wsTipo');var modo=el?el.value:'auto';if(modo==='limpo')return 0;if(modo==='incrustante')return WALL_SHEAR_PRODUTO_INCRUSTANTE;if(modo==='custom'){var c=parseFloat(document.getElementById('wsCustom').value);return isNaN(c)?0:c;}if(isFluidoIncrustante(fp))return WALL_SHEAR_PRODUTO_INCRUSTANTE;return WALL_SHEAR_FLUIDO_LIMPO;}
+function wallShearServico(fs){if(fs==='vapor')return 999;return ['agua','glicol20','glicol30','salmoura','refrigerante','ammonia','r134a','r410a'].indexOf(fs)>=0?WALL_SHEAR_FLUIDO_LIMPO:WALL_SHEAR_PRODUTO_INCRUSTANTE;}
+var VAPOR={2:{Tsat:120.2,hfg:2202,rhoL:943,kL:0.686,muL:2.32e-4},3:{Tsat:133.5,hfg:2164,rhoL:931,kL:0.685,muL:2.11e-4},6:{Tsat:158.8,hfg:2088,rhoL:908,kL:0.683,muL:1.78e-4},10:{Tsat:179.9,hfg:2015,rhoL:887,kL:0.680,muL:1.53e-4}};
+var BRIX_DEFAULT={cerveja:12,mosto:12,vinho:0,vinho_cana:6,soft_drink:6,leite:0,oleo_vegetal:0,sacarose:20,suco_cana:16,levedura_cana:25,levedura_cerveja:20,agua:0,etanol:50,salmoura:10,sae10:0,sae30:0,hydrodrive32:0};
+var PLATES=[
+{n:'CLIP6',a:0.18,w:0.20,l:0.40,dh:0.004,phi:1.15,type:'g',mat:'AISI316',tk:0.0005,lam:16,dn:50,Hf:600,Wf:200,gap:2.0},
+{n:'CLIP8',a:0.38,w:0.22,l:0.50,dh:0.004,phi:1.15,type:'g',mat:'AISI316',tk:0.0005,lam:16,dn:65,Hf:700,Wf:220,gap:2.0},
+{n:'CLIP10',a:0.62,w:0.25,l:0.60,dh:0.0045,phi:1.18,type:'g',mat:'AISI316',tk:0.0005,lam:16,dn:80,Hf:800,Wf:250,gap:2.3},
+{n:'M3',a:0.03,w:0.060,l:0.357,dh:0.004,phi:1.12,type:'g',mat:'AISI316',tk:0.0005,lam:16,dn:25,Hf:480,Wf:180,gap:2.0},
+{n:'M6-B',a:0.06,w:0.140,l:0.640,dh:0.0052,phi:1.15,type:'g',mat:'AISI316',tk:0.0005,lam:16,dn:50,Hf:920,Wf:320,gap:2.6},
+{n:'M6-M',a:0.06,w:0.140,l:0.640,dh:0.008,phi:1.15,type:'g',mat:'AISI316',tk:0.0005,lam:16,dn:50,Hf:920,Wf:320,gap:4.0},
+{n:'M10-B',a:0.22,w:0.225,l:0.719,dh:0.0052,phi:1.20,type:'g',mat:'AISI316',tk:0.0005,lam:16,dn:100,Hf:1084,Wf:470,gap:2.6},
+{n:'M10-M',a:0.22,w:0.225,l:0.719,dh:0.008,phi:1.20,type:'g',mat:'AISI316',tk:0.0005,lam:16,dn:100,Hf:1084,Wf:470,gap:4.0},
+{n:'M15-B',a:0.62,w:0.298,l:1.294,dh:0.0052,phi:1.22,type:'g',mat:'AISI316',tk:0.0005,lam:16,dn:150,Hf:1941,Wf:610,gap:2.6},
+{n:'M15-M',a:0.62,w:0.298,l:1.294,dh:0.008,phi:1.22,type:'g',mat:'AISI316',tk:0.0005,lam:16,dn:150,Hf:1941,Wf:610,gap:4.0},
+{n:'TS6-M',a:0.07,w:0.203,l:0.380,dh:0.004,phi:1.15,type:'g',mat:'AISI316',tk:0.0005,lam:16,dn:65,Hf:704,Wf:400,gap:2.0},
+{n:'TL6',a:0.26,w:0.140,l:1.036,dh:0.004,phi:1.15,type:'g',mat:'AISI316',tk:0.0005,lam:16,dn:50,Hf:1264,Wf:320,gap:2.0},
+{n:'TL10-B',a:0.50,w:0.225,l:1.338,dh:0.004,phi:1.18,type:'g',mat:'AISI316',tk:0.0005,lam:16,dn:100,Hf:1885,Wf:480,gap:2.0},
+{n:'TL10-P',a:0.50,w:0.225,l:1.338,dh:0.004,phi:1.18,type:'g',mat:'AISI316',tk:0.0005,lam:16,dn:100,Hf:1885,Wf:480,gap:2.0},
+{n:'T20-B',a:1.50,w:0.353,l:1.478,dh:0.006,phi:1.22,type:'g',mat:'AISI316',tk:0.0005,lam:16,dn:200,Hf:2145,Wf:780,gap:3.0},
+{n:'T20-M',a:1.50,w:0.353,l:1.478,dh:0.006,phi:1.22,type:'g',mat:'AISI316',tk:0.0005,lam:16,dn:200,Hf:2145,Wf:780,gap:3.0},
+{n:'TS20-M',a:0.28,w:0.363,l:0.698,dh:0.008,phi:1.22,type:'g',mat:'AISI316',tk:0.0005,lam:16,dn:200,Hf:1405,Wf:800,gap:4.0},
+{n:'M10-BW',a:0.24,w:0.225,l:0.719,dh:0.0052,phi:1.20,type:'s',mat:'AISI316',tk:0.0005,lam:16,dn:100,Hf:1084,Wf:470,gap:2.6},
+{n:'MK15-BW',a:0.15,w:0.298,l:1.044,dh:0.005,phi:1.20,type:'s',mat:'AISI316',tk:0.0005,lam:16,dn:150,Hf:1486,Wf:650,gap:2.5},
+{n:'A15-BW',a:0.15,w:0.298,l:1.294,dh:0.005,phi:1.20,type:'s',mat:'AISI316',tk:0.0005,lam:16,dn:150,Hf:1941,Wf:610,gap:2.5},
+{n:'T20-BW',a:1.50,w:0.353,l:1.478,dh:0.006,phi:1.22,type:'s',mat:'AISI316',tk:0.0005,lam:16,dn:200,Hf:2145,Wf:780,gap:3.0},
+{n:'T20-MW',a:1.50,w:0.353,l:1.478,dh:0.006,phi:1.22,type:'s',mat:'AISI316',tk:0.0005,lam:16,dn:200,Hf:2145,Wf:780,gap:3.0},
+{n:'M20-MW',a:0.25,w:0.40,l:1.60,dh:0.006,phi:1.25,type:'s',mat:'AISI316',tk:0.0005,lam:16,dn:150,Hf:2100,Wf:610,gap:3.0},
+{n:'WideGap350-S',a:1.93,w:0.50,l:1.20,dh:0.008,phi:1.30,type:'s',mat:'AISI316',tk:0.0006,lam:16,dn:200,Hf:1900,Wf:900,gap:4.0}
+];
+function plateClass(be){return be===45?'H 45°':'L 67°';}
+function pAgua(T){var rho=1000*(1-Math.pow(Math.abs(T-4)/622,1.71));rho=Math.max(rho,800);var cp=4182+(T-20)*(0.06+0.0008*(T-20));cp=Math.max(cp,3000);var mu=2.414e-5*Math.pow(10,247.8/(T+273.15-140));mu=Math.max(mu,1e-5);var k=0.5706+0.00176*T-6.46e-6*T*T;k=Math.max(k,0.1);return{rho:rho,cp:cp,mu:mu,k:k};}
+function pLeite(T){var w=pAgua(T);return{rho:1030-0.4*(T-20),cp:3930,mu:Math.max(1.8e-3*Math.exp(-0.012*(T-20)),1e-4),k:Math.max(w.k-0.04,0.4)};}
+function pCerveja(T){var w=pAgua(T);return{rho:1010-0.3*(T-20),cp:3950,mu:Math.max(1.6e-3*Math.exp(-0.014*(T-20)),1e-4),k:Math.max(w.k-0.03,0.35)};}
+function pMosto(T,B){return pSacarose(T,B||12);}
+function pSacarose(T,B){var b=(B||0),wt=pAgua(T);var rho=1000+3.87*b+0.017*b*b-0.0063*b*T;var cp=4182-45*b+0.5*T;var mu=1e-3*Math.pow(10,0.05*b)*Math.exp(-0.02*(T-20));return{rho:Math.max(rho,800),cp:Math.max(cp,1500),mu:Math.max(mu,1e-5),k:Math.max(wt.k-0.004*b,0.4)};}
+function pSucoCana(T,B){return pSacarose(T,B||16);}
+function pVinhoCana(T,B){var we=0.1,w=pAgua(T),ba=pSacarose(T,Math.min(B||6,10));return{rho:w.rho*(1-we)+(989-0.6*(T-20))*we,cp:w.cp*(1-we)+(2430+5*T)*we,mu:Math.max(ba.mu*1.2,1e-4),k:Math.max(w.k*(1-we)+0.3*we,0.25)};}
+function pLeveduraCana(T,C){var w=(C||25)/100,wt=pAgua(T);return{rho:wt.rho*(1+0.35*w),cp:wt.cp*(1-0.35*w)+1500*w,mu:Math.max(wt.mu*Math.exp(4.5*w),1e-4),k:Math.max(wt.k*(1-0.25*w),0.3)};}
+function pLeveduraCerveja(T,C){return pLeveduraCana(T,C||20);}
+function pVinho(T){var w=pAgua(T),we=0.096;return{rho:990-0.5*(T-20),cp:3880,mu:Math.max(1.4e-3*Math.exp(-0.014*(T-20)),1e-4),k:Math.max(w.k-0.02,0.3)};}
+function pSoftDrink(T,B){return pSacarose(T,B||6);}
+function pEtanol(T,C){var w=(C||50)/100;return{rho:1000*(1-w)+789*w-50*w*(1-w)-0.8*(T-20),cp:4182*(1-w)+2430*w+5*T,mu:Math.max(1e-3*(1+2.2*w)*Math.exp(-0.018*(T-20)),1e-5),k:Math.max(0.57*(1-w)+0.17*w,0.2)};}
+function pOleoVegetal(T){return{rho:Math.max(920-0.7*(T-20),850),cp:2000+2*T,mu:Math.max(0.05*Math.exp(-0.02*(T-20)),0.001),k:Math.max(0.17-0.0001*(T-20),0.1)};}
+function pSalmoura(T,c){var w=(c||10)/100;return{rho:1000+700*w-0.5*(T-20),cp:4182-480*w+0.3*T,mu:Math.max(1e-3*(1+3*w)*Math.exp(-0.02*(T-20)),1e-5),k:Math.max(0.57-0.15*w,0.45)};}
+function pSAE10(T){return pSAE(T,10);}function pSAE30(T){return pSAE(T,30);}
+function pSAE(T,g){var v={10:0.05,30:0.095}[g||10];return{rho:Math.max(880-0.6*(T-20),820),cp:1880+2*T,mu:Math.max(v*Math.exp(-0.025*(T-40)),0.005),k:Math.max(0.14-0.0001*(T-20),0.1)};}
+function pHydroDrive32(T){return{rho:Math.max(875-0.6*(T-15),820),cp:1880+2*T,mu:Math.max(0.028*Math.exp(-0.025*(T-40)),0.004),k:Math.max(0.14-0.0001*(T-20),0.1)};}
+function pGlicol(T,c){var w=(c||20)/100,wt=pAgua(T);return{rho:wt.rho*(1-w)+(1113-0.64*(T-20))*w,cp:wt.cp*(1-w)+(2350+3.8*T)*w,mu:Math.max(Math.exp((1-w)*Math.log(wt.mu)+w*Math.log(0.021*Math.exp(-0.025*(T-20)))),1e-5),k:Math.max(wt.k*(1-w)+(0.252-0.0003*(T-20))*w,0.15)};}
+function pGlicol30(T){return pGlicol(T,30);}
+function pRefrigerante(g,T){
+  var TB={'R717':{'-40':[682,3.46e-4,.628,4426],'-20':[662,2.93e-4,.596,4515],'0':[639,2.52e-4,.567,4610],'20':[610,2.2e-4,.540,4722],'40':[580,1.95e-4,.514,4852]},
+  'R134a':{'-40':[1387,4.81e-4,.111,1247],'-20':[1332,3.71e-4,.1,1300],'0':[1273,2.97e-4,.09,1358],'20':[1210,2.43e-4,.08,1427],'40':[1142,2.02e-4,.071,1512]},
+  'R22':{'-40':[1406,4e-4,.114,1124],'-20':[1349,3.17e-4,.104,1173],'0':[1285,2.58e-4,.094,1230],'20':[1210,2.13e-4,.084,1299],'40':[1128,1.79e-4,.074,1383]},
+  'R410A':{'-40':[1230,2.6e-4,.105,1421],'-20':[1172,2.09e-4,.097,1482],'0':[1106,1.72e-4,.089,1555],'20':[1028,1.44e-4,.081,1646],'40':[931,1.23e-4,.073,1765]},
+  'R32':{'-40':[1142,2.75e-4,.181,1730],'-20':[1090,2.19e-4,.169,1798],'0':[1027,1.78e-4,.158,1883],'20':[950,1.48e-4,.147,1992],'40':[851,1.26e-4,.136,2141]},
+  'R404A':{'-40':[1234,3e-4,.089,1335],'-20':[1174,2.36e-4,.081,1398],'0':[1103,1.91e-4,.074,1474],'20':[1018,1.58e-4,.067,1570],'40':[911,1.34e-4,.059,1697]}};
+  var tb=TB[g];if(!tb)return pAgua(T);
+  var ks=Object.keys(tb).map(Number).sort(function(a,b){return a-b});
+  var lo=ks[0],hi=ks[ks.length-1];
+  for(var i=0;i<ks.length;i++){if(T<=ks[i]){hi=ks[i];lo=i>0?ks[i-1]:ks[i];break;}}
+  var a=tb[lo],b=tb[hi];
+  if(lo===hi)return{rho:a[0],cp:a[3]*1000,mu:a[1],k:a[2]};
+  var f=(T-lo)/(hi-lo);
+  return{rho:a[0]+(b[0]-a[0])*f,cp:(a[3]+(b[3]-a[3])*f)*1000,mu:a[1]+(b[1]-a[1])*f,k:a[2]+(b[2]-a[2])*f};
+}
+var ui={modo:'simples',anguloMode:'auto',result:null,allRes:null,selMod:null,selRes:null,lastInput:null,lastInput2:null};
+ui.prefillBrix=function(){document.getElementById('bp').value=BRIX_DEFAULT[document.getElementById('fp').value]||0;};
+ui.prefillBrix2=function(){var el=document.getElementById('fp2');if(el)document.getElementById('bp2').value=BRIX_DEFAULT[el.value]||0;};
+ui.toggleDual=function(){var on=document.getElementById('dualChk').checked;document.getElementById('secDual').style.display=on?'block':'none';};
+ui.tgWsTipo=function(){var v=document.getElementById('wsTipo').value;document.getElementById('wsCustomBox').style.display=(v==='custom')?'block':'none';};
+ui.tgServ=function(){var s=document.getElementById('fs').value;var isVap=(s==='vapor');var isRefr=(s==='ammonia'||s==='r134a'||s==='r410a'||s==='refrigerante');document.getElementById('bx_vapor').style.display=isVap?'block':'none';document.getElementById('vapor_note').style.display=isVap?'block':'none';document.getElementById('refr_note').style.display=isRefr?'block':'none';};
+ui.tgServ2=function(){var s=document.getElementById('fs2').value;document.getElementById('bx_vapor2').style.display=(s==='vapor')?'block':'none';};
+ui.switchTab=function(id){var btns=document.querySelectorAll('.tab-btn');btns.forEach(function(b){b.classList.remove('active');});if(id==='calc'){btns[0].classList.add('active');document.getElementById('calc-view').style.display='block';document.getElementById('datasheet-view').style.display='none';}else{btns[1].classList.add('active');document.getElementById('calc-view').style.display='none';document.getElementById('datasheet-view').style.display='flex';}};
+ui.setModo=function(m){ui.modo=m;document.getElementById('btnSimples').classList.toggle('act',m==='simples');document.getElementById('btnMulti').classList.toggle('act',m==='multi');document.getElementById('secMulti').style.display=(m==='multi')?'block':'none';document.getElementById('modoInfo').textContent=(m==='simples')?'Simples: Martin+Kumar avg, f 30/70.':'Multi: Pasteurizador 3 secoes (calculo individual + auto dP).';};
+ui.setAngulo=function(m){ui.anguloMode=m;document.getElementById('btnAngAuto').classList.toggle('active',m==='auto');document.getElementById('btnAngH').classList.toggle('active',m==='H');document.getElementById('btnAngL').classList.toggle('active',m==='L');};
+function anguloAceito(be){if(ui.anguloMode==='auto')return true;if(ui.anguloMode==='H')return be===45;if(ui.anguloMode==='L')return be===67;return true;}
+function lerEntrada(){
+  var d={
+    fp:document.getElementById('fp').value,
+    bp:parseFloat(document.getElementById('bp').value)||0,
+    vp:parseFloat(document.getElementById('vp').value)||0,
+    tip:parseFloat(document.getElementById('tip').value)||0,
+    top:parseFloat(document.getElementById('top').value)||0,
+    dpp:parseFloat(document.getElementById('dpp').value)||0,
+    fs:document.getElementById('fs').value,
+    vs:parseFloat(document.getElementById('vs').value)||0,
+    tis:parseFloat(document.getElementById('tis').value)||0,
+    tos:parseFloat(document.getElementById('tos').value)||0,
+    dps:parseFloat(document.getElementById('dps').value)||0,
+    pvap:parseFloat(document.getElementById('pvap').value)||2,
+    tp:0, tr:0, tf:0, trt:0,
+    mg:parseFloat(document.getElementById('mg').value)||0,
+    mgf:parseFloat(document.getElementById('mgf').value)||0,
+    rf:parseFloat(document.getElementById('rf').value)||0.0001,
+    tpl:document.getElementById('tpl').value,
+    mat:document.getElementById('mat').value,
+    ps:document.getElementById('ps').value,
+    fs_aq:document.getElementById('fs_aq').value,
+    fs_res:document.getElementById('fs_res').value,
+    t_agua_q:parseFloat(document.getElementById('t_agua_q').value)||0,
+    t_agua_g:parseFloat(document.getElementById('t_agua_g').value)||0
+  };
+  if(ui.modo==='multi'){
+    d.tp  = parseFloat(document.getElementById('tpast').value)   || 0;
+    d.tr  = parseFloat(document.getElementById('tregen').value) || 0;
+    d.tf  = parseFloat(document.getElementById('tfinal').value) || 0;
+    d.trt = parseFloat(document.getElementById('t_reten').value)|| 0;
+  }
+  resolverBalancoServico(d);
+  document.getElementById('vs').value = d.vs.toFixed(2);
+  document.getElementById('tos').value = d.tos.toFixed(2);
+  return d;
+}
+function lerCondicao2(){var d={fp:document.getElementById('fp2').value,bp:parseFloat(document.getElementById('bp2').value)||0,vp:parseFloat(document.getElementById('vp2').value)||0,tip:parseFloat(document.getElementById('tip2').value)||0,top:parseFloat(document.getElementById('top2').value)||0,dpp:parseFloat(document.getElementById('dpp2').value)||0,fs:document.getElementById('fs2').value,vs:parseFloat(document.getElementById('vs2').value)||0,tis:parseFloat(document.getElementById('tis2').value)||0,tos:parseFloat(document.getElementById('tos2').value)||0,dps:parseFloat(document.getElementById('dps2').value)||0,pvap:parseFloat(document.getElementById('pvap2').value)||2,tp:0,tr:0,tf:0,trt:0,mg:parseFloat(document.getElementById('mg').value)||0,mgf:parseFloat(document.getElementById('mgf').value)||0,rf:parseFloat(document.getElementById('rf').value)||0.0001,tpl:document.getElementById('tpl').value,mat:document.getElementById('mat').value,ps:document.getElementById('ps').value,fs_aq:document.getElementById('fs_aq').value,fs_res:document.getElementById('fs_res').value,t_agua_q:parseFloat(document.getElementById('t_agua_q').value)||0,t_agua_g:parseFloat(document.getElementById('t_agua_g').value)||0};resolverBalancoServico(d);document.getElementById('vs2').value=d.vs.toFixed(2);document.getElementById('tos2').value=d.tos.toFixed(2);return d;}
+function resolverBalancoServico(d){
+  if(d.fs==='vapor'){d.tos=VAPOR[d.pvap||2].Tsat;d.vaporKgh=0;if(!(d.vp>0)||d.top===d.tip){d.vs=0;return;}var Tp=(d.tip+d.top)/2;var pp=propProduto(d.fp,d.bp,Tp);var mProd=d.vp*pp.rho/3600;var Q=mProd*pp.cp*Math.abs(d.top-d.tip)/1000;var v=VAPOR[d.pvap||2];d.vs=v.hfg>0?(Q*1000)/(v.hfg*1000)/v.rhoL*3600:0;d.vaporKgh=v.hfg>0?(Q*1000)/(v.hfg*1000)*3600:0;return;}
+  if(!(d.vp>0)||d.top===d.tip){d.vs=0;d.tos=0;d.vaporKgh=0;return;}
+  var Tp=(d.tip+d.top)/2;var pp=propProduto(d.fp,d.bp,Tp);var mProd=d.vp*pp.rho/3600;var Q=mProd*pp.cp*Math.abs(d.top-d.tip)/1000;var cooling=d.tip>d.top;d.vaporKgh=0;
+  if(d.tos>0 && !(d.vs>0)){if(cooling&&d.tos>=d.tip)d.tos=d.tip-APPROACH_MIN;if(!cooling&&d.tos<=d.top)d.tos=d.top+APPROACH_MIN;var ps=propServico(d.fs,(d.tis+d.tos)/2,d.pvap);var dT=Math.abs(d.tos-d.tis);d.vs=dT>0.5?Q*1000/(ps.cp*dT)/ps.rho*3600:0;return;}
+  if(d.vs>0 && !(d.tos>0)){var ps=propServico(d.fs,(d.tis+(cooling?d.tis+APPROACH_MIN:d.tis-APPROACH_MIN))/2,d.pvap);var mServ=d.vs*ps.rho/3600;var dT=mServ>0?Q*1000/(mServ*ps.cp):0;d.tos=cooling?d.tis+dT:d.tis-dT;if(cooling&&d.tos>=d.tip)d.tos=d.tip-APPROACH_MIN;if(!cooling&&d.tos<=d.top)d.tos=d.top+APPROACH_MIN;return;}
+  if(!(d.vs>0) && !(d.tos>0)){
+    var ps=propServico(d.fs,(d.tis+(cooling?d.tip:d.top))/2,d.pvap);
+    if(cooling){
+var Vw=d.vp*AGUA_FLOW_FACTOR;var mw=Vw*ps.rho/3600;var dTw=mw>0?Q*1000/(mw*ps.cp):0;d.tos=d.tis+dTw;var maxTos=d.tip-APPROACH_MIN;if(d.tos>=maxTos)d.tos=maxTos;var dT=Math.abs(d.tos-d.tis);d.vs=dT>0.5?Q*1000/(ps.cp*dT)/ps.rho*3600:0;
+    }else{d.tos=d.top+APPROACH_MIN;var dT=Math.abs(d.tos-d.tis);d.vs=dT>0.5?Q*1000/(ps.cp*dT)/ps.rho*3600:0;}
+    return;
+  }
+}
+function validarEntrada(d){
+  if(!(d.vp>0))return 'Vazao do produto deve ser maior que 0';
+  if(d.top===d.tip)return 'T.Saida do produto deve ser diferente da T.Entrada (deltaT nulo)';
+  if(ui.modo==='multi'){
+    if(!(d.tp>d.tr && d.tr>d.tf && d.tip<d.tp))
+      return 'Coerencia multi-secao: exige tp (pasteurizacao) > tr (apos regen) > tf (final) e T.Entrada < tp';
+    if(d.dpp<=0||d.dpp>80) return 'dP max produto fora do intervalo (0-80 kPa)';
+    if(d.dps<=0) return 'dP max servico deve ser maior que 0';
+    return null;
+  }
+  var cooling=d.tip>d.top;var heating=d.tip<d.top;
+  if(cooling&&d.fs==='vapor')return 'Vapor nao pode resfriar. Use agua, glicol, salmoura ou refrigerante.';
+  if(d.fs==='vapor'){var tsat=VAPOR[d.pvap||2].Tsat;if(d.tip>=tsat)return 'T.Entrada do produto ('+d.tip+' C) deve ser menor que a Tsat do vapor ('+tsat+' C). Aumente a pressao do vapor.';if(d.top>=tsat)return 'T.Saida do produto ('+d.top+' C) deve ser menor que a Tsat do vapor ('+tsat+' C). Aumente a pressao do vapor ou reduza o setpoint.';}
+  else{if(!(d.tis>0))return 'Informe a T.Entrada do servico.';if(!(d.vs>0))return 'Nao foi possivel calcular a vazao do servico. Verifique as temperaturas.';if(!(d.tos>0))return 'Nao foi possivel calcular a T.Sai do servico. Verifique a vazao e as temperaturas.';if(heating){if(d.tos<=d.tis)return 'No aquecimento, T.Saida do servico deve ser maior que a T.Entrada';if(d.tis<=d.tip)return 'T.Entrada do servico deve ser maior que a T.Entrada do produto';}else{if(d.tos>=d.tip)return 'T.Saida do servico deve ser menor que a T.Entrada do produto';if(d.tis>=d.top)return 'T.Entrada do servico deve ser menor que a T.Saida do produto (approach)';}}
+  if(d.dpp<=0||d.dpp>80)return 'dP max produto fora do intervalo (0-80 kPa)';if(d.dps<=0)return 'dP max servico deve ser maior que 0';return null;
+}
+function propProduto(fp,bp,T){switch(fp){case 'agua':return pAgua(T);case 'leite':return pLeite(T);case 'cerveja':return pCerveja(T);case 'mosto':return pMosto(T,bp);case 'vinho':return pVinho(T);case 'vinho_cana':return pVinhoCana(T,bp);case 'soft_drink':return pSoftDrink(T,bp);case 'sacarose':return pSacarose(T,bp);case 'suco_cana':return pSucoCana(T,bp);case 'levedura_cana':return pLeveduraCana(T,bp);case 'levedura_cerveja':return pLeveduraCerveja(T,bp);case 'oleo_vegetal':return pOleoVegetal(T);case 'etanol':return pEtanol(T,bp);case 'salmoura':return pSalmoura(T,bp);case 'sae10':return pSAE10(T);case 'sae30':return pSAE30(T);case 'hydrodrive32':return pHydroDrive32(T);default:return pAgua(T);}}
+function propServico(fs,T,pvap){switch(fs){case 'vapor':{var v=VAPOR[pvap]||VAPOR[2];return{isVapor:true,Tsat:v.Tsat,hfg:v.hfg,rhoL:v.rhoL,kL:v.kL,muL:v.muL,rho:0.6,cp:2.0,k:0.025,mu:1.2e-5};}case 'agua':return pAgua(T);case 'glicol20':return pGlicol(T,20);case 'glicol30':return pGlicol30(T);case 'salmoura':return pSalmoura(T,10);case 'refrigerante':return pRefrigerante('R717',T);case 'ammonia':return pRefrigerante('R717',T);case 'r134a':return pRefrigerante('R134a',T);case 'r410a':return pRefrigerante('R410A',T);default:return pAgua(T);}}
+function calcNu(be,Re,Pr){var fAng=(be-45)/(67-45);var cM=0.122+0.10*fAng,nM=0.374+0.06*fAng;var cK=0.267+0.12*fAng,nK=0.78+0.04*fAng;return ((cM*Math.pow(Re,nM)*Math.pow(Pr,1/3))+(cK*Math.pow(Re,nK)*Math.pow(Pr,1/3)))/2;}
+function calcF(be,Re){var fAng=(be-45)/(67-45);var fM=(0.6+0.5*fAng)*Math.pow(Re,-0.3);var fK=(1.0+0.8*fAng)*Math.pow(Re,-0.25);return 0.3*fM+0.7*fK;}
+function calcLMTD(t1e,t1s,t2e,t2s){var dt1=Math.abs(t1e-t2s),dt2=Math.abs(t1s-t2e);if(dt1===dt2)return dt1;if(dt1<=0||dt2<=0)return Math.max(dt1,dt2);return (dt1-dt2)/Math.log(dt1/dt2);}
+function nozzleDN(m3h){var Q=m3h/3600,Dm=Math.sqrt(4*Q/(Math.PI*LIM_VEL_BOCAL))*1000;var std=[25,32,40,50,65,80,100,125,150,200,250];for(var i=0;i<std.length;i++){if(Dm<=std[i])return std[i];}return 250;}
+function checkRe(Re,Pr,be,w){if(Re<500)w.push('Re='+Re.toFixed(0)+' < 500: regime laminar. Piso de Nusselt aplicado (Nu>='+NU_MIN+') para placas chevron.');if(Re>2500)w.push('Re='+Re.toFixed(0)+' > 2500 (extrapolacao da correlacao)');if(Pr>0&&(Pr<3.5||Pr>6))w.push('Pr='+Pr.toFixed(1)+' fora de 3.5-6.0');if(be>60)w.push('Angulo '+be+' graus fora da faixa validada 30-60 (placa L 67)');}
+function calcDp(p,be,Re,v,rho,mdot,dnP,nPasses){var f=calcF(be,Re),Le=p.l*(p.phi||1.15)*(nPasses||1);var dpCanal=(2*f*(Le/p.dh)*(rho*v*v/2))/1000;var Anoz=Math.PI*Math.pow((dnP||50)/1000,2)/4;var vNoz=Anoz>0?(mdot/(rho*Anoz)):0;var dpPorta=(0.5*rho*vNoz*vNoz*1.5)/1000;return{canal:dpCanal,porta:dpPorta,total:dpCanal+dpPorta};}
+function condVaporCoef(ps,mServ,p,lmtd){var g=9.81,dT=Math.max(lmtd,1),rhoL=ps.rhoL,muL=ps.muL,kL=ps.kL,hfg=ps.hfg*1000;return Math.max(0.943*Math.pow(rhoL*rhoL*g*kL*kL*kL*hfg/(muL*p.l*dT),0.25),1500);}
+function lerPasses(ps){if(!ps||ps==='auto')return null;var p=ps.split('-').map(function(x){return parseInt(x,10)||1;});return{prod:p[0]||1,serv:p[1]||1,auto:false};}
+function coletarAvisos(d){var w=[];if(d.vp<=0||d.vp>5000)w.push('Vazao do produto '+d.vp+' m3/h fora da faixa tipica (0-5000 m3/h). Confira a unidade.');var Tp=(d.tip+d.top)/2;if(d.fp==='agua'&&(Tp<0||Tp>100))w.push('Agua: temperatura media '+Tp.toFixed(1)+' C fora de 0-100 C.');if(d.fp==='leite'&&(Tp<0||Tp>80))w.push('Leite: temperatura media '+Tp.toFixed(1)+' C fora de 0-80 C.');if(d.fs==='glicol20'||d.fs==='glicol30'){var Ts=(d.tis+d.tos)/2;if(Ts<-20||Ts>120)w.push('Glicol: temperatura media '+Ts.toFixed(1)+' C fora de -20 a 120 C.');}if((d.fp==='sacarose'||d.fp==='suco_cana'||d.fp==='mosto')&&(d.bp<0||d.bp>70))w.push('Brix '+d.bp+' fora da faixa tipica (0-70).');if(d.top!==d.tip){var ps=propServico(d.fs,(d.tis+d.tos)/2,d.pvap);var lmtd=ps.isVapor?calcLMTD(d.tip,d.top,ps.Tsat,ps.Tsat):calcLMTD(d.tip,d.top,d.tis,d.tos);if(lmtd<1)w.push('LMTD de '+lmtd.toFixed(2)+' C e muito pequeno (<1 C). Area e placas serao excessivas.');}return w;}
+function calcAtN(p,be,d,passes,n){
+  var Tp=(d.tip+d.top)/2;var pp=propProduto(d.fp,d.bp,Tp);var mProd=d.vp*pp.rho/3600;var Q=mProd*pp.cp*Math.abs(d.top-d.tip)/1000;var ps=propServico(d.fs,(d.tis+d.tos)/2,d.pvap);var lmtd=ps.isVapor?calcLMTD(d.tip,d.top,ps.Tsat,ps.Tsat):calcLMTD(d.tip,d.top,d.tis,d.tos);if(!(lmtd>0.01))return null;
+  var Asec=p.w*(p.dh/2);var isRefr=(d.fs==='ammonia'||d.fs==='r134a'||d.fs==='r410a'||d.fs==='refrigerante');var refrFactor=isRefr?(REFR_EFFICIENCY[d.fs]||0.85):1;var mServ;if(ps.isVapor){mServ=Q*1000/(ps.hfg*1000);}else{mServ=d.vs*ps.rho/3600;}
+  var dnP=p.dn||nozzleDN(d.vp);var wsProd=wallShearProduto(d.fp,ps.isVapor);var wsServ=wallShearServico(d.fs);
+  var Nch=Math.max(1,Math.floor((n-2)/2));var Aef=p.a*(n-2);var v1=mProd/(pp.rho*Asec*Math.max(1,Math.floor(Nch/passes.prod)));var v2=ps.isVapor?0:mServ/(ps.rho*Asec*Math.max(1,Math.floor(Nch/passes.serv)));if(v2<0)v2=0;
+  var Re1=pp.rho*v1*p.dh/pp.mu;var Re2=(ps.isVapor||v2<=0)?0:(ps.rho*v2*p.dh/ps.mu);var Pr1=pp.cp*pp.mu/pp.k;var Pr2=(ps.isVapor||Re2<=0)?0:(ps.cp*ps.mu/ps.k);
+  var w=[];checkRe(Re1,Pr1,be,w);if(!ps.isVapor)checkRe(Re2,Pr2,be,w);
+  var Nu1=calcNu(be,Re1,Pr1),f1=calcF(be,Re1);var Nu2=(Re2>0)?calcNu(be,Re2,Pr2):0;var f2=(Re2>0)?calcF(be,Re2):0;
+  if(Re1<500)Nu1=Math.max(Nu1,NU_MIN);if(Re2>0&&Re2<500)Nu2=Math.max(Nu2,NU_MIN);
+  var h1=Nu1*pp.k/p.dh;var h2=ps.isVapor?condVaporCoef(ps,mServ,p,lmtd):(Re2>0?Nu2*ps.k/p.dh:1000);var U=(1/(1/h1+p.tk/p.lam+1/h2+(d.rf||0)))*refrFactor;
+  var margemTotal=(d.mg||0)+Math.max(d.mgf||0,10);var Amax=Q*1000/(U*lmtd);var areaOk=Aef>=Amax*(1+margemTotal/100);
+  var dp1=calcDp(p,be,Re1,v1,pp.rho,mProd,dnP,passes.prod);var dp2=ps.isVapor?{total:0.05,canal:0,porta:0.05}:calcDp(p,be,Re2,v2,ps.rho,mServ,dnP,passes.serv);
+  var viol=[];if(!areaOk)viol.push('Area insuficiente');if(v1<LIM_VEL_CANAL_MIN||v1>LIM_VEL_CANAL_MAX)viol.push('Velocidade do produto '+v1.toFixed(2)+' m/s fora de '+LIM_VEL_CANAL_MIN+'-'+LIM_VEL_CANAL_MAX+' m/s');if(!ps.isVapor&&(v2<LIM_VEL_CANAL_MIN||v2>LIM_VEL_CANAL_MAX))viol.push('Velocidade do servico '+v2.toFixed(2)+' m/s fora de '+LIM_VEL_CANAL_MIN+'-'+LIM_VEL_CANAL_MAX+' m/s');var ws1=f1*pp.rho*v1*v1/2;var ws2=ps.isVapor?999:(f2*ps.rho*v2*v2/2);if(wsProd>0&&ws1<wsProd)viol.push('Tensao de cisalhamento do produto '+ws1.toFixed(1)+' Pa < '+wsProd+' Pa');if(!ps.isVapor&&ws2<wsServ)viol.push('Tensao de cisalhamento do servico '+ws2.toFixed(1)+' Pa < '+wsServ+' Pa');if(dp1.total>d.dpp)viol.push('dP produto '+dp1.total.toFixed(1)+' kPa > limite '+d.dpp+' kPa');if(!ps.isVapor&&dp2.total>d.dps)viol.push('dP servico '+dp2.total.toFixed(1)+' kPa > limite '+d.dps+' kPa');if(dp1.porta>10&&dp1.total>0&&dp1.porta/dp1.total>0.25)viol.push('dP de porta '+Math.round(100*dp1.porta/dp1.total)+'% do total (>25%)');if(!ps.isVapor&&dp2.porta>10&&dp2.total>0&&dp2.porta/dp2.total>0.25)viol.push('dP de porta servico '+Math.round(100*dp2.porta/dp2.total)+'% do total (>25%)');
+  if(lmtd<5&&areaOk)w.push('LMTD de '+lmtd.toFixed(1)+' C e pequeno. Area ('+Aef.toFixed(1)+' m2) grande; verifique a viabilidade de instalacao.');
+  return {p:p,be:be,n:n,a:Aef,areaOk:areaOk,q:Q,lmtd:lmtd,u:U,dp1:dp1.total,dp2:dp2.total,dp1Porta:dp1.porta,dp2Porta:dp2.porta,v1:v1,v2:v2,re1:Re1,re2:Re2,ws1:ws1,ws2:ws2,viavel:viol.length===0,viol:viol,warnings:w,refrFactor:refrFactor,isVapor:ps.isVapor,Tsat:ps.isVapor?ps.Tsat:null,passes:passes,vaporKgh:d.vaporKgh||0};
+}
+function mCalcSingle(p,be,d,passes){
+  try{
+    var Tp=(d.tip+d.top)/2;var pp=propProduto(d.fp,d.bp,Tp);var mProd=d.vp*pp.rho/3600;var Q=mProd*pp.cp*Math.abs(d.top-d.tip)/1000;var ps=propServico(d.fs,(d.tis+d.tos)/2,d.pvap);var lmtd=ps.isVapor?calcLMTD(d.tip,d.top,ps.Tsat,ps.Tsat):calcLMTD(d.tip,d.top,d.tis,d.tos);
+    if(!(lmtd>0.01)){diag.add('['+p.n+' '+plateClass(be)+' '+passes.prod+'-'+passes.serv+'] LMTD invalido','d-err');return null;}
+    var n=Math.max(2,Math.ceil((Q*1000/(3000*lmtd))/p.a)+2);if(n%2!==0)n+=1;
+    var wsProd=wallShearProduto(d.fp,ps.isVapor);
+    diag.add('['+p.n+' '+plateClass(be)+' '+passes.prod+'-'+passes.serv+'] Q='+Q.toFixed(0)+'kW LMTD='+lmtd.toFixed(1)+'C n0='+n,'d-info');
+    var best=null,iterCount=0;
+    for(var it=0;it<LIM_PLACAS&&n<=LIM_PLACAS&&iterCount<300;it++){
+      var r=calcAtN(p,be,d,passes,n);iterCount++;
+      if(!r){n+=2;continue;}
+      if(r.areaOk&&r.viavel){best=r;diag.add('['+p.n+' '+plateClass(be)+' '+passes.prod+'-'+passes.serv+'] VIAVEL n='+n+' A='+r.a.toFixed(1)+'m2 v1='+r.v1.toFixed(3)+' dp1='+r.dp1.toFixed(2)+'kPa U='+r.u.toFixed(0),'d-ok');break;}
+      n+=2;
+    }
+    if(!best)diag.add('['+p.n+' '+plateClass(be)+' '+passes.prod+'-'+passes.serv+'] sem solucao (iter='+iterCount+')','d-err');
+    return best;
+  }catch(e){diag.add('['+p.n+'] erro: '+e.message,'d-err');return null;}
+}
+function mCalcDual(p,be,d1,d2,passes){try{var r1min=mCalcSingle(p,be,d1,passes);var r2min=mCalcSingle(p,be,d2,passes);if(!r1min||!r2min)return null;var n=Math.max(r1min.n,r2min.n);while(n<=LIM_PLACAS){var a=calcAtN(p,be,d1,passes,n);var b=calcAtN(p,be,d2,passes,n);if(a&&b&&a.viavel&&b.viavel){var cand={p:p,be:be,n:n,a:a.a,q:a.q+b.q,lmtd:a.lmtd,u:(a.u+b.u)/2,dp1:Math.max(a.dp1,b.dp1),dp2:Math.max(a.dp2,b.dp2),dp1Porta:Math.max(a.dp1Porta,b.dp1Porta),dp2Porta:Math.max(a.dp2Porta,b.dp2Porta),v1:a.v1,v2:a.v2,re1:a.re1,re2:a.re2,ws1:Math.min(a.ws1,b.ws1),ws2:Math.min(a.ws2,b.ws2),viavel:true,viol:[],warnings:a.warnings.concat(b.warnings),refrFactor:a.refrFactor,isVapor:a.isVapor,Tsat:a.Tsat,passes:passes,secs:[a,b],dual:true};diag.add('['+p.n+' '+plateClass(be)+' '+passes.prod+'-'+passes.serv+'] DUAL VIAVEL n='+n+' A='+a.a.toFixed(1)+'m2 (C1 dp='+a.dp1.toFixed(2)+'kPa, C2 dp='+b.dp1.toFixed(2)+'kPa)','d-ok');return cand;}n+=2;}diag.add('['+p.n+' '+plateClass(be)+' '+passes.prod+'-'+passes.serv+'] DUAL: sem n comum ate '+LIM_PLACAS+' placas','d-err');return null;}catch(e){diag.add('['+p.n+'] dual erro: '+e.message,'d-err');return null;}}
+function clone(o){var c={};for(var k in o)c[k]=o[k];return c;}
+var PASSES_AUTO=[{prod:1,serv:1},{prod:2,serv:2},{prod:1,serv:2},{prod:2,serv:1},{prod:3,serv:3}];
+function bestFor(d){var placas=PLATES.filter(function(p){return d.tpl==='t'||p.type===d.tpl;});if(d.mat!=='auto')placas=placas.filter(function(p){return p.mat===d.mat;});var pre=document.getElementById('selModeloPre').value;if(pre&&pre!=='auto')placas=placas.filter(function(p){return p.n===pre;});if(placas.length===0){alert('Nenhuma placa para os filtros selecionados.');return null;}var res=[];var passesFixos=lerPasses(d.ps);var configs=passesFixos?[passesFixos]:PASSES_AUTO;diag.add('=== Inicio busca: '+placas.length+' placas x '+ANGULOS_PLACA.length+' angulos x '+configs.length+' configs de passes ===','d-warn');placas.forEach(function(p){ANGULOS_PLACA.forEach(function(be){if(!anguloAceito(be))return;configs.forEach(function(pass){var r=mCalcSingle(p,be,d,pass);if(r&&r.viavel)res.push(r);});});});res.sort(function(a,b){return a.n-b.n||a.a-b.a;});ui.allRes=res;diag.add('=== Fim busca: '+res.length+' modelos viaveis ===','d-warn');return res[0]||null;}
+function bestForDual(d1,d2){var placas=PLATES.filter(function(p){return d1.tpl==='t'||p.type===d1.tpl;});if(d1.mat!=='auto')placas=placas.filter(function(p){return p.mat===d1.mat;});var pre=document.getElementById('selModeloPre').value;if(pre&&pre!=='auto')placas=placas.filter(function(p){return p.n===pre;});if(placas.length===0){alert('Nenhuma placa para os filtros selecionados.');return null;}var res=[];var passesFixos=lerPasses(d1.ps);var configs=passesFixos?[passesFixos]:PASSES_AUTO;diag.add('=== Inicio busca DUAL (2 condicoes): '+placas.length+' placas x '+ANGULOS_PLACA.length+' angulos x '+configs.length+' passes ===','d-warn');placas.forEach(function(p){ANGULOS_PLACA.forEach(function(be){if(!anguloAceito(be))return;configs.forEach(function(pass){var r=mCalcDual(p,be,d1,d2,pass);if(r)res.push(r);});});});res.sort(function(a,b){return a.n-b.n||a.a-b.a;});ui.allRes=res;diag.add('=== Fim busca DUAL: '+res.length+' modelos viaveis ===','d-warn');return res[0]||null;}
+function mCalcMulti(d){
+  var ti=d.tip, tr=d.tr, tp=d.tp, tf=d.tf;
+  if(!(tp>tr&&tr>tf&&ti<tp)){_REGEN=null;return null;}
+  _REGEN=function(T){return propProduto(d.fp,d.bp,T);};
+  var dA=clone(d);dA.tip=ti;dA.top=tp;dA.fs=d.fs_aq;dA.vs=0;
+  if(dA.fs!=='vapor'){dA.tis=d.t_agua_q;dA.tos=d.t_agua_q-5;}else{dA.tis=0;dA.tos=0;}
+  resolverBalancoServico(dA);
+  var dB=clone(d);dB.tip=tp;dB.top=tr;dB.fs='agua';dB.vs=0;dB.tis=d.t_agua_q;dB.tos=0;
+  resolverBalancoServico(dB);
+  var dC=clone(d);dC.tip=tr;dC.top=tf;dC.fs=d.fs_res;dC.vs=0;dC.tis=d.t_agua_g;dC.tos=0;
+  resolverBalancoServico(dC);
+  var secs=[{nome:'Aquecimento',cfg:dA},{nome:'Regeneracao/Pre-Resfriamento',cfg:dB},{nome:'Refrigeracao',cfg:dC}];
+  var placas=PLATES.filter(function(p){return d.tpl==='t'||p.type===d.tpl;});
+  if(d.mat!=='auto')placas=placas.filter(function(p){return p.mat===d.mat;});
+  var pre=document.getElementById('selModeloPre').value;
+  if(pre&&pre!=='auto')placas=placas.filter(function(p){return p.n===pre;});
+  var passesFixos=lerPasses(d.ps);
+  var configs=passesFixos?[passesFixos]:PASSES_AUTO;
+  var bestGlobal=null,all=[],iter=0,MAX_ITER=6000;
+  diag.add('=== Inicio busca PASTEURIZADOR (passes independentes por secao): '+placas.length+' placas x '+ANGULOS_PLACA.length+' angulos ===','d-warn');
+  for(var pi=0;pi<placas.length&&iter<MAX_ITER;pi++){
+    var p=placas[pi];
+    for(var bi=0;bi<ANGULOS_PLACA.length&&iter<MAX_ITER;bi++){
+      var be=ANGULOS_PLACA[bi];
+      if(!anguloAceito(be))continue;
+      var secResults=[],allViable=true;
+      for(var si=0;si<secs.length;si++){
+        var bestSec=null;
+        for(var ci=0;ci<configs.length&&iter<MAX_ITER;ci++){
+          var pass=configs[ci];iter++;
+          var r=mCalcSingle(p,be,secs[si].cfg,pass);
+          if(r&&r.viavel){if(!bestSec||r.n<bestSec.n){bestSec=r;}}
+        }
+        if(!bestSec){allViable=false;break;}
+        bestSec.cfg=secs[si].cfg;
+        secResults.push(bestSec);
+      }
+      if(!allViable)continue;
+      var sumN=0,maxN=0,A=0,Q=0,dp1=0,dp2=0,warn=[];
+      secResults.forEach(function(r){sumN+=r.n;maxN=Math.max(maxN,r.n);A+=r.a;Q+=r.q;dp1=Math.max(dp1,r.dp1);dp2=Math.max(dp2,r.dp2);warn=warn.concat(r.warnings||[]);});
+      var dom=secResults[0];
+      for(var si2=1;si2<secResults.length;si2++){if(secResults[si2].n>dom.n)dom=secResults[si2];}
+      var cand={p:p,be:be,n:sumN,nFrame:maxN,a:A,q:Q,lmtd:dom.lmtd,u:dom.u,dp1:dp1,dp2:dp2,dp1Porta:dom.dp1Porta,dp2Porta:dom.dp2Porta,v1:dom.v1,v2:dom.v2,re1:dom.re1,re2:dom.re2,ws1:dom.ws1,ws2:dom.ws2,secs:secResults,viavel:true,viol:[],warnings:warn,refrFactor:secResults[0].refrFactor,isVapor:false,passes:dom.passes};
+      all.push(cand);
+      if(!bestGlobal||cand.n<bestGlobal.n||(cand.n===bestGlobal.n&&cand.a<bestGlobal.a))bestGlobal=cand;
+    }
+  }
+  _REGEN=null;
+  all.sort(function(a,b){return a.n-b.n||a.a-b.a;});
+  ui.allRes=all;
+  diag.add('=== Fim busca PASTEURIZADOR: '+all.length+' modelos viaveis ===','d-warn');
+  return bestGlobal;
+}
+function salvarEntradas(d){try{var payload={v:STORAGE_VERSION,d:d};localStorage.setItem('alfaved_phe_entradas',JSON.stringify(payload));}catch(e){}}
+function calcular(){
+  var btn=document.getElementById('btnCalc');
+  btn.disabled=true;btn.textContent='Calculando...';
+  var guard=setTimeout(function(){btn.disabled=false;btn.textContent='Calcular';alert('O calculo demorou demais. Verifique os dados e tente novamente.');},25000);
+  setTimeout(function(){
+    try{
+      clearTimeout(guard);
+      diag.clear();
+      var d=lerEntrada();
+      var err=validarEntrada(d);
+      if(err){alert('Produto/Servico: '+err);diag.add('Validacao: '+err,'d-err');return;}
+      salvarEntradas(d);
+      var dual=document.getElementById('dualChk').checked;
+      var d2=null,res;
+      if(dual){d2=lerCondicao2();var err2=validarEntrada(d2);if(err2){alert('Condicao 2: '+err2);return;}res=bestForDual(d,d2);}
+      else if(ui.modo==='multi'){res=mCalcMulti(d);}
+      else{res=bestFor(d);}
+      if(!res){
+        var tsat=VAPOR[d.pvap||2].Tsat;var approach=tsat-d.top;
+        if(d.fs==='vapor'&&approach<10){alert('Approach muito pequeno ('+approach.toFixed(1)+' C). O vapor a '+tsat+' C nao consegue aquecer o produto a '+d.top+' C com area razoavel. Aumente a pressao do vapor ou reduza o setpoint.');}
+        else{alert('Nenhum modelo viavel encontrado'+(dual?' para as 2 condicoes. Verifique os dados da Condicao 2.':'')+'. Verifique a validade termica, aumente o dP maximo, ajuste o tipo de fluido (wall shear) ou libere o modo Auto. Consulte o Log de Diagnostico para o motivo exato.');}
+        return;
+      }
+      ui.result=res;ui.lastInput=d;ui.lastInput2=d2;
+      renderResult(res,d);renderDatasheet(res,d);preencherModelos(res);
+      ui.switchTab('calc');
+    }catch(e){diag.add('Erro: '+e.message,'d-err');alert('Erro no calculo: '+e.message);}
+    finally{btn.disabled=false;btn.textContent='Calcular';}
+  },10);
+}
+function autoDp(){var d=lerEntrada(),found=null;var dual=document.getElementById('dualChk').checked;var d2=dual?lerCondicao2():null;var lo=1,hi=80;diag.clear();diag.add('=== Auto dP'+(dual?' DUAL':'')+': varrendo 1-80 kPa ===','d-warn');while(lo<=hi){var mid=Math.round((lo+hi)/2);d.dpp=mid;d.dps=mid;if(d2){d2.dpp=mid;d2.dps=mid;}var r=dual?bestForDual(d,d2):(ui.modo==='multi'?mCalcMulti(d):bestFor(d));if(r&&r.viavel){found={r:r,dpp:mid};hi=mid-1;}else{lo=mid+1;}}if(!found){alert('Nenhuma solucao viavel mesmo com dP=80 kPa.');diag.add('=== Auto dP: nenhuma solucao em 1-80 kPa ===','d-err');return;}document.getElementById('dpp').value=found.dpp;document.getElementById('dps').value=Math.max(found.dpp,Math.ceil(found.r.dp2));if(d2){document.getElementById('dpp2').value=found.dpp;document.getElementById('dps2').value=Math.max(found.dpp,Math.ceil(found.r.dp2));}var dd=lerEntrada();var dd2=dual?lerCondicao2():null;var res=dual?bestForDual(dd,dd2):(ui.modo==='multi'?mCalcMulti(dd):bestFor(dd));if(res){ui.result=res;ui.lastInput=dd;ui.lastInput2=dd2;renderResult(res,dd);renderDatasheet(res,dd);preencherModelos(res);}}
+function renderResult(res,d){
+  document.getElementById('ph').style.display='none';
+  document.getElementById('res').style.display='block';
+  var isMulti=res.secs&&res.secs.length===3;
+  var lblQ='Carga (kW)',lblA='Area (m²)',lblN='Placas',lblU='U (W/m²K)',lblDp1='dP prod (kPa)',lblDp2='dP serv (kPa)';
+  if(isMulti){lblQ='Carga total (kW)';lblA='Area total (m²)';lblN='Placas totais (soma)';}
+  document.getElementById('cards').innerHTML=
+    '<div class="mc"><div class="mc-val">'+res.q.toFixed(1)+'</div><div class="mc-lbl">'+lblQ+'</div></div>'+
+    '<div class="mc"><div class="mc-val">'+res.a.toFixed(2)+'</div><div class="mc-lbl">'+lblA+'</div></div>'+
+    '<div class="mc"><div class="mc-val">'+res.n+'</div><div class="mc-lbl">'+lblN+'</div></div>'+
+    '<div class="mc"><div class="mc-val">'+res.u.toFixed(0)+'</div><div class="mc-lbl">'+lblU+'</div></div>'+
+    '<div class="mc"><div class="mc-val">'+res.dp1.toFixed(1)+'</div><div class="mc-lbl">'+lblDp1+'</div></div>'+
+    '<div class="mc"><div class="mc-val">'+res.dp2.toFixed(1)+'</div><div class="mc-lbl">'+lblDp2+'</div></div>';
+  var b=document.getElementById('badge');
+  if(res.dual){b.textContent='VIAVEL (2 CONDICOES)';}
+  else if(isMulti){b.textContent='VIAVEL (3 SECOES · '+res.n+' placas)';}
+  else{b.textContent=res.viavel?'VIAVEL':'INVIAVEL';}
+  b.className='res-badge '+(res.viavel?'ok':'notok');
+  var servV='—',servWS='—';
+  if(res.dual&&res.secs&&res.secs[1]){servV=res.secs[1].isVapor?'—':res.secs[1].v2.toFixed(2)+' m/s';servWS=res.secs[1].isVapor?'—':res.secs[1].ws2.toFixed(0)+' Pa';}
+  else if(!res.isVapor){servV=res.v2.toFixed(2)+' m/s';servWS=res.ws2.toFixed(0)+' Pa';}
+  var selInfoHTML='<p><strong>Modelo:</strong> '+res.p.n+' · Placa <strong>'+plateClass(res.be)+'</strong> · Tipo '+res.p.type+' · Material '+res.p.mat+'</p><p><strong>Area/placa:</strong> '+res.p.a.toFixed(2)+' m² · <strong>Bocal:</strong> DN'+res.p.dn+' · <strong>Dimensoes:</strong> '+res.p.w+' x '+res.p.l+' m</p><p><strong>Velocidades:</strong> prod '+res.v1.toFixed(2)+' m/s · serv '+servV+' · <strong>Re:</strong> '+Math.round(res.re1)+' / '+Math.round(res.re2)+'</p><p><strong>Wall shear:</strong> prod '+res.ws1.toFixed(0)+' Pa · serv '+servWS+'</p>';
+  if(res.dual&&res.secs){selInfoHTML+='<div class="note" style="margin-top:8px"><strong>Modo 2 condicoes:</strong> mesmo equipamento atende as duas condicoes (n='+res.n+' placas).<br>C1 Aquecedor: Q='+res.secs[0].q.toFixed(0)+' kW · v='+res.secs[0].v1.toFixed(2)+' m/s · dP='+res.secs[0].dp1.toFixed(1)+' kPa<br>C2 Resfriador: Q='+res.secs[1].q.toFixed(0)+' kW · v='+res.secs[1].v1.toFixed(2)+' m/s · dP='+res.secs[1].dp1.toFixed(1)+' kPa</div>';}
+  else if(isMulti){
+    var labs=['Aquecimento','Regeneracao/Pre-Resfriamento','Refrigeracao'];
+    selInfoHTML+='<div class="note" style="margin-top:8px"><strong>Pasteurizador (3 secoes em serie) — placas totais: '+res.n+' (soma) · maior secao: '+res.nFrame+' (frame)</strong></div>';
+    selInfoHTML+='<table class="tbl" style="margin-top:4px"><thead><tr><th>Secao</th><th>Servico</th><th>Passes</th><th>Q (kW)</th><th>Placas</th><th>Area (m2)</th><th>U</th><th>v1 (m/s)</th><th>dP1 (kPa)</th></tr></thead><tbody>';
+    res.secs.forEach(function(s,i){
+      var c=s.cfg||{};
+      var sn=s.isVapor?('Vapor '+(c.pvap||d.pvap||2)+' bar'):(c.fs||'Servico');
+      var sp=s.passes?(s.passes.prod+'-'+s.passes.serv):(res.passes.prod+'-'+res.passes.serv);
+      selInfoHTML+='<tr><td>'+labs[i]+'</td><td>'+sn+'</td><td>'+sp+'</td><td>'+s.q.toFixed(0)+'</td><td>'+s.n+'</td><td>'+s.a.toFixed(1)+'</td><td>'+s.u.toFixed(0)+'</td><td>'+s.v1.toFixed(2)+'</td><td>'+s.dp1.toFixed(1)+'</td></tr>';
+    });
+    selInfoHTML+='</tbody></table>';
+  }
+  document.getElementById('selInfo').innerHTML=selInfoHTML;
+  drawDiagram('tcanvas',res,d);
+  var rows=(ui.allRes||[]).slice(0,8);
+  if(rows.length){var h='<table class="tbl"><thead><tr><th>Mod</th><th>Ang</th><th>Placas</th><th>Area</th><th>U</th><th>dP1</th><th>dP2</th></tr></thead><tbody>';rows.forEach(function(r){h+='<tr'+(r===res?' class="hl"':'')+'><td>'+r.p.n+'</td><td>'+plateClass(r.be)+'</td><td>'+r.n+'</td><td>'+r.a.toFixed(2)+'</td><td>'+r.u.toFixed(0)+'</td><td>'+r.dp1.toFixed(1)+'</td><td>'+r.dp2.toFixed(1)+'</td></tr>';});h+='</tbody></table>';document.getElementById('comp').innerHTML=h;}
+  else{document.getElementById('comp').innerHTML='<p>Nenhuma alternativa viavel.</p>';}
+  var wsProd=wallShearProduto(d.fp,d.fs==='vapor');var wsServ=wallShearServico(d.fs);
+  var checks=[{ok:res.viavel,msg:res.dual?'Atende as 2 condicoes de operacao':(isMulti?'Atende as 3 secoes do pasteurizador':'Viabilidade termica e hidraulica')},{ok:res.dp1<=d.dpp,msg:'dP produto '+res.dp1.toFixed(1)+' kPa <= limite '+d.dpp+' kPa'},{ok:(res.isVapor||res.dp2<=d.dps),msg:'dP servico '+res.dp2.toFixed(1)+' kPa <= limite '+d.dps+' kPa'},{ok:(res.v1>=LIM_VEL_CANAL_MIN&&res.v1<=LIM_VEL_CANAL_MAX),msg:'Velocidade produto '+res.v1.toFixed(2)+' m/s ('+LIM_VEL_CANAL_MIN+'-'+LIM_VEL_CANAL_MAX+')'},{ok:(res.isVapor||(res.v2>=LIM_VEL_CANAL_MIN&&res.v2<=LIM_VEL_CANAL_MAX)),msg:'Velocidade servico '+servV+' ('+LIM_VEL_CANAL_MIN+'-'+LIM_VEL_CANAL_MAX+')'},{ok:(wsProd<=0||res.ws1>=wsProd),msg:wsProd<=0?'Wall shear produto: desconsiderado (fluido limpo)':'Wall shear produto '+res.ws1.toFixed(0)+' Pa >= '+wsProd+' Pa'},{ok:(res.isVapor||res.ws2>=wsServ),msg:'Wall shear servico '+servWS+' >= '+wsServ+' Pa'},{ok:((res.dp1Porta||0)<=10||(res.dp1Porta||0)<=0.25*res.dp1),msg:'dP de portas dentro do criterio (<=25% do total ou <=10 kPa)'}];
+  var vh='';checks.forEach(function(c){vh+='<div class="ck"><span class="'+(c.ok?'ck-ok':'ck-err')+'">'+(c.ok?'✓':'✗')+'</span><span>'+c.msg+'</span></div>';});
+  if(res.warnings&&res.warnings.length){vh+='<div class="note-warn" style="margin-top:8px">Avisos:<br>'+res.warnings.slice(0,4).join('<br>')+'</div>';}
+  document.getElementById('ver').innerHTML=vh;
+  var avisos=coletarAvisos(d);
+  if(avisos.length){var av='<div class="cr"><div class="ct">Avisos de faixa / unidade</div>';avisos.forEach(function(a){av+='<div class="ck"><span class="ck-err">⚠</span><span>'+a+'</span></div>';});av+='</div>';document.getElementById('res').insertAdjacentHTML('beforeend',av);}
+}
+function drawDiagram(id,res,d){
+  var cv=document.getElementById(id);
+  if(!cv)return;
+  var ctx=cv.getContext('2d'),W=cv.width,H=cv.height;
+  ctx.clearRect(0,0,W,H);
+  var x1=55,x2=W-20,y1=20,y2=H-52;
+  var isMulti=ui.modo==='multi'&&res.secs&&res.secs.length===3;
+  var ts,zones=null;
+  if(isMulti){
+    ts=[d.tip,d.tp,d.tr,d.tf];
+    res.secs.forEach(function(s){
+      if(s.isVapor){ts.push(s.Tsat||120);}
+      else if(s.cfg){ts.push(s.cfg.tis||0,s.cfg.tos||0);}
+    });
+    zones={xA1:x1+(x2-x1)/3,xB1:x1+2*(x2-x1)/3};
+  }else{
+    ts=[d.tip,d.top];
+    if(res.isVapor){ts.push(res.Tsat||d.tis);}else{ts.push(d.tis,d.tos);}
+  }
+  var tmin=Math.min.apply(null,ts)-2,tmax=Math.max.apply(null,ts)+2;
+  function Y(t){return y2-(t-tmin)/(tmax-tmin)*(y2-y1);}
+  function X(f){return x1+f*(x2-x1);}
+  ctx.strokeStyle='#e2e8f0';ctx.lineWidth=1;
+  for(var i=0;i<=4;i++){var yy=y1+(y2-y1)*i/4;ctx.beginPath();ctx.moveTo(x1,yy);ctx.lineTo(x2,yy);ctx.stroke();}
+  ctx.fillStyle='#475569';ctx.font='11px Segoe UI';
+  for(var i=0;i<=4;i++){var t=tmin+(tmax-tmin)*i/4;ctx.fillText(t.toFixed(0)+'°C',4,Y(t)+3);}
+  if(isMulti){
+    ctx.strokeStyle='#cbd5e0';ctx.setLineDash([4,4]);
+    [zones.xA1,zones.xB1].forEach(function(xx){ctx.beginPath();ctx.moveTo(xx,y1);ctx.lineTo(xx,y2);ctx.stroke();});
+    ctx.setLineDash([]);
+    ctx.strokeStyle='#cc3300';ctx.lineWidth=3;ctx.beginPath();
+    ctx.moveTo(x1,Y(d.tip));ctx.lineTo(zones.xA1,Y(d.tp));
+    ctx.lineTo(zones.xB1,Y(d.tr));ctx.lineTo(x2,Y(d.tf));
+    ctx.stroke();
+    var legY=y2+16;
+    res.secs.forEach(function(s,i){
+      var x0=(i===0?x1:(i===1?zones.xA1:zones.xB1));
+      var x1z=(i===0?zones.xA1:(i===1?zones.xB1:x2));
+      var fsKey=s.isVapor?'vapor':(s.cfg?s.cfg.fs:'agua');
+      var col=SERV_COLORS[fsKey]||'#3b82f6';
+      ctx.strokeStyle=col;ctx.lineWidth=2.5;ctx.beginPath();
+      if(s.isVapor){var tsat=s.Tsat||120;ctx.moveTo(x0,Y(tsat));ctx.lineTo(x1z,Y(tsat));}
+      else if(s.cfg){ctx.moveTo(x0,Y(s.cfg.tis||0));ctx.lineTo(x1z,Y(s.cfg.tos||0));}
+      else{ctx.moveTo(x0,Y(d.tis));ctx.lineTo(x1z,Y(d.tos));}
+      ctx.stroke();
+      ctx.fillStyle=col;ctx.font='bold 10px Segoe UI';
+      var lbl=['Aquecimento','Regeneracao','Refrigeracao'][i];
+      ctx.fillText(lbl,x0+4,y2+16);
+    });
+    ctx.font='9px Segoe UI';var lx=x1;
+    var legend=[['Produto','#cc3300'],['Vapor','#f59e0b'],['Agua regen.','#3b82f6'],['Agua gelada','#06b6d4']];
+    legend.forEach(function(lg){
+      ctx.strokeStyle=lg[1];ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(lx,legY+14);ctx.lineTo(lx+14,legY+14);ctx.stroke();
+      ctx.fillStyle='#475569';ctx.fillText(lg[0],lx+17,legY+17);
+      lx+=ctx.measureText(lg[0]).width+45;
+    });
+  }else{
+    ctx.strokeStyle='#cc3300';ctx.lineWidth=2.5;ctx.beginPath();
+    ctx.moveTo(X(0),Y(d.tip));ctx.lineTo(X(1),Y(d.top));ctx.stroke();
+    ctx.strokeStyle='#1a3a5c';ctx.lineWidth=2.5;
+    if(res.isVapor){var tsat=res.Tsat||d.tis;ctx.beginPath();ctx.moveTo(X(0),Y(tsat));ctx.lineTo(X(1),Y(tsat));ctx.stroke();}
+    else{ctx.beginPath();ctx.moveTo(X(0),Y(d.tis));ctx.lineTo(X(1),Y(d.tos));ctx.stroke();}
+    ctx.fillStyle='#94a3b8';ctx.font='10px Segoe UI';
+    ctx.fillText('Produto (vermelho) · Servico (azul)',x1,H-10);
+  }
+}
+function renderDatasheet(res,d){
+  function set(id,v){var el=document.getElementById(id);if(el)el.textContent=v;}
+  function setVal(id,v){var el=document.getElementById(id);if(el)el.value=v;}
+  var d2=ui.lastInput2||{};
+  var isMulti=res.secs&&res.secs.length===3;
+  set('ds-date',new Date().toLocaleDateString('pt-BR'));
+  var procSingle=document.getElementById('ds-proc-single');
+  var procMulti=document.getElementById('ds-proc-multi');
+  if(isMulti){
+    if(procSingle)procSingle.style.display='none';
+    if(procMulti){
+      procMulti.style.display='';
+      var labs=['Aquecimento','Regeneracao/Pre-Resfriamento','Refrigeracao'];
+      var rows='';
+      res.secs.forEach(function(s,i){
+        var c=s.cfg||{};
+        var Tpm=(c.tip+c.top)/2,pm=propProduto(d.fp,d.bp,Tpm);
+        var sn=s.isVapor?('Vapor '+(c.pvap||d.pvap||2)+' bar'):(c.fs||'Servico');
+        var psS=s.isVapor?propServico('vapor',(c.tis+c.tos)/2,c.pvap):propServico(c.fs||'agua',(c.tis+c.tos)/2,c.pvap);
+        var sp=s.passes?(s.passes.prod+'-'+s.passes.serv):(res.passes.prod+'-'+res.passes.serv);
+        var vazS=c.vs?(c.vs.toFixed(1)):'—';
+        var tiS=s.isVapor?(s.Tsat||0):(c.tis||0);
+        var toS=s.isVapor?(s.Tsat||0):(c.tos||0);
+        var sv=s.vaporKgh?((s.vaporKgh/1000).toFixed(2)):'—';
+        rows+='<tr><td colspan="3" style="background:#eef2f7;font-weight:800;color:#1a3a5c">'+labs[i]+' · Passes '+sp+' · '+s.n+' placas · Área '+s.a.toFixed(2)+' m² · U '+s.u.toFixed(0)+' W/m²K · LMTD '+s.lmtd.toFixed(1)+' °C</td></tr>';
+        rows+='<tr><th>Fluido</th><td>'+d.fp+'</td><td>'+sn+'</td></tr>';
+        rows+='<tr><th>Vazão (m³/h)</th><td>'+d.vp.toFixed(1)+'</td><td>'+vazS+'</td></tr>';
+        rows+='<tr><th>T. Entrada (°C)</th><td>'+c.tip.toFixed(1)+'</td><td>'+tiS.toFixed(1)+'</td></tr>';
+        rows+='<tr><th>T. Saída (°C)</th><td>'+c.top.toFixed(1)+'</td><td>'+toS.toFixed(1)+'</td></tr>';
+        rows+='<tr><th>Densidade (kg/m³)</th><td>'+pm.rho.toFixed(0)+'</td><td>'+(psS.isVapor?(psS.rhoL||0).toFixed(0):(psS.rho||0).toFixed(0))+'</td></tr>';
+        rows+='<tr><th>Calor esp. (J/kg·K)</th><td>'+pm.cp.toFixed(0)+'</td><td>'+(psS.isVapor?'(latente)':(psS.cp||0).toFixed(0))+'</td></tr>';
+        rows+='<tr><th>Viscosidade (mPa·s)</th><td>'+(pm.mu*1000).toFixed(2)+'</td><td>'+(psS.isVapor?((psS.muL||0)*1000).toFixed(2):((psS.mu||0)*1000).toFixed(2))+'</td></tr>';
+        rows+='<tr><th>Cond. térmica (W/m·K)</th><td>'+pm.k.toFixed(3)+'</td><td>'+(psS.isVapor?(psS.kL||0).toFixed(3):(psS.k||0).toFixed(3))+'</td></tr>';
+        rows+='<tr><th>dP (kPa)</th><td>'+s.dp1.toFixed(1)+'</td><td>'+s.dp2.toFixed(1)+'</td></tr>';
+        rows+='<tr><th>Carga (kW)</th><td>'+s.q.toFixed(1)+'</td><td>'+s.q.toFixed(1)+'</td></tr>';
+        rows+='<tr><th>Consumo vapor (t/h)</th><td>—</td><td>'+sv+'</td></tr>';
+      });
+      procMulti.innerHTML='<table class="ds-table"><thead><tr><th style="width:18%">Parâmetro</th><th>Produto</th><th>Serviço</th></tr></thead><tbody>'+rows+'</tbody></table>';
+    }
+  }else{
+    if(procMulti)procMulti.style.display='none';
+    if(procSingle)procSingle.style.display='';
+    var Tp=(d.tip+d.top)/2,pp=propProduto(d.fp,d.bp,Tp);
+    var ps1=propServico(d.fs,(d.tis+d.tos)/2,d.pvap);
+    var ps2=d2.fs?propServico(d2.fs,(d2.tis+d2.tos)/2,d2.pvap):null;
+    set('ds-p-name',d.fp+(d.bp?' ('+d.bp+' Brix)':''));
+    set('ds-p-flow',d.vp.toFixed(1));
+    set('ds-p-ti',d.tip.toFixed(1));
+    set('ds-p-to',d.top.toFixed(1));
+    set('ds-p-rho',pp.rho.toFixed(0));
+    set('ds-p-cp',pp.cp.toFixed(0));
+    set('ds-p-mu',(pp.mu*1000).toFixed(2));
+    set('ds-p-k',pp.k.toFixed(3));
+    set('ds-p-dp',(res.secs&&res.secs[0]?res.secs[0].dp1:res.dp1).toFixed(1));
+    set('ds-p-q',(res.secs&&res.secs[0]?res.secs[0].q:res.q).toFixed(1));
+    set('ds-s1-name',d.fs==='vapor'?('Vapor '+d.pvap+' bar'):d.fs);
+    set('ds-s1-flow',(d.vs||0).toFixed(1));
+    set('ds-s1-ti',(ps1.isVapor?(ps1.Tsat||0):(d.tis||0)).toFixed(1));
+    set('ds-s1-to',(ps1.isVapor?(ps1.Tsat||0):(d.tos||0)).toFixed(1));
+    set('ds-s1-rho',ps1.isVapor?(ps1.rhoL||0).toFixed(0):(ps1.rho||0).toFixed(0));
+    set('ds-s1-cp',ps1.isVapor?'(latente)':(ps1.cp||0).toFixed(0));
+    set('ds-s1-mu',ps1.isVapor?((ps1.muL||0)*1000).toFixed(2):((ps1.mu||0)*1000).toFixed(2));
+    set('ds-s1-k',ps1.isVapor?(ps1.kL||0).toFixed(3):(ps1.k||0).toFixed(3));
+    set('ds-s1-dp',res.secs&&res.secs[0]?res.secs[0].dp2.toFixed(1):'—');
+    set('ds-s1-q',(res.secs&&res.secs[0]?res.secs[0].q:res.q).toFixed(1));
+    set('ds-s1-vapor',d.fs==='vapor'&&d.vaporKgh?((d.vaporKgh/1000).toFixed(2)+' ('+Math.round(d.vaporKgh)+' kg/h)'):'—');
+    if(d2.fp){
+      var Tp2=(d2.tip+d2.top)/2,pp2=propProduto(d2.fp,d2.bp,Tp2);
+      set('ds2-p-name',d2.fp+(d2.bp?' ('+d2.bp+' Brix)':''));
+      set('ds2-p-flow',d2.vp.toFixed(1));
+      set('ds2-p-ti',d2.tip.toFixed(1));
+      set('ds2-p-to',d2.top.toFixed(1));
+      set('ds2-p-rho',pp2.rho.toFixed(0));
+      set('ds2-p-cp',pp2.cp.toFixed(0));
+      set('ds2-p-mu',(pp2.mu*1000).toFixed(2));
+      set('ds2-p-k',pp2.k.toFixed(3));
+      set('ds2-p-dp',(res.secs&&res.secs[1]?res.secs[1].dp1:0).toFixed(1));
+      set('ds2-p-q',(res.secs&&res.secs[1]?res.secs[1].q:0).toFixed(1));
+      set('ds2-s-name',d2.fs==='vapor'?('Vapor '+d2.pvap+' bar'):d2.fs);
+      set('ds2-s-flow',(d2.vs||0).toFixed(1));
+      set('ds2-s-ti',(ps2.isVapor?(ps2.Tsat||0):(d2.tis||0)).toFixed(1));
+      set('ds2-s-to',(ps2.isVapor?(ps2.Tsat||0):(d2.tos||0)).toFixed(1));
+      set('ds2-s-rho',ps2.isVapor?(ps2.rhoL||0).toFixed(0):(ps2.rho||0).toFixed(0));
+      set('ds2-s-cp',ps2.isVapor?'(latente)':(ps2.cp||0).toFixed(0));
+      set('ds2-s-mu',ps2.isVapor?((ps2.muL||0)*1000).toFixed(2):((ps2.mu||0)*1000).toFixed(2));
+      set('ds2-s-k',ps2.isVapor?(ps2.kL||0).toFixed(3):(ps2.k||0).toFixed(3));
+      set('ds2-s-dp',res.secs&&res.secs[1]?res.secs[1].dp2.toFixed(1):'—');
+      set('ds2-s-q',(res.secs&&res.secs[1]?res.secs[1].q:0).toFixed(1));
+      set('ds2-s-vapor',d2.fs==='vapor'&&d2.vaporKgh?((d2.vaporKgh/1000).toFixed(2)+' ('+Math.round(d2.vaporKgh)+' kg/h)'):'—');
+    }else{
+      ['ds2-p-name','ds2-p-flow','ds2-p-ti','ds2-p-to','ds2-p-rho','ds2-p-cp','ds2-p-mu','ds2-p-k','ds2-p-dp','ds2-p-q','ds2-s-name','ds2-s-flow','ds2-s-ti','ds2-s-to','ds2-s-rho','ds2-s-cp','ds2-s-mu','ds2-s-k','ds2-s-dp','ds2-s-q','ds2-s-vapor'].forEach(function(id){set(id,'—');});
+    }
+  }
+  set('ds-frame-h',(res.p.Hf||'—')+' mm');
+  set('ds-frame-w',(res.p.Wf||'—')+' mm');
+  set('ds-port-d',(res.p.w*1000).toFixed(0)+' mm');
+  set('ds-port-c',(res.p.gap||2).toFixed(1)+' mm');
+  set('ds-gap',(res.p.gap||2).toFixed(1)+' mm');
+  set('ds-dn-fixed','DN'+res.p.dn);
+  set('ds-q',res.q.toFixed(1));
+  set('ds-a',res.a.toFixed(2));
+  setVal('ds-pl',res.n);
+  set('ds-dp',res.dp1.toFixed(1)+' / '+res.dp2.toFixed(1));
+  set('ds-plate-class-check',plateClass(res.be)+' · '+res.p.mat);
+  set('ds-footer-ver','AlfaVed PHE v'+(window.__APP_VERSION__||'1.4.0'));
+  var tb=document.getElementById('ds-body');
+  if(tb){
+    if(res.secs){
+      var labels=isMulti?['Aquecimento','Regeneracao/Pre-Resfriamento','Refrigeracao']:['Condicao 1','Condicao 2'];
+      var h='';
+      res.secs.forEach(function(s,i){
+        var sp=s.passes?(s.passes.prod+'-'+s.passes.serv):(res.passes.prod+'-'+res.passes.serv);
+        var sv=s.vaporKgh?' '+(s.vaporKgh/1000).toFixed(2):'—';
+        h+='<tr><td>'+labels[i]+'</td><td>'+sp+'</td><td>'+s.n+'</td><td>'+s.a.toFixed(2)+'</td><td>'+s.u.toFixed(0)+'</td><td>'+s.dp1.toFixed(1)+'</td><td>'+sv+'</td></tr>';
+      });
+      tb.innerHTML=h;
+    }else{
+      var sv2=res.vaporKgh?' '+(res.vaporKgh/1000).toFixed(2):'—';
+      tb.innerHTML='<tr><td>Unica</td><td>'+res.passes.prod+'-'+res.passes.serv+'</td><td>'+res.n+'</td><td>'+res.a.toFixed(2)+'</td><td>'+res.u.toFixed(0)+'</td><td>'+res.dp1.toFixed(1)+'</td><td>'+sv2+'</td></tr>';
+    }
+  }
+  var sct=document.getElementById('ds-sec-table'),scb=document.getElementById('ds-sec-body');
+  if(sct&&scb){
+    if(isMulti){
+      var labs=['Aquecimento','Regeneracao/Pre-Resfriamento','Refrigeracao'];
+      var h='';
+      res.secs.forEach(function(s,i){
+        var c=s.cfg||{};
+        var sn=s.isVapor?('Vapor '+(c.pvap||d.pvap||2)+' bar'):(c.fs||'Servico');
+        var sp=s.passes?(s.passes.prod+'-'+s.passes.serv):(res.passes.prod+'-'+res.passes.serv);
+        var vaz=c.vs?(c.vs.toFixed(1)):'—';
+        var tiV=s.isVapor?(s.Tsat||0):(c.tis||0);
+        var toV=s.isVapor?(s.Tsat||0):(c.tos||0);
+        var sv=s.vaporKgh?((s.vaporKgh/1000).toFixed(2)):'—';
+        h+='<tr><td>'+labs[i]+'</td><td>'+sn+'</td><td>'+sp+'</td><td>'+vaz+'</td><td>'+tiV.toFixed(1)+'</td><td>'+toV.toFixed(1)+'</td><td>'+s.q.toFixed(1)+'</td><td>'+s.n+'</td><td>'+s.a.toFixed(2)+'</td><td>'+s.u.toFixed(0)+'</td><td>'+s.dp1.toFixed(1)+' / '+s.dp2.toFixed(1)+'</td><td>'+sv+'</td></tr>';
+      });
+      scb.innerHTML=h;
+      sct.style.display='';
+    }else{
+      sct.style.display='none';
+    }
+  }
+  drawDiagram('ds-chart',res,d);
+}
+function preencherModelos(res){var sel=document.getElementById('selModeloPre');sel.innerHTML='<option value="auto">Auto (otimizar)</option>';(ui.allRes||[]).forEach(function(r){var o=document.createElement('option');o.value=r.p.n;o.textContent=r.p.n+' '+plateClass(r.be)+' ('+r.n+' placas)';sel.appendChild(o);});if(res){sel.value=res.p.n;}var ds=document.getElementById('ds-model-select');ds.innerHTML='<option value="">Selecionar modelo...</option>';(ui.allRes||[]).forEach(function(r){var o=document.createElement('option');o.value=r.p.n;o.textContent=r.p.n+' '+plateClass(r.be)+' ('+r.n+' placas, '+r.a.toFixed(1)+' m²)';ds.appendChild(o);});}
+ui.onDsModelChange=function(){var v=document.getElementById('ds-model-select').value;if(!v)return;var m=(ui.allRes||[]).filter(function(r){return r.p.n===v;})[0];if(m&&ui.lastInput){renderResult(m,ui.lastInput);renderDatasheet(m,ui.lastInput);}};
+ui.recalcFromDs=function(){
+  var el=document.getElementById('ds-pl');
+  var pl=parseInt(el?el.value:'0',10);
+  if(isNaN(pl)||pl<2)pl=2;
+  if(el)el.value=pl;
+  if(!ui.result)return;
+  var res=ui.result, secs=res.secs, i, soma=0;
+  res.n=pl;
+  if(secs&&secs.length===3){
+    // Pasteurizador: redistribui proporcionalmente entre as 3 secoes (par)
+    var base=[];
+    for(i=0;i<secs.length;i++)soma+=secs[i].n;
+    if(soma>0){
+      var rest=pl;
+      for(i=0;i<secs.length;i++){
+        var v;
+        if(i===secs.length-1){v=rest;}
+        else{v=Math.max(2,Math.round(pl*secs[i].n/soma));if(v%2!==0)v++;}
+        base.push(v);rest-=v;
+      }
+      for(i=0;i<secs.length;i++){if(base[i]<2)base[i]=2;}
+      var soma2=0;for(i=0;i<secs.length;i++)soma2+=base[i];
+      base[secs.length-1]+=(pl-soma2);
+      for(i=0;i<secs.length;i++){secs[i].n=base[i];secs[i].a=secs[i].p.a*(base[i]-2);}
+    }
+    var A=0;for(i=0;i<secs.length;i++)A+=secs[i].a;
+    res.a=A;
+  } else if(secs&&secs.length===2){
+    // Modo 2 condicoes: mesmo equipamento nas duas
+    secs[0].n=pl;secs[1].n=pl;
+    secs[0].a=secs[0].p.a*(pl-2);
+    secs[1].a=secs[1].p.a*(pl-2);
+    res.a=secs[0].a;
+  } else {
+    // Condicao unica: atualiza tambem a area
+    res.a=res.p.a*(pl-2);
+  }
+  renderDatasheet(res,ui.lastInput);
+};
+function datasheetCss(){return '@page{size:A4 portrait;margin:0}body{margin:0;background:#fff}.ds-page{font-family:Segoe UI,Arial;color:#1a1a1a;padding:14mm;width:210mm;min-height:297mm;box-sizing:border-box}.ds-table{width:100%;border-collapse:collapse;font-size:10px}.ds-table th,.ds-table td{border:1px solid #ccc;padding:4px}.ds-hdr{border-bottom:2px solid #1a3a5c;padding-bottom:8px;margin-bottom:14px}.ds-sect-title{background:#f1f5f9;padding:3px 8px;font-size:11px;font-weight:800;color:#1a3a5c;margin:10px 0 6px;border-left:4px solid #1a3a5c}.mc{display:inline-block;margin:4px;padding:8px;border:1px solid #ccc;text-align:center}.mc-val{font-size:18px;font-weight:800;color:#1a3a5c}.mc-lbl{font-size:10px;color:#666}.editable{border:none;border-bottom:1px dashed #1a3a5c;background:transparent;font-weight:700}.ds-sign{display:flex;justify-content:space-between;margin-top:36px}.sign-box{width:30%;border-top:1px solid #333;text-align:center;padding-top:4px;font-size:9px}.ds-footer{margin-top:30px;border-top:1px solid #e2e8f0;padding-top:8px;font-size:8px;color:#94a3b8;display:flex;justify-content:space-between}#ds-chart{width:100%}';}
+
+/* ===== FIX EXPORTAÇÃO: diagrama (canvas -> img) e logo (base64) ===== */
+var __LOGO_BASE64__ = '';
+
+// Carrega a logo uma vez, ao iniciar, e guarda como base64 (data URL)
+function carregarLogoBase64() {
+  return fetch('logo.png').then(function(r){ return r.blob(); }).then(function(blob){
+    return new Promise(function(resolve){
+      var fr = new FileReader();
+      fr.onload = function(){ resolve(fr.result); };
+      fr.readAsDataURL(blob);
+    });
+  }).then(function(dataUrl){ __LOGO_BASE64__ = dataUrl; })
+  .catch(function(){ __LOGO_BASE64__ = ''; });
+}
+
+// Converte o canvas do diagrama em <img> PNG e embute a logo em base64
+// no HTML do datasheet ANTES de serializar/exportar.
+// printToPDF nao captura <canvas> serializado; a logo com caminho relativo
+// nao resolve no arquivo temporario. Ambas as correcoes evitam isso.
+function prepararHtmlExportacao() {
+  var ds = document.getElementById('printable-ds');
+  if (!ds) return '';
+
+  // a) Remove a barra "Selecionar Equipamento" do DOM antes de serializar
+  var bar = document.getElementById('ds-model-bar');
+  var barParent = null, barNext = null;
+  if (bar && bar.parentNode) { barParent = bar.parentNode; barNext = bar.nextSibling; barParent.removeChild(bar); }
+
+  // b) Diagrama: canvas -> <img> com os pixels desenhados
+  var cv = document.getElementById('ds-chart');
+  var img = null, cvParent = null, cvNext = null;
+  if (cv && typeof cv.toDataURL === 'function') {
+    try {
+      img = document.createElement('img');
+      img.setAttribute('src', cv.toDataURL('image/png'));
+      img.style.width = '100%';
+      img.style.border = '1px solid #e2e8f0';
+      img.style.borderRadius = '6px';
+      cvParent = cv.parentNode; cvNext = cv.nextSibling;
+      cvParent.replaceChild(img, cv);
+    } catch (e) { img = null; }
+  }
+
+  // c) Sincroniza o ATRIBUTO value do campo "Placas totais" com o valor real
+  var pl = document.getElementById('ds-pl');
+  if (pl) { pl.setAttribute('value', pl.value); }
+
+  // d) Logo: caminho relativo -> base64
+  var logos = [], imgs = ds.querySelectorAll('img'), i;
+  for (i = 0; i < imgs.length; i++) {
+    var s = imgs[i].getAttribute('src') || '';
+    if (s.indexOf('logo.png') !== -1 && __LOGO_BASE64__) { logos.push(imgs[i]); imgs[i].setAttribute('src', __LOGO_BASE64__); }
+  }
+
+  var html;
+  try {
+    html = ds.outerHTML;
+  } finally {
+    // e) Restaura o DOM (canvas volta, logo volta, barra volta)
+    if (img && cvParent) { cvParent.replaceChild(cv, img); }
+    for (i = 0; i < logos.length; i++) { logos[i].setAttribute('src', 'logo.png'); }
+    if (bar && barParent) { barParent.insertBefore(bar, barNext); }
+  }
+  return html;
+}
+/* ===== FIM DO FIX ===== */
+
+ui.savePdf=function(){if(!window.electronAPI||!window.electronAPI.savePdf){alert('Salvar PDF disponivel apenas no app desktop.');return;}var html=prepararHtmlExportacao();var full='<!DOCTYPE html><html><head><meta charset="UTF-8"><style>'+datasheetCss()+'</style></head><body>'+html+'</body></html>';window.electronAPI.savePdf(full).then(function(fp){if(fp)alert('PDF salvo em: '+fp);}).catch(function(e){alert('Erro ao salvar PDF: '+e.message);});};
+ui.saveDatasheet=function(){if(!window.electronAPI||!window.electronAPI.saveDatasheet){alert('Salvar datasheet disponivel apenas no app desktop.');return;}var html=prepararHtmlExportacao();var full='<!DOCTYPE html><html><head><meta charset="UTF-8"><style>'+datasheetCss()+'</style></head><body>'+html+'</body></html>';window.electronAPI.saveDatasheet(full).then(function(r){if(r&&r.ok)alert('Datasheet salvo em: '+r.filePath);else if(r&&r.error)alert('Erro: '+r.error);}).catch(function(e){alert('Erro: '+e.message);});};
+function carregarCatalogo(){var h='';PLATES.forEach(function(p){h+='<tr><td>'+p.n+'</td><td>'+ANGULOS_PLACA.join('/')+'°</td><td>'+p.a.toFixed(2)+'</td><td>'+(p.dh*1000).toFixed(1)+'</td><td>DN'+p.dn+'</td></tr>';});document.getElementById('cat').innerHTML=h;}
+function carregarSelecaoModelos(){var sel=document.getElementById('selModeloPre');sel.innerHTML='<option value="auto">Auto (otimizar)</option>';PLATES.forEach(function(p){var o=document.createElement('option');o.value=p.n;o.textContent=p.n+' (A '+p.a.toFixed(2)+' m²)';sel.appendChild(o);});}
+function restaurarEntradas(){
+  try{
+    var raw=localStorage.getItem('alfaved_phe_entradas');
+    if(!raw)return;
+    var parsed;
+    try{parsed=JSON.parse(raw);}catch(e){localStorage.removeItem('alfaved_phe_entradas');return;}
+    var d=parsed&&parsed.v?parsed.d:null;
+    if(!d){localStorage.removeItem('alfaved_phe_entradas');return;}
+    if(parsed.v!==STORAGE_VERSION){localStorage.removeItem('alfaved_phe_entradas');return;}
+    var tp=parseFloat(d.tp)||0,tr=parseFloat(d.tr)||0,tf=parseFloat(d.tf)||0,ti=parseFloat(d.tip)||0;
+    if(ui.modo==='multi'&&!(tp>tr&&tr>tf&&ti<tp)){
+      localStorage.removeItem('alfaved_phe_entradas');
+      return;
+    }
+    var map={fp:'fp',bp:'bp',vp:'vp',tip:'tip',top:'top',dpp:'dpp',fs:'fs',tis:'tis',dps:'dps',pvap:'pvap',tp:'tpast',tr:'tregen',tf:'tfinal',trt:'t_reten',mg:'mg',mgf:'mgf',rf:'rf',tpl:'tpl',mat:'mat',ps:'ps',fs_aq:'fs_aq',fs_res:'fs_res',t_agua_q:'t_agua_q',t_agua_g:'t_agua_g'};
+    for(var k in map){var el=document.getElementById(map[k]);if(el&&d[k]!==undefined)el.value=d[k];}
+    ui.prefillBrix();ui.tgServ();
+  }catch(e){}
+}
+document.addEventListener('DOMContentLoaded',function(){carregarCatalogo();carregarSelecaoModelos();var fp1=document.getElementById('fp'),fp2=document.getElementById('fp2');if(fp1&&fp2)fp2.innerHTML=fp1.innerHTML;var fs1=document.getElementById('fs'),fs2=document.getElementById('fs2');if(fs1&&fs2)fs2.innerHTML=fs1.innerHTML;if(fp2){fp2.value='agua';}if(fs2){fs2.value='agua';}ui.prefillBrix();ui.prefillBrix2();ui.tgServ();ui.tgServ2();ui.tgWsTipo();restaurarEntradas();document.getElementById('btnCalc').addEventListener('click',calcular);document.getElementById('btnAutoDp').addEventListener('click',autoDp);document.getElementById('btnLimpar').addEventListener('click',function(){location.reload();});carregarLogoBase64();if(window.electronAPI&&window.electronAPI.getAppVersion){window.electronAPI.getAppVersion().then(function(v){window.__APP_VERSION__=v||'1.4.0';document.getElementById('appVersion').textContent='v'+window.__APP_VERSION__;}).catch(function(){});}});
+</script>
+</body>
+</html>

@@ -1,5 +1,5 @@
 /**
- * CONFIGURAÇÃO GLOBAL - AlfaVed PHE Dimensionador
+ * CONFIGURAÇÃO GLOBAL - AlfaVed PHE Dimensionador v2.0
  * Constantes, limites, correlações e padrões industriais
  * Baseado em: Martin (1996), Kumar (1984), API 662, TEMA
  * Referências: Alfa Laval, GEA, Sondex, SPX, APV
@@ -21,63 +21,47 @@ const CONFIG = {
   // LIMITES OPERACIONAIS
   // =====================
   limits: {
-    // Placas e geometria
-    maxPlates: 400,              // Limite de placas por trocador
+    maxPlates: 400,
     minPlates: 2,
-    maxChannels: 150,            // Número máximo de canais
-    
-    // Velocidades (m/s)
-    maxNozzleVelocity: 4.9,      // Velocidade máxima no bocal (TEMA)
-    minChannelVelocity: 0.03,    // Mínimo no canal (laminar)
-    maxChannelVelocity: 1.0,     // Máximo no canal (turbulência)
-    
-    // Pressão (kPa)
-    maxPressureDropProduct: 80,  // Máx perda de carga - produto
-    maxPressureDropService: 100, // Máx perda de carga - serviço
+    maxChannels: 150,
+    maxNozzleVelocity: 4.9,
+    minChannelVelocity: 0.03,
+    maxChannelVelocity: 1.0,
+    maxPressureDropProduct: 80,
+    maxPressureDropService: 100,
     minPressureDrop: 0.5,
-    
-    // Vazão (m³/h)
     minFlow: 0.1,
     maxFlow: 5000,
-    
-    // Temperatura (°C)
     minTemp: -100,
     maxTemp: 300,
-    minApproach: 2,              // Diferença mínima (LMTD)
+    minApproach: 2,
     maxApproach: 200
   },
 
   // =====================
-  // CORRELAÇÕES TERMOFÍSICAS
+  // CORRELAÇÕES THERMOFÍSICAS
   // =====================
   correlations: {
-    // Martin (1996) para placas chevron - valores por ângulo
     martin: {
-      45: {  // β = 45°
+      45: {
         nu: { a: 0.122, b: 0.634, pr: 0.333 },
         f: { k: 24, m: -0.3 }
       },
-      67: {  // β = 67°
+      67: {
         nu: { a: 0.158, b: 0.620, pr: 0.333 },
         f: { k: 32, m: -0.35 }
       }
     },
-    
-    // Kumar (1984) - correlação universal
     kumar: {
       nu: { C: 0.3, m: 0.65, n: 0.33 },
       f: { K: 1.8, m: -0.25 }
     },
-
-    // Piso de Nusselt para regime laminar
     lowRe: {
-      minNusselt: 20,    // Nu mínimo (placas chevron em laminar)
-      reTransition: 2300 // Limite aproximado
+      minNusselt: 20,
+      reTransition: 2300
     },
-
-    // Condensação de vapor (Nusselt para fluido bifásico)
     condensation: {
-      minHeatTransfer: 500  // W/m²K mínimo para vapor
+      minHeatTransfer: 500
     }
   },
 
@@ -85,91 +69,52 @@ const CONFIG = {
   // FOULING (INCRUSTAÇÃO) - API 662
   // =====================
   fouling: {
-    // Fatores de incrustação por tipo de fluido (m²K/W)
     resistances: {
-      // Limpos (< 0.0001 m²K/W)
       agua: 0.0001,
       etanol: 0.00005,
       glicol20: 0.00008,
       glicol30: 0.00008,
-      
-      // Levemente incrustantes (0.0001 - 0.0003 m²K/W)
       oleo_vegetal: 0.0001,
       sae10: 0.00015,
       sae30: 0.0002,
       hydrodrive32: 0.00012,
-      
-      // Moderadamente incrustantes (0.0003 - 0.001 m²K/W)
       cerveja: 0.0003,
       leite: 0.0004,
       vinho: 0.00025,
       soft_drink: 0.0003,
-      
-      // Incrustantes (> 0.001 m²K/W)
       sacarose: 0.0005,
       suco_cana: 0.0006,
       levedura_cana: 0.0008,
       levedura_cerveja: 0.0008,
       salmoura: 0.0002,
-      
-      // Refrigerantes (muito baixo)
       ammonia: 0.00001,
       r134a: 0.00001,
       r410a: 0.00001,
       refrigerante: 0.00001,
-      
-      // Vapor
       vapor: 0.0
     },
-    
-    // Margens de design (API 662 recomenda 5-10%)
-    designMargin: 10,            // % adicional para fouling progressivo
+    designMargin: 10,
     minMargin: 5,
     maxMargin: 30
   },
 
   // =====================
-  // PROPRIEDADES TÉRMICAS VAPOR
+  // PROPRIEDADES VAPOR
   // =====================
   steam: {
-    // Tabelas de vapor saturado (T, hfg, rhoL, kL, muL)
     saturation: {
-      2: {   // 2 bar
-        Tsat: 120.2,
-        hfg: 2202.0,      // kJ/kg - calor latente
-        rhoL: 943,         // kg/m³ - densidade líquido
-        kL: 0.686,         // W/m·K - condutividade
-        muL: 2.32e-4       // Pa·s - viscosidade
-      },
-      3: {   // 3 bar
-        Tsat: 133.5,
-        hfg: 2164.0,
-        rhoL: 931,
-        kL: 0.685,
-        muL: 2.11e-4
-      },
-      6: {   // 6 bar
-        Tsat: 158.8,
-        hfg: 2088.0,
-        rhoL: 908,
-        kL: 0.683,
-        muL: 1.78e-4
-      },
-      10: {  // 10 bar
-        Tsat: 179.9,
-        hfg: 2014.0,
-        rhoL: 880,
-        kL: 0.681,
-        muL: 1.52e-4
-      }
+      2: { Tsat: 120.2, hfg: 2202.0, rhoL: 943, kL: 0.686, muL: 2.32e-4 },
+      3: { Tsat: 133.5, hfg: 2164.0, rhoL: 931, kL: 0.685, muL: 2.11e-4 },
+      6: { Tsat: 158.8, hfg: 2088.0, rhoL: 908, kL: 0.683, muL: 1.78e-4 },
+      10: { Tsat: 179.9, hfg: 2014.0, rhoL: 880, kL: 0.681, muL: 1.52e-4 }
     }
   },
 
   // =====================
-  // REFRIGERANTES - Propriedades termofísicas
+  // REFRIGERANTES
   // =====================
   refrigerants: {
-    R717: {   // Amônia
+    R717: {
       name: 'Amônia (R-717)',
       props: {
         '-40': { rho: 682.1, mu: 1.944e-4, k: 0.628, cp: 4426 },
@@ -179,7 +124,7 @@ const CONFIG = {
         '40': { rho: 580.2, mu: 1.95e-4, k: 0.514, cp: 4852 }
       }
     },
-    R134a: {  // R-134a (HFC)
+    R134a: {
       name: 'R-134a',
       props: {
         '-40': { rho: 1387.0, mu: 4.81e-4, k: 0.111, cp: 1247 },
@@ -189,7 +134,7 @@ const CONFIG = {
         '40': { rho: 1142.0, mu: 2.02e-4, k: 0.071, cp: 1512 }
       }
     },
-    R410A: {  // R-410A (HFC blend)
+    R410A: {
       name: 'R-410A',
       props: {
         '-40': { rho: 1230.0, mu: 2.6e-4, k: 0.105, cp: 1421 },
@@ -201,9 +146,6 @@ const CONFIG = {
     }
   },
 
-  // =====================
-  // EFICIÊNCIA DE REFRIGERANTES
-  // =====================
   refrigerantEfficiency: {
     ammonia: 0.85,
     refrigerante: 0.85,
@@ -212,13 +154,12 @@ const CONFIG = {
   },
 
   // =====================
-  // WALL SHEAR (Controle de incrustação)
+  // WALL SHEAR
   // =====================
   wallShear: {
-    fluoLimpo: 0,              // Pa - Sem restrição
-    fluoIncrustante: 50,       // Pa - Mínimo para fluidos incrustantes
-    vaporLimpo: 0,             // Pa - Vapor sem restrição
-    
+    fluoLimpo: 0,
+    fluoIncrustante: 50,
+    vaporLimpo: 0,
     fluoIncrustantes: [
       'leite', 'cerveja', 'mosto', 'vinho', 'vinho_cana',
       'soft_drink', 'sacarose', 'suco_cana', 'levedura_cana',
@@ -230,9 +171,9 @@ const CONFIG = {
   // SEGURANÇA HIDRÁULICA
   // =====================
   hydraulic: {
-    waterFlowFactor: 1.2,      // Fator de segurança para água (1.2x maior)
-    minVelForNusselt: 0.005,   // m/s - Mínimo para garantir transferência
-    portLossFactor: 1.3        // Fator de perda de entrada/saída
+    waterFlowFactor: 1.2,
+    minVelForNusselt: 0.005,
+    portLossFactor: 1.3
   },
 
   // =====================
@@ -278,7 +219,6 @@ const CONFIG = {
   }
 };
 
-// Exportar para Node.js
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = CONFIG;
 }

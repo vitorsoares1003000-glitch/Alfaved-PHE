@@ -1,4 +1,3 @@
-[package.json](https://github.com/user-attachments/files/31847686/package.json)
 {
   "name": "alfaved-phe",
   "version": "1.4.0",
@@ -17,10 +16,14 @@
   "build": {
     "appId": "br.com.alfaved.phe",
     "productName": "AlfaVed PHE",
+    "compression": "maximum",
     "files": [
       "index.html",
       "main.js",
       "preload.js",
+      "thermal.js",
+      "tema.css",
+      "gauges.js",
       "logo.png"
     ],
     "win": {
@@ -31,7 +34,11 @@
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
-      "shortcutName": "AlfaVed PHE"
+      "shortcutName": "AlfaVed PHE",
+      "artifactName": "AlfaVed-PHE-${version}-Setup.${ext}"
+    },
+    "portable": {
+      "artifactName": "AlfaVed-PHE-${version}-Portable.${ext}"
     }
   }
 }

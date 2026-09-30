@@ -1,8 +1,12 @@
-[main.js](https://github.com/user-attachments/files/31847666/main.js)
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs/promises');
 const crypto = require('crypto');
+
+// Marcador esperado no HTML do datasheet (validação de conteúdo antes do PDF)
+const DATASHEET_MARKER = 'alfaved-datasheet';
+
+let mainWindow = null;
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -24,12 +28,17 @@ function createWindow() {
   // Impede abertura de janelas extras a partir do renderer
   win.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
   win.loadFile('index.html');
+  mainWindow = win;
   return win;
 }
 
+// Confirma que o conteúdo é o HTML do datasheet (não HTML arbitrário)
+function isDatasheetHtml(html) {
+  return typeof html === 'string' && html.length > 0 &&
+    (html.includes(DATASHEET_MARKER) || html.includes('id="datasheet"'));
+}
+
 // Lê a logo do app e devolve como data URL base64.
-// O printToPDF não resolve caminhos relativos no arquivo temporário;
-// embutir a logo em base64 garante que ela apareça no PDF.
 async function logoComoDataURL() {
   try {
     const buf = await fs.readFile(path.join(__dirname, 'logo.png'));
@@ -39,15 +48,11 @@ async function logoComoDataURL() {
   }
 }
 
-// Corrige o datasheet carregado na janela oculta ANTES do printToPDF:
-// 1) Canvas do diagrama -> <img> PNG (printToPDF não captura canvas serializado);
-// 2) Logo quebrada (caminho relativo não resolve no temp) -> logo embutida em base64.
+// Corrige o datasheet carregado na janela oculta ANTES do printToPDF.
 async function prepararDatasheetParaPdf(targetWin, logoDataURL) {
   await targetWin.webContents.executeJavaScript(`
     (async () => {
       const logo = ${JSON.stringify(logoDataURL)};
-
-      // 1. Diagrama de temperatura: substitui todo canvas por imagem PNG.
       document.querySelectorAll('canvas').forEach((cv) => {
         try {
           const img = document.createElement('img');
@@ -58,8 +63,6 @@ async function prepararDatasheetParaPdf(targetWin, logoDataURL) {
           cv.replaceWith(img);
         } catch (e) { /* canvas vazio ou sem permissão */ }
       });
-
-      // 2. Logo: corrige imagens que não carregaram (404 no caminho relativo do temp).
       if (logo) {
         document.querySelectorAll('img').forEach((img) => {
           if (img.complete && img.naturalWidth === 0) {
@@ -67,8 +70,6 @@ async function prepararDatasheetParaPdf(targetWin, logoDataURL) {
           }
         });
       }
-
-      // Pequeno respiro para o navegador aplicar as mudanças antes do print.
       await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
     })()
   `);
@@ -77,13 +78,17 @@ async function prepararDatasheetParaPdf(targetWin, logoDataURL) {
 app.whenReady().then(() => {
   createWindow();
 
-  // Salva o datasheet em PDF A4 limpo, sem a interface do app.
+  // Salva o datasheet em PDF A4 limpo.
   ipcMain.handle('save-pdf', async (event, htmlContent) => {
-    // Guarda: conteúdo inválido -> erro, nunca imprimir a UI principal
-    if (typeof htmlContent !== 'string' || htmlContent.length === 0) {
-      throw new Error('Conteúdo do datasheet vazio ou inválido.');
-    }
     const win = BrowserWindow.fromWebContents(event.sender);
+    // Validação de origem: só a janela principal pode chamar
+    if (!win || win !== mainWindow) {
+      return { ok: false, error: 'Origem inválida.' };
+    }
+    // Validação de conteúdo: só imprime HTML do datasheet
+    if (!isDatasheetHtml(htmlContent)) {
+      return { ok: false, error: 'Conteúdo do datasheet vazio ou inválido.' };
+    }
     const tempPath = path.join(app.getPath('temp'), 'alfaved-datasheet-' + crypto.randomUUID() + '.html');
     let targetWin = null;
     try {
@@ -92,25 +97,28 @@ app.whenReady().then(() => {
         show: false,
         webPreferences: { contextIsolation: true, nodeIntegration: false, sandbox: true }
       });
-      await targetWin.loadFile(tempPath);
-
-      // >>> CORREÇÃO: prepara diagrama (canvas->img) e logo (base64) antes do PDF
+      // Timeout de carregamento (evita travamento se o HTML demorar)
+      await Promise.race([
+        targetWin.loadFile(tempPath),
+        new Promise((_, rej) => setTimeout(() => rej(new Error('Timeout ao carregar o datasheet.')), 10000))
+      ]);
       const logoDataURL = await logoComoDataURL();
       await prepararDatasheetParaPdf(targetWin, logoDataURL);
-
       const { canceled, filePath } = await dialog.showSaveDialog(win, {
         title: 'Salvar Datasheet em PDF',
         defaultPath: path.join(app.getPath('documents'), 'AlfaVed-Datasheet.pdf'),
         filters: [{ name: 'PDF', extensions: ['pdf'] }]
       });
-      if (canceled || !filePath) return null;
+      if (canceled || !filePath) return { ok: false, canceled: true };
       const pdf = await targetWin.webContents.printToPDF({
         pageSize: 'A4',
         printBackground: true,
         margins: { marginType: 'none' }
       });
       await fs.writeFile(filePath, pdf);
-      return filePath;
+      return { ok: true, filePath };
+    } catch (err) {
+      return { ok: false, error: err.message };
     } finally {
       if (targetWin && !targetWin.isDestroyed()) targetWin.destroy();
       try { await fs.unlink(tempPath); } catch (e) { /* arquivo já removido */ }
@@ -119,10 +127,13 @@ app.whenReady().then(() => {
 
   // Salva o datasheet em arquivo HTML via diálogo nativo.
   ipcMain.handle('save-datasheet', async (event, htmlContent) => {
-    if (typeof htmlContent !== 'string' || htmlContent.length === 0) {
-      return { ok: false, error: 'Conteúdo do datasheet vazio.' };
-    }
     const win = BrowserWindow.fromWebContents(event.sender);
+    if (!win || win !== mainWindow) {
+      return { ok: false, error: 'Origem inválida.' };
+    }
+    if (!isDatasheetHtml(htmlContent)) {
+      return { ok: false, error: 'Conteúdo do datasheet vazio ou inválido.' };
+    }
     const { canceled, filePath } = await dialog.showSaveDialog(win, {
       title: 'Salvar Datasheet',
       defaultPath: path.join(app.getPath('documents'), 'AlfaVed-Datasheet.html'),
@@ -142,7 +153,7 @@ app.whenReady().then(() => {
 
   // Retorna a versão do app.
   ipcMain.handle('get-app-version', () => app.getVersion());
-  // Retorna o caminho padrão de exportação (pasta Documentos do usuário).
+  // Retorna o caminho padrão de exportação.
   ipcMain.handle('get-export-path', () => app.getPath('documents'));
 
   app.on('activate', () => {
